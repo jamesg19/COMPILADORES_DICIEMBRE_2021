@@ -163,13 +163,13 @@ INSTRUCCIONES : INSTRUCCIONES INSTRUCCION { $1.push($2); $$ = $1;  }
 //terminales con minuscula
 //no terminales con mayuscula
 INICIO:
-    INSTRUCCIONES EOF{ return new Nodo({etiqueta: 'INICIO', hijos: [$1], linea: yylineno});   }
+    INSTRUCCIONES EOF{ $$ = $1; return $$;   }
     
 ;
 INSTRUCCIONES:
       
-    INSTRUCCIONES INSTRUCCION { $$ = new Nodo({etiqueta: 'INSTRUCCIONES', hijos: [...$1.hijos, ...$2.hijos], linea: yylineno}); }
-    | INSTRUCCION             { $$ = new Nodo({etiqueta: 'INSTRUCCIONES', hijos: [...$1.hijos], linea: yylineno}); }
+    INSTRUCCIONES INSTRUCCION {  $1.push($2); $$ = $1; }
+    | INSTRUCCION             { $$ = [$1] }
 
 ;
 

@@ -1,17 +1,20 @@
 import { TablaSimbolos } from '../table/tablasimbolos';
 import { Arbol } from '../table/arbol';
-export interface  Instruccion{
+export abstract class  Instruccion{
     
     fila:number;
     columna:number;
     struct:boolean;
     arra:boolean;
-  /*  constructor(fila:number,columna:number){
+    
+    constructor(fila:number,columna:number){
             this.columna = columna;
             this.fila = fila;    
-            this.struct = false;            
-    }*/
-     interpretar(entorno:TablaSimbolos,arbol:Arbol):any;
+            this.struct = false;  
+            this.arra = false;          
+    }
+    abstract interpretar(entorno:TablaSimbolos,arbol:Arbol):any;
+    
     
         
     
