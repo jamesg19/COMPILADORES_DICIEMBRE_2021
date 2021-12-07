@@ -14,7 +14,7 @@ export class Suma extends Instruccion{
     fila: number;
     columna:number;
     tipo:TIPO;
-
+    
     constructor(operador:ARITMETICO,operadorIzq:Primitivo,operadorDer:Primitivo,fila:number,columna:number){
         super(fila,columna);
         this.operadorIzq=operadorIzq;
@@ -200,7 +200,7 @@ export class Suma extends Instruccion{
         } catch (error) {
 
             return new Excepcion("Semantico","QUETZAL Null Poiter",`${this.fila}`,`${this.columna}`);
-            
+
         }
     }
 
