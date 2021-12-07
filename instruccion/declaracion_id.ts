@@ -51,6 +51,7 @@ export class D_Id extends Instruccion{
         case TIPO.CADENA: return "";
         case TIPO.ARREGLO :
           case TIPO.STRUCT : return undefined;
+          
       }
     }
   }

@@ -30,7 +30,7 @@ export class Asignacion extends Instruccion {
       let valor = this.exp.interpretar(e,arbol);
       let value = JSON.parse(JSON.stringify(valor))
       
-      if(!(this.exp.tipo == variable.tipo))
+      if((this.exp.tipo != variable.tipo))
           return new Excepcion("Semantico","Tipos diferentes "+this.id,super.fila+'',super.columna+"");
      
      variable.valor = value;

@@ -119,6 +119,7 @@
     const {D_IdExp} = require('../instruccion/declaracion_idexp')
     const {D_Id} = require('../instruccion/declaracion_id')
     
+    
     const { Asignacion } = require('../instruccion/asignacion')
     
     //Tipos
@@ -127,7 +128,7 @@
     
     //Enumerados        
     const { ARITMETICO } = require('../table/tipo')
-    //const { TIPO } = require('../table/tipo').TIPO;
+    
     
     const { RELACIONAL } = require('../table/tipo');
     const { LOGICO} = require('../table/tipo');
@@ -140,6 +141,7 @@
     const { Mayor } = require('../expresiones/relacional/mayor');
     const { MenorIgual } = require('../expresiones/relacional/menor_igual');
     const { Menor } = require('../expresiones/relacional/menor');
+    const {Identificador} = require('../expresiones/identificador')
     //logicos
     const { And } = require('../expresiones/logico/and');
     const { Or } = require('../expresiones/logico/or');
@@ -519,11 +521,11 @@ EXP
   //Valores Primitivos
   
   | entero                          { $$ = new Primitivo(TIPO.ENTERO,$1,@1.firt_line,@1.firt_column); }
-  | decimal                         { $$ = new Primitivo(1,$1,@1.firt_line,@1.firt_column);}
+  | decimal                         { $$ = new Primitivo(TIPO.DECIMAL,$1,@1.firt_line,@1.firt_column);}
   | string                          { $$ = new Primitivo(TIPO.CADENA,$1,@1.firt_line,@1.firt_column);   }
-  | id                              {    }
-  | true                            { $$ = new Primitivo(2,$1,@1.firt_line,@1.firt_column);   }
-  | false                           { $$ = new Primitivo(2,$1,@1.firt_line,@1.firt_column);   }
+  | id                              { $$ = new Identificador($1,$1,@1.firt_line,@1.firt_column);   }
+  | true                            { $$ = new Primitivo(TIPO.BOOLEAN,$1,@1.firt_line,@1.firt_column);   }
+  | false                           { $$ = new Primitivo(TIPO.BOOLEAN,$1,@1.firt_line,@1.firt_column);   }
   | null                            { $$ = new Primitivo(TIPO.NULL,$1,@1.firt_line,@1.firt_column);  }
   
   //Arreglos

@@ -35,8 +35,6 @@ export class D_IdExp extends Instruccion{
       let valor = this.exp.interpretar(e,arbol);
       
       valor = JSON.parse(JSON.stringify(this,valor));
-  
-      
       
       let simbolo = new Simbolo(this.id,this.tipo,super.fila,super.columna,valor,false,false);
       e.addSimbolo(simbolo);//valor: any, arreglo: boolean, struct: boolean
