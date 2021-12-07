@@ -459,7 +459,7 @@ EXP
   //Operaciones Aritmeticas
   : menos EXP %prec UMENOS  {    }
   | EXP mas EXP  { $$ = new Suma(0,$1,$3,yylineno,0);   }
-  | EXP menos EXP  {    }
+  | EXP menos EXP  { $$ = new Resta(0,$1,$3,yylineno,0);   }
   | EXP por EXP  {    }
   | EXP div EXP  {    }
   | EXP mod EXP  {    }
@@ -477,8 +477,8 @@ EXP
   
   //Operaciones Lógicas
   | EXP and EXP  { $$ = new And($1,$3,yylineno,0);   }
-  | EXP or EXP  {    }
-  | not EXP  {    }
+  | EXP or EXP  {  $$ = new Or($1,$3,yylineno,0);  }
+  | not EXP  {  $$ = new Not($2,yylineno,0);  }
   
   //Valores Primitivos
   

@@ -30,7 +30,7 @@ export class Suma extends Instruccion{
     interpretar(entorno: TablaSimbolos, arbol: Arbol): any {
         try {
             const izq=this.operadorIzq.interpretar(entorno,arbol);
-            const der=this.operadorIzq.interpretar(entorno,arbol);
+            const der=this.operadorDer.interpretar(entorno,arbol);
             if(izq instanceof Excepcion){
                 return izq;
             }
@@ -46,10 +46,10 @@ export class Suma extends Instruccion{
             if(this.operador === ARITMETICO.MAS ){
                 //validaciones
                 if(this.operadorIzq.tipo == TIPO.NULL){
-                    return new Excepcion("Semantico", "Error de operacion en variable NULA", `${this.fila}`, `${this.columna}`);
+                    return new Excepcion("Semantico", "Error de operacion en variable NULA IZQ", `${this.fila}`, `${this.columna}`);
                 }
                 if(this.operadorDer.tipo == TIPO.NULL){
-                    return new Excepcion("Semantico", "Error de operacion en variable NULA", `${this.fila}`, `${this.columna}`);
+                    return new Excepcion("Semantico", "Error de operacion en variable NULA DER", `${this.fila}`, `${this.columna}`);
                 }
                 //-------ENTERO
                 //ENTERO + ENTERO

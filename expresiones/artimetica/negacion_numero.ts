@@ -28,7 +28,7 @@ export class NegacionNum extends Instruccion{
     interpretar(entorno: TablaSimbolos, arbol: Arbol): any {
         try {
             const izq=this.operadorIzq.interpretar(entorno,arbol);
-            const der=this.operadorIzq.interpretar(entorno,arbol);
+            const der=this.operadorDer.interpretar(entorno,arbol);
             if(izq instanceof Excepcion){
                 return izq;
             }
@@ -61,7 +61,7 @@ export class NegacionNum extends Instruccion{
                         this.tipo=TIPO.DECIMAL;
                         return (this.obtenerVal(this.operadorIzq.tipo,izq))*(-1) ;
                     }
-                    
+
                 return new Excepcion("Semantico",`Tipo de datos invalido para negacion numero ${this.operadorIzq.tipo} * ${this.operadorDer.tipo}  `,`${this.fila}`,`${this.columna}`);
             } 
 

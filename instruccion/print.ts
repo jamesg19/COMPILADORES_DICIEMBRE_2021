@@ -21,11 +21,11 @@ export class Print extends Instruccion{
     
     interpretar(entorno:TablaSimbolos, arbol:Arbol):any{
         
-        console.log('antes: ',this.expresion);
+        //console.log('antes: ',this.expresion);
         
         const value = this.expresion.interpretar(entorno,arbol);
         
-        console.log('despues: ',value);
+        //console.log('despues: ',value);
         
         
         if( value instanceof Excepcion){
@@ -35,7 +35,7 @@ export class Print extends Instruccion{
         
         
         arbol.consola += value;
-        //console.log(value);
+        console.log(value);
     }
     
     

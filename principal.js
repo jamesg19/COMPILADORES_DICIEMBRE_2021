@@ -19,5 +19,6 @@ class Principal {
 }
 exports.Principal = Principal;
 let principa = new Principal();
-principa.ejecutar('println((4+4)+(4+4));');
+principa.ejecutar('println((4+4)+(4+4+5));');
+principa.ejecutar('println((true || false ));');
 //principa.ejecutar ('println((true && true) && (true && true));');

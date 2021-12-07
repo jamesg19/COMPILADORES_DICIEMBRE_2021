@@ -15,11 +15,11 @@ class Print extends Instruccion_1.Instruccion {
         const value = this.expresion.interpretar(entorno, arbol);
         //console.log('despues: ',value);
         if (value instanceof excepcion_1.Excepcion) {
+            console.log(value);
             return value;
         }
-        console.log(value);
         arbol.consola += value;
-        //console.log(value);
+        console.log(value);
     }
 }
 exports.Print = Print;
