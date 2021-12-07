@@ -113,7 +113,7 @@ export class Division extends Instruccion{
             }
 
         } catch (error) {
-            
+            return new Excepcion("Semantico",`No se pudo obtener el valor en division`,`${this.fila}`,`${this.columna}`);
         }
 
     }

@@ -229,7 +229,7 @@ export class Suma extends Instruccion{
             }
 
         } catch (error) {
-            
+            return new Excepcion("Semantico",`No se pudo obtener el valor suma `,`${this.fila}`,`${this.columna}`);
         }
 
     }

@@ -157,7 +157,7 @@ export class Resta extends Instruccion{
             }
 
         } catch (error) {
-            
+            return new Excepcion("Semantico",`No se pudo obtener el valor en resta `,`${this.fila}`,`${this.columna}`);
         }
 
     }

@@ -7,18 +7,24 @@ import { Excepcion} from "../../table/excepcion"
 import { Primitivo } from "../primitivo";
 
 
-export class NegacionNum extends Instruccion{
+export class Seno extends Instruccion{
     operador:ARITMETICO;
     operadorIzq:Primitivo;
-    operadorDer:Primitivo;
+    //operadorDer:Primitivo;
     fila: number;
     columna:number;
     tipo:TIPO;
-    
-    constructor(operador:ARITMETICO,operadorIzq:Primitivo,operadorDer:Primitivo,fila:number,columna:number){
+    /**
+     * CONSTRUCTOR DE OPERACION SENO()
+     * @param operador 
+     * @param operadorIzq 
+     * @param fila 
+     * @param columna 
+     */
+    constructor(operador:ARITMETICO,operadorIzq:Primitivo,fila:number,columna:number){
         super(fila,columna);
         this.operadorIzq=operadorIzq;
-        this.operadorDer=operadorDer;
+        //this.operadorDer=operadorDer;
         this.fila=fila;
         this.columna=columna;
         this.operador=operador;
@@ -28,46 +34,49 @@ export class NegacionNum extends Instruccion{
     interpretar(entorno: TablaSimbolos, arbol: Arbol): any {
         try {
             const izq=this.operadorIzq.interpretar(entorno,arbol);
-            const der=this.operadorDer.interpretar(entorno,arbol);
+            //const der=this.operadorDer.interpretar(entorno,arbol);
             if(izq instanceof Excepcion){
                 return izq;
             }
-            if(this.operadorDer!= null || this.operadorDer != undefined){
+            // if(this.operadorDer!= null || this.operadorDer != undefined){
                 
-                if(der instanceof Excepcion){
-                    return der;
-                }
-            }
+            //     if(der instanceof Excepcion){
+            //         return der;
+            //     }
+            // }
 
-            //--------------------------MULTIPLICACION------------------------------
-            
-            if(this.operador === ARITMETICO.UMENOS ){
+            //--------------------------SENO------------------------------
+
                 //validaciones
                 if(this.operadorIzq.tipo == TIPO.NULL){
                     return new Excepcion("Semantico", "Error de operacion en variable NULA", `${this.fila}`, `${this.columna}`);
                 }
-                if(this.operadorDer.tipo == TIPO.NULL){
-                    return new Excepcion("Semantico", "Error de operacion en variable NULA", `${this.fila}`, `${this.columna}`);
-                }
                     
                     //-------ENTERO
-                    //ENTERO
+                    //sen(ENTERO);
                     if(this.operadorIzq.tipo===TIPO.ENTERO  ){
-                        this.tipo=TIPO.ENTERO;
-                        return (this.obtenerVal(this.operadorIzq.tipo,izq))*(-1);
-                    }
-                    //DECIMAL
-                    else if(this.operadorIzq.tipo===TIPO.DECIMAL){
                         this.tipo=TIPO.DECIMAL;
-                        return (this.obtenerVal(this.operadorIzq.tipo,izq))*(-1) ;
+                        return Math.sin(this.obtenerVal(this.operadorIzq.tipo,izq)) ;
                     }
 
-                return new Excepcion("Semantico",`Tipo de datos invalido para negacion numero ${this.operadorIzq.tipo} * ${this.operadorDer.tipo}  `,`${this.fila}`,`${this.columna}`);
-            } 
+                    ////--------DECIMAL
+                    //SEN(DECIMAL)
+                    else if(this.operadorIzq.tipo===TIPO.DECIMAL  ){
+                        this.tipo=TIPO.DECIMAL;
+                        return Math.sin(this.obtenerVal(this.operadorIzq.tipo,izq));
+                    }
+                    //SEN(BOOLEAN)
+                    else if(this.operadorIzq.tipo===TIPO.BOOLEAN  ){
+                        this.tipo=TIPO.DECIMAL;
+                        return Math.sin(this.obtenerVal(this.operadorIzq.tipo,izq));
+                    }
+
+
+                return new Excepcion("Semantico",`Tipo de datos invalido para Sen()  ${this.operadorIzq.tipo}`,`${this.fila}`,`${this.columna}`);
 
         } catch (error) {
 
-            return new Excepcion("Semantico","QUETZAL Null Poiter negacion numero ",`${this.fila}`,`${this.columna}`);
+            return new Excepcion("Semantico","QUETZAL Null Poiter Sen() tipo dato incorrecto ",`${this.fila}`,`${this.columna}`);
 
         }
     }
@@ -95,8 +104,7 @@ export class NegacionNum extends Instruccion{
             }
 
         } catch (error) {
-            return new Excepcion("Semantico",`No se pudo obtener el valor en negacion `,`${this.fila}`,`${this.columna}`);
-            
+            return new Excepcion("Semantico",`No se pudo obtener el valor en Sen() `,`${this.fila}`,`${this.columna}`);
         }
 
     }
