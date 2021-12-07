@@ -32,6 +32,8 @@ let principa:Principal = new Principal();
 
 principa.ejecutar (
                 'int a  ;'+
+                'a=3;'+
+                ''+
                 'struct miStruct{int a,int c};'+
                    'println((true || false ));'
                    );

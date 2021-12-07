@@ -13,7 +13,7 @@ export class D_Id extends Instruccion{
     
     constante:boolean;
     
-    constructor( tipo:TIPO, id: string, ,constante:boolean,fila: number,columna:number){
+    constructor( tipo:TIPO, id: string, constante:boolean,fila: number,columna:number){
       super(fila,columna);
       
       this.tipo = tipo;
