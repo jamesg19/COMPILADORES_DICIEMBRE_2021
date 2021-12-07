@@ -205,7 +205,7 @@ INSTRUCCIONES:
 //solo hay que crear la produccion (ambigua)
 
 INSTRUCCION: 
-    DECLARACION_VARIABLE            {   $$ = $1 }
+    DECLARACION_VARIABLE            {   $$ = $1 }//falta cuando hay una lista de id's
   | DECLARACION_FUNCION             {   $$ = $1 }
   | DECLARACION_TYPE                {   $$ = $1 } //aca se crea la 'plantilla' para despues crear instancias
   | ASIGNACION 	                    {   $$ = $1 } 
@@ -425,8 +425,11 @@ ATRIBUTO
 DECLARACION_VARIABLE 
   : TIPO_DEC_VARIABLE id igual EXP punto_coma{  $$ = new D_IdExp($1, $2, $4,false,@1.firt_line,@1.firt_column);  }
   | TIPO_DEC_VARIABLE id punto_coma {  $$ = new D_Id($1, $2,false,@1.firt_line,@1.firt_column);  }   
+  | TIPO_DEC_VARIABLE LIST_ID punto_coma {  $$ = new D_IdList($1, $2,false,@1.firt_line,@1.firt_column);  }   
 ;
 
+
+;
 //TODO: REVISAR DEC_ID_COR Y DEC_ID_COR_EXP
 LISTA_DECLARACIONES 
   : LISTA_DECLARACIONES coma DEC_ID  {  $1.push($3); $$ = $1;   }//No utilice las comas
@@ -436,7 +439,6 @@ LISTA_DECLARACIONES
   | LISTA_DECLARACIONES coma DEC_ID_TIPO_EXP  {    }
   | LISTA_DECLARACIONES coma DEC_ID_TIPO_CORCHETES_EXP  {    }
   | DEC_ID  {  $$ = [$1]  }
-  | DEC_ID_TIPO  {  $$ = [$1]  }
   | DEC_ID_TIPO_CORCHETES  {  $$ = [$1]  }
   | DEC_ID_EXP  { $$ = [$1]   }
   | DEC_ID_TIPO_EXP  { $$ = [$1]   }
