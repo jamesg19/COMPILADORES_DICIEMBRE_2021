@@ -23,8 +23,10 @@ export class Or extends Instruccion{
       if(exp1 instanceof Excepcion) return exp1;
       if(exp2 instanceof Excepcion) return exp2;
 
-      if(exp1.tipo === TIPO.BOOLEAN && exp2.tipo == TIPO.BOOLEAN ) return exp1 || exp2;
-      
+      if(this.leftExpressio.tipo === TIPO.BOOLEAN && this.rightExpression.tipo == TIPO.BOOLEAN ){
+        this.tipo = TIPO.BOOLEAN;
+         return exp1 || exp2;
+      }
       return new Excepcion("Semantico","Se requiere un tipo Boolean ", super.fila+"",super.columna+"");
     }
   }

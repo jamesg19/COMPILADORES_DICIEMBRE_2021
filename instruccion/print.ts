@@ -21,12 +21,19 @@ export class Print extends Instruccion{
     
     interpretar(entorno:TablaSimbolos, arbol:Arbol):any{
         
-        let value = this.expresion.interpretar(entorno,arbol);
+        console.log('antes: ',this.expresion);
+        
+        const value = this.expresion.interpretar(entorno,arbol);
+        
+        console.log('despues: ',value);
+        
         
         if( value instanceof Excepcion){
+            console.log(value);
             return value;            
         }  
-        console.log("Interpretar println");
+        
+        
         arbol.consola += value;
         //console.log(value);
     }

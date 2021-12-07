@@ -1,21 +1,24 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Print = void 0;
-class Print {
+const Instruccion_1 = require("../abs/Instruccion");
+const excepcion_1 = require("../table/excepcion");
+class Print extends Instruccion_1.Instruccion {
     constructor(fila, columna, value) {
-        //super(fila,columna);
+        super(fila, columna);
         this.fila = fila;
         this.columna = columna;
         this.expresion = value;
-        this.struct = false;
-        this.arra = false;
     }
     interpretar(entorno, arbol) {
-        //let value = this.expresion.interpretar(entorno,arbol);
-        //if( value instanceof Excepcion){
-        //  return value;            
-        //}  
-        console.log("Interpretar println");
+        //console.log('antes: ',this.expresion);
+        const value = this.expresion.interpretar(entorno, arbol);
+        //console.log('despues: ',value);
+        if (value instanceof excepcion_1.Excepcion) {
+            return value;
+        }
+        console.log(value);
+        arbol.consola += value;
         //console.log(value);
     }
 }
