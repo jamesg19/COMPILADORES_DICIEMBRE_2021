@@ -116,6 +116,11 @@
   
   //Instrucciones
     const { Print } = require('../instruccion/print');
+    const {D_IdExp} = require('../instruccion/declaracion_idexp')
+    const {D_Id} = require('../instruccion/declaracion_id')
+    
+    const { Asignacion } = require('../instruccion/asignacion')
+    
     //Tipos
     const { Primitivo } = require('../expresiones/primitivo');
     
@@ -123,6 +128,7 @@
     //Enumerados        
     const { ARITMETICO } = require('../table/tipo')
     //const { TIPO } = require('../table/tipo').TIPO;
+    
     const { RELACIONAL } = require('../table/tipo');
     const { LOGICO} = require('../table/tipo');
     const { TIPO } = require('../table/TipoNativo');
@@ -202,9 +208,9 @@ INSTRUCCIONES:
 //solo hay que crear la produccion (ambigua)
 
 INSTRUCCION: 
-    DECLARACION_VARIABLE            {   $$ = $1 }
+    DECLARACION_VARIABLE            {   $$ = $1 }//falta cuando hay una lista de id's
   | DECLARACION_FUNCION             {   $$ = $1 }
-  | DECLARACION_TYPE                {   $$ = $1 }
+  | DECLARACION_TYPE                {   $$ = $1 } //aca se crea la 'plantilla' para despues crear instancias
   | ASIGNACION 	                    {   $$ = $1 } 
   | PUSH_ARREGLO 	                  {   $$ = $1 }
   | IMPRIMIR 	                      {   $$ = $1 }
@@ -221,11 +227,12 @@ INSTRUCCION:
   | LLAMAR_FUNCION                  {   $$ = $1 }
   | INCREMENTO_DECREMENTO           {   $$ = $1 }
   | PRINTLN                         {   $$ = $1 }
-  | PRINT                           {   $$ = $1 }
+  | PRINT                           {   $$ = $1 } //listo
 ;
 
 
-PRINT  :  println par_abierto EXP par_cerrado punto_coma  { $$ = new Print(@1.firt_line,@1.firt_column,$3);  };
+PRINT  :  println par_abierto EXP par_cerrado punto_coma  { $$ = new Print(@1.firt_line,@1.firt_column,$3);  }
+;
 
 // //--------------------------------------IMPRIMIR--------------------------------------
  //print 
@@ -277,15 +284,15 @@ FOR_IN
 ASIGNACION 
   //variable = EXP ;
   
-  : id TIPO_IGUAL EXP punto_coma {   }
+  : id igual EXP punto_coma {  $$ = new Asignacion($1, $3,false,@1.firt_line,@1.firt_column); }
 
   // type.accesos = EXP ; || type.accesos[][] = EXP;
   
-  | id LISTA_ACCESOS_TYPE TIPO_IGUAL EXP PT_COMA {   }
+ // | id LISTA_ACCESOS_TYPE TIPO_IGUAL EXP PT_COMA {   }
 
   //variable[][] = EXP ;
   
-  | ACCESO_ARREGLO TIPO_IGUAL EXP punto_coma {   }
+  //| ACCESO_ARREGLO TIPO_IGUAL EXP punto_coma {   }
 ;
 
 
@@ -420,23 +427,26 @@ ATRIBUTO
 //=========================================>fin
 
 DECLARACION_VARIABLE 
-  : TIPO_DEC_VARIABLE LISTA_DECLARACIONES punto_coma {    }
+  : TIPO_DEC_VARIABLE id igual EXP punto_coma  {  $$ = new D_IdExp($1, $2, $4,false,@1.firt_line,@1.firt_column);  }
+  | TIPO_DEC_VARIABLE id punto_coma            {  $$ = new D_Id($1, $2,false,@1.firt_line,@1.firt_column);  }   
+  //| TIPO_DEC_VARIABLE LIST_ID punto_coma     {  $$ = new D_IdList($1, $2,false,@1.firt_line,@1.firt_column);  }   
 ;
+
+
 
 //TODO: REVISAR DEC_ID_COR Y DEC_ID_COR_EXP
 LISTA_DECLARACIONES 
   : LISTA_DECLARACIONES coma DEC_ID  {  $1.push($3); $$ = $1;   }//No utilice las comas
-  | LISTA_DECLARACIONES coma DEC_ID_TIPO  {    }
+  | LISTA_DECLARACIONES coma DEC_ID_TIPO  { $1.push($3)   }
   | LISTA_DECLARACIONES coma DEC_ID_TIPO_CORCHETES  {    }
   | LISTA_DECLARACIONES coma DEC_ID_EXP  {    }
   | LISTA_DECLARACIONES coma DEC_ID_TIPO_EXP  {    }
   | LISTA_DECLARACIONES coma DEC_ID_TIPO_CORCHETES_EXP  {    }
   | DEC_ID  {  $$ = [$1]  }
-  | DEC_ID_TIPO  {    }
-  | DEC_ID_TIPO_CORCHETES  {    }
-  | DEC_ID_EXP  {    }
-  | DEC_ID_TIPO_EXP  {    }
-  | DEC_ID_TIPO_CORCHETES_EXP  {    }
+  | DEC_ID_TIPO_CORCHETES  {  $$ = [$1]  }
+  | DEC_ID_EXP  { $$ = [$1]   }
+  | DEC_ID_TIPO_EXP  { $$ = [$1]   }
+  | DEC_ID_TIPO_CORCHETES_EXP  { $$ = [$1]   }
 ;
 
 //let id : TIPO_VARIABLE_NATIVA LISTA_CORCHETES = EXP ;
@@ -445,8 +455,8 @@ DEC_ID_TIPO_CORCHETES_EXP
 ;
 
 //let id : TIPO_VARIABLE_NATIVA = EXP;
-DEC_ID_TIPO_EXP 
-  : id dos_puntos TIPO_VARIABLE_NATIVA igual EXP {    }
+DEC_ID_TIPO_EXP                                 
+  : TIPO_VARIABLE_NATIVA id   igual EXP {  $$ = new D_IdExp($1, $2, $3,false,@1.firt_line,@1.firt_column);   }
 ;
 
 //let id = EXP ;
@@ -591,12 +601,10 @@ LISTA_EXPRESIONES
 
 
 TIPO_DEC_VARIABLE
-  :  
-   string     {    }
-  | int     {    }
-  | double     {    }
-  | boolean    { }
-  
+  :string      {  $$ = TIPO.CADENA  }
+  | int        {  $$ = TIPO.ENTERO  }
+  | double     {  $$ = TIPO.DECIMAL }
+  | boolean    {  $$ = TIPO.BOOLEAN }
 ;
 
 TIPO_VARIABLE_NATIVA

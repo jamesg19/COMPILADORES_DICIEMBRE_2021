@@ -49,7 +49,7 @@ export class Struct extends Instruccion{
             //entorno.setSi(variable);
             entorno_local.addSimbolo(variable);
         });
-        console.log('guardando struct');
+        
         arbol.structs.set(this.id,JSON.parse(JSON.stringify(this)));
         return new Type(this.id,entorno_local.tabla);
       }
