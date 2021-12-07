@@ -11,7 +11,7 @@ export class Primitivo extends Instruccion {
     value: any;
    
 
-    constructor(fila: number, columna: number, tipo: TIPO, value: any) {
+    constructor(tipo: TIPO, value: any,fila: number, columna: number) {
         super(fila,columna);
         this.fila = fila;
         this.columna = columna;

@@ -22,7 +22,7 @@ export class Not extends Instruccion{
       
       if (expression1 instanceof Excepcion) return expression1;
       
-      if(expression1.tipo === TIPO.BOOLEAN) return !expression1;
+      if(this.expression.tipo === TIPO.BOOLEAN) return !expression1;
       
       return new Excepcion("Semantico","Se requiere un tipo Boolean ", super.fila+"",super.columna+"");
     

@@ -116,6 +116,15 @@
     const { Primitivo } = require('../expresiones/primitivo');
     const { Print } = require('../instruccion/print');
     const { Instruccion } = require('../instruccion/print');
+            
+    const { ARITMETICO } = require('../table/tipo')
+    const { TIPO } = require('../table/tipo');
+    const { RELACIONAL } = require('../table/tipo');
+    const { LOGICO} = require('../table/tipo');
+    
+    const { IgualIgual } = require('../expresiones/relacional/igual_igual');
+    const { And } = require('../expresiones/logico/and');
+    const { Suma} = require('../expresiones/artimetica/suma');
 %}
 
 // Asociacion de operadores y precedencia
@@ -145,18 +154,6 @@
 
 %start INICIO 
 
-//////////////////////////////PARTE SINTACTICA//////////////
-%% /* DEFINICION DE LA GRAMATICA*/
-//terminales con minuscula
-//no terminales con mayuscula
-
-
-INICIO : INSTRUCCIONES EOF { $$ = $1; return $$; };
-
-INSTRUCCIONES : INSTRUCCIONES INSTRUCCION { $1.push($2); $$ = $1;  }
-              | INSTRUCCION { $$ = [$1] }
-              ;
-%start INICIO 
 
 //////////////////////////////PARTE SINTACTICA//////////////
 %% /* DEFINICION DE LA GRAMATICA*/
@@ -173,6 +170,7 @@ INSTRUCCIONES:
 
 ;
 
+
 //estas son las producciones que se tienen
 //que agregar 
 //
@@ -180,33 +178,34 @@ INSTRUCCIONES:
 //solo hay que crear la produccion (ambigua)
 
 INSTRUCCION: 
-    DECLARACION_VARIABLE            {    }
-  | DECLARACION_FUNCION             {     }
-  | DECLARACION_TYPE                {    }
-  | ASIGNACION 	                    {   } 
-  | PUSH_ARREGLO 	              {   }
-  | IMPRIMIR 	                {    }
-  | CONDICION_IF 	            {    }
-  | SWITCH 	                  {   }
-  | BREAK 	                  {   }
-  | RETURN 	                  {   }
-  | CONTINUE 	                {   }
-  | WHILE 	                  {   }
-  | DO_WHILE 	                {   }
-  | FOR 	                    {   }
-  | FOR1_OF 	                {   }
-  | FOR2_IN 	                {   }
-  | LLAMAR_FUNCION            {   }
-  | INCREMENTO_DECREMENTO     {   }
-  | PRINTLN                   {   }
-  | PRINT                     {   }
+    DECLARACION_VARIABLE            {   $$ = $1 }
+  | DECLARACION_FUNCION             {   $$ = $1 }
+  | DECLARACION_TYPE                {   $$ = $1 }
+  | ASIGNACION 	                    {   $$ = $1 } 
+  | PUSH_ARREGLO 	                  {   $$ = $1 }
+  | IMPRIMIR 	                      {   $$ = $1 }
+  | CONDICION_IF 	                  {   $$ = $1 }
+  | SWITCH 	                        {   $$ = $1 }
+  | BREAK 	                        {   $$ = $1 }
+  | RETURN 	                        {   $$ = $1 }
+  | CONTINUE 	                      {   $$ = $1 }
+  | WHILE 	                        {   $$ = $1 }
+  | DO_WHILE 	                      {   $$ = $1 }
+  | FOR 	                          {   $$ = $1 }
+  | FOR1_OF 	                      {   $$ = $1 }
+  | FOR2_IN 	                      {   $$ = $1 }
+  | LLAMAR_FUNCION                  {   $$ = $1 }
+  | INCREMENTO_DECREMENTO           {   $$ = $1 }
+  | PRINTLN                         {   $$ = $1 }
+  | PRINT                           {   $$ = $1 }
+;
 
 
-PRINT  :  println par_abierto decimal par_cerrado punto_coma  { $$ = new Print(1,1,$3);  };
+PRINT  :  println par_abierto EXP par_cerrado punto_coma  { $$ = new Print(1,1,$3);  };
 
 // //--------------------------------------IMPRIMIR--------------------------------------
-// IMPRIMIR 
-//   : imprimir par_abierto LISTA_EXPRESIONES par_cerrado punto_coma {    }
+ //print 
+  // : imprimir par_abierto LISTA_EXPRESIONES par_cerrado punto_coma {    }
 // ;
 
 
@@ -459,7 +458,7 @@ INCREMENTO_DECREMENTO
 EXP
   //Operaciones Aritmeticas
   : menos EXP %prec UMENOS  {    }
-  | EXP mas EXP  {    }
+  | EXP mas EXP  { $$ = new Suma(0,$1,$3,yylineno,0);   }
   | EXP menos EXP  {    }
   | EXP por EXP  {    }
   | EXP div EXP  {    }
@@ -467,37 +466,44 @@ EXP
   | EXP potencia EXP  {    }
   | id mas_mas  {    }
   | id menos_menos  {    }
-  | par_abierto EXP par_cerrado  {    }
+  | par_abierto EXP par_cerrado  {  $$ = $2  }
   //Operaciones de Comparacion
   | EXP mayor EXP  {    }
   | EXP menor EXP  {    }
   | EXP mayor_igual EXP  {    }
   | EXP menor_igual EXP  {    }
-  | EXP igual_que EXP  {    }
+  //| EXP igual_que EXP  { $$ = new IgualIgual($1,$3,yylineno,0);     }
   | EXP dif_que EXP  {    }
+  
   //Operaciones Lógicas
-  | EXP and EXP  {    }
+  | EXP and EXP  { $$ = new And($1,$3,yylineno,0);   }
   | EXP or EXP  {    }
   | not EXP  {    }
+  
   //Valores Primitivos
-  | entero { }
-  | decimal {}
-  | string  {    }
+  
+  | entero { $$ = new Primitivo(TIPO.ENTERO,$1,yylineno,0); }
+  | decimal {$$ = new Primitivo(1,$1,yylineno,0);}
+  | string  { $$ = new Primitivo(TIPO.CADENA,$1,yylineno,0);   }
   | id   {    }
-  | true  {    }
-  | false  {    }
-  | null  {    }
+  | true  { $$ = new Primitivo(2,$1,yylineno,0);   }
+  | false  { $$ = new Primitivo(2,$1,yylineno,0);   }
+  | null  {  $$ = new Primitivo(TIPO.NULL,$1,yylineno,0);  }
+  
   //Arreglos
   | corchete_abierto LISTA_EXPRESIONES corchete_cerrado  {    }
   | corchete_abierto corchete_cerrado  {    }
   | ACCESO_ARREGLO  {    }
   | ARRAY_LENGTH  {    }
   | ARRAY_POP  {    }
+  
   //Types - accesos
   | ACCESO_TYPE  {    }
   | TYPE  {    }
+  
   //Ternario
   | TERNARIO  {    }
+  
   //Funciones
   | LLAMADA_FUNCION_EXP  {    }
 ;
