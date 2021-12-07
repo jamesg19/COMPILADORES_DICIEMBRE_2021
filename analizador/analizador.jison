@@ -204,4 +204,372 @@ INSTRUCCION:
 
 PRINT  :  println par_abierto decimal par_cerrado punto_coma  { $$ = new Print(1,1,$3);  };
 
+// //--------------------------------------IMPRIMIR--------------------------------------
+// IMPRIMIR 
+//   : imprimir par_abierto LISTA_EXPRESIONES par_cerrado punto_coma {    }
+// ;
+
+
+PT_COMA:
+   punto_coma
+;
+//--------------------LLAMADA DE UNA FUNCION--------------------
+
+LLAMAR_FUNCION 
+  : id par_abierto par_cerrado PT_COMA {   }
+  | id par_abierto LISTA_EXPRESIONES par_cerrado PT_COMA {   }
+;
+
+//---------------------LLAMAR A FUNCION EXP
+LLAMAR_FUNCION_EXP 
+  : id par_abierto par_cerrado {   }
+  | id par_abierto LISTA_EXPRESIONES par_cerrado {   }
+;
+
+WHILE 
+  : while par_abierto EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada {   }
+;
+
+
+//---------------------------------DO WHILE----------------------
+DO_WHILE 
+  : do llave_abierta INSTRUCCIONES llave_cerrada while par_abierto EXP par_cerrado PT_COMA {   }
+;
+
+////xxx raiz
+FOR : for par_abierto DECLARACION_VARIABLE EXP punto_coma ASIGNACION_FOR par_cerrado llave_abierta INSTRUCCIONES llave_cerrada {   }
+  | for par_abierto ASIGNACION EXP punto_coma ASIGNACION_FOR par_cerrado llave_abierta INSTRUCCIONES llave_cerrada    {   }
+;
+
+FOR_OF 
+  : for par_abierto TIPO_DEC_VARIABLE id of EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada 
+  {   }
+;
+
+
+FOR_IN 
+  : for par_abierto TIPO_DEC_VARIABLE id in EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada {   }
+;
+
+ASIGNACION 
+  //variable = EXP ;
+  
+  : id TIPO_IGUAL EXP punto_coma {   }
+
+  // type.accesos = EXP ; || type.accesos[][] = EXP;
+  
+  | id LISTA_ACCESOS_TYPE TIPO_IGUAL EXP PT_COMA {   }
+
+  //variable[][] = EXP ;
+  
+  | ACCESO_ARREGLO TIPO_IGUAL EXP punto_coma {   }
+;
+
+
+TIPO_IGUAL 
+  : igual {    }
+  | mas igual {    }
+  | menos igual {    }
+;
+
+ASIGNACION_FOR 
+  : id TIPO_IGUAL EXP {    }
+  | id mas_mas {    }
+  | id menos_menos {    }
+;
+
+SWITCH 
+  : switch par_abierto EXP par_cerrado llave_abierta LISTA_CASE llave_cerrada {   }
+;
+
+LISTA_CASE 
+  : LISTA_CASE CASE {  }
+  | CASE {  }
+  | DEFAULT { }
+  | LISTA_CASE DEFAULT {  }
+;
+
+CASE 
+  : case EXP dos_puntos INSTRUCCIONES {  }
+;
+
+DEFAULT 
+  : default dos_puntos INSTRUCCIONES {  }
+;
+
+CONTINUE 
+  : continue PT_COMA {  }
+;
+
+BREAK 
+  : break PT_COMA {  }
+;
+
+RETURN 
+  : return EXP PT_COMA {  }
+  | return punto_coma {  }
+;
+
+CONDICION_IF 
+  : IF  {  }
+  | IF ELSE  {  }
+  | IF LISTA_ELSE_IF  {  }
+  | IF LISTA_ELSE_IF ELSE  {  }
+;
+
+IF 
+  : if par_abierto EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada {  }
+;
+
+
+ELSE 
+  : else llave_abierta INSTRUCCIONES llave_cerrada {  }
+;
+
+ELSE_IF 
+  : else if par_abierto EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada {  }
+;
+
+LISTA_ELSE_IF 
+  : LISTA_ELSE_IF ELSE_IF  {  }
+  | ELSE_IF  {  }
+;
+
+PUSH_ARREGLO 
+  : id punto push par_abierto EXP par_cerrado PT_COMA  {  }
+  | id LISTA_ACCESOS_TYPE punto push par_abierto EXP par_cerrado PT_COMA  {  }
+;
+
+
+//------------------------------------- DECLARACION DE FUNCION ---------------------------------
+DECLARACION_FUNCION 
+  //Funcion sin parametros y con tipo -> 
+  //function TIPO test() { INSTRUCCIONES }
+  : function TIPO_VARIABLE_NATIVA id par_abierto par_cerrado llave_abierta INSTRUCCIONES llave_cerrada {    }
+
+   //Funcion sin parametros y con tipo -> function TIPO[][] test()  { INSTRUCCIONES }
+  | function TIPO_VARIABLE_NATIVA LISTA_CORCHETES id par_abierto par_cerrado llave_abierta INSTRUCCIONES llave_cerrada {    }
+
+  //Funcion sin parametros y sin tipo -> function test() { INSTRUCCIONES }
+  
+  | function id par_abierto par_cerrado llave_abierta INSTRUCCIONES llave_cerrada {    }
+
+  //Funcion con parametros y con tipo -> function TIPO test ( LISTA_PARAMETROS )  { INSTRUCCIONES }
+  
+  | function TIPO_VARIABLE_NATIVA id par_abierto LISTA_PARAMETROS par_cerrado  llave_abierta INSTRUCCIONES llave_cerrada {    }
+
+  //Funcion con parametros y con tipo -> function TIPO[][] test ( LISTA_PARAMETROS )  { INSTRUCCIONES }
+  | function TIPO_VARIABLE_NATIVA LISTA_CORCHETES id par_abierto LISTA_PARAMETROS par_cerrado llave_abierta INSTRUCCIONES llave_cerrada {    }
+
+  //Funcion con parametros y sin tipo -> function test ( LISTA_PARAMETROS ) { INSTRUCCIONES }
+  
+  | function id par_abierto LISTA_PARAMETROS par_cerrado llave_abierta INSTRUCCIONES llave_cerrada {    }
+
+;
+
+LISTA_PARAMETROS 
+  : LISTA_PARAMETROS coma PARAMETRO {    }
+  | PARAMETRO {    }
+;
+
+PARAMETRO 
+  : id dos_puntos TIPO_VARIABLE_NATIVA {    }
+  | id dos_puntos TIPO_VARIABLE_NATIVA LISTA_CORCHETES {    }
+  | id dos_puntos Array menor TIPO_VARIABLE_NATIVA mayor {    }
+;
+
+
+DECLARACION_TYPE 
+  : type id igual llave_abierta LISTA_ATRIBUTOS llave_cerrada punto_coma {    }
+  | type id igual llave_abierta LISTA_ATRIBUTOS llave_cerrada  {    }
+;
+
+LISTA_ATRIBUTOS 
+  : ATRIBUTO coma LISTA_ATRIBUTOS {    }
+  | ATRIBUTO {    }
+;
+
+ATRIBUTO 
+  : id dos_puntos TIPO_VARIABLE_NATIVA {    }
+  | id dos_puntos TIPO_VARIABLE_NATIVA LISTA_CORCHETES {    }
+;
+
+DECLARACION_VARIABLE 
+  : TIPO_DEC_VARIABLE LISTA_DECLARACIONES punto_coma {    }
+ // | TIPO_DEC_VARIABLE LISTA_DECLARACIONES {    }
+;
+
+//TODO: REVISAR DEC_ID_COR Y DEC_ID_COR_EXP
+LISTA_DECLARACIONES 
+  : LISTA_DECLARACIONES coma DEC_ID  {    }//No utilice las comas
+  | LISTA_DECLARACIONES coma DEC_ID_TIPO  {    }
+  | LISTA_DECLARACIONES coma DEC_ID_TIPO_CORCHETES  {    }
+  | LISTA_DECLARACIONES coma DEC_ID_EXP  {    }
+  | LISTA_DECLARACIONES coma DEC_ID_TIPO_EXP  {    }
+  | LISTA_DECLARACIONES coma DEC_ID_TIPO_CORCHETES_EXP  {    }
+  | DEC_ID  {    }
+  | DEC_ID_TIPO  {    }
+  | DEC_ID_TIPO_CORCHETES  {    }
+  | DEC_ID_EXP  {    }
+  | DEC_ID_TIPO_EXP  {    }
+  | DEC_ID_TIPO_CORCHETES_EXP  {    }
+;
+
+//let id : TIPO_VARIABLE_NATIVA LISTA_CORCHETES = EXP ;
+DEC_ID_TIPO_CORCHETES_EXP 
+  : id dos_puntos TIPO_VARIABLE_NATIVA LISTA_CORCHETES igual EXP {    }
+;
+
+//let id : TIPO_VARIABLE_NATIVA = EXP;
+DEC_ID_TIPO_EXP 
+  : id dos_puntos TIPO_VARIABLE_NATIVA igual EXP {    }
+;
+
+//let id = EXP ;
+DEC_ID_EXP 
+  : id igual EXP {    }
+;
+
+//let id : TIPO_VARIABLE_NATIVA ;
+DEC_ID_TIPO  
+  : id dos_puntos TIPO_VARIABLE_NATIVA {    }
+;
+
+//let id ;
+DEC_ID  
+  : id  {    }
+;
+
+//let id : TIPO_VARIABLE_NATIVA LISTA_CORCHETES ;
+DEC_ID_TIPO_CORCHETES 
+  : id dos_puntos TIPO_VARIABLE_NATIVA LISTA_CORCHETES {    }
+;
+
+
+LISTA_CORCHETES 
+  : LISTA_CORCHETES corchete_abierto corchete_cerrado {    }
+  | corchete_abierto corchete_cerrado {    }
+;
+
+INCREMENTO_DECREMENTO
+  : id mas_mas PT_COMA {    }
+  | id menos_menos PT_COMA {    }
+;
+
+EXP
+  //Operaciones Aritmeticas
+  : menos EXP %prec UMENOS  {    }
+  | EXP mas EXP  {    }
+  | EXP menos EXP  {    }
+  | EXP por EXP  {    }
+  | EXP div EXP  {    }
+  | EXP mod EXP  {    }
+  | EXP potencia EXP  {    }
+  | id mas_mas  {    }
+  | id menos_menos  {    }
+  | par_abierto EXP par_cerrado  {    }
+  //Operaciones de Comparacion
+  | EXP mayor EXP  {    }
+  | EXP menor EXP  {    }
+  | EXP mayor_igual EXP  {    }
+  | EXP menor_igual EXP  {    }
+  | EXP igual_que EXP  {    }
+  | EXP dif_que EXP  {    }
+  //Operaciones Lógicas
+  | EXP and EXP  {    }
+  | EXP or EXP  {    }
+  | not EXP  {    }
+  //Valores Primitivos
+  | entero { }
+  | decimal {}
+  | string  {    }
+  | id   {    }
+  | true  {    }
+  | false  {    }
+  | null  {    }
+  //Arreglos
+  | corchete_abierto LISTA_EXPRESIONES corchete_cerrado  {    }
+  | corchete_abierto corchete_cerrado  {    }
+  | ACCESO_ARREGLO  {    }
+  | ARRAY_LENGTH  {    }
+  | ARRAY_POP  {    }
+  //Types - accesos
+  | ACCESO_TYPE  {    }
+  | TYPE  {    }
+  //Ternario
+  | TERNARIO  {    }
+  //Funciones
+  | LLAMADA_FUNCION_EXP  {    }
+;
+
+TYPE 
+  : llave_abierta ATRIBUTOS_TYPE llave_cerrada {    }
+;
+
+ATRIBUTOS_TYPE 
+  : ATRIBUTO_TYPE coma ATRIBUTOS_TYPE {    }
+  | ATRIBUTO_TYPE {    }
+;
+
+ATRIBUTO_TYPE 
+  : id dos_puntos EXP {    }
+;
+
+ARRAY_LENGTH 
+  : id punto length  {    }
+  | id LISTA_ACCESOS_ARREGLO punto length  {    }
+  | id LISTA_ACCESOS_TYPE punto length  {    }
+;
+
+ARRAY_POP 
+  : id punto pop par_abierto par_cerrado  {    }
+  | id LISTA_ACCESOS_ARREGLO punto pop par_abierto par_cerrado  {    }
+  | id LISTA_ACCESOS_TYPE punto pop par_abierto par_cerrado  {    }
+;
+
+TERNARIO 
+  : EXP interrogacion EXP dos_puntos EXP {    }
+;
+
+ACCESO_ARREGLO 
+  : id LISTA_ACCESOS_ARREGLO {    }
+;
+
+ACCESO_TYPE 
+  : id LISTA_ACCESOS_TYPE {    }
+;
+
+LISTA_ACCESOS_TYPE 
+  : LISTA_ACCESOS_TYPE punto id {    }
+  | punto id {    }
+  | LISTA_ACCESOS_TYPE punto id LISTA_ACCESOS_ARREGLO {    }
+  | punto id LISTA_ACCESOS_ARREGLO {    }
+;
+
+LISTA_ACCESOS_ARREGLO 
+  : LISTA_ACCESOS_ARREGLO corchete_abierto EXP corchete_cerrado {    }
+  | corchete_abierto EXP corchete_cerrado {    }
+;
+
+LISTA_EXPRESIONES 
+  : LISTA_EXPRESIONES coma EXP {    }
+  | EXP  {    }
+;
+
+
+TIPO_DEC_VARIABLE
+  :  
+   string     {    }
+  | int     {    }
+  | double     {    }
+  | boolean    { }
+;
+
+TIPO_VARIABLE_NATIVA
+  : string  {  }
+  | number  {  }
+  | boolean {  }
+  | void    {  }
+  | id      {  }
+;
 

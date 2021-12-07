@@ -6,6 +6,7 @@ export const enum TIPO{
     NULL,
     ARREGLO,
     STRUCT,
+    CARACTER,
     VOID
 }
 
