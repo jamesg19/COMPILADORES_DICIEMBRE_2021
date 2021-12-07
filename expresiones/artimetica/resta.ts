@@ -123,12 +123,13 @@ export class Resta extends Instruccion{
                     }
                     return valorBoolean33 - this.obtenerVal(this.operadorDer.tipo,der);
                 }
+                return new Excepcion("Semantico",`Tipo de datos invalido para resta ${this.operadorIzq.tipo} - ${this.operadorDer.tipo}  `,`${this.fila}`,`${this.columna}`);
 
             } 
 
         } catch (error) {
 
-            return new Excepcion("Semantico","QUETZAL Null Poiter",`${this.fila}`,`${this.columna}`);
+            return new Excepcion("Semantico","QUETZAL Null Poiter resta",`${this.fila}`,`${this.columna}`);
 
         }
     }
