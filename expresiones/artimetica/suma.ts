@@ -9,8 +9,10 @@ import { Primitivo } from "../primitivo";
 
 export class Suma extends Instruccion{
     operador:ARITMETICO;
+
     operadorIzq:Primitivo;
     operadorDer:Primitivo;
+
     fila: number;
     columna:number;
     tipo:TIPO;
@@ -194,12 +196,12 @@ export class Suma extends Instruccion{
                     return this.obtenerVal(this.operadorIzq.tipo,izq) + this.obtenerVal(this.operadorDer.tipo,der);
                 }
 
-
+                return new Excepcion("Semantico",`Tipo de datos invalido para suma ${this.operadorIzq.tipo} + ${this.operadorDer.tipo}  `,`${this.fila}`,`${this.columna}`);
             } 
 
         } catch (error) {
 
-            return new Excepcion("Semantico","QUETZAL Null Poiter",`${this.fila}`,`${this.columna}`);
+            return new Excepcion("Semantico","QUETZAL Null Poiter suma ",`${this.fila}`,`${this.columna}`);
 
         }
     }
