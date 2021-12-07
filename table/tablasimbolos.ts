@@ -1,5 +1,6 @@
 import { Simbolo } from './simbolo';
 import { Excepcion } from './excepcion';
+import { Struct } from '../expresiones/struct/struct';
 
 export class TablaSimbolos{
     
@@ -7,9 +8,13 @@ export class TablaSimbolos{
     tabla: Map<String, Simbolo> ;
     anterior:TablaSimbolos|undefined;
     
+    
     constructor(anterior:TablaSimbolos|undefined){
+        
         this.tabla = new Map();
         this.anterior = anterior;    
+        
+        
     }
     addSimbolo(simbolo:Simbolo){
         
