@@ -124,6 +124,7 @@
     //Enumerados        
     const { ARITMETICO } = require('../table/tipo')
     //const { TIPO } = require('../table/tipo').TIPO;
+    
     const { RELACIONAL } = require('../table/tipo');
     const { LOGICO} = require('../table/tipo');
     const { TIPO } = require('../table/TipoNativo');
@@ -421,7 +422,7 @@ ATRIBUTO
 //=========================================>fin
 
 DECLARACION_VARIABLE 
-  : TIPO_DEC_VARIABLE LISTA_DECLARACIONES punto_coma { $$ = new D_IdExp($1,$2,@1.firt_line,@1.firt_column);   }
+  : TIPO_DEC_VARIABLE id igual EXP punto_coma{  $$ = new D_IdExp($1, $2, $4,false,@1.firt_line,@1.firt_column);  }
 ;
 
 //TODO: REVISAR DEC_ID_COR Y DEC_ID_COR_EXP
