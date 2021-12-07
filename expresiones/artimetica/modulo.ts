@@ -7,7 +7,7 @@ import { Excepcion} from "../../table/excepcion"
 import { Primitivo } from "../primitivo";
 
 
-export class Multiplicar extends Instruccion{
+export class Modulo extends Instruccion{
     operador:ARITMETICO;
     operadorIzq:Primitivo;
     operadorDer:Primitivo;
@@ -39,9 +39,9 @@ export class Multiplicar extends Instruccion{
                 }
             }
 
-            //--------------------------MULTIPLICACION------------------------------
+            //------------------------------MODULO------------------------------
             
-            if(this.operador === ARITMETICO.POR ){
+            if(this.operador === ARITMETICO.MOD ){
                 //validaciones
                 if(this.operadorIzq.tipo == TIPO.NULL){
                     return new Excepcion("Semantico", "Error de operacion en variable NULA", `${this.fila}`, `${this.columna}`);
@@ -53,36 +53,36 @@ export class Multiplicar extends Instruccion{
 
                     
                     //-------ENTERO
-                    //ENTERO * ENTERO
+                    //ENTERO % ENTERO
                     if(this.operadorIzq.tipo===TIPO.ENTERO && this.operadorDer.tipo===TIPO.ENTERO ){
                         this.tipo=TIPO.ENTERO;
-                        return this.obtenerVal(this.operadorIzq.tipo,izq) - this.obtenerVal(this.operadorDer.tipo,der);
+                        return this.obtenerVal(this.operadorIzq.tipo,izq) % this.obtenerVal(this.operadorDer.tipo,der);
                     }
-                    //ENTERO * DECIMAL
+                    //ENTERO % DECIMAL
                     else if(this.operadorIzq.tipo===TIPO.ENTERO && this.operadorDer.tipo===TIPO.DECIMAL ){
                         this.tipo=TIPO.DECIMAL;
-                        return this.obtenerVal(this.operadorIzq.tipo,izq) - this.obtenerVal(this.operadorDer.tipo,der);
+                        return this.obtenerVal(this.operadorIzq.tipo,izq) % this.obtenerVal(this.operadorDer.tipo,der);
                     }
 
                     ////--------DECIMAL
-                    //DECIMAL * ENTERO
+                    //DECIMAL % ENTERO
                     else if(this.operadorIzq.tipo===TIPO.DECIMAL && this.operadorDer.tipo===TIPO.ENTERO ){
                         this.tipo=TIPO.DECIMAL;
-                        return this.obtenerVal(this.operadorIzq.tipo,izq) - this.obtenerVal(this.operadorDer.tipo,der);
+                        return this.obtenerVal(this.operadorIzq.tipo,izq) % this.obtenerVal(this.operadorDer.tipo,der);
                     }
-                    //DECIMAL * DECIMAL
+                    //DECIMAL % DECIMAL
                     else if(this.operadorIzq.tipo===TIPO.DECIMAL && this.operadorDer.tipo===TIPO.DECIMAL ){
                         this.tipo=TIPO.DECIMAL;
-                        return this.obtenerVal(this.operadorIzq.tipo,izq) - this.obtenerVal(this.operadorDer.tipo,der);
+                        return this.obtenerVal(this.operadorIzq.tipo,izq) % this.obtenerVal(this.operadorDer.tipo,der);
                     }
 
-                return new Excepcion("Semantico",`Tipo de datos invalido para multiplicacion ${this.operadorIzq.tipo} * ${this.operadorDer.tipo}  `,`${this.fila}`,`${this.columna}`);
+                return new Excepcion("Semantico",`Tipo de datos invalido para modulo ${this.operadorIzq.tipo} % ${this.operadorDer.tipo}  `,`${this.fila}`,`${this.columna}`);
 
             } 
 
         } catch (error) {
 
-            return new Excepcion("Semantico","QUETZAL Null Poiter multiplicacion",`${this.fila}`,`${this.columna}`);
+            return new Excepcion("Semantico","QUETZAL Null Poiter modulo",`${this.fila}`,`${this.columna}`);
 
         }
     }
