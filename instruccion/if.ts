@@ -48,7 +48,8 @@ export class If extends Instruccion{
                     if(result instanceof Excepcion){
                         ///
                         ///
-                        ///
+                        //arbol.excepciones.push(result);
+                        //arbol.actualizar_consola(result.toString());
 
                     }
                     if(result instanceof Break || result instanceof Continue ){
@@ -73,6 +74,8 @@ export class If extends Instruccion{
                         if(result instanceof Excepcion){
                             ///
                             ///
+                            //arbol.excepciones.push(result);
+                            //arbol.actualizar_consola(result.toString());
                         }
                         if(result instanceof Break || result instanceof Continue ){
                             return result;
@@ -95,8 +98,8 @@ export class If extends Instruccion{
                         if(result instanceof Excepcion){
                             ///
                             ///
-                            arbol.excepciones.push(result);
-                            arbol.actualizar_consola();
+                            //arbol.excepciones.push(result);
+                            //arbol.actualizar_consola(result.toString());
                         }
                         if(result instanceof Break || result instanceof Continue ){
                             return result;
