@@ -1,0 +1,109 @@
+import { Instruccion } from "../../abs/Instruccion";
+import { Arbol } from "../../table/arbol";
+import { TablaSimbolos } from "../../table/tablasimbolos";
+import { TIPO } from "../../table/tipo";
+import { ARITMETICO } from "../../table/tipo";
+import { Excepcion} from "../../table/excepcion"
+import { Primitivo } from "../primitivo";
+
+
+export class Seno extends Instruccion{
+    operador:ARITMETICO;
+    operadorIzq:Primitivo;
+    //operadorDer:Primitivo;
+    fila: number;
+    columna:number;
+    tipo:TIPO;
+    
+    constructor(operador:ARITMETICO,operadorIzq:Primitivo,fila:number,columna:number){
+        super(fila,columna);
+        this.operadorIzq=operadorIzq;
+        //this.operadorDer=operadorDer;
+        this.fila=fila;
+        this.columna=columna;
+        this.operador=operador;
+        this.tipo=TIPO.NULL;
+
+    }
+    interpretar(entorno: TablaSimbolos, arbol: Arbol): any {
+        try {
+            const izq=this.operadorIzq.interpretar(entorno,arbol);
+            //const der=this.operadorDer.interpretar(entorno,arbol);
+            if(izq instanceof Excepcion){
+                return izq;
+            }
+            // if(this.operadorDer!= null || this.operadorDer != undefined){
+                
+            //     if(der instanceof Excepcion){
+            //         return der;
+            //     }
+            // }
+
+            //--------------------------MULTIPLICACION------------------------------
+            
+            if(this.operador === ARITMETICO.POR ){
+                //validaciones
+                if(this.operadorIzq.tipo == TIPO.NULL){
+                    return new Excepcion("Semantico", "Error de operacion en variable NULA", `${this.fila}`, `${this.columna}`);
+                }
+                    
+                    //-------ENTERO
+                    //sen(ENTERO);
+                    if(this.operadorIzq.tipo===TIPO.ENTERO  ){
+                        this.tipo=TIPO.DECIMAL;
+                        return Math.sin(this.obtenerVal(this.operadorIzq.tipo,izq)) ;
+                    }
+
+                    ////--------DECIMAL
+                    //SEN(DECIMAL)
+                    else if(this.operadorIzq.tipo===TIPO.DECIMAL  ){
+                        this.tipo=TIPO.DECIMAL;
+                        return Math.sin(this.obtenerVal(this.operadorIzq.tipo,izq));
+                    }
+                    //SEN(BOOLEAN)
+                    else if(this.operadorIzq.tipo===TIPO.BOOLEAN  ){
+                        this.tipo=TIPO.DECIMAL;
+                        return Math.sin(this.obtenerVal(this.operadorIzq.tipo,izq));
+                    }
+
+
+                return new Excepcion("Semantico",`Tipo de datos invalido para Sen()  ${this.operadorIzq.tipo}`,`${this.fila}`,`${this.columna}`);
+
+            } 
+
+        } catch (error) {
+
+            return new Excepcion("Semantico","QUETZAL Null Poiter Sen() tipo dato incorrecto ",`${this.fila}`,`${this.columna}`);
+
+        }
+    }
+
+
+
+
+
+    obtenerVal(tipo:TIPO,val:string):any{
+        try {
+            if(tipo === TIPO.ENTERO|| tipo === TIPO.DECIMAL){
+                return Number(val);
+            }
+            else if(tipo === TIPO.BOOLEAN){
+                if(val.toLowerCase() === "true"){
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+            else if(tipo === TIPO.CADENA){
+                return val;
+            }else{
+                return val;
+            }
+
+        } catch (error) {
+            
+        }
+
+    }
+
+}
