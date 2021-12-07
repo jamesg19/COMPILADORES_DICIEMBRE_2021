@@ -12,4 +12,7 @@ export class Excepcion{
             
           
     }
+    toString():string{
+        return `${this.tipo} - ${this.descripcion} - ${this.fila},${this.columna}`;
+    }
 }
