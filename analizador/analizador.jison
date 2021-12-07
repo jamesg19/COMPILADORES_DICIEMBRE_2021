@@ -117,6 +117,7 @@
   //Instrucciones
     const { Print } = require('../instruccion/print');
     const {D_IdExp} = require('../instruccion/declaracion_idexp')
+    const {D_Id} = require('../instruccion/declaracion_id')
     //Tipos
     const { Primitivo } = require('../expresiones/primitivo');
     
@@ -423,6 +424,7 @@ ATRIBUTO
 
 DECLARACION_VARIABLE 
   : TIPO_DEC_VARIABLE id igual EXP punto_coma{  $$ = new D_IdExp($1, $2, $4,false,@1.firt_line,@1.firt_column);  }
+  | TIPO_DEC_VARIABLE id punto_coma {  $$ = new D_Id($1, $2,false,@1.firt_line,@1.firt_column);  }   
 ;
 
 //TODO: REVISAR DEC_ID_COR Y DEC_ID_COR_EXP
