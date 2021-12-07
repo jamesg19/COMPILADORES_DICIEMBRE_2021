@@ -3,12 +3,13 @@ import { TablaSimbolos } from '../../table/tablasimbolos';
 import { Excepcion } from '../../table/excepcion';
 import { Arbol } from '../../table/arbol';
 import { TIPO } from '../../table/tipo';
+import { Primitivo } from '../primitivo';
 
 
 export class Not extends Instruccion{
-    expression: Instruccion;
+    expression: Primitivo;
 
-    constructor( expression: Instruccion,fila:number,columna:number){
+    constructor( expression: Primitivo,fila:number,columna:number){
       super(fila,columna);
       this.expression = expression;
       

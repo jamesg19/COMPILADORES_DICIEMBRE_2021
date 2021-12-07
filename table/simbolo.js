@@ -10,6 +10,7 @@ class Simbolo {
         this.valor = valor;
         this.arreglo = arreglo;
         this.struct = struct;
+        this.constante = false;
     }
     getID() {
         return this.id;

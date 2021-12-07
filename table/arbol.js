@@ -8,6 +8,7 @@ class Arbol {
             this.funciones = new Array();
         this.TSglobal = TSglobal;
         this.instrucciones = instrucciones;
+        this.structs = new Map();
     }
 }
 exports.Arbol = Arbol;

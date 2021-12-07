@@ -8,12 +8,13 @@ export class IgualIgual extends Instruccion{
     
     leftExpression: Instruccion;
     rightExpression: Instruccion;
-  
+    tipo:TIPO;
     constructor(leftExpression: Instruccion, rightExpression: Instruccion,fila: number,columna:number ){
         
       super(fila,columna);
       this.rightExpression = rightExpression;
       this.leftExpression = leftExpression;
+      this.tipo = TIPO.NULL;
       
     }
   
@@ -31,13 +32,13 @@ export class IgualIgual extends Instruccion{
   
         //Si tienen la misma longitud realizo un recorrido para comparar los items - Esta implementacion funciona solo para los valores nativos
         for(let i = 0; i < exp1.getSize(); i++){
-          if(exp1.getValue(i) != exp2.getValue(i)) return false;
+          if(exp1.getValue(i) != exp2.getValue(i)){ this.tipo = TIPO.BOOLEAN; return false;}
         }
-        
+        this.tipo = TIPO.BOOLEAN;
         return true;
       }
       console.log("falta comparar el struct")
-  
+      this.tipo = TIPO.BOOLEAN;
       return exp1 == exp2;
 
     }

@@ -3,13 +3,14 @@ import { Arbol } from '../../table/arbol';
 import { Excepcion } from '../../table/excepcion';
 import { Instruccion } from '../../abs/Instruccion';
 import { TIPO } from '../../table/tipo';
+import { Primitivo } from '../primitivo';
 
 export class And extends Instruccion{
-    leftExpressio: Instruccion;
-    rightExpression: Instruccion;
+    leftExpressio: Primitivo;
+    rightExpression: Primitivo;
     tipo:TIPO;
   
-    constructor( leftExpressio: Instruccion, rightExpression: Instruccion,linea: number,columna:number){
+    constructor( leftExpressio: Primitivo, rightExpression: Primitivo,linea: number,columna:number){
       super(linea,columna);
       this.rightExpression = rightExpression;
       this.leftExpressio = leftExpressio;

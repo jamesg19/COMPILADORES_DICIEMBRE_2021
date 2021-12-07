@@ -8,6 +8,7 @@ export class Simbolo {
     valor: any;
     arreglo: boolean;
     struct: boolean;
+    constante:boolean;
 
     constructor(id: string, tipo: TIPO, fila: number, columna: number, valor: any, arreglo: boolean, struct: boolean) {
         this.id = id;
@@ -17,6 +18,7 @@ export class Simbolo {
         this.valor = valor;
         this.arreglo = arreglo;
         this.struct = struct;
+        this.constante = false;
 
     }
     getID() {
