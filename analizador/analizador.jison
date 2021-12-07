@@ -184,7 +184,7 @@ INSTRUCCION:
   | DECLARACION_FUNCION             {     }
   | DECLARACION_TYPE                {    }
   | ASIGNACION 	                    {   } 
-  | PUSH_ARREGLO 	            {   }
+  | PUSH_ARREGLO 	              {   }
   | IMPRIMIR 	                {    }
   | CONDICION_IF 	            {    }
   | SWITCH 	                  {   }
