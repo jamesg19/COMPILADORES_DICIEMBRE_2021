@@ -14,7 +14,13 @@ export class Seno extends Instruccion{
     fila: number;
     columna:number;
     tipo:TIPO;
-    
+    /**
+     * CONSTRUCTOR DE OPERACION SENO()
+     * @param operador 
+     * @param operadorIzq 
+     * @param fila 
+     * @param columna 
+     */
     constructor(operador:ARITMETICO,operadorIzq:Primitivo,fila:number,columna:number){
         super(fila,columna);
         this.operadorIzq=operadorIzq;
@@ -39,9 +45,8 @@ export class Seno extends Instruccion{
             //     }
             // }
 
-            //--------------------------MULTIPLICACION------------------------------
-            
-            if(this.operador === ARITMETICO.POR ){
+            //--------------------------SENO------------------------------
+
                 //validaciones
                 if(this.operadorIzq.tipo == TIPO.NULL){
                     return new Excepcion("Semantico", "Error de operacion en variable NULA", `${this.fila}`, `${this.columna}`);
@@ -68,8 +73,6 @@ export class Seno extends Instruccion{
 
 
                 return new Excepcion("Semantico",`Tipo de datos invalido para Sen()  ${this.operadorIzq.tipo}`,`${this.fila}`,`${this.columna}`);
-
-            } 
 
         } catch (error) {
 
@@ -101,7 +104,7 @@ export class Seno extends Instruccion{
             }
 
         } catch (error) {
-            
+            return new Excepcion("Semantico",`No se pudo obtener el valor en Sen() `,`${this.fila}`,`${this.columna}`);
         }
 
     }

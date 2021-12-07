@@ -111,7 +111,7 @@ export class Potencia extends Instruccion{
             }
 
         } catch (error) {
-            
+            return new Excepcion("Semantico",`No se pudo obtener el valor potencia `,`${this.fila}`,`${this.columna}`);
         }
 
     }

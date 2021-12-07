@@ -110,7 +110,7 @@ export class Modulo extends Instruccion{
             }
 
         } catch (error) {
-            
+            return new Excepcion("Semantico",`No se pudo obtener el valor modulo `,`${this.fila}`,`${this.columna}`);
         }
 
     }

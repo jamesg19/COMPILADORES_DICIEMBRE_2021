@@ -110,7 +110,7 @@ export class Multiplicar extends Instruccion{
             }
 
         } catch (error) {
-            
+            return new Excepcion("Semantico",`No se pudo obtener el valor multiplicar `,`${this.fila}`,`${this.columna}`);
         }
 
     }
