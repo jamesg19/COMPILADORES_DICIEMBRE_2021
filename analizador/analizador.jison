@@ -13,7 +13,7 @@
 'double'    return 'double';
 'boolean'   return 'boolean';
 'void'      return 'void';
-'Struct'    return 'Struct';
+'struct'    return 'struct';
 'const'     return 'const';
 
 //funciones nativas
@@ -112,19 +112,40 @@
 /lex
 
 %{
-  //const  Nodo = require('../ts/arbol/ast');
+  
+  
+  //Instrucciones
+  const { Instruccion } = require('../instruccion/print');
+    //Tipos
     const { Primitivo } = require('../expresiones/primitivo');
-    const { Print } = require('../instruccion/print');
-    const { Instruccion } = require('../instruccion/print');
-            
+    
+    
+    //Enumerados        
     const { ARITMETICO } = require('../table/tipo')
     const { TIPO } = require('../table/tipo');
     const { RELACIONAL } = require('../table/tipo');
     const { LOGICO} = require('../table/tipo');
     
+    //relacionales
+    const { Diff } = require('../expresiones/relacional/dif');
     const { IgualIgual } = require('../expresiones/relacional/igual_igual');
+    const { MayorIgual } = require('../expresiones/relacional/mayor_igual');
+    const { Mayor } = require('../expresiones/relacional/mayor');
+    const { MenorIgual } = require('../expresiones/relacional/menor_igual');
+    const { Menor } = require('../expresiones/relacional/menor');
+    //logicos
     const { And } = require('../expresiones/logico/and');
+    const { Or } = require('../expresiones/logico/or');
+    const { Not } = require('../expresiones/logico/not');
+    
+    //Operaciones Aritmeticas
     const { Suma} = require('../expresiones/artimetica/suma');
+    const { Multiplicar} = require('../expresiones/artimetica/multiplicar');
+    const { Division } = require('../expresiones/artimetica/division');
+    const { Modulo} = require('../expresiones/artimetica/modulo');
+    const { NegacionNum} = require('../expresiones/artimetica/negacion_numero');    
+    const { Potencia } = require('../expresiones/artimetica/Potencia');    
+    
 %}
 
 // Asociacion de operadores y precedencia
@@ -395,18 +416,17 @@ ATRIBUTO
 
 DECLARACION_VARIABLE 
   : TIPO_DEC_VARIABLE LISTA_DECLARACIONES punto_coma {    }
- // | TIPO_DEC_VARIABLE LISTA_DECLARACIONES {    }
 ;
 
 //TODO: REVISAR DEC_ID_COR Y DEC_ID_COR_EXP
 LISTA_DECLARACIONES 
-  : LISTA_DECLARACIONES coma DEC_ID  {    }//No utilice las comas
+  : LISTA_DECLARACIONES coma DEC_ID  {  $1.push($2); $$ = $1;   }//No utilice las comas
   | LISTA_DECLARACIONES coma DEC_ID_TIPO  {    }
   | LISTA_DECLARACIONES coma DEC_ID_TIPO_CORCHETES  {    }
   | LISTA_DECLARACIONES coma DEC_ID_EXP  {    }
   | LISTA_DECLARACIONES coma DEC_ID_TIPO_EXP  {    }
   | LISTA_DECLARACIONES coma DEC_ID_TIPO_CORCHETES_EXP  {    }
-  | DEC_ID  {    }
+  | DEC_ID  {  $$ = [$1]  }
   | DEC_ID_TIPO  {    }
   | DEC_ID_TIPO_CORCHETES  {    }
   | DEC_ID_EXP  {    }
@@ -436,7 +456,7 @@ DEC_ID_TIPO
 
 //let id ;
 DEC_ID  
-  : id  {    }
+  : id  {  $$ = $1  }
 ;
 
 //let id : TIPO_VARIABLE_NATIVA LISTA_CORCHETES ;
@@ -457,38 +477,39 @@ INCREMENTO_DECREMENTO
 
 EXP
   //Operaciones Aritmeticas
-  : menos EXP %prec UMENOS  {    }
-  | EXP mas EXP  { $$ = new Suma(0,$1,$3,yylineno,0);   }
-  | EXP menos EXP  { $$ = new Resta(0,$1,$3,yylineno,0);   }
-  | EXP por EXP  {    }
-  | EXP div EXP  {    }
-  | EXP mod EXP  {    }
-  | EXP potencia EXP  {    }
-  | id mas_mas  {    }
-  | id menos_menos  {    }
-  | par_abierto EXP par_cerrado  {  $$ = $2  }
+  : menos EXP %prec UMENOS          { $$ = new NegacionNum(6,$2,0,yylineno,0);   }
+  | EXP mas EXP                     { $$ = new Suma(0,$1,$3,yylineno,0);   }
+  | EXP menos EXP                   { $$ = new Resta(1,$1,$3,yylineno,0);   }
+  | EXP por EXP                     { $$ = new Multiplicar(2,$1,$3,yylineno,0);  }
+  | EXP div EXP                     { $$ = new Division(3,$1,$3,yylineno,0);   }
+  | EXP potencia EXP                { $$ = new Potencia(4,$1,$3,yylineno,0);   }
+  | EXP mod EXP                     { $$ = new Modulo(5,$1,$3,yylineno,0);   }
+  | id mas_mas                      {   }
+  | id menos_menos                  {    }
+  | par_abierto EXP par_cerrado     {  $$ = $2  }
+  
   //Operaciones de Comparacion
-  | EXP mayor EXP  {    }
-  | EXP menor EXP  {    }
-  | EXP mayor_igual EXP  {    }
-  | EXP menor_igual EXP  {    }
-  //| EXP igual_que EXP  { $$ = new IgualIgual($1,$3,yylineno,0);     }
-  | EXP dif_que EXP  {    }
+  | EXP mayor EXP                   {   $$ = new Mayor($1,$3,yylineno,0);       }
+  | EXP menor EXP                   {   $$ = new Menor($1,$3,yylineno,0);       }
+  | EXP mayor_igual EXP             {   $$ = new MayorIgual($1,$3,yylineno,0);  }
+  | EXP menor_igual EXP             {   $$ = new MenorIgual($1,$3,yylineno,0);  }
+  | EXP igual_que EXP               {   $$ = new IgualIgual($1,$3,yylineno,0);  }
+  | EXP dif_que EXP                 {   $$ = new Diff($1,$3,yylineno,0);        }
   
   //Operaciones Lógicas
-  | EXP and EXP  { $$ = new And($1,$3,yylineno,0);   }
-  | EXP or EXP  {  $$ = new Or($1,$3,yylineno,0);  }
-  | not EXP  {  $$ = new Not($2,yylineno,0);  }
+  | EXP and EXP                     {  $$ = new And($1,$3,yylineno,0);   }
+  | EXP or EXP                      {  $$ = new Or($1,$3,yylineno,0);  }
+  | not EXP                         {  $$ = new Not($2,yylineno,0);  }
   
   //Valores Primitivos
   
-  | entero { $$ = new Primitivo(TIPO.ENTERO,$1,yylineno,0); }
-  | decimal {$$ = new Primitivo(1,$1,yylineno,0);}
-  | string  { $$ = new Primitivo(TIPO.CADENA,$1,yylineno,0);   }
-  | id   {    }
-  | true  { $$ = new Primitivo(2,$1,yylineno,0);   }
-  | false  { $$ = new Primitivo(2,$1,yylineno,0);   }
-  | null  {  $$ = new Primitivo(TIPO.NULL,$1,yylineno,0);  }
+  | entero                          { $$ = new Primitivo(TIPO.ENTERO,$1,yylineno,0); }
+  | decimal                         { $$ = new Primitivo(1,$1,yylineno,0);}
+  | string                          { $$ = new Primitivo(TIPO.CADENA,$1,yylineno,0);   }
+  | id                              {    }
+  | true                            { $$ = new Primitivo(2,$1,yylineno,0);   }
+  | false                           { $$ = new Primitivo(2,$1,yylineno,0);   }
+  | null                            { $$ = new Primitivo(TIPO.NULL,$1,yylineno,0);  }
   
   //Arreglos
   | corchete_abierto LISTA_EXPRESIONES corchete_cerrado  {    }
@@ -507,9 +528,9 @@ EXP
   //Funciones
   | LLAMADA_FUNCION_EXP  {    }
 ;
-
+///=====================>struct
 TYPE 
-  : llave_abierta ATRIBUTOS_TYPE llave_cerrada {    }
+  : struct llave_abierta ATRIBUTOS_TYPE llave_cerrada { $$ = $2   }
 ;
 
 ATRIBUTOS_TYPE 
@@ -520,6 +541,7 @@ ATRIBUTOS_TYPE
 ATRIBUTO_TYPE 
   : id dos_puntos EXP {    }
 ;
+//fin struct<===========================//
 
 ARRAY_LENGTH 
   : id punto length  {    }
