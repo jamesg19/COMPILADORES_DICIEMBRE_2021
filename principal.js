@@ -19,6 +19,7 @@ class Principal {
 }
 exports.Principal = Principal;
 let principa = new Principal();
-principa.ejecutar('struct miStruct{int a,int c};' + 'println((true || false ));');
-principa.ejecutar('println((true || false ));');
+principa.ejecutar('int a =3 ;' +
+    'struct miStruct{int a,int c};' +
+    'println((true || false ));');
 //principa.ejecutar ('println((true && true) && (true && true));');
