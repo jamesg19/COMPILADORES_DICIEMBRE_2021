@@ -27,6 +27,21 @@ class TablaSimbolos {
         }
         return null;
     }
+    //obtener el simbolo
+    getSimboloJ(id) {
+        let tabla_actual = this;
+        while (tabla_actual != undefined || tabla_actual != null) {
+            if (tabla_actual.tabla.has(id)) {
+                let s = tabla_actual.tabla.get(id);
+                s === null || s === void 0 ? void 0 : s.id;
+                //retorna el simbolo
+                return s;
+            }
+            else {
+                tabla_actual = tabla_actual.anterior;
+            }
+        }
+    }
     actualizarSimboloEnTabla(simbolo) {
         let tabla_actual = this;
         while (tabla_actual != null) {

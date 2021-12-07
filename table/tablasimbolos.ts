@@ -37,13 +37,30 @@ export class TablaSimbolos{
         return null;
         
     }
+    //obtener el simbolo
+    getSimboloJ(id:string):Simbolo|undefined{
+        let tabla_actual:TablaSimbolos|undefined = this;
+        while (tabla_actual != undefined || tabla_actual!= null ){
+            
+            if(tabla_actual.tabla.has(id)){
+
+                let s = tabla_actual.tabla.get(id);
+                s?.id;
+                //retorna el simbolo
+                return s
+
+            }else{
+                tabla_actual = tabla_actual.anterior;
+            }
+        }
+    }
     actualizarSimboloEnTabla(simbolo:Simbolo){
         let tabla_actual:TablaSimbolos|undefined = this;
         
         while (tabla_actual != null){
             
             if(tabla_actual.tabla.has(simbolo.id)){
-                
+            
                 let s = tabla_actual.tabla.get(simbolo.id);
                 s?.id;
                 if(s?.getTipo == simbolo.getTipo){
