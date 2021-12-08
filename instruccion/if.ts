@@ -34,9 +34,9 @@ export class If extends Instruccion{
             return condition;
         }
         
-        console.log(condition.value );
+        console.log(this.condicion.tipo );
         //verifica que la condicion sea boolean
-        if(condition.tipo === TIPO.BOOLEAN){
+        if(this.condicion.tipo === TIPO.BOOLEAN){
             
             //verifica que la condicion sea TRUE
             if(condition.value.toLowerCase()==="true"){

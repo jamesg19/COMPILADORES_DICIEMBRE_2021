@@ -8,11 +8,12 @@ import { Excepcion } from '../../table/excepcion';
 export class Mayor extends Instruccion{
   leftExpression: Instruccion;
   rigthExpression: Instruccion;
-
+  tipo:TIPO;
   constructor( leftExpression: Instruccion, rigthExpression: Instruccion,linea:number,columna:number){
     super(linea,columna);
     this.leftExpression = leftExpression;
     this.rigthExpression = rigthExpression;
+    this.tipo = TIPO.NULL;
     Object.assign(this, {leftExpression, rigthExpression});
   }
 
@@ -39,6 +40,7 @@ export class Mayor extends Instruccion{
     if(this.leftExpression.tipo == TIPO.NULL || this.rigthExpression.tipo == TIPO.NULL )
     return new Excepcion("Semantico","variable NULL no se puede comparar ",super.fila+"",super.columna+"");
     
+    this.tipo = TIPO.BOOLEAN;
     return exp1 > exp2;
 
   }

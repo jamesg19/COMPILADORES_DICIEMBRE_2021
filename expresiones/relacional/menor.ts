@@ -39,6 +39,7 @@ export class Menor extends Instruccion{
     if(this.leftExpression.tipo == TIPO.NULL || this.rigthExpression.tipo == TIPO.NULL )
     return new Excepcion("Semantico","variable NULL no se puede comparar ",super.fila+"",super.columna+"");
     
+    this.tipo = TIPO.BOOLEAN;
     return exp1 < exp2;
 
   }

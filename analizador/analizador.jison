@@ -116,8 +116,8 @@
   
   //Instrucciones
     const { Print } = require('../instruccion/print');
-    //const {D_IdExp} = require('../instruccion/declaracion_idexp')
-    const {D_Id} = require('../instruccion/declaracion_id')
+    
+    
     const {D_IdExp} = require('../instruccion/declaracion_idexp');
     const {D_Id} = require('../instruccion/declaracion_id');
     const {Funcion} = require('../instruccion/funcion');
@@ -528,8 +528,8 @@ EXP
   | decimal                         { $$ = new Primitivo(TIPO.DECIMAL,$1,@1.firt_line,@1.firt_column);}
   | string                          { $$ = new Primitivo(TIPO.CADENA,$1,@1.firt_line,@1.firt_column);   }
   | id                              { $$ = new Identificador($1,$1,@1.firt_line,@1.firt_column);   }
-  | true                            { $$ = new Primitivo(TIPO.BOOLEAN,$1,@1.firt_line,@1.firt_column);   }
-  | false                           { $$ = new Primitivo(TIPO.BOOLEAN,$1,@1.firt_line,@1.firt_column);   }
+  | true                            { $$ = new Primitivo(TIPO.BOOLEAN,true,@1.firt_line,@1.firt_column);   }
+  | false                           { $$ = new Primitivo(TIPO.BOOLEAN,false,@1.firt_line,@1.firt_column);   }
   | null                            { $$ = new Primitivo(TIPO.NULL,$1,@1.firt_line,@1.firt_column);  }
   
   //Arreglos
