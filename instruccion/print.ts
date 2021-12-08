@@ -9,13 +9,13 @@ export class Print extends Instruccion{
     fila:number;
     columna:number;
   
-    expresion:Instruccion;
+    value:Instruccion;
     
     constructor(fila:number,columna:number,value:Instruccion){
         super(fila,columna);
         this.fila = fila;
         this.columna = columna;
-        this.expresion = value;
+        this.value = value;
       
     }
     
@@ -23,7 +23,7 @@ export class Print extends Instruccion{
         
         //console.log('antes: ',this.expresion);
         
-        const value = this.expresion.interpretar(entorno,arbol);
+        const value = this.value.interpretar(entorno,arbol);
         
         //console.log('despues: ',value);
         

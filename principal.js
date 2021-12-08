@@ -23,10 +23,4 @@ class Principal {
     }
 }
 exports.Principal = Principal;
-let principa = new Principal();
-var cadena = "function void holaMundo(int a, double c){\
-println('hola mundo funcion');\
-}\
-holaMundo(1,13.4);";
-principa.ejecutar(cadena);
-//principa.ejecutar ('println((true && true) && (true && true));');
+
