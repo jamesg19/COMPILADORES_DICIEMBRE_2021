@@ -10,5 +10,13 @@ class Arbol {
         this.instrucciones = instrucciones;
         this.structs = new Map();
     }
+    getFunctionByName(nombre) {
+        let funcion;
+        this.funciones.forEach((x) => {
+            if (x.id === nombre)
+                funcion = x;
+        });
+        return funcion;
+    }
 }
 exports.Arbol = Arbol;

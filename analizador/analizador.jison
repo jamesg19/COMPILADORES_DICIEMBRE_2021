@@ -115,23 +115,22 @@
   
   
   //Instrucciones
-    const { Print } = require('../instruccion/print');
-    
-    
-    const {D_IdExp} = require('../instruccion/declaracion_idexp');
-    const {D_Id} = require('../instruccion/declaracion_id');
-    const {Funcion} = require('../instruccion/funcion');
+    const { Print   } = require('../instruccion/print');
+    const { D_IdExp } = require('../instruccion/declaracion_idexp');
+    const { D_Id    } = require('../instruccion/declaracion_id');
+    const { Funcion } = require('../instruccion/funcion');
+    const { Llamada } = require ('../instruccion/llamada');
     const { Asignacion } = require('../instruccion/asignacion');
+    //JAMES
+    const { If } = require('../instruccion/if');
+    
     
     
     //Tipos
     const { Primitivo } = require('../expresiones/primitivo');
     
-    
     //Enumerados        
-    const { ARITMETICO } = require('../table/tipo')
-    
-    
+    const { ARITMETICO } = require('../table/tipo');
     const { RELACIONAL } = require('../table/tipo');
     const { LOGICO} = require('../table/tipo');
     const { TIPO } = require('../table/TipoNativo');
@@ -160,8 +159,7 @@
     
     const { Struct } = require('../expresiones/struct/struct')
     const { Atributo } = require('../expresiones/struct/atributo')
-    //JAMES
-    const { If } = require('../instruccion/if');
+    
 %}
 
 // Asociacion de operadores y precedencia
@@ -235,6 +233,7 @@ INSTRUCCION:
   | INCREMENTO_DECREMENTO           {   $$ = $1 }
   | PRINTLN                         {   $$ = $1 }
   | PRINT                           {   $$ = $1 } //listo
+  | LLAMADA_FUNCION_EXP             {   $$ = $1 }
 ;
 
 
@@ -253,8 +252,8 @@ PT_COMA:
 //--------------------LLAMADA DE UNA FUNCION--------------------
 
 LLAMAR_FUNCION 
-  : id par_abierto par_cerrado PT_COMA                   {   }
-  | id par_abierto LISTA_EXPRESIONES par_cerrado PT_COMA {   }
+  : id par_abierto par_cerrado PT_COMA                   {  $$ = new Llamada($1,@1.first_line,@1.first_column); }
+  | id par_abierto LISTA_EXPRESIONES par_cerrado PT_COMA {  $$ = new Llamada($1,@1.first_line,@1.first_column,$3); }
 ;
 
 //---------------------LLAMAR A FUNCION EXP
@@ -273,7 +272,7 @@ DO_WHILE
   : do llave_abierta INSTRUCCIONES llave_cerrada while par_abierto EXP par_cerrado PT_COMA {   }
 ;
 
-////xxx raiz
+
 FOR : for par_abierto DECLARACION_VARIABLE EXP punto_coma ASIGNACION_FOR par_cerrado llave_abierta INSTRUCCIONES llave_cerrada {   }
   | for par_abierto ASIGNACION EXP punto_coma ASIGNACION_FOR par_cerrado llave_abierta INSTRUCCIONES llave_cerrada    {   }
 ;
@@ -289,8 +288,6 @@ FOR_IN
 ;
 
 ASIGNACION 
-  //variable = EXP ;
-  
   : id igual EXP punto_coma {  $$ = new Asignacion($1, $3,false,@1.firt_line,@1.firt_column); }
 
   // type.accesos = EXP ; || type.accesos[][] = EXP;
@@ -350,10 +347,12 @@ RETURN
 CONDICION_IF:
     if par_abierto EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada 
     { $$=new If($3,$6,null,null,@1.firt_line,@1.firt_column); }
-
+    //if con una instruccion
+    
+    | if par_abierto EXP par_cerrado  INSTRUCCION 
+    { $$=new If($3,$6,null,null,@1.firt_line,@1.firt_column); }
     | if par_abierto EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada else llave_abierta INSTRUCCIONES llave_cerrada 
     {  $$=new If($3,$6,$10,null,@1.firt_line,@1.firt_column); }
-
     | if par_abierto EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada else CONDICION_IF
     {  $$=new If($3,$6,null,[$9],@1.firt_line,@1.firt_column); }
 ;
@@ -380,50 +379,42 @@ CONDICION_IF:
 //   : else if par_abierto EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada {  }
 // ;
 
-LISTA_ELSE_IF 
-  : LISTA_ELSE_IF ELSE_IF  {  }
-  | ELSE_IF  {  }
-;
-
 PUSH_ARREGLO 
-  : id punto push par_abierto EXP par_cerrado PT_COMA  {  }
+  : id punto push par_abierto EXP par_cerrado PT_COMA                     {  }
   | id LISTA_ACCESOS_TYPE punto push par_abierto EXP par_cerrado PT_COMA  {  }
 ;
 
 
 //------------------------------------- DECLARACION DE FUNCION ---------------------------------
 DECLARACION_FUNCION 
-  //Funcion sin parametros y con tipo -> 
-  //function TIPO test() { INSTRUCCIONES }
   //   1          2                3     4           5           6            7
-  : function TIPO_VARIABLE_NATIVA id par_abierto par_cerrado llave_abierta INSTRUCCIONES llave_cerrada 
-  { $$ = new Funcion($3,$7,$2,@1.first_line,@1.first_column);   }
+  : function TIPO_VARIABLE_NATIVA id par_abierto par_cerrado llave_abierta INSTRUCCIONES llave_cerrada { $$ = new Funcion($3,$7,$2,@1.first_line,@1.first_column);   }
 
    //Funcion sin parametros y con tipo -> function TIPO[][] test()  { INSTRUCCIONES }
-  | function TIPO_VARIABLE_NATIVA LISTA_CORCHETES id par_abierto par_cerrado llave_abierta INSTRUCCIONES llave_cerrada {    }
+  //| function TIPO_VARIABLE_NATIVA  id par_abierto par_cerrado llave_abierta INSTRUCCIONES llave_cerrada {    }
    
   //Funcion con parametros y con tipo -> function TIPO test ( LISTA_PARAMETROS )  { INSTRUCCIONES }
-  
-  | function TIPO_VARIABLE_NATIVA id par_abierto LISTA_PARAMETROS par_cerrado  llave_abierta INSTRUCCIONES llave_cerrada {    }
+  //1         2                   3     4         5                   6           
+  | function TIPO_VARIABLE_NATIVA id par_abierto LISTA_PARAMETROS par_cerrado  llave_abierta INSTRUCCIONES llave_cerrada {  $$ = new Funcion($3,$8,$2,@1.first_line,@1.first_column,$5);    }
 
   //Funcion con parametros y con tipo -> function TIPO[][] test ( LISTA_PARAMETROS )  { INSTRUCCIONES }
-  | function TIPO_VARIABLE_NATIVA LISTA_CORCHETES id par_abierto LISTA_PARAMETROS par_cerrado llave_abierta INSTRUCCIONES llave_cerrada {    }
+  //| function TIPO_VARIABLE_NATIVA LISTA_CORCHETES id par_abierto LISTA_PARAMETROS par_cerrado llave_abierta INSTRUCCIONES llave_cerrada {    }
 
   //Funcion con parametros y sin tipo -> function test ( LISTA_PARAMETROS ) { INSTRUCCIONES }
   
-  | function id par_abierto LISTA_PARAMETROS par_cerrado llave_abierta INSTRUCCIONES llave_cerrada {    }
+  //| function id par_abierto LISTA_PARAMETROS par_cerrado llave_abierta INSTRUCCIONES llave_cerrada {    }
 
 ;
 
 LISTA_PARAMETROS 
-  : LISTA_PARAMETROS coma PARAMETRO {    }
-  | PARAMETRO {    }
+  : LISTA_PARAMETROS coma PARAMETRO {  $1.push($3); $$ = $1;   }
+  | PARAMETRO                       {  $$ =  [$1]          }
 ;
 
 PARAMETRO 
-  : id dos_puntos TIPO_VARIABLE_NATIVA {    }
-  | id dos_puntos TIPO_VARIABLE_NATIVA LISTA_CORCHETES {    }
-  | id dos_puntos Array menor TIPO_VARIABLE_NATIVA mayor {    }
+  : TIPO_VARIABLE_NATIVA id         { $$ = {'tipo':$1, 'id':$2, 'arreglo':false}   }
+  //| TIPO_VARIABLE_NATIVA LISTA_CORCHETES id  {    }
+  //| id dos_puntos Array menor TIPO_VARIABLE_NATIVA mayor {    }
 ;
 
 //=========================================>declaracion de struct
@@ -474,22 +465,22 @@ DEC_ID_TIPO_CORCHETES_EXP
 
 //let id : TIPO_VARIABLE_NATIVA = EXP;
 DEC_ID_TIPO_EXP                                 
-  : TIPO_VARIABLE_NATIVA id   igual EXP {  $$ = new D_IdExp($1, $2, $3,false,@1.firt_line,@1.firt_column);   }
+  : TIPO_VARIABLE_NATIVA id   igual EXP               {  $$ = new D_IdExp($1, $2, $3,false,@1.firt_line,@1.firt_column);   }
 ;
 
 //let id = EXP ;
 DEC_ID_EXP 
-  : id igual EXP {    }
+  : id igual EXP                                      {    }
 ;
 
 //let id : TIPO_VARIABLE_NATIVA ;
 DEC_ID_TIPO  
-  : id dos_puntos TIPO_VARIABLE_NATIVA {    }
+  : id dos_puntos TIPO_VARIABLE_NATIVA                {    }
 ;
 
 //let id ;
 DEC_ID  
-  : id  {  $$ = $1  }
+  : id                                                {  $$ = $1  }
 ;
 
 //let id : TIPO_VARIABLE_NATIVA LISTA_CORCHETES ;
@@ -500,11 +491,11 @@ DEC_ID_TIPO_CORCHETES
 
 LISTA_CORCHETES 
   : LISTA_CORCHETES corchete_abierto corchete_cerrado {    }
-  | corchete_abierto corchete_cerrado {    }
+  | corchete_abierto corchete_cerrado                 {    }
 ;
 
 INCREMENTO_DECREMENTO
-  : id mas_mas PT_COMA {    }
+  : id mas_mas PT_COMA     {    }
   | id menos_menos PT_COMA {    }
 ;
 
@@ -539,14 +530,12 @@ EXP
   | entero                          { $$ = new Primitivo(TIPO.ENTERO,$1,@1.firt_line,@1.firt_column); }
   | decimal                         { $$ = new Primitivo(TIPO.DECIMAL,$1,@1.firt_line,@1.firt_column);}
   | string                          { $$ = new Primitivo(TIPO.CADENA,$1,@1.firt_line,@1.firt_column);   }
-  | id                              { $$ = new Identificador($1,$1,@1.firt_line,@1.firt_column);   }
+  | id                              { console.log("idparser"); $$ = new Identificador($1,$1,@1.firt_line,@1.firt_column);   }
   | true                            { $$ = new Primitivo(TIPO.BOOLEAN,true,@1.firt_line,@1.firt_column);   }
   | false                           { $$ = new Primitivo(TIPO.BOOLEAN,false,@1.firt_line,@1.firt_column);   }
   | null                            { $$ = new Primitivo(TIPO.NULL,$1,@1.firt_line,@1.firt_column);  }
   
   //Arreglos
-  | corchete_abierto LISTA_EXPRESIONES corchete_cerrado  {    }
-  | corchete_abierto corchete_cerrado                    {    }
   | ACCESO_ARREGLO  {    }
   | ARRAY_LENGTH    {    }
   | ARRAY_POP       {    }
@@ -559,7 +548,7 @@ EXP
   | TERNARIO        {  $$ = $1;  }
   
   //Funciones
-  | LLAMADA_FUNCION_EXP  {    }
+  | LLAMADA_FUNCION_EXP  {  $$ = $1  }
 ;
 /*//=====================>struct<=====================
 TYPE 
@@ -614,23 +603,36 @@ LISTA_ACCESOS_ARREGLO
 
 LISTA_EXPRESIONES 
   : LISTA_EXPRESIONES coma EXP {  $1.push($3); $$ = $1;  }
-  | EXP  {  $$ = [$1]  }
+  | EXP                        {  $$ = [$1]  }
 ;
 
 
 TIPO_DEC_VARIABLE
-  :string      {  $$ = TIPO.CADENA  }
-  | int        {  $$ = TIPO.ENTERO  }
-  | double     {  $$ = TIPO.DECIMAL }
-  | boolean    {  $$ = TIPO.BOOLEAN }
+  :string                      {  $$ = TIPO.CADENA  }
+  | int                        {  $$ = TIPO.ENTERO  }
+  | double                     {  $$ = TIPO.DECIMAL }
+  | boolean                    {  $$ = TIPO.BOOLEAN }
 ;
 
 TIPO_VARIABLE_NATIVA
-  : string  { $$ = TIPO.CADENA}
-  | int     { $$ = TIPO.ENTERO }
-  | double  { $$ = TIPO.DECIMAL }
-  | boolean { $$ = TIPO.BOOLEAN }
-  | void    { $$ = TIPO.VOID}
-  | id      {  }
+  : string                     { $$ = TIPO.CADENA  } 
+  | int                        { $$ = TIPO.ENTERO  }
+  | double                     { $$ = TIPO.DECIMAL }
+  | boolean                    { $$ = TIPO.BOOLEAN }
+  | void                       { $$ = TIPO.VOID    }
+  | id                         { $$ = TIPO.STRUCT  }
+;
+LLAMADA_FUNCION_EXP:
+      id par_abierto par_cerrado                     { $$ = new Llamada($1,@1.first_line,@1.first_column); }
+    | id par_abieerto PARAMETROS_LLAMADA par_cerrado { $$ = new Llamada($1,@1.first_line,@1.first_column,$3); }    
 ;
 
+PARAMETROS_LLAMADA :
+    PARAMETROS_LLAMADA coma PARAMETRO_LLAMADA       { $1.push(3); $$ = $1; }
+  | PARAMETRO_LLAMADA                               { $$ = [$1];           }
+;
+
+PARAMETRO_LLAMADA:
+     EXP                                            { $$ = $1; }
+     
+;

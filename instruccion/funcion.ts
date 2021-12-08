@@ -61,8 +61,10 @@ export class Funcion extends Instruccion{
     return this.lista_parametros != null;
   }
 
-  getParametrosSize() : number{
-    return 0;//return this.hasParametros() ? this.lista_parametros.length : 0;
+  getParametrosSize() : number|undefined{
+    if(this.lista_parametros)
+      return this.hasParametros() ? this.lista_parametros.length : 0;
+    return undefined;
   }
 
   public toString() : string{
