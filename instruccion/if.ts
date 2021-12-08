@@ -36,10 +36,10 @@ export class If extends Instruccion{
         
         console.log(this.condicion.tipo );
         //verifica que la condicion sea boolean
-        if(this.condicion.tipo === TIPO.BOOLEAN){
+        if(this.condicion){
             
             //verifica que la condicion sea TRUE
-            if(condition.value.toLowerCase()==="true"){
+            if(condition){
 
                 //CREA UN ENTORNO PARA LAS INSTRUCCIONES DENTRO DEL IF
                 const nuevaTabla=new TablaSimbolos(entorno);
