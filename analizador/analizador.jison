@@ -118,8 +118,11 @@
     const { Print } = require('../instruccion/print');
     //const {D_IdExp} = require('../instruccion/declaracion_idexp')
     const {D_Id} = require('../instruccion/declaracion_id')
+    const {D_IdExp} = require('../instruccion/declaracion_idexp');
+    const {D_Id} = require('../instruccion/declaracion_id');
+    const {Funcion} = require('../instruccion/funcion');
+    const { Asignacion } = require('../instruccion/asignacion');
     
-    const { Asignacion } = require('../instruccion/asignacion')
     
     //Tipos
     const { Primitivo } = require('../expresiones/primitivo');
@@ -127,7 +130,7 @@
     
     //Enumerados        
     const { ARITMETICO } = require('../table/tipo')
-    //const { TIPO } = require('../table/tipo').TIPO;
+    
     
     const { RELACIONAL } = require('../table/tipo');
     const { LOGICO} = require('../table/tipo');
@@ -140,6 +143,8 @@
     const { Mayor } = require('../expresiones/relacional/mayor');
     const { MenorIgual } = require('../expresiones/relacional/menor_igual');
     const { Menor } = require('../expresiones/relacional/menor');
+    const {Identificador} = require('../expresiones/identificador');
+    const { Ternario } = require('../expresiones/ternario/ternario');
     //logicos
     const { And } = require('../expresiones/logico/and');
     const { Or } = require('../expresiones/logico/or');
@@ -236,7 +241,7 @@ INSTRUCCION:
 PRINT  :  println par_abierto EXP par_cerrado punto_coma  { $$ = new Print(@1.firt_line,@1.firt_column,$3);  }
 ;
 
-// //--------------------------------------IMPRIMIR--------------------------------------
+// //--------------------------------------IMPRIMIR--------F------------------------------
  //print 
   // : imprimir par_abierto LISTA_EXPRESIONES par_cerrado punto_coma {    }
 // ;
@@ -378,15 +383,13 @@ PUSH_ARREGLO
 DECLARACION_FUNCION 
   //Funcion sin parametros y con tipo -> 
   //function TIPO test() { INSTRUCCIONES }
-  : function TIPO_VARIABLE_NATIVA id par_abierto par_cerrado llave_abierta INSTRUCCIONES llave_cerrada {    }
+  //   1          2                3     4           5           6            7
+  : function TIPO_VARIABLE_NATIVA id par_abierto par_cerrado llave_abierta INSTRUCCIONES llave_cerrada 
+  { $$ = new Funcion($3,$7,$2,@1.first_line,@1.first_column);   }
 
    //Funcion sin parametros y con tipo -> function TIPO[][] test()  { INSTRUCCIONES }
   | function TIPO_VARIABLE_NATIVA LISTA_CORCHETES id par_abierto par_cerrado llave_abierta INSTRUCCIONES llave_cerrada {    }
-
-  //Funcion sin parametros y sin tipo -> function test() { INSTRUCCIONES }
-  
-  | function id par_abierto par_cerrado llave_abierta INSTRUCCIONES llave_cerrada {    }
-
+   
   //Funcion con parametros y con tipo -> function TIPO test ( LISTA_PARAMETROS )  { INSTRUCCIONES }
   
   | function TIPO_VARIABLE_NATIVA id par_abierto LISTA_PARAMETROS par_cerrado  llave_abierta INSTRUCCIONES llave_cerrada {    }
@@ -522,9 +525,9 @@ EXP
   //Valores Primitivos
   
   | entero                          { $$ = new Primitivo(TIPO.ENTERO,$1,@1.firt_line,@1.firt_column); }
-  | decimal                         { $$ = new Primitivo(1,$1,@1.firt_line,@1.firt_column);}
+  | decimal                         { $$ = new Primitivo(TIPO.DECIMAL,$1,@1.firt_line,@1.firt_column);}
   | string                          { $$ = new Primitivo(TIPO.CADENA,$1,@1.firt_line,@1.firt_column);   }
-  | id                              {    }
+  | id                              { $$ = new Identificador($1,$1,@1.firt_line,@1.firt_column);   }
   | true                            { $$ = new Primitivo(TIPO.BOOLEAN,$1,@1.firt_line,@1.firt_column);   }
   | false                           { $$ = new Primitivo(TIPO.BOOLEAN,$1,@1.firt_line,@1.firt_column);   }
   | null                            { $$ = new Primitivo(TIPO.NULL,$1,@1.firt_line,@1.firt_column);  }
@@ -541,7 +544,7 @@ EXP
   | TYPE            {    }
   
   //Ternario
-  | TERNARIO        {    }
+  | TERNARIO        {  $$ = $1;  }
   
   //Funciones
   | LLAMADA_FUNCION_EXP  {    }
@@ -573,8 +576,8 @@ ARRAY_POP
   | id LISTA_ACCESOS_TYPE punto pop par_abierto par_cerrado  {    }
 ;
 
-TERNARIO 
-  : EXP interrogacion EXP dos_puntos EXP {    }
+TERNARIO //condicion: Instruccion, exp_true: Instruccion, exp_false: Instruccion,fila:number, columna:number
+  : EXP interrogacion EXP dos_puntos EXP {  $$ = new Ternario($1,$3,$5,@1.firt_line,@1.firt_column);  }
 ;
 
 ACCESO_ARREGLO 
@@ -598,8 +601,8 @@ LISTA_ACCESOS_ARREGLO
 ;
 
 LISTA_EXPRESIONES 
-  : LISTA_EXPRESIONES coma EXP {    }
-  | EXP  {    }
+  : LISTA_EXPRESIONES coma EXP {  $1.push($3); $$ = $1;  }
+  | EXP  {  $$ = [$1]  }
 ;
 
 
