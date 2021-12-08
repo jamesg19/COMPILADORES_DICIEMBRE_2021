@@ -15,8 +15,8 @@ export class Funcion extends Instruccion{
   tipo:TIPO;
   lista_parametros?: Array<Simbolo>;
     
-
-  constructor(id: string, instrucciones: Array<Instruccion>, 
+  constructor(id: string,
+              instrucciones: Array<Instruccion>, 
               tipo_return: TIPO = TIPO.VOID,
               fila:number,columna:number,
                lista_parametros?: Array<Simbolo>
@@ -45,15 +45,11 @@ export class Funcion extends Instruccion{
                 arbol.consola = arbol.consola + value;
             }
             if (value instanceof Return){
-                //this.tipo = value
-                 
+                //this.tipo = value 
                 if(this.tipo == value.value.tipo){
                   return  value.return_value;
                 }
             }
-            console.log("clase funcion, se deben de comparar el break y return")
-                        
-            
         })  ;      
         
     }

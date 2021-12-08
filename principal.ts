@@ -31,9 +31,10 @@ export class Principal{
 let principa:Principal = new Principal();
 
 principa.ejecutar (
-                'int a  ;'+
-                'a=3;'+
-                ' println(a);'+
+                'double a  ;'+
+                'a=5.5;'+
+                'function int get(){ int b;}'+
+                ' println(6==6 ? "hps":"no");'+
                 'struct miStruct{int a,int c};'+
                    'println((true || false ));'
                    );
