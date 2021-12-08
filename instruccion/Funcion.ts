@@ -4,6 +4,8 @@ import { TablaSimbolos } from '../table/tablasimbolos';
 import { Simbolo } from '../table/simbolo';
 import { Arbol } from '../table/arbol';
 import { Excepcion } from '../table/excepcion';
+import { Break } from './break';
+import { Return } from './Return';
 
 
 export class Funcion extends Instruccion{
@@ -12,6 +14,7 @@ export class Funcion extends Instruccion{
   tipo_return: TIPO;
   tipo:TIPO;
   lista_parametros?: Array<Simbolo>;
+    
 
   constructor(id: string, instrucciones: Array<Instruccion>, 
               tipo_return: TIPO = TIPO.VOID,
@@ -37,10 +40,22 @@ export class Funcion extends Instruccion{
                 arbol.excepciones.push(value);
                 arbol.consola = arbol.consola + value;
             }
+            if (value instanceof Break){
+                arbol.excepciones.push(new Excepcion("Semantico","Sentencia break fuera de ciclo ",super.fila+"",super.columna+""));
+                arbol.consola = arbol.consola + value;
+            }
+            if (value instanceof Return){
+                //this.tipo = value
+                 
+                if(this.tipo == value.value.tipo){
+                  return  value.return_value;
+                }
+            }
             console.log("clase funcion, se deben de comparar el break y return")
                         
             
         })  ;      
+        
     }
   hasReturn() : boolean{
     return this.tipo_return != TIPO.VOID;
@@ -58,5 +73,6 @@ export class Funcion extends Instruccion{
     const parametros = this.lista_parametros != null ? this.lista_parametros.length : 0;
     let salida = `Funcion: ${this.id} - Parametros: ${parametros} - Return Asignado: ${this.hasReturn()?'Si':'No'}`;
     return salida;
+    
   }
 }

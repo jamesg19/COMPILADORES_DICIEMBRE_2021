@@ -8,5 +8,8 @@ class Excepcion {
         this.fila = fila;
         this.columna = columna;
     }
+    toString() {
+        return `${this.tipo} - ${this.descripcion} - ${this.fila},${this.columna}`;
+    }
 }
 exports.Excepcion = Excepcion;
