@@ -8,15 +8,15 @@ import { TIPO } from "../table/tipo";
 import { Break } from "./break";
 import { Continue } from "./continue";
 
-export class If extends Instruccion{
+export class Switch extends Instruccion{
     condicion:Instruccion;
     instruccionesIf:Instruccion[];
     instruccionesElse:Instruccion[];
-    ElseIf:Array<Instruccion>;
+    ElseIf:Instruccion[];
     fila:number;
     columna:number;
 
-    constructor(condicion:Instruccion,instruccionesIf:Instruccion[],instruccionesElse:Instruccion[],ElseIf:Array<Instruccion>,fila:number,columna:number){
+    constructor(condicion:Instruccion,instruccionesIf:Instruccion[],instruccionesElse:Instruccion[],ElseIf:Instruccion[],fila:number,columna:number){
         super(fila,columna);
         this.condicion=condicion;
         this.instruccionesIf=instruccionesIf;
@@ -65,8 +65,7 @@ export class If extends Instruccion{
             }
             //SI ES FALSA
             else{
-                //console.log("la condicion tiene que entrar a else")
-                if(this.instruccionesElse != null || this.instruccionesElse != undefined ){
+                if(this.instruccionesElse != null || this.instruccionesElse !=undefined ){
                     //crea un nuevo entorno
                     const nuevaTabla=new TablaSimbolos(entorno);
                     
@@ -86,13 +85,19 @@ export class If extends Instruccion{
                         }
                     });
                 } 
+
+
+
                 //INSTRUCCIONES ELSE IF
-                else if(this.ElseIf !=null || this.ElseIf != undefined){
-
+                else if(this.ElseIf != null || this.ElseIf !=undefined){
+                    //crea un nuevo entorno
+                    const nuevaTabla=new TablaSimbolos(entorno);
+                    
                     //ejecuta instrucciones else
+                    this.ElseIf.forEach((element3:Instruccion) => {
 
-                    this.ElseIf.forEach((element2) => {
-                        const result=element2.interpretar(entorno,arbol);
+                        const result=element3.interpretar(nuevaTabla,arbol);
+
                         if(result instanceof Excepcion){
                             ///
                             ///
@@ -102,9 +107,7 @@ export class If extends Instruccion{
                         if(result instanceof Break || result instanceof Continue ){
                             return result;
                         }
-                    });
-                
-          
+                    });           
                 }
             }
 
