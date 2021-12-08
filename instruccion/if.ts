@@ -1,5 +1,6 @@
 import { Instruccion } from "../abs/Instruccion";
 import { NodoAST } from "../abs/nodo";
+import { Primitivo } from "../expresiones/primitivo";
 import { Arbol } from "../table/arbol";
 import { Excepcion } from "../table/excepcion";
 import { TablaSimbolos } from "../table/tablasimbolos";
@@ -23,17 +24,20 @@ export class If extends Instruccion{
         this.ElseIf=ElseIf;
         this.fila=fila;
         this.columna=columna;
-        
     }
 
     interpretar(entorno: TablaSimbolos, arbol: Arbol) {
+        //console.log(this.condicion.interpretar(entorno,arbol));
         const condition=this.condicion.interpretar(entorno,arbol);
+        
         if(condition instanceof Excepcion){
             return condition;
         }
+        
+        console.log(condition.value );
         //verifica que la condicion sea boolean
         if(condition.tipo === TIPO.BOOLEAN){
-
+            
             //verifica que la condicion sea TRUE
             if(condition.value.toLowerCase()==="true"){
 
@@ -109,6 +113,7 @@ export class If extends Instruccion{
 
 
         }else{
+            console.log('TIPO DATO NO BOOLEANO');
             return new Excepcion("Semantico", "Tipo de dato no Booleano en IF",`${this.fila}`,`${this.columna}`);
         }
 

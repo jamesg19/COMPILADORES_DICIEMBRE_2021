@@ -116,7 +116,7 @@
   
   //Instrucciones
     const { Print } = require('../instruccion/print');
-    const {D_IdExp} = require('../instruccion/declaracion_idexp')
+    //const {D_IdExp} = require('../instruccion/declaracion_idexp')
     const {D_Id} = require('../instruccion/declaracion_id')
     
     const { Asignacion } = require('../instruccion/asignacion')
@@ -155,6 +155,8 @@
     
     const { Struct } = require('../expresiones/struct/struct')
     const { Atributo } = require('../expresiones/struct/atributo')
+    //JAMES
+    const { If } = require('../instruccion/if');
 %}
 
 // Asociacion de operadores y precedencia
@@ -341,14 +343,15 @@ RETURN
 ;
 
 CONDICION_IF 
-  : IF  {  }
+  : IF  { $$= $1 }
   | IF ELSE  {  }
   | IF LISTA_ELSE_IF  {  }
   | IF LISTA_ELSE_IF ELSE  {  }
 ;
 
 IF 
-  : if par_abierto EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada {  }
+  : if par_abierto EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada 
+  { $$=new If($3,$6,@1.firt_line,@1.firt_column); }
 ;
 
 
@@ -522,8 +525,8 @@ EXP
   | decimal                         { $$ = new Primitivo(1,$1,@1.firt_line,@1.firt_column);}
   | string                          { $$ = new Primitivo(TIPO.CADENA,$1,@1.firt_line,@1.firt_column);   }
   | id                              {    }
-  | true                            { $$ = new Primitivo(2,$1,@1.firt_line,@1.firt_column);   }
-  | false                           { $$ = new Primitivo(2,$1,@1.firt_line,@1.firt_column);   }
+  | true                            { $$ = new Primitivo(TIPO.BOOLEAN,$1,@1.firt_line,@1.firt_column);   }
+  | false                           { $$ = new Primitivo(TIPO.BOOLEAN,$1,@1.firt_line,@1.firt_column);   }
   | null                            { $$ = new Primitivo(TIPO.NULL,$1,@1.firt_line,@1.firt_column);  }
   
   //Arreglos
