@@ -39,7 +39,6 @@ export class If extends Instruccion{
 
                 //CREA UN ENTORNO PARA LAS INSTRUCCIONES DENTRO DEL IF
                 const nuevaTabla=new TablaSimbolos(entorno);
-                ins:Instruccion;
                 //EJECUTA LAS INSTRUCCIONES
 
                 this.instruccionesIf.forEach((element:Instruccion) => {
@@ -109,6 +108,8 @@ export class If extends Instruccion{
             }
 
 
+        }else{
+            return new Excepcion("Semantico", "Tipo de dato no Booleano en IF",`${this.fila}`,`${this.columna}`);
         }
 
 
