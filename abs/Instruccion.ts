@@ -6,6 +6,7 @@ export abstract class  Instruccion{
     columna:number;
     struct:boolean;
     arra:boolean;
+    expresion: string;
     
     constructor(fila:number,columna:number){
             this.columna = columna;

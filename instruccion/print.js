@@ -8,11 +8,11 @@ class Print extends Instruccion_1.Instruccion {
         super(fila, columna);
         this.fila = fila;
         this.columna = columna;
-        this.expresion = value;
+        this.value = value;
     }
     interpretar(entorno, arbol) {
         //console.log('antes: ',this.expresion);
-        const value = this.expresion.interpretar(entorno, arbol);
+        const value = this.value.interpretar(entorno, arbol);
         //console.log('despues: ',value);
         if (value instanceof excepcion_1.Excepcion) {
             console.log(value);

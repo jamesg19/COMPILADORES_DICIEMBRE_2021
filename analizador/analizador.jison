@@ -162,6 +162,10 @@
     const { Atributo } = require('../expresiones/struct/atributo')
     //JAMES
     const { If } = require('../instruccion/if');
+    const { Switch } = require('../instruccion/switch');
+    const { Case } = require('../instruccion/case');
+    const { Default } = require('../instruccion/default');
+    const { Break } = require('../instruccion/break');
 %}
 
 // Asociacion de operadores y precedencia
@@ -316,22 +320,27 @@ ASIGNACION_FOR
 ;
 
 SWITCH 
-  : switch par_abierto EXP par_cerrado llave_abierta LISTA_CASE llave_cerrada {   }
+  : switch par_abierto EXP par_cerrado llave_abierta LISTA_CASE llave_cerrada 
+  { $$=new Switch($3,$6,null,@1.firt_line,@1.firt_column);  }
+
+  | switch par_abierto EXP par_cerrado llave_abierta LISTA_CASE DEFAULT llave_cerrada 
+  { $$=new Switch($3,$6,$7,@1.firt_line,@1.firt_column);  }
+
+  | switch par_abierto EXP par_cerrado llave_abierta DEFAULT llave_cerrada   
+  { $$=new Switch($3,null,$6,@1.firt_line,@1.firt_column);  }
 ;
 
 LISTA_CASE 
-  : LISTA_CASE CASE {  }
-  | CASE {  }
-  | DEFAULT { }
-  | LISTA_CASE DEFAULT {  }
+  : LISTA_CASE CASE     {  $1.push($2); $$ = $1; }
+  | CASE                { $$ = [$1] }
 ;
 
 CASE 
-  : case EXP dos_puntos INSTRUCCIONES {  }
+  : case EXP dos_puntos INSTRUCCIONES { $$ = new Case($2, $4,@1.firt_line,@1.firt_column); }
 ;
 
 DEFAULT 
-  : default dos_puntos INSTRUCCIONES {  }
+  : default dos_puntos INSTRUCCIONES { $$ = new Default($3,@1.firt_line,@1.firt_column);  }
 ;
 
 CONTINUE 
@@ -339,7 +348,7 @@ CONTINUE
 ;
 
 BREAK 
-  : break PT_COMA {  }
+  : break PT_COMA { $$= new Break(@1.firt_line,@1.firt_column);  }
 ;
 
 RETURN 
@@ -380,10 +389,10 @@ CONDICION_IF:
 //   : else if par_abierto EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada {  }
 // ;
 
-LISTA_ELSE_IF 
-  : LISTA_ELSE_IF ELSE_IF  {  }
-  | ELSE_IF  {  }
-;
+// LISTA_ELSE_IF 
+//   : LISTA_ELSE_IF ELSE_IF  {  }
+//   | ELSE_IF  {  }
+// ;
 
 PUSH_ARREGLO 
   : id punto push par_abierto EXP par_cerrado PT_COMA  {  }

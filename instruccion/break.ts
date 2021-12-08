@@ -16,7 +16,8 @@ export class Break extends Instruccion{
     }
 
     interpretar(entorno: TablaSimbolos, arbol: Arbol) {
-        return this;
+        return new Break(this.fila,this.columna);
+        //return this;
     }
     getNodo():NodoAST{
         return new NodoAST("BREAK");
