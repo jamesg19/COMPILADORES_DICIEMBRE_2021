@@ -343,7 +343,7 @@ BREAK
 ;
 
 RETURN 
-  : return EXP PT_COMA {  }
+  : return EXP PT_COMA {   }
   | return punto_coma {  }
 ;
 
