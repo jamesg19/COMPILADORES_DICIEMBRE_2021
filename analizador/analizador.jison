@@ -347,26 +347,38 @@ RETURN
   | return punto_coma {  }
 ;
 
-CONDICION_IF 
-  : IF  { $$= $1 }
-  | IF ELSE  {  }
-  | IF LISTA_ELSE_IF  {  }
-  | IF LISTA_ELSE_IF ELSE  {  }
+CONDICION_IF:
+    if par_abierto EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada 
+    { $$=new If($3,$6,null,null,@1.firt_line,@1.firt_column); }
+
+    | if par_abierto EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada else llave_abierta INSTRUCCIONES llave_cerrada 
+    {  $$=new If($3,$6,$10,null,@1.firt_line,@1.firt_column); }
+
+    | if par_abierto EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada else CONDICION_IF
+    {  $$=new If($3,$6,null,[$9],@1.firt_line,@1.firt_column); }
 ;
 
-IF 
-  : if par_abierto EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada 
-  { $$=new If($3,$6,@1.firt_line,@1.firt_column); }
-;
+
+// CONDICION_IF 
+//   : IF  { $$= $1 }
+//   | IF ELSE  { $$=$1 }
+//   | IF LISTA_ELSE_IF  {  }
+//   | IF LISccTA_ELSE_IF ELSE  {  }
+// ;
+
+// IF 
+//   : if par_abierto EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada 
+//   { $$=new If($3,$6,@1.firt_line,@1.firt_column); }
+// ;
 
 
-ELSE 
-  : else llave_abierta INSTRUCCIONES llave_cerrada {  }
-;
+// ELSE 
+//   : else llave_abierta INSTRUCCIONES llave_cerrada {  }
+// ;
 
-ELSE_IF 
-  : else if par_abierto EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada {  }
-;
+// ELSE_IF 
+//   : else if par_abierto EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada {  }
+// ;
 
 LISTA_ELSE_IF 
   : LISTA_ELSE_IF ELSE_IF  {  }

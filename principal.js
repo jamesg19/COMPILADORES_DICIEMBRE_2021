@@ -20,8 +20,12 @@ class Principal {
 exports.Principal = Principal;
 let principa = new Principal();
 principa.ejecutar('println(6>5);   '
-    + 'if(6>5){'
-    + 'println(false);'
-    + '}'
+    + 'if(1>5){'
+    + 'println("entra if6>5");'
+    + '} '
+    + 'else if(7>5){'
+    + 'println("entra else if 7>5 ");'
+    + '} '
+    + 'else { println("entra AL FALSE");  } '
     + 'println(true);');
 //principa.ejecutar ('println((true && true) && (true && true));');
