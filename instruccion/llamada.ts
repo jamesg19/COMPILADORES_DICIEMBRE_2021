@@ -12,6 +12,8 @@ export class Llamada extends Instruccion{
     lista_parametros?: Array<Instruccion>;
     tipo:TIPO;
     
+    // clase para llamar funciones
+    // con o sin parametros
     constructor(id:string, fila:number,columna:number,lista_parmetros?:Array<Instruccion> ){
         super(fila,columna);
         this.id = id;
@@ -24,6 +26,11 @@ export class Llamada extends Instruccion{
     //debo comparar la cantidad de parametros          ..................listo
     //comparar que el tipo de parametro coincida con los de la funcion...
     //ejecutar
+    /**
+     * @param  {TablaSimbolos} entorno
+     * @param  {Arbol} arbol
+     * @returns any
+     */
     interpretar(entorno:TablaSimbolos, arbol:Arbol):any{
         console.log('en llamada');
         let llamar_funcion = arbol.getFunctionByName(this.id);

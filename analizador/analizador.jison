@@ -121,10 +121,6 @@
     const { Funcion } = require('../instruccion/funcion');
     const { Llamada } = require ('../instruccion/llamada');
     const { Asignacion } = require('../instruccion/asignacion');
-    //JAMES
-    const { If } = require('../instruccion/if');
-    
-    
     
     //Tipos
     const { Primitivo } = require('../expresiones/primitivo');
@@ -200,13 +196,13 @@
 //terminales con minuscula
 //no terminales con mayuscula
 INICIO:
-    INSTRUCCIONES EOF{ $$ = $1; return $$;   }
+    INSTRUCCIONES EOF                 { $$ = $1; return $$;   }
     
 ;
 INSTRUCCIONES:
       
-    INSTRUCCIONES INSTRUCCION {  $1.push($2); $$ = $1; }
-    | INSTRUCCION             { $$ = [$1] }
+    INSTRUCCIONES INSTRUCCION         {  $1.push($2); $$ = $1; }
+    | INSTRUCCION                     { $$ = [$1]              }
 
 ;
 
@@ -242,13 +238,8 @@ INSTRUCCION:
 ;
 
 
-PRINT  :  println par_abierto EXP par_cerrado punto_coma  { $$ = new Print(@1.firt_line,@1.firt_column,$3);  }
+PRINT  :  println par_abierto LISTA_EXPRESIONES par_cerrado punto_coma  { $$ = new Print(@1.firt_line,@1.firt_column,$3);  }
 ;
-
-// //--------------------------------------IMPRIMIR--------F------------------------------
- //print 
-  // : imprimir par_abierto LISTA_EXPRESIONES par_cerrado punto_coma {    }
-// ;
 
 
 PT_COMA:
@@ -346,12 +337,12 @@ CONTINUE
 ;
 
 BREAK 
-  : break PT_COMA { $$= new Break(@1.firt_line,@1.firt_column);  }
+  : break PT_COMA     { $$= new Break(@1.firt_line,@1.firt_column);  }
 ;
 
 RETURN 
-  : return EXP PT_COMA {   }
-  | return punto_coma {  }
+  : return EXP PT_COMA {  $$ = new Return(true,@1.first_line,@1.first_column,$2); }
+  | return punto_coma  {  $$ = new Return(false,@1.first_line,@1.first_column); }
 ;
 
 CONDICION_IF:
@@ -367,32 +358,6 @@ CONDICION_IF:
     {  $$=new If($3,$6,null,[$9],@1.firt_line,@1.firt_column); }
 ;
 
-
-// CONDICION_IF 
-//   : IF  { $$= $1 }
-//   | IF ELSE  { $$=$1 }
-//   | IF LISTA_ELSE_IF  {  }
-//   | IF LISccTA_ELSE_IF ELSE  {  }
-// ;
-
-// IF 
-//   : if par_abierto EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada 
-//   { $$=new If($3,$6,@1.firt_line,@1.firt_column); }
-// ;
-
-
-// ELSE 
-//   : else llave_abierta INSTRUCCIONES llave_cerrada {  }
-// ;
-
-// ELSE_IF 
-//   : else if par_abierto EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada {  }
-// ;
-
-// LISTA_ELSE_IF 
-//   : LISTA_ELSE_IF ELSE_IF  {  }
-//   | ELSE_IF  {  }
-// ;
 
 PUSH_ARREGLO 
   : id punto push par_abierto EXP par_cerrado PT_COMA                     {  }
@@ -517,12 +482,12 @@ INCREMENTO_DECREMENTO
 EXP
   //Operaciones Aritmeticas
   : menos EXP %prec UMENOS          { $$ = new NegacionNum(6,$2,0,@1.firt_line,@1.firt_column);   }
-  | EXP mas EXP                     { $$ = new Suma(0,$1,$3,@1.firt_line,@1.firt_column);   }
-  | EXP menos EXP                   { $$ = new Resta(1,$1,$3,@1.firt_line,@1.firt_column);   }
+  | EXP mas EXP                     { $$ = new Suma(0,$1,$3,@1.firt_line,@1.firt_column);         }
+  | EXP menos EXP                   { $$ = new Resta(1,$1,$3,@1.firt_line,@1.firt_column);        } 
   | EXP por EXP                     { $$ = new Multiplicar(2,$1,$3,@1.firt_line,@1.firt_column);  }
-  | EXP div EXP                     { $$ = new Division(3,$1,$3,@1.firt_line,@1.firt_column);   }
-  | EXP potencia EXP                { $$ = new Potencia(4,$1,$3,@1.firt_line,@1.firt_column);   }
-  | EXP mod EXP                     { $$ = new Modulo(5,$1,$3,@1.firt_line,@1.firt_column);   }
+  | EXP div EXP                     { $$ = new Division(3,$1,$3,@1.firt_line,@1.firt_column);     }
+  | EXP potencia EXP                { $$ = new Potencia(4,$1,$3,@1.firt_line,@1.firt_column);     }
+  | EXP mod EXP                     { $$ = new Modulo(5,$1,$3,@1.firt_line,@1.firt_column);       }
   | id mas_mas                      {   }
   | id menos_menos                  {   }
   | par_abierto EXP par_cerrado     {  $$ = $2  }
@@ -545,7 +510,7 @@ EXP
   | entero                          { $$ = new Primitivo(TIPO.ENTERO,$1,@1.firt_line,@1.firt_column); }
   | decimal                         { $$ = new Primitivo(TIPO.DECIMAL,$1,@1.firt_line,@1.firt_column);}
   | string                          { $$ = new Primitivo(TIPO.CADENA,$1,@1.firt_line,@1.firt_column);   }
-  | id                              { console.log("idparser"); $$ = new Identificador($1,$1,@1.firt_line,@1.firt_column);   }
+  | id                              { $$ = new Identificador($1,@1.firt_line,@1.firt_column);   }
   | true                            { $$ = new Primitivo(TIPO.BOOLEAN,true,@1.firt_line,@1.firt_column);   }
   | false                           { $$ = new Primitivo(TIPO.BOOLEAN,false,@1.firt_line,@1.firt_column);   }
   | null                            { $$ = new Primitivo(TIPO.NULL,$1,@1.firt_line,@1.firt_column);  }
@@ -618,7 +583,7 @@ LISTA_ACCESOS_ARREGLO
 
 LISTA_EXPRESIONES 
   : LISTA_EXPRESIONES coma EXP {  $1.push($3); $$ = $1;  }
-  | EXP                        {  $$ = [$1]  }
+  | EXP                        {  $$ = [$1];  }
 ;
 
 
@@ -648,6 +613,5 @@ PARAMETROS_LLAMADA :
 ;
 
 PARAMETRO_LLAMADA:
-     EXP                                            { $$ = $1; }
-     
+     EXP                                            { $$ = $1; }  
 ;

@@ -10,6 +10,12 @@ export class And extends Instruccion{
     rightExpression: Primitivo;
     tipo:TIPO;
   
+    /**
+     * @param  {Primitivo} leftExpressio
+     * @param  {Primitivo} rightExpression
+     * @param  {number} linea
+     * @param  {number} columna
+     */
     constructor( leftExpressio: Primitivo, rightExpression: Primitivo,linea: number,columna:number){
       super(linea,columna);
       this.rightExpression = rightExpression;
@@ -18,6 +24,11 @@ export class And extends Instruccion{
       
     }
   
+    /**
+     * @param  {TablaSimbolos} entorno
+     * @param  {Arbol} arbol
+     * @returns any
+     */
     interpretar(entorno:TablaSimbolos,arbol:Arbol ):any {
         
       const exp1 = this.leftExpressio.interpretar(entorno,arbol);

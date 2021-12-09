@@ -1,3 +1,6 @@
+/**
+ * @param  {TablaSimbolos|undefined} anterior
+ */
 import { Simbolo } from './simbolo';
 import { Excepcion } from './excepcion';
 import { Struct } from '../expresiones/struct/struct';
@@ -9,6 +12,9 @@ export class TablaSimbolos{
     anterior:TablaSimbolos|undefined;
     
     
+    /**
+     * @param  {TablaSimbolos|undefined} anterior
+     */
     constructor(anterior:TablaSimbolos|undefined){
         
         this.tabla = new Map();
@@ -16,6 +22,9 @@ export class TablaSimbolos{
         
         
     }
+    /**
+     * @param  {Simbolo} simbolo
+     */
     addSimbolo(simbolo:Simbolo){
         
         if(simbolo.id in this.tabla){
@@ -25,6 +34,9 @@ export class TablaSimbolos{
         }
         
     }
+    /**
+     * @param  {string} id
+     */
     getSimbolo(id:string){
         let tabla_actual:TablaSimbolos|undefined = this;
         while (tabla_actual != undefined){
@@ -59,6 +71,9 @@ export class TablaSimbolos{
             }
         }
     }
+    /**
+     * @param  {Simbolo} simbolo
+     */
     actualizarSimboloEnTabla(simbolo:Simbolo){
         let tabla_actual:TablaSimbolos|undefined = this;
         
