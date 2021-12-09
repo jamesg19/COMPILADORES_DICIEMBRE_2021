@@ -25,7 +25,7 @@ class TablaSimbolos {
      * @param  {string} id
      */
     getSimbolo(id) {
-        let tabla_actual = this;
+        let tabla_actual;
         while (tabla_actual != undefined) {
             if (tabla_actual.tabla.has(id)) {
                 return tabla_actual.tabla.get(id);
@@ -34,7 +34,7 @@ class TablaSimbolos {
                 tabla_actual = tabla_actual.anterior;
             }
         }
-        return null;
+        return undefined;
     }
     //obtener el simbolo
     getSimboloJ(id) {

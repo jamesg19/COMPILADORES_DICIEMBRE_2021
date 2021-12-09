@@ -88,6 +88,8 @@ export class Arreglo extends Instruccion {
     entorno.addSimbolo(simbolo);
   }
 
+
+
   copyExpDeep(
     entorno: TablaSimbolos,
     arbol: Arbol,

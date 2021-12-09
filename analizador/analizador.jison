@@ -158,6 +158,8 @@
     const { Potencia } = require('../expresiones/artimetica/potencia');    
     
     const { Arreglo } = require('../expresiones/array/declarar_array')
+    //Arreglo_Valor
+    const { Arreglo_Valor } = require('../expresiones/array/array_valor')
     const { Struct } = require('../expresiones/struct/struct')
     const { Atributo } = require('../expresiones/struct/atributo')
     //JAMES
@@ -610,7 +612,7 @@ DEC_ARRAY //Arreglo del tipo---> int[] arr = [exp1,exp2, [exp3] ]
 
   : TIPO_DEC_VARIABLE LISTA_CORCHETES id  igual corchete_abierto  LISTA_EXPRESIONES corchete_cerrado punto_coma
    { $$ = new Arreglo ($1,$3,$6,$1,$3,@1.first_line,@1.first_column);    }
-  | TIPO_DEC_VARIABLE LISTA_CORCHETES id  igual  nmral id {$$ new Arreglo_Valor($1,$3,$6,@1.first_line,@1.first_column); }
+  | TIPO_DEC_VARIABLE LISTA_CORCHETES id  igual  nmral id {$$ = new Arreglo_Valor($1,$3,$6,@1.first_line,@1.first_column); }
 ;
 
 
