@@ -3,10 +3,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.TablaSimbolos = void 0;
 const excepcion_1 = require("./excepcion");
 class TablaSimbolos {
+    /**
+     * @param  {TablaSimbolos|undefined} anterior
+     */
     constructor(anterior) {
         this.tabla = new Map();
         this.anterior = anterior;
     }
+    /**
+     * @param  {Simbolo} simbolo
+     */
     addSimbolo(simbolo) {
         if (simbolo.id in this.tabla) {
             return new excepcion_1.Excepcion("Semantico", "Variable " + simbolo.id + " ya existe en el entorno", simbolo.fila + "", simbolo.columna + "");
@@ -15,6 +21,9 @@ class TablaSimbolos {
             this.tabla.set(simbolo.id, simbolo);
         }
     }
+    /**
+     * @param  {string} id
+     */
     getSimbolo(id) {
         let tabla_actual = this;
         while (tabla_actual != undefined) {
@@ -42,6 +51,9 @@ class TablaSimbolos {
             }
         }
     }
+    /**
+     * @param  {Simbolo} simbolo
+     */
     actualizarSimboloEnTabla(simbolo) {
         let tabla_actual = this;
         while (tabla_actual != null) {

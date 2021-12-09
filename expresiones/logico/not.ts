@@ -8,13 +8,22 @@ import { Primitivo } from '../primitivo';
 
 export class Not extends Instruccion{
     expression: Primitivo;
-
+    /**
+     * @param  {Primitivo} expression
+     * @param  {number} fila
+     * @param  {number} columna
+     */
     constructor( expression: Primitivo,fila:number,columna:number){
       super(fila,columna);
       this.expression = expression;
       
     }
   
+    /**
+     * @param  {TablaSimbolos} entorno
+     * @param  {Arbol} arbol
+     * @returns any
+     */
     interpretar(entorno: TablaSimbolos,arbol:Arbol):any {
         
       const expression1 = this.expression.interpretar(entorno,arbol);

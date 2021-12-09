@@ -13,6 +13,14 @@ export class D_IdExp extends Instruccion{
     exp: Instruccion;
     constante:boolean;
     
+    /**
+     * @param  {TIPO} tipo
+     * @param  {string} id
+     * @param  {Instruccion} exp
+     * @param  {boolean} constante
+     * @param  {number} fila
+     * @param  {number} columna
+     */
     constructor( tipo:TIPO, id: string, exp: Instruccion ,constante:boolean,fila: number,columna:number){
       super(fila,columna);
       
@@ -23,6 +31,11 @@ export class D_IdExp extends Instruccion{
       
     }
   
+    /**
+     * @param  {TablaSimbolos} e
+     * @param  {Arbol} arbol
+     * @returns any
+     */
     interpretar(e: TablaSimbolos,arbol:Arbol):any {
       //Validacion de variable existente
       let variable = e.getSimbolo(this.id);//e.getVariable(this.id);
@@ -33,8 +46,8 @@ export class D_IdExp extends Instruccion{
   
       //Creacion de variable en el entorno
       let valor = this.exp.interpretar(e,arbol);
-      
-      valor = JSON.parse(JSON.stringify(this,valor));
+      if(this.exp.tipo == TIPO.ARREGLO || this.exp.tipo == TIPO.STRUCT)  
+        valor = JSON.parse(JSON.stringify(this,valor));
       
       let simbolo = new Simbolo(this.id,this.tipo,super.fila,super.columna,valor,false,false);
       e.addSimbolo(simbolo);//valor: any, arreglo: boolean, struct: boolean

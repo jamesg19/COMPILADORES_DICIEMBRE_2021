@@ -13,6 +13,10 @@ export class Arbol{
     consola:string= ""
     TSglobal:TablaSimbolos;   
     
+    /**
+     * @param  {TablaSimbolos} TSglobal
+     * @param  {Instruccion[]} instrucciones
+     */
     constructor(TSglobal:TablaSimbolos,instrucciones:Instruccion[]){
         this.excepciones = 
         this.funciones = new Array();
@@ -23,6 +27,10 @@ export class Arbol{
     
     
     
+    /**
+     * @param  {string} nombre
+     * @returns Funcion
+     */
     getFunctionByName(nombre:string):Funcion{
         let funcion:Funcion;
         this.funciones.forEach((x)=>{
