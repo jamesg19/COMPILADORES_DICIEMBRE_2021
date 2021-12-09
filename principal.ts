@@ -40,9 +40,10 @@ holaMundo(1,13.4);\
 println('cadena1','cadena2');\
 ";
 
-principa.ejecutar("int a = 33;\
+principa.ejecutar("\
+                  int[] a = [33,5,[4,5,6]];\
                    \
-                   println('HOLA',a);\
+                   println('HOLA',a); #\
                    ");
 // principa.ejecutar ('println(6>5);   '
 //                     +'if(1>5){'

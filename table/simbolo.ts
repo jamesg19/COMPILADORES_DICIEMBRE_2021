@@ -23,10 +23,13 @@ export class Simbolo {
         this.tipo = tipo;
         this.fila = fila;
         this.columna = columna;
-        this.valor = valor;
         this.arreglo = arreglo;
+        
+        this.valor = valor;//arreglo? JSON.parse(JSON.stringify(valor)):valor;
+        
         this.struct = struct;
         this.constante = false;
+        
 
     }
     /**

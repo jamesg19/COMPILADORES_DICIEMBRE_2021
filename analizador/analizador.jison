@@ -45,8 +45,9 @@
 'false'     return 'false';
 
 //Patrones numericos
-[0-9]+("."[0-9]+)?\b  	return 'decimal';
 [0-9]+\b  	return 'entero';
+[0-9]+("."[0-9]+)?\b  	return 'decimal';
+
 ([a-zA-Z])[a-zA-Z0-9_]* return 'id';
 
 
@@ -74,6 +75,7 @@
 '/'         return 'div';
 '%'         return 'mod';
 
+
 //operadores relaciona
 '<='        return 'menor_igual';
 '>='        return 'mayor_igual';
@@ -92,6 +94,7 @@
 '!'         return 'not';
 '?'         return 'interrogacion';
 
+'#'         return 'nmral';
 
 
 //Patrones para cadenas
@@ -121,6 +124,7 @@
     const { Funcion } = require('../instruccion/funcion');
     const { Llamada } = require ('../instruccion/llamada');
     const { Asignacion } = require('../instruccion/asignacion');
+    
     
     //Tipos
     const { Primitivo } = require('../expresiones/primitivo');
@@ -153,6 +157,7 @@
     const { NegacionNum} = require('../expresiones/artimetica/negacion_numero');    
     const { Potencia } = require('../expresiones/artimetica/potencia');    
     
+    const { Arreglo } = require('../expresiones/array/declarar_array')
     const { Struct } = require('../expresiones/struct/struct')
     const { Atributo } = require('../expresiones/struct/atributo')
     //JAMES
@@ -214,7 +219,9 @@ INSTRUCCIONES:
 //solo hay que crear la produccion (ambigua)
 
 INSTRUCCION: 
-    DECLARACION_VARIABLE            {   $$ = $1 }//falta cuando hay una lista de id's
+  //init_inst
+   DEC_ARRAY
+  |  DECLARACION_VARIABLE            {   $$ = $1 }//falta cuando hay una lista de id's
   | DECLARACION_FUNCION             {   $$ = $1 }
   | DECLARACION_TYPE                {   $$ = $1 } //aca se crea la 'plantilla' para despues crear instancias
   | ASIGNACION 	                    {   $$ = $1 } 
@@ -321,7 +328,7 @@ SWITCH
 
 LISTA_CASE 
   : LISTA_CASE CASE     {  $1.push($2); $$ = $1; }
-  | CASE                { $$ = [$1] }
+  | CASE                { $$ = [$1]              }
 ;
 
 CASE 
@@ -397,7 +404,9 @@ PARAMETRO
   //| id dos_puntos Array menor TIPO_VARIABLE_NATIVA mayor {    }
 ;
 
-//=========================================>declaracion de struct
+
+
+//=========================================>declaracion de struct<=========================================>
 
 DECLARACION_TYPE 
   : struct id  llave_abierta LISTA_ATRIBUTOS llave_cerrada punto_coma { $$ = new Struct($1,$4)    }
@@ -463,17 +472,6 @@ DEC_ID
   : id                                                {  $$ = $1  }
 ;
 
-//let id : TIPO_VARIABLE_NATIVA LISTA_CORCHETES ;
-DEC_ID_TIPO_CORCHETES 
-  : id dos_puntos TIPO_VARIABLE_NATIVA LISTA_CORCHETES {    }
-;
-
-
-LISTA_CORCHETES 
-  : LISTA_CORCHETES corchete_abierto corchete_cerrado {    }
-  | corchete_abierto corchete_cerrado                 {    }
-;
-
 INCREMENTO_DECREMENTO
   : id mas_mas PT_COMA     {    }
   | id menos_menos PT_COMA {    }
@@ -507,7 +505,7 @@ EXP
   
   //Valores Primitivos
   
-  | entero                          { $$ = new Primitivo(TIPO.ENTERO,$1,@1.firt_line,@1.firt_column); }
+  | entero                          { $$ = new Primitivo(0,$1,@1.firt_line,@1.firt_column); }
   | decimal                         { $$ = new Primitivo(TIPO.DECIMAL,$1,@1.firt_line,@1.firt_column);}
   | string                          { $$ = new Primitivo(TIPO.CADENA,$1,@1.firt_line,@1.firt_column);   }
   | id                              { $$ = new Identificador($1,@1.firt_line,@1.firt_column);   }
@@ -519,6 +517,7 @@ EXP
   | ACCESO_ARREGLO  {    }
   | ARRAY_LENGTH    {    }
   | ARRAY_POP       {    }
+  | corchete_abierto LISTA_EXPRESIONES corchete_cerrado { $$ = $2}
   
   //Types - accesos
   | ACCESO_TYPE     {    }
@@ -529,21 +528,9 @@ EXP
   
   //Funciones
   | LLAMADA_FUNCION_EXP  {  $$ = $1  }
-;
-/*//=====================>struct<=====================
-TYPE 
-  :  llave_abierta ATRIBUTOS_TYPE llave_cerrada { $$ = new Struct($2);   }
+  
 ;
 
-ATRIBUTOS_TYPE 
-  : ATRIBUTO_TYPE coma ATRIBUTOS_TYPE {  $1.push($3); $$ = $1  }
-  | ATRIBUTO_TYPE                     {  $$ = [$1]  }
-;
-
-ATRIBUTO_TYPE 
-  : id  EXP                           {  $$ = { id:$1, exp:e$2 }  }
-;
-//=====================>fin struct<===========================/*/
 
 ARRAY_LENGTH 
   : id punto length  {    }
@@ -552,13 +539,13 @@ ARRAY_LENGTH
 ;
 
 ARRAY_POP 
-  : id punto pop par_abierto par_cerrado  {    }
+  : id punto pop par_abierto par_cerrado                        {    }
   | id LISTA_ACCESOS_ARREGLO punto pop par_abierto par_cerrado  {    }
-  | id LISTA_ACCESOS_TYPE punto pop par_abierto par_cerrado  {    }
+  | id LISTA_ACCESOS_TYPE punto pop par_abierto par_cerrado     {    }
 ;
 
-TERNARIO //condicion: Instruccion, exp_true: Instruccion, exp_false: Instruccion,fila:number, columna:number
-  : EXP interrogacion EXP dos_puntos EXP {  $$ = new Ternario($1,$3,$5,@1.firt_line,@1.firt_column);  }
+TERNARIO 
+  : EXP interrogacion EXP dos_puntos EXP          {  $$ = new Ternario($1,$3,$5,@1.firt_line,@1.firt_column);  }
 ;
 
 ACCESO_ARREGLO 
@@ -583,7 +570,8 @@ LISTA_ACCESOS_ARREGLO
 
 LISTA_EXPRESIONES 
   : LISTA_EXPRESIONES coma EXP {  $1.push($3); $$ = $1;  }
-  | EXP                        {  $$ = [$1];  }
+  
+  | EXP                        {  $$ = [$1];             }
 ;
 
 
@@ -614,4 +602,19 @@ PARAMETROS_LLAMADA :
 
 PARAMETRO_LLAMADA:
      EXP                                            { $$ = $1; }  
+;
+
+//--------------------------------------ARRAY-----------------------------------
+
+DEC_ARRAY //Arreglo del tipo---> int[] arr = [exp1,exp2, [exp3] ]
+
+  : TIPO_DEC_VARIABLE LISTA_CORCHETES id  igual corchete_abierto  LISTA_EXPRESIONES corchete_cerrado punto_coma
+   { $$ = new Arreglo ($1,$3,$6,$1,$3,@1.first_line,@1.first_column);    }
+  | TIPO_DEC_VARIABLE LISTA_CORCHETES id  igual  nmral id {$$ new Arreglo_Valor($1,$3,$6,@1.first_line,@1.first_column); }
+;
+
+
+LISTA_CORCHETES 
+  : LISTA_CORCHETES corchete_abierto corchete_cerrado {  $$ = $2+$1  }
+  | corchete_abierto corchete_cerrado                 {  $$ = 1;  }
 ;

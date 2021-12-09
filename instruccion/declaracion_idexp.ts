@@ -47,11 +47,11 @@ export class D_IdExp extends Instruccion{
       //Creacion de variable en el entorno
       let valor = this.exp.interpretar(e,arbol);
       if(this.exp.tipo == TIPO.ARREGLO || this.exp.tipo == TIPO.STRUCT)  
-        valor = JSON.parse(JSON.stringify(this,valor));
+        valor = JSON.parse(JSON.stringify(valor));
       
       let simbolo = new Simbolo(this.id,this.tipo,super.fila,super.columna,valor,false,false);
       e.addSimbolo(simbolo);//valor: any, arreglo: boolean, struct: boolean
     }
   
-  }
+}
   

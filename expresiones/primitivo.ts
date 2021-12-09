@@ -1,5 +1,5 @@
 import { Instruccion } from "../abs/Instruccion";
-import { TIPO } from "../table/tipo";
+import { TIPO } from "../table/TipoNativo";
 import { TablaSimbolos } from "../table/tablasimbolos";
 import { Arbol } from "../table/arbol";
 
