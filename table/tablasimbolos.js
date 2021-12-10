@@ -25,7 +25,7 @@ class TablaSimbolos {
      * @param  {string} id
      */
     getSimbolo(id) {
-        let tabla_actual;
+        let tabla_actual = this;
         while (tabla_actual != undefined) {
             if (tabla_actual.tabla.has(id)) {
                 return tabla_actual.tabla.get(id);

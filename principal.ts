@@ -45,7 +45,8 @@ principa.ejecutar("\
                    \
                    println('HOLA',a); \
                    int[] b = #a\
-                   \
+                    b[1] = 100;\
+                    println(b);\
                    ");
 // principa.ejecutar ('println(6>5);   '
 //                     +'if(1>5){'

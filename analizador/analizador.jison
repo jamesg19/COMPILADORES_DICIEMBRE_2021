@@ -124,7 +124,7 @@
     const { Funcion } = require('../instruccion/funcion');
     const { Llamada } = require ('../instruccion/llamada');
     const { Asignacion } = require('../instruccion/asignacion');
-    
+    const { Modificar } = require('../expresiones/array/modificar_array');
     
     //Tipos
     const { Primitivo } = require('../expresiones/primitivo');
@@ -244,6 +244,7 @@ INSTRUCCION:
   | PRINTLN                         {   $$ = $1 }
   | PRINT                           {   $$ = $1 } //listo
   | LLAMADA_FUNCION_EXP             {   $$ = $1 }
+  | MODIFICAR_ARREGLO               {   $$ = $1 }
 ;
 
 
@@ -617,6 +618,15 @@ DEC_ARRAY //Arreglo del tipo---> int[] arr = [exp1,exp2, [exp3] ]
 
 
 LISTA_CORCHETES 
-  : LISTA_CORCHETES corchete_abierto corchete_cerrado {  $$ = $2+$1  }
-  | corchete_abierto corchete_cerrado                 {  $$ = 1;  }
+  : LISTA_CORCHETES corchete_abierto corchete_cerrado   {  $$ = $2+$1  }
+  | corchete_abierto corchete_cerrado                   {  $$ = 1;  }
+;
+MODIFICAR_ARREGLO:
+  id EXPS_CORCHETE igual EXP punto_coma                 {  $$ = new Modificar($1,$2, $4,@1.first_line,@1.first_column); }
+;
+
+EXPS_CORCHETE:
+    EXPS_CORCHETE corchete_abierto EXP corchete_cerrado { $1.push($3); $$ = $1; }
+  | corchete_abierto EXP corchete_cerrado               { $$ = [$2]             }
+  
 ;

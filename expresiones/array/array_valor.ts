@@ -32,7 +32,7 @@ export class Arreglo_Valor extends Instruccion{
             
         let sim = entorno.getSimbolo(this.id);
         
-        if(this.id == undefined ){
+        if(sim == undefined ){
             let value = JSON.parse(JSON.stringify(simbolo.valor));
             
             let new_array:Simbolo = new Simbolo(this.id,this.tipo,super.fila,super.columna,value,true,false);
