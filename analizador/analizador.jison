@@ -154,6 +154,7 @@
     
     //Operaciones Aritmeticas
     const { Suma} = require('../expresiones/artimetica/suma');
+    const { Resta} = require('../expresiones/artimetica/resta');
     const { Multiplicar} = require('../expresiones/artimetica/multiplicar');
     const { Division } = require('../expresiones/artimetica/division');
     const { Modulo} = require('../expresiones/artimetica/modulo');
@@ -180,6 +181,7 @@
     const { Break } = require('../instruccion/break');
     const { For } = require('../instruccion/for');
     const { While } = require('../instruccion/while');
+    const { DoWhile } = require('../instruccion/do_while');
     const { Continue } = require('../instruccion/continue');
 %}
 
@@ -286,7 +288,8 @@ WHILE
 
 //---------------------------------DO WHILE----------------------
 DO_WHILE 
-  : do llave_abierta INSTRUCCIONES llave_cerrada while par_abierto EXP par_cerrado PT_COMA {   }
+  : do llave_abierta INSTRUCCIONES llave_cerrada while par_abierto EXP par_cerrado PT_COMA 
+  { $$= new DoWhile($7,$3,@1.first_line,@1.first_column);   }
 ;
 
 
