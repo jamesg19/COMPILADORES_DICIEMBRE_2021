@@ -32,11 +32,11 @@ println('cadena1','cadena2');\
 ";
 principa.ejecutar("\
                   int[] a = [33,5,[4,5,6]];\
-                   \
+                   println(a[1]);\
                    println('HOLA',a); \
                    int[] b = #a\
-                    b[1] = 100;\
-                    println(b);\
+                    b[2] = 100;\
+                    println(b[1]);\
                    ");
 // principa.ejecutar ('println(6>5);   '
 //                     +'if(1>5){'

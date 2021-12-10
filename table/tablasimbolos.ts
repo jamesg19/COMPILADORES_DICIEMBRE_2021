@@ -38,7 +38,9 @@ export class TablaSimbolos{
      * @param  {string} id
      */
     getSimbolo(id:string):Simbolo|undefined{
-        let tabla_actual:TablaSimbolos|undefined;
+        
+        let tabla_actual:TablaSimbolos|undefined = this;
+        
         while (tabla_actual != undefined){
             
             

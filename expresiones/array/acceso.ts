@@ -5,35 +5,34 @@ import { Excepcion } from "../../table/excepcion";
 import { exit } from "process";
 import { TIPO } from "../../table/TipoNativo";
 
-export class Modificar extends Instruccion {
+export class Acceso extends Instruccion {
   id: string;
   list_expresiones: Instruccion[];
-  exp: Instruccion;
+  
   /**
    * @param  {string} id
    * @param  {Instruccion[]} list_expresiones
-   * @param  {Instruccion} exp
    * @param  {number} fila
    * @param  {number} columna
    */
   constructor(
     id: string,
     list_expresiones: Instruccion[],
-    exp: Instruccion,
+    
     fila: number,
     columna: number
   ) {
     super(fila, columna);
     this.id = id;
     this.list_expresiones = list_expresiones;
-    this.exp = exp;
+    
   }
 
   /**
    * @param  {TablaSimbolos} entorno
    * @param  {Arbol} arbol
    */
-  interpretar(entorno: TablaSimbolos, arbol: Arbol) {
+  interpretar(entorno: TablaSimbolos, arbol: Arbol):any {
     let exist = entorno.getSimbolo(this.id); //verifico que exista la variable
 
     if (!exist)
@@ -52,20 +51,14 @@ export class Modificar extends Instruccion {
         super.columna + ""
       );
 
-    let value_exp = this.exp.interpretar(entorno, arbol);
+    
 
-    if (value_exp instanceof Excepcion) return value_exp; //verifico la expresion
 
-    if (!(exist.tipo == this.exp.tipo))
-      return new Excepcion(
-        "Semantico",
-        "No coinciden los tipos " + this.id,
-        super.fila + "",
-        super.columna + ""
-      );
 
+    
     let contador = this.list_expresiones.length;
     let temp;
+    let value_return;
 
     if(contador == 1) temp = (exist?.valor);
     
@@ -85,14 +78,19 @@ export class Modificar extends Instruccion {
       contador--;
       
       if ((contador == 0)) {
-        let val = JSON.parse(JSON.stringify(value_exp));
-        if (exist?.valor instanceof Array) (temp)[index] = val;
+        if (exist?.valor instanceof Array) {
+              value_return =JSON.parse(JSON.stringify((temp)[index])) ;
+             
+            //return value_return;
+          }
+        return value_return = JSON.parse(JSON.stringify((temp)[index])) ;
         
       }else{
           temp = (exist?.valor)[index];
       }
       
     });
+    return value_return;
   }
   modificarIndex(lst: any, valor: any, entorno: TablaSimbolos, arbol: Arbol) {
     this.lst.forEach((x) => {

@@ -125,6 +125,7 @@
     const { Llamada } = require ('../instruccion/llamada');
     const { Asignacion } = require('../instruccion/asignacion');
     const { Modificar } = require('../expresiones/array/modificar_array');
+    const { Acceso } = require('../expresiones/array/acceso');
     
     //Tipos
     const { Primitivo } = require('../expresiones/primitivo');
@@ -243,7 +244,7 @@ INSTRUCCION:
   | INCREMENTO_DECREMENTO           {   $$ = $1 }
   | PRINTLN                         {   $$ = $1 }
   | PRINT                           {   $$ = $1 } //listo
-  | LLAMADA_FUNCION_EXP             {   $$ = $1 }
+  //| LLAMADA_FUNCION_EXP             {   $$ = $1 }
   | MODIFICAR_ARREGLO               {   $$ = $1 }
 ;
 
@@ -302,7 +303,7 @@ ASIGNACION
 
   //variable[][] = EXP ;
   
-  //| ACCESO_ARREGLO TIPO_IGUAL EXP punto_coma {   }
+  
 ;
 
 
@@ -517,11 +518,11 @@ EXP
   | null                            { $$ = new Primitivo(TIPO.NULL,$1,@1.firt_line,@1.firt_column);  }
   
   //Arreglos
-  | ACCESO_ARREGLO  {    }
-  | ARRAY_LENGTH    {    }
-  | ARRAY_POP       {    }
+  | ACCESO_ARREGLO                  {   $$ = $1; }
+  | ARRAY_LENGTH                    {    }
+  | ARRAY_POP                       {    }
   | corchete_abierto LISTA_EXPRESIONES corchete_cerrado { $$ = $2}
-  
+  //| MODIFICAR_ARREGLO
   //Types - accesos
   | ACCESO_TYPE     {    }
   | TYPE            {    }
@@ -535,24 +536,20 @@ EXP
 ;
 
 
-ARRAY_LENGTH 
-  : id punto length  {    }
-  | id LISTA_ACCESOS_ARREGLO punto length  {    }
-  | id LISTA_ACCESOS_TYPE punto length  {    }
-;
+// ARRAY_LENGTH 
+//   : id punto length  {    }
+//   | id LISTA_ACCESOS_ARREGLO punto length  {    }
+//   | id LISTA_ACCESOS_TYPE punto length  {    }
+// ;
 
-ARRAY_POP 
-  : id punto pop par_abierto par_cerrado                        {    }
-  | id LISTA_ACCESOS_ARREGLO punto pop par_abierto par_cerrado  {    }
-  | id LISTA_ACCESOS_TYPE punto pop par_abierto par_cerrado     {    }
-;
+// ARRAY_POP 
+//   : id punto pop par_abierto par_cerrado                        {    }
+//   | id LISTA_ACCESOS_ARREGLO punto pop par_abierto par_cerrado  {    }
+//   | id LISTA_ACCESOS_TYPE punto pop par_abierto par_cerrado     {    }
+// ;
 
 TERNARIO 
   : EXP interrogacion EXP dos_puntos EXP          {  $$ = new Ternario($1,$3,$5,@1.firt_line,@1.firt_column);  }
-;
-
-ACCESO_ARREGLO 
-  : id LISTA_ACCESOS_ARREGLO {    }
 ;
 
 ACCESO_TYPE 
@@ -595,7 +592,7 @@ TIPO_VARIABLE_NATIVA
 ;
 LLAMADA_FUNCION_EXP:
       id par_abierto par_cerrado                     { $$ = new Llamada($1,@1.first_line,@1.first_column); }
-    | id par_abieerto PARAMETROS_LLAMADA par_cerrado { $$ = new Llamada($1,@1.first_line,@1.first_column,$3); }    
+    | id par_abierto PARAMETROS_LLAMADA par_cerrado  { $$ = new Llamada($1,@1.first_line,@1.first_column,$3); }    
 ;
 
 PARAMETROS_LLAMADA :
@@ -621,12 +618,19 @@ LISTA_CORCHETES
   : LISTA_CORCHETES corchete_abierto corchete_cerrado   {  $$ = $2+$1  }
   | corchete_abierto corchete_cerrado                   {  $$ = 1;  }
 ;
+
 MODIFICAR_ARREGLO:
+  // id  EXPS_CORCHETE punto_coma                          {  $$ = new Acceso($1,$2,@1.first_line,@1.first_column); }
   id EXPS_CORCHETE igual EXP punto_coma                 {  $$ = new Modificar($1,$2, $4,@1.first_line,@1.first_column); }
 ;
+ACCESO_ARREGLO:
+  id  EXPS_CORCHETE                           {  $$ = new Acceso($1,$2,@1.first_line,@1.first_column); }
+;
+
+
 
 EXPS_CORCHETE:
     EXPS_CORCHETE corchete_abierto EXP corchete_cerrado { $1.push($3); $$ = $1; }
-  | corchete_abierto EXP corchete_cerrado               { $$ = [$2]             }
-  
+  | corchete_abierto EXP corchete_cerrado               { $$ = [$2]             } 
 ;
+
