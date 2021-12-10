@@ -1,0 +1,103 @@
+import { Instruccion } from "../../abs/Instruccion";
+import { Arbol } from "../../table/arbol";
+import { TablaSimbolos } from "../../table/tablasimbolos";
+import { TIPO } from "../../table/tipo";
+import { ARITMETICO } from "../../table/tipo";
+import { Excepcion} from "../../table/excepcion"
+import { Primitivo } from "../primitivo";
+
+
+export class Tangente extends Instruccion{
+    operadorIzq:Instruccion;
+    //operadorDer:Primitivo;
+    fila: number;
+    columna:number;
+    tipo:TIPO;
+    /**
+     * CONSTRUCTOR DE OPERACION TANGENTE()
+     * @param operador 
+     * @param operadorIzq 
+     * @param fila 
+     * @param columna 
+     */
+    constructor(operadorIzq:Instruccion,fila:number,columna:number){
+        super(fila,columna);
+        this.operadorIzq=operadorIzq;
+        //this.operadorDer=operadorDer;
+        this.fila=fila;
+        this.columna=columna;
+        this.tipo=TIPO.NULL;
+
+    }
+    interpretar(entorno: TablaSimbolos, arbol: Arbol): any {
+        try {
+            const izq=this.operadorIzq.interpretar(entorno,arbol);
+            //const der=this.operadorDer.interpretar(entorno,arbol);
+            if(izq instanceof Excepcion){
+                return izq;
+            }
+
+                //validaciones
+                if(this.operadorIzq.tipo == TIPO.NULL){
+                    return new Excepcion("Semantico", "Error de operacion en variable NULA", `${this.fila}`, `${this.columna}`);
+                }
+                    
+                //-------ENTERO
+                //sen(ENTERO);
+                if(this.operadorIzq.tipo===TIPO.ENTERO  ){
+                    this.tipo=TIPO.DECIMAL;
+                    return Math.tan(this.obtenerVal(this.operadorIzq.tipo,izq)) ;
+                }
+
+                ////--------DECIMAL
+                //SEN(DECIMAL)
+                else if(this.operadorIzq.tipo===TIPO.DECIMAL  ){
+                    this.tipo=TIPO.DECIMAL;
+                    return Math.tan(this.obtenerVal(this.operadorIzq.tipo,izq));
+                }
+                //SEN(BOOLEAN)
+                else if(this.operadorIzq.tipo===TIPO.BOOLEAN  ){
+                    this.tipo=TIPO.DECIMAL;
+                    return Math.tan(this.obtenerVal(this.operadorIzq.tipo,izq));
+                }
+
+
+                return new Excepcion("Semantico",`Tipo de datos invalido para TAN()  ${this.operadorIzq.tipo}`,`${this.fila}`,`${this.columna}`);
+
+        } catch (error) {
+
+            return new Excepcion("Semantico","QUETZAL Null Poiter TAN() tipo dato incorrecto ",`${this.fila}`,`${this.columna}`);
+
+        }
+    }
+
+
+
+    obtenerVal(tipo:TIPO,val:string):any{
+        try {
+            if(tipo === TIPO.ENTERO|| tipo === TIPO.DECIMAL){
+                return Number(val);
+            }
+            else if(tipo === TIPO.BOOLEAN){
+                if(val.toLowerCase() === "true"){
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+            else if(tipo === TIPO.CADENA){
+                return val;
+            }else{
+                return val;
+            }
+
+        } catch (error) {
+            return new Excepcion("Semantico",`No se pudo obtener el valor en Sen() `,`${this.fila}`,`${this.columna}`);
+        }
+
+    }
+
+}
+
+
+

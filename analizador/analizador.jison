@@ -40,6 +40,13 @@
 'for'       return 'for';
 'in'        return 'in';
 
+//nativas
+'sin'         return 'sin';
+'log10'       return 'log10';
+'cos'         return 'cos';
+'tan'         return 'tan';
+'sqrt'        return 'sqrt';
+
 //kw
 'true'      return 'true';
 'false'     return 'false';
@@ -154,6 +161,13 @@
     const { Potencia } = require('../expresiones/artimetica/potencia');    
     const { DecrementoVariable} = require('../expresiones/artimetica/decremento_variable');
     const { IncrementoVariable} = require('../expresiones/artimetica/incremento_variable');
+
+    //nativas
+    const { Seno} = require('../expresiones/nativas/seno');
+    const { Coseno} = require('../expresiones/nativas/coseno');
+    const { Tangente} = require('../expresiones/nativas/tangente');
+    const { Sqrt} = require('../expresiones/nativas/sqrt');
+    const { Log} = require('../expresiones/nativas/log');
 
 
     const { Struct } = require('../expresiones/struct/struct')
@@ -497,12 +511,18 @@ EXP
   | EXP menos EXP                   { $$ = new Resta(1,$1,$3,@1.firt_line,@1.firt_column);        } 
   | EXP por EXP                     { $$ = new Multiplicar(2,$1,$3,@1.firt_line,@1.firt_column);  }
   | EXP div EXP                     { $$ = new Division(3,$1,$3,@1.firt_line,@1.firt_column);     }
-  | EXP potencia EXP                { $$ = new Potencia(4,$1,$3,@1.firt_line,@1.firt_column);     }
+  //| EXP potencia EXP                { $$ = new Potencia(4,$1,$3,@1.firt_line,@1.firt_column);     }
   | EXP mod EXP                     { $$ = new Modulo(5,$1,$3,@1.firt_line,@1.firt_column);       }
   | id mas_mas                      { $$=new IncrementoVariable($1,@1.firt_line,@1.firt_column);  }
   | id menos_menos                  { $$=new DecrementoVariable($1,@1.firt_line,@1.firt_column);  }
   | par_abierto EXP par_cerrado     {  $$ = $2  }
-  
+  //nativas
+  | sin par_abierto EXP par_cerrado     {  $$ = new Seno($3,@1.firt_line,@1.firt_column);  }
+  | cos par_abierto EXP par_cerrado     {  $$ = new Coseno($3,@1.firt_line,@1.firt_column);  }
+  | tan par_abierto EXP par_cerrado     {  $$ = new Tangente($3,@1.firt_line,@1.firt_column);  }
+  | sqrt par_abierto EXP par_cerrado     {  $$ = new Sqrt($3,@1.firt_line,@1.firt_column);  }
+  | log10 par_abierto EXP par_cerrado     {  $$ = new Log($3,@1.firt_line,@1.firt_column);  }
+
   //Operaciones de Comparacion
   | EXP mayor EXP                   {   $$ = new Mayor($1,$3,@1.firt_line,@1.firt_column);       }
   | EXP menor EXP                   {   $$ = new Menor($1,$3,@1.firt_line,@1.firt_column);       }
