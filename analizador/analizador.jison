@@ -46,6 +46,7 @@
 'cos'         return 'cos';
 'tan'         return 'tan';
 'sqrt'        return 'sqrt';
+'pow'        return 'pow';
 
 //kw
 'true'      return 'true';
@@ -168,6 +169,7 @@
     const { Coseno} = require('../expresiones/nativas/coseno');
     const { Tangente} = require('../expresiones/nativas/tangente');
     const { Sqrt} = require('../expresiones/nativas/sqrt');
+    const { Pow} = require('../expresiones/nativas/pow');
     const { Log} = require('../expresiones/nativas/log');
 
 
@@ -523,11 +525,12 @@ EXP
   | id menos_menos                  { $$=new DecrementoVariable($1,@1.firt_line,@1.firt_column);  }
   | par_abierto EXP par_cerrado     {  $$ = $2  }
   //nativas
-  | sin par_abierto EXP par_cerrado     {  $$ = new Seno($3,@1.firt_line,@1.firt_column);  }
-  | cos par_abierto EXP par_cerrado     {  $$ = new Coseno($3,@1.firt_line,@1.firt_column);  }
-  | tan par_abierto EXP par_cerrado     {  $$ = new Tangente($3,@1.firt_line,@1.firt_column);  }
-  | sqrt par_abierto EXP par_cerrado     {  $$ = new Sqrt($3,@1.firt_line,@1.firt_column);  }
-  | log10 par_abierto EXP par_cerrado     {  $$ = new Log($3,@1.firt_line,@1.firt_column);  }
+  | sin par_abierto EXP par_cerrado             {  $$ = new Seno($3,@1.firt_line,@1.firt_column);  }
+  | cos par_abierto EXP par_cerrado             {  $$ = new Coseno($3,@1.firt_line,@1.firt_column);  }
+  | tan par_abierto EXP par_cerrado             {  $$ = new Tangente($3,@1.firt_line,@1.firt_column);  }
+  | sqrt par_abierto EXP par_cerrado            {  $$ = new Sqrt($3,@1.firt_line,@1.firt_column);  }
+  | pow par_abierto EXP coma EXP par_cerrado    {  $$ = new Pow($3,$5,@1.firt_line,@1.firt_column);  }
+  | log10 par_abierto EXP par_cerrado           {  $$ = new Log($3,@1.firt_line,@1.firt_column);  }
 
   //Operaciones de Comparacion
   | EXP mayor EXP                   {   $$ = new Mayor($1,$3,@1.firt_line,@1.firt_column);       }
