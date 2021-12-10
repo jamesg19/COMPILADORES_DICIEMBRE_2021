@@ -1,7 +1,7 @@
 import { Instruccion } from "../../abs/Instruccion";
 import { Arbol } from "../../table/arbol";
 import { TablaSimbolos } from "../../table/tablasimbolos";
-import { TIPO } from "../../table/tipo";
+import { TIPO } from "../../table/TipoNativo";
 import { ARITMETICO } from "../../table/tipo";
 import { Excepcion} from "../../table/excepcion"
 import { Primitivo } from "../primitivo";
@@ -32,13 +32,17 @@ export class DecrementoVariable extends Instruccion{
      */
     interpretar(entorno: TablaSimbolos, arbol: Arbol): any {
         try {
-            let simbol =entorno.getSimboloJ(this.id);
+            const simbol =entorno.getSimboloJ(this.id);
             
             //verifica que el simbolo exista
             if(simbol != null ){
-
+                
                 //verifica que sea tipo numero o decimal
-                if(simbol?.tipo == TIPO.ENTERO || simbol?.tipo == TIPO.DECIMAL ){
+                if(Number(simbol.getTipo()+"") === 0 || Number(simbol.getTipo()+"") === 1 ){
+                    //console.log(simbol.getValor()+" GET VALOR");
+
+                    simbol.setValor(Number(simbol.getValor())-1);
+
                     //si el simbolo existe realizar el decremento
                     entorno.actualizarSimboloEnTabla(simbol);
 
@@ -50,7 +54,7 @@ export class DecrementoVariable extends Instruccion{
             }
 
         } catch (error) {
-
+            
             return new Excepcion("Semantico","QUETZAL Null Poiter Decremento",`${this.fila}`,`${this.columna}`);
 
         }

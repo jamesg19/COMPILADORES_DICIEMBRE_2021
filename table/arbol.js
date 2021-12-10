@@ -14,6 +14,9 @@ class Arbol {
         this.instrucciones = instrucciones;
         this.structs = new Map();
     }
+    updateConsolaError(texto) {
+        this.consola += texto + '\n';
+    }
     /**
      * @param  {string} nombre
      * @returns Funcion

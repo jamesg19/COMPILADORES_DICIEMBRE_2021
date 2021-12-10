@@ -40,6 +40,14 @@
 'for'       return 'for';
 'in'        return 'in';
 
+//nativas
+'sin'         return 'sin';
+'log10'       return 'log10';
+'cos'         return 'cos';
+'tan'         return 'tan';
+'sqrt'        return 'sqrt';
+'pow'        return 'pow';
+
 //kw
 'true'      return 'true';
 'false'     return 'false';
@@ -158,6 +166,7 @@
     
     //Operaciones Aritmeticas
     const { Suma} = require('../expresiones/artimetica/suma');
+    const { Resta} = require('../expresiones/artimetica/resta');
     const { Multiplicar} = require('../expresiones/artimetica/multiplicar');
     const { Division } = require('../expresiones/artimetica/division');
     const { Modulo} = require('../expresiones/artimetica/modulo');
@@ -167,6 +176,18 @@
     const { Arreglo } = require('../expresiones/array/declarar_array')
     //Arreglo_Valor
     const { Arreglo_Valor } = require('../expresiones/array/array_valor')
+    const { DecrementoVariable} = require('../expresiones/artimetica/decremento_variable');
+    const { IncrementoVariable} = require('../expresiones/artimetica/incremento_variable');
+
+    //nativas
+    const { Seno} = require('../expresiones/nativas/seno');
+    const { Coseno} = require('../expresiones/nativas/coseno');
+    const { Tangente} = require('../expresiones/nativas/tangente');
+    const { Sqrt} = require('../expresiones/nativas/sqrt');
+    const { Pow} = require('../expresiones/nativas/pow');
+    const { Log} = require('../expresiones/nativas/log');
+
+
     const { Struct } = require('../expresiones/struct/struct')
     const { Atributo } = require('../expresiones/struct/atributo')
     //JAMES
@@ -175,6 +196,10 @@
     const { Case } = require('../instruccion/case');
     const { Default } = require('../instruccion/default');
     const { Break } = require('../instruccion/break');
+    const { For } = require('../instruccion/for');
+    const { While } = require('../instruccion/while');
+    const { DoWhile } = require('../instruccion/do_while');
+    const { Continue } = require('../instruccion/continue');
 %}
 
 // Asociacion de operadores y precedencia
@@ -275,18 +300,22 @@ LLAMAR_FUNCION_EXP
 ;
 
 WHILE 
-  : while par_abierto EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada {   }
+  : while par_abierto EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada 
+  { $$= new While($3,$6,@1.first_line,@1.first_column);  }
 ;
 
 
 //---------------------------------DO WHILE----------------------
 DO_WHILE 
-  : do llave_abierta INSTRUCCIONES llave_cerrada while par_abierto EXP par_cerrado PT_COMA {   }
+  : do llave_abierta INSTRUCCIONES llave_cerrada while par_abierto EXP par_cerrado PT_COMA 
+  { $$= new DoWhile($7,$3,@1.first_line,@1.first_column);   }
 ;
 
 
-FOR : for par_abierto DECLARACION_VARIABLE EXP punto_coma ASIGNACION_FOR par_cerrado llave_abierta INSTRUCCIONES llave_cerrada {   }
-  | for par_abierto ASIGNACION EXP punto_coma ASIGNACION_FOR par_cerrado llave_abierta INSTRUCCIONES llave_cerrada    {   }
+FOR : 
+  for par_abierto DECLARACION_VARIABLE_FOR  punto_coma EXP punto_coma INCREMENTO_FOR par_cerrado llave_abierta INSTRUCCIONES llave_cerrada 
+  {  $$= new For($3,$5,$7,$10,@1.firt_line,@1.firt_column); }
+  //| for par_abierto ASIGNACION EXP punto_coma INCREMENTO_FOR par_cerrado llave_abierta INSTRUCCIONES llave_cerrada    {   }
 ;
 
 FOR_OF 
@@ -311,17 +340,18 @@ ASIGNACION
   
 ;
 
-
 TIPO_IGUAL 
   : igual {    }
   | mas igual {    }
   | menos igual {    }
 ;
-
-ASIGNACION_FOR 
-  : id TIPO_IGUAL EXP {    }
-  | id mas_mas {    }
-  | id menos_menos {    }
+// CONDICION_FOR
+// : id TIPO_IGUAL EXP {    }
+// ;
+INCREMENTO_FOR 
+  : //id TIPO_IGUAL EXP {    }
+  | id mas_mas      { $$= new IncrementoVariable($1,@1.firt_line,@1.firt_column); }
+  | id menos_menos  { $$= new DecrementoVariable($1,@1.firt_line,@1.firt_column); }
 ;
 
 SWITCH 
@@ -349,7 +379,7 @@ DEFAULT
 ;
 
 CONTINUE 
-  : continue PT_COMA {  }
+  : continue PT_COMA { $$= new Continue(@1.firt_line,@1.firt_column); }
 ;
 
 BREAK 
@@ -439,6 +469,10 @@ DECLARACION_VARIABLE
   //| TIPO_DEC_VARIABLE LIST_ID punto_coma     {  $$ = new D_IdList($1, $2,false,@1.firt_line,@1.firt_column);  }   
 ;
 
+DECLARACION_VARIABLE_FOR 
+  : TIPO_DEC_VARIABLE id igual EXP   {  $$ = new D_IdExp($1, $2, $4,false,@1.firt_line,@1.firt_column);  }  
+;
+
 
 
 //TODO: REVISAR DEC_ID_COR Y DEC_ID_COR_EXP
@@ -482,8 +516,8 @@ DEC_ID
 ;
 
 INCREMENTO_DECREMENTO
-  : id mas_mas PT_COMA     {    }
-  | id menos_menos PT_COMA {    }
+  : id mas_mas PT_COMA     {  $$=new IncrementoVariable($1,@1.firt_line,@1.firt_column);  }
+  | id menos_menos PT_COMA {  $$=new DecrementoVariable($1,@1.firt_line,@1.firt_column);  }
 ;
 
 EXP
@@ -493,12 +527,19 @@ EXP
   | EXP menos EXP                   { $$ = new Resta(1,$1,$3,@1.firt_line,@1.firt_column);        } 
   | EXP por EXP                     { $$ = new Multiplicar(2,$1,$3,@1.firt_line,@1.firt_column);  }
   | EXP div EXP                     { $$ = new Division(3,$1,$3,@1.firt_line,@1.firt_column);     }
-  | EXP potencia EXP                { $$ = new Potencia(4,$1,$3,@1.firt_line,@1.firt_column);     }
+  //| EXP potencia EXP                { $$ = new Potencia(4,$1,$3,@1.firt_line,@1.firt_column);     }
   | EXP mod EXP                     { $$ = new Modulo(5,$1,$3,@1.firt_line,@1.firt_column);       }
-  | id mas_mas                      {   }
-  | id menos_menos                  {   }
+  | id mas_mas                      { $$=new IncrementoVariable($1,@1.firt_line,@1.firt_column);  }
+  | id menos_menos                  { $$=new DecrementoVariable($1,@1.firt_line,@1.firt_column);  }
   | par_abierto EXP par_cerrado     {  $$ = $2  }
-  
+  //nativas
+  | sin par_abierto EXP par_cerrado             {  $$ = new Seno($3,@1.firt_line,@1.firt_column);  }
+  | cos par_abierto EXP par_cerrado             {  $$ = new Coseno($3,@1.firt_line,@1.firt_column);  }
+  | tan par_abierto EXP par_cerrado             {  $$ = new Tangente($3,@1.firt_line,@1.firt_column);  }
+  | sqrt par_abierto EXP par_cerrado            {  $$ = new Sqrt($3,@1.firt_line,@1.firt_column);  }
+  | pow par_abierto EXP coma EXP par_cerrado    {  $$ = new Pow($3,$5,@1.firt_line,@1.firt_column);  }
+  | log10 par_abierto EXP par_cerrado           {  $$ = new Log($3,@1.firt_line,@1.firt_column);  }
+
   //Operaciones de Comparacion
   | EXP mayor EXP                   {   $$ = new Mayor($1,$3,@1.firt_line,@1.firt_column);       }
   | EXP menor EXP                   {   $$ = new Menor($1,$3,@1.firt_line,@1.firt_column);       }

@@ -45,7 +45,7 @@ export class Simbolo {
     }
     /**
      */
-    getTipo() {
+    getTipo():TIPO {
         return this.tipo
     }
     /**

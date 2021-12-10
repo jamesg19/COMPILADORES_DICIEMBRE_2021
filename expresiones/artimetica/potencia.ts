@@ -41,7 +41,7 @@ export class Potencia extends Instruccion{
 
             //------------------------------POTENCIA------------------------------
             
-            if(this.operador === ARITMETICO.MOD ){
+            if(this.operador === ARITMETICO.POT ){
                 //validaciones
                 if(this.operadorIzq.tipo == TIPO.NULL){
                     return new Excepcion("Semantico", "Error de operacion en variable NULA", `${this.fila}`, `${this.columna}`);

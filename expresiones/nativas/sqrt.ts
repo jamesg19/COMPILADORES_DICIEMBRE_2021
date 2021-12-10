@@ -7,27 +7,25 @@ import { Excepcion} from "../../table/excepcion"
 import { Primitivo } from "../primitivo";
 
 
-export class Coseno extends Instruccion{
-    operador:ARITMETICO;
-    operadorIzq:Primitivo;
+export class Sqrt extends Instruccion{
+    operadorIzq:Instruccion;
     //operadorDer:Primitivo;
     fila: number;
     columna:number;
     tipo:TIPO;
     /**
-     * CONSTRUCTOR DE OPERACION Cos()
+     * CONSTRUCTOR DE OPERACION TANGENTE()
      * @param operador 
      * @param operadorIzq 
      * @param fila 
      * @param columna 
      */
-    constructor(operador:ARITMETICO,operadorIzq:Primitivo,fila:number,columna:number){
+    constructor(operadorIzq:Instruccion,fila:number,columna:number){
         super(fila,columna);
         this.operadorIzq=operadorIzq;
         //this.operadorDer=operadorDer;
         this.fila=fila;
         this.columna=columna;
-        this.operador=operador;
         this.tipo=TIPO.NULL;
 
     }
@@ -39,44 +37,41 @@ export class Coseno extends Instruccion{
                 return izq;
             }
 
-
-            //--------------------------COSENO------------------------------
-
                 //validaciones
                 if(this.operadorIzq.tipo == TIPO.NULL){
                     return new Excepcion("Semantico", "Error de operacion en variable NULA", `${this.fila}`, `${this.columna}`);
                 }
                     
-                    //-------ENTERO
-                    //sen(ENTERO);
-                    if(this.operadorIzq.tipo===TIPO.ENTERO  ){
-                        this.tipo=TIPO.DECIMAL;
-                        return Math.cos(this.obtenerVal(this.operadorIzq.tipo,izq)) ;
-                    }
+                //-------ENTERO
+                //sen(ENTERO);
+                if(this.operadorIzq.tipo===TIPO.ENTERO  ){
+                    this.tipo=TIPO.DECIMAL;
+                    return Math.sqrt(this.obtenerVal(this.operadorIzq.tipo,izq)) ;
+                }
 
-                    ////--------DECIMAL
-                    //SEN(DECIMAL)
-                    else if(this.operadorIzq.tipo===TIPO.DECIMAL  ){
-                        this.tipo=TIPO.DECIMAL;
-                        return Math.cos(this.obtenerVal(this.operadorIzq.tipo,izq));
-                    }
-                    //SEN(BOOLEAN)
-                    else if(this.operadorIzq.tipo===TIPO.BOOLEAN  ){
-                        this.tipo=TIPO.DECIMAL;
-                        return Math.cos(this.obtenerVal(this.operadorIzq.tipo,izq));
-                    }
+                ////--------DECIMAL
+                //SEN(DECIMAL)
+                else if(this.operadorIzq.tipo===TIPO.DECIMAL  ){
+                    this.tipo=TIPO.DECIMAL;
+                    return Math.sqrt(this.obtenerVal(this.operadorIzq.tipo,izq));
+                }
+                //SEN(BOOLEAN)
+                else if(this.operadorIzq.tipo===TIPO.BOOLEAN  ){
+                    this.tipo=TIPO.DECIMAL;
+                    return Math.sqrt(this.obtenerVal(this.operadorIzq.tipo,izq));
+                }
 
 
-                return new Excepcion("Semantico",`Tipo de datos invalido para Cos()  ${this.operadorIzq.tipo}`,`${this.fila}`,`${this.columna}`);
-
-            
+                return new Excepcion("Semantico",`Tipo de datos invalido para TAN()  ${this.operadorIzq.tipo}`,`${this.fila}`,`${this.columna}`);
 
         } catch (error) {
 
-            return new Excepcion("Semantico","QUETZAL Null Poiter Sen() tipo dato incorrecto ",`${this.fila}`,`${this.columna}`);
+            return new Excepcion("Semantico","QUETZAL Null Poiter TAN() tipo dato incorrecto ",`${this.fila}`,`${this.columna}`);
 
         }
     }
+
+
 
     obtenerVal(tipo:TIPO,val:string):any{
         try {
@@ -97,10 +92,12 @@ export class Coseno extends Instruccion{
             }
 
         } catch (error) {
-            return new Excepcion("Semantico",`No se pudo obtener el valor cos() `,`${this.fila}`,`${this.columna}`);
-            
+            return new Excepcion("Semantico",`No se pudo obtener el valor en Sen() `,`${this.fila}`,`${this.columna}`);
         }
 
     }
 
 }
+
+
+
