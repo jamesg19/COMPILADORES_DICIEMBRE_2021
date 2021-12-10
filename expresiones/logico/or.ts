@@ -45,6 +45,7 @@ export class Or extends Instruccion {
       this.rightExpression.tipo == TIPO.BOOLEAN
     ) {
       this.tipo = TIPO.BOOLEAN;
+      
       return exp1 || exp2;
     }
     return new Excepcion(

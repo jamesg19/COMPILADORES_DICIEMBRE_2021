@@ -37,7 +37,7 @@ export class IgualIgual extends Instruccion{
         this.tipo = TIPO.BOOLEAN;
         return true;
       }
-      console.log("falta comparar el struct")
+      //console.log("falta comparar el struct")
       this.tipo = TIPO.BOOLEAN;
       return exp1 == exp2;
 

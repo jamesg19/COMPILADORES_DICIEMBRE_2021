@@ -179,6 +179,8 @@
     const { Default } = require('../instruccion/default');
     const { Break } = require('../instruccion/break');
     const { For } = require('../instruccion/for');
+    const { While } = require('../instruccion/while');
+    const { Continue } = require('../instruccion/continue');
 %}
 
 // Asociacion de operadores y precedencia
@@ -277,7 +279,8 @@ LLAMAR_FUNCION_EXP
 ;
 
 WHILE 
-  : while par_abierto EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada {   }
+  : while par_abierto EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada 
+  { $$= new While($3,$6,@1.first_line,@1.first_column);  }
 ;
 
 
@@ -354,7 +357,7 @@ DEFAULT
 ;
 
 CONTINUE 
-  : continue PT_COMA {  }
+  : continue PT_COMA { $$= new Continue(@1.firt_line,@1.firt_column); }
 ;
 
 BREAK 

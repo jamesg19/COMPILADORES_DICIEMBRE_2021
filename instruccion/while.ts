@@ -8,23 +8,20 @@ import { Break } from "./break";
 import { Continue } from "./continue";
 import { Return } from "./Return";
 
-export class For extends Instruccion {
-    declaracion:Instruccion;
+export class While extends Instruccion {
+
     condicion:Instruccion;
-    actualizacion:Instruccion;
     instrucciones:Instruccion[];
     fila: number;
     columna:number;
     hayContinue:boolean;
 
     // FOR( DECLARACION; CONDICION; ACTUALIZACION )
-    constructor(declaracion:Instruccion,condicion:Instruccion,actualizacion:Instruccion,instrucciones:Instruccion[],fila:number,columna:number){
+    constructor(condicion:Instruccion,instrucciones:Instruccion[],fila:number,columna:number){
         super(fila,columna);
         this.fila=fila;
         this.columna=columna;
-        this.declaracion=declaracion;
         this.condicion=condicion;
-        this.actualizacion=actualizacion;
         this.instrucciones=instrucciones;
         this.hayContinue=false;
     }
@@ -37,14 +34,10 @@ export class For extends Instruccion {
 
         const nuevaTabla=new TablaSimbolos(entorno);
 
-        const declaracion=this.declaracion.interpretar(nuevaTabla,arbol);
 
-        if(declaracion instanceof Excepcion){
-            return declaracion;
-        }
+
 
         while(true){
-            this.hayContinue=false;
             //NUEVO ENTONO DENTRO DEL CICLO
             const nuevaTabla2=new TablaSimbolos(nuevaTabla);
             try {
@@ -55,13 +48,13 @@ export class For extends Instruccion {
             } catch (error) {
                 return this.condicion;
             }
-            //VERIFICA QUE LA CONDICION SE CUMPLA
+            //VERIFICA QUE LA CONDICION SEA TIPO BOOLEAN
             if(this.condicion.tipo ==TIPO.BOOLEAN ){
                 
                 
-                
+                //VERIFICA QUE LA CONDICION SE CUMPLA sea TRUE
                 if(this.condicion.interpretar(nuevaTabla2,arbol) == true){
-                    //ejecuta las instrucciones que estan dentro del FOR
+                    //ejecuta las instrucciones que estan dentro del WHILE
                     this.instrucciones.forEach((element:Instruccion) => {
                         
                         const result=element.interpretar(nuevaTabla2,arbol);
@@ -73,10 +66,6 @@ export class For extends Instruccion {
                         //VERIFICA SI VIENE UN CONTINUE
                         if(result instanceof Continue){
                             this.hayContinue=true;
-                            const actualiza=this.actualizacion.interpretar(nuevaTabla2,arbol);
-                            if(actualiza instanceof Excepcion){
-                                return actualiza;
-                            }
                             //break;
                             return;
 
@@ -94,28 +83,19 @@ export class For extends Instruccion {
                 }
             }else{
                 //break;
-                return new Excepcion("Semantico",'Tipo de condicion no boleana en For',`${this.fila}`,`${this.columna}`);
+                return new Excepcion("Semantico",'Tipo de condicion no boleana en While',`${this.fila}`,`${this.columna}`);
             }
             //SI HAY UN CONTINUE
             if(this.hayContinue){
                 this.hayContinue=false;
-                console.log("CONTINUE DENTRO DEL FOR");
+                console.log("CONTINUE DENTRO DEL WHILE");
                 continue;
             }
-
-            //ACTUALIZA LA VARIABLE DE ITERACION
-            const actual=this.actualizacion.interpretar(nuevaTabla2,arbol);
-            if(actual instanceof Excepcion){
-                return actual;
-            }
-
         }
-
-
     }
 
     getNodo(){
-        const nodo=new NodoAST("FOR");
+        const nodo=new NodoAST("WHILE");
         const instruccionesNodo=new NodoAST("INSTRUCCIONES");
 
         this.instrucciones.forEach((element)=>{

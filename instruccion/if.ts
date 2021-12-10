@@ -15,6 +15,7 @@ export class If extends Instruccion{
     ElseIf:Array<Instruccion>;
     fila:number;
     columna:number;
+    ins:Instruccion;
 
     constructor(condicion:Instruccion,instruccionesIf:Instruccion[],instruccionesElse:Instruccion[],ElseIf:Array<Instruccion>,fila:number,columna:number){
         super(fila,columna);
@@ -24,9 +25,11 @@ export class If extends Instruccion{
         this.ElseIf=ElseIf;
         this.fila=fila;
         this.columna=columna;
+        this.ins=condicion;
     }
 
     interpretar(entorno: TablaSimbolos, arbol: Arbol) {
+        this.ins=this;
         //console.log(this.condicion.interpretar(entorno,arbol));
         const condition=this.condicion.interpretar(entorno,arbol);
         
@@ -36,10 +39,10 @@ export class If extends Instruccion{
         
 
         //verifica que la condicion sea boolean
-        if(this.condicion){
+        if(this.condicion.tipo == TIPO.BOOLEAN){
             
             //verifica que la condicion sea TRUE
-            if(condition){
+            if(condition==true){
 
                 //CREA UN ENTORNO PARA LAS INSTRUCCIONES DENTRO DEL IF
                 const nuevaTabla=new TablaSimbolos(entorno);
@@ -53,9 +56,10 @@ export class If extends Instruccion{
                         ///
                         //arbol.excepciones.push(result);
                         //arbol.actualizar_consola(result.toString());
-
+                        
                     }
                     if(result instanceof Break || result instanceof Continue ){
+                        this.ins=result;
                         return result;
                     }
                     
@@ -82,6 +86,7 @@ export class If extends Instruccion{
                             //arbol.actualizar_consola(result.toString());
                         }
                         if(result instanceof Break || result instanceof Continue ){
+                            this.ins=result;
                             return result;
                         }
                     });
@@ -100,6 +105,7 @@ export class If extends Instruccion{
                             //arbol.actualizar_consola(result.toString());
                         }
                         if(result instanceof Break || result instanceof Continue ){
+                            this.ins=result;
                             return result;
                         }
                     });
@@ -115,7 +121,7 @@ export class If extends Instruccion{
         }
 
 
-        return this;
+        return this.ins;
     }
     getNodo():NodoAST{
         return new NodoAST("IF");
