@@ -25,7 +25,9 @@ export class Arbol{
         this.structs = new Map();
     }
     
-    
+    updateConsolaError(texto:string){
+        this.consola+=texto+'\n';
+    }
     
     /**
      * @param  {string} nombre

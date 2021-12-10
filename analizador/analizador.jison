@@ -152,7 +152,10 @@
     const { Modulo} = require('../expresiones/artimetica/modulo');
     const { NegacionNum} = require('../expresiones/artimetica/negacion_numero');    
     const { Potencia } = require('../expresiones/artimetica/potencia');    
-    
+    const { DecrementoVariable} = require('../expresiones/artimetica/decremento_variable');
+    const { IncrementoVariable} = require('../expresiones/artimetica/incremento_variable');
+
+
     const { Struct } = require('../expresiones/struct/struct')
     const { Atributo } = require('../expresiones/struct/atributo')
     //JAMES
@@ -161,6 +164,7 @@
     const { Case } = require('../instruccion/case');
     const { Default } = require('../instruccion/default');
     const { Break } = require('../instruccion/break');
+    const { For } = require('../instruccion/for');
 %}
 
 // Asociacion de operadores y precedencia
@@ -269,8 +273,10 @@ DO_WHILE
 ;
 
 
-FOR : for par_abierto DECLARACION_VARIABLE EXP punto_coma ASIGNACION_FOR par_cerrado llave_abierta INSTRUCCIONES llave_cerrada {   }
-  | for par_abierto ASIGNACION EXP punto_coma ASIGNACION_FOR par_cerrado llave_abierta INSTRUCCIONES llave_cerrada    {   }
+FOR : 
+  for par_abierto DECLARACION_VARIABLE_FOR  punto_coma EXP punto_coma INCREMENTO_FOR par_cerrado llave_abierta INSTRUCCIONES llave_cerrada 
+  {  $$= new For($3,$5,$7,$10,@1.firt_line,@1.firt_column); }
+  //| for par_abierto ASIGNACION EXP punto_coma INCREMENTO_FOR par_cerrado llave_abierta INSTRUCCIONES llave_cerrada    {   }
 ;
 
 FOR_OF 
@@ -295,17 +301,18 @@ ASIGNACION
   //| ACCESO_ARREGLO TIPO_IGUAL EXP punto_coma {   }
 ;
 
-
 TIPO_IGUAL 
   : igual {    }
   | mas igual {    }
   | menos igual {    }
 ;
-
-ASIGNACION_FOR 
-  : id TIPO_IGUAL EXP {    }
-  | id mas_mas {    }
-  | id menos_menos {    }
+// CONDICION_FOR
+// : id TIPO_IGUAL EXP {    }
+// ;
+INCREMENTO_FOR 
+  : //id TIPO_IGUAL EXP {    }
+  | id mas_mas      { $$= new IncrementoVariable($1,@1.firt_line,@1.firt_column); }
+  | id menos_menos  { $$= new DecrementoVariable($1,@1.firt_line,@1.firt_column); }
 ;
 
 SWITCH 
@@ -421,6 +428,10 @@ DECLARACION_VARIABLE
   //| TIPO_DEC_VARIABLE LIST_ID punto_coma     {  $$ = new D_IdList($1, $2,false,@1.firt_line,@1.firt_column);  }   
 ;
 
+DECLARACION_VARIABLE_FOR 
+  : TIPO_DEC_VARIABLE id igual EXP   {  $$ = new D_IdExp($1, $2, $4,false,@1.firt_line,@1.firt_column);  }  
+;
+
 
 
 //TODO: REVISAR DEC_ID_COR Y DEC_ID_COR_EXP
@@ -475,8 +486,8 @@ LISTA_CORCHETES
 ;
 
 INCREMENTO_DECREMENTO
-  : id mas_mas PT_COMA     {    }
-  | id menos_menos PT_COMA {    }
+  : id mas_mas PT_COMA     {  $$=new IncrementoVariable($1,@1.firt_line,@1.firt_column);  }
+  | id menos_menos PT_COMA {  $$=new DecrementoVariable($1,@1.firt_line,@1.firt_column);  }
 ;
 
 EXP
@@ -488,8 +499,8 @@ EXP
   | EXP div EXP                     { $$ = new Division(3,$1,$3,@1.firt_line,@1.firt_column);     }
   | EXP potencia EXP                { $$ = new Potencia(4,$1,$3,@1.firt_line,@1.firt_column);     }
   | EXP mod EXP                     { $$ = new Modulo(5,$1,$3,@1.firt_line,@1.firt_column);       }
-  | id mas_mas                      {   }
-  | id menos_menos                  {   }
+  | id mas_mas                      { $$=new IncrementoVariable($1,@1.firt_line,@1.firt_column);  }
+  | id menos_menos                  { $$=new DecrementoVariable($1,@1.firt_line,@1.firt_column);  }
   | par_abierto EXP par_cerrado     {  $$ = $2  }
   
   //Operaciones de Comparacion

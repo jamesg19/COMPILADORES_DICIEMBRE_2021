@@ -16,7 +16,7 @@ export class Continue extends Instruccion{
     }
 
     interpretar(entorno: TablaSimbolos, arbol: Arbol) {
-        return this;
+        return new Continue(this.fila, this.columna);
     }
     getNodo():NodoAST{
         return new NodoAST("CONTINUE");
