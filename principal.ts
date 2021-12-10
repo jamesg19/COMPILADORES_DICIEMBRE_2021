@@ -41,12 +41,13 @@ println('cadena1','cadena2');\
 ";
 
 principa.ejecutar("\
-                  int[] a = [33,5,[4,5,6]];\
-                   println(a[1]);\
-                   println('HOLA',a); \
-                   int[] b = #a\
-                    b[2] = 100;\
-                    println(b[1]);\
+                  int[] a = [33,5,[4,[1,3,4],[6,7,8]] ];\
+                   println(a);\
+                   println(a[2][1].pop());\
+                   println('[33,5,[4,[1,3],[6,7,8]]] ==> ',a);\
+                   println(a[2][2]);\
+                   println(a[2][2].push(1000));\
+                   println(a);\
                    ");
 // principa.ejecutar ('println(6>5);   '
 //                     +'if(1>5){'

@@ -43,6 +43,8 @@
 //kw
 'true'      return 'true';
 'false'     return 'false';
+'pop'       return 'pop';
+'push'      return'push';
 
 //Patrones numericos
 [0-9]+\b  	return 'entero';
@@ -126,6 +128,10 @@
     const { Asignacion } = require('../instruccion/asignacion');
     const { Modificar } = require('../expresiones/array/modificar_array');
     const { Acceso } = require('../expresiones/array/acceso');
+    const { Pop } = require('../expresiones/array/pop');
+    const { Pop_List } = require('../expresiones/array/pop_list');
+    const { Push_List } = require('../expresiones/array/push_list');
+    const { Push } = require('../expresiones/array/push');
     
     //Tipos
     const { Primitivo } = require('../expresiones/primitivo');
@@ -224,8 +230,8 @@ INSTRUCCIONES:
 INSTRUCCION: 
   //init_inst
    DEC_ARRAY
-  |  DECLARACION_VARIABLE            {   $$ = $1 }//falta cuando hay una lista de id's
-  | DECLARACION_FUNCION             {   $$ = $1 }
+  |  DECLARACION_VARIABLE           {   $$ = $1 }//falta cuando hay una lista de id's
+  | DECLARACION_FUNCION             {   $$ = $1 }//listo
   | DECLARACION_TYPE                {   $$ = $1 } //aca se crea la 'plantilla' para despues crear instancias
   | ASIGNACION 	                    {   $$ = $1 } 
   | PUSH_ARREGLO 	                  {   $$ = $1 }
@@ -240,11 +246,10 @@ INSTRUCCION:
   | FOR 	                          {   $$ = $1 }
   | FOR1_OF 	                      {   $$ = $1 }
   | FOR2_IN 	                      {   $$ = $1 }
-  | LLAMAR_FUNCION                  {   $$ = $1 }
   | INCREMENTO_DECREMENTO           {   $$ = $1 }
   | PRINTLN                         {   $$ = $1 }
   | PRINT                           {   $$ = $1 } //listo
-  //| LLAMADA_FUNCION_EXP             {   $$ = $1 }
+  | LLAMADA_FUNCION_EXP punto_coma  {   $$ = $1 }
   | MODIFICAR_ARREGLO               {   $$ = $1 }
 ;
 
@@ -519,8 +524,8 @@ EXP
   
   //Arreglos
   | ACCESO_ARREGLO                  {   $$ = $1; }
-  | ARRAY_LENGTH                    {    }
-  | ARRAY_POP                       {    }
+  | ARRAY_LENGTH                    {   $$ = $1; }
+  | ARRAY_POP                       {   $$ = $1; }
   | corchete_abierto LISTA_EXPRESIONES corchete_cerrado { $$ = $2}
   //| MODIFICAR_ARREGLO
   //Types - accesos
@@ -542,11 +547,14 @@ EXP
 //   | id LISTA_ACCESOS_TYPE punto length  {    }
 // ;
 
-// ARRAY_POP 
-//   : id punto pop par_abierto par_cerrado                        {    }
+ ARRAY_POP 
+     : id punto pop par_abierto par_cerrado                        { $$ = new Pop($1,@1.first_line,@1.first_column);   }
+     | id punto push par_abierto EXP par_cerrado                   { $$ = new Push($1,$5,@1.first_line,@1.first_column);   }
+     | id EXPS_CORCHETE punto pop par_abierto par_cerrado          { $$ = new Pop_List($1,$2,@1.first_line,@1.first_column);  }
+     | id EXPS_CORCHETE punto push par_abierto EXP par_cerrado     { $$ = new Push_List($1,$2,$6,@1.first_line,@1.first_column);   }     
 //   | id LISTA_ACCESOS_ARREGLO punto pop par_abierto par_cerrado  {    }
 //   | id LISTA_ACCESOS_TYPE punto pop par_abierto par_cerrado     {    }
-// ;
+ ;
 
 TERNARIO 
   : EXP interrogacion EXP dos_puntos EXP          {  $$ = new Ternario($1,$3,$5,@1.firt_line,@1.firt_column);  }
@@ -576,19 +584,19 @@ LISTA_EXPRESIONES
 
 
 TIPO_DEC_VARIABLE
-  :string                      {  $$ = TIPO.CADENA  }
-  | int                        {  $$ = TIPO.ENTERO  }
-  | double                     {  $$ = TIPO.DECIMAL }
-  | boolean                    {  $$ = TIPO.BOOLEAN }
+  :string                      {  $$ = TIPO.CADENA;  }
+  | int                        {  $$ = 0;  }
+  | double                     {  $$ = TIPO.DECIMAL; }
+  | boolean                    {  $$ = TIPO.BOOLEAN; }
 ;
 
 TIPO_VARIABLE_NATIVA
-  : string                     { $$ = TIPO.CADENA  } 
-  | int                        { $$ = TIPO.ENTERO  }
-  | double                     { $$ = TIPO.DECIMAL }
-  | boolean                    { $$ = TIPO.BOOLEAN }
-  | void                       { $$ = TIPO.VOID    }
-  | id                         { $$ = TIPO.STRUCT  }
+  : string                     { $$ = TIPO.CADENA;  } 
+  | int                        { $$ = 0;  }
+  | double                     { $$ = TIPO.DECIMAL; }
+  | boolean                    { $$ = TIPO.BOOLEAN; }
+  | void                       { $$ = TIPO.VOID;    }
+  | id                         { $$ = TIPO.STRUCT;  }
 ;
 LLAMADA_FUNCION_EXP:
       id par_abierto par_cerrado                     { $$ = new Llamada($1,@1.first_line,@1.first_column); }
@@ -610,7 +618,7 @@ DEC_ARRAY //Arreglo del tipo---> int[] arr = [exp1,exp2, [exp3] ]
 
   : TIPO_DEC_VARIABLE LISTA_CORCHETES id  igual corchete_abierto  LISTA_EXPRESIONES corchete_cerrado punto_coma
    { $$ = new Arreglo ($1,$3,$6,$1,$3,@1.first_line,@1.first_column);    }
-  | TIPO_DEC_VARIABLE LISTA_CORCHETES id  igual  nmral id {$$ = new Arreglo_Valor($1,$3,$6,@1.first_line,@1.first_column); }
+  | TIPO_DEC_VARIABLE LISTA_CORCHETES id  igual  nmral id { $$ = new Arreglo_Valor($1,$3,$6,@1.first_line,@1.first_column); }
 ;
 
 
@@ -620,11 +628,10 @@ LISTA_CORCHETES
 ;
 
 MODIFICAR_ARREGLO:
-  // id  EXPS_CORCHETE punto_coma                          {  $$ = new Acceso($1,$2,@1.first_line,@1.first_column); }
   id EXPS_CORCHETE igual EXP punto_coma                 {  $$ = new Modificar($1,$2, $4,@1.first_line,@1.first_column); }
 ;
 ACCESO_ARREGLO:
-  id  EXPS_CORCHETE                           {  $$ = new Acceso($1,$2,@1.first_line,@1.first_column); }
+  id  EXPS_CORCHETE                                     {  $$ = new Acceso($1,$2,@1.first_line,@1.first_column); }
 ;
 
 

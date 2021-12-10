@@ -25,7 +25,7 @@ export class Arreglo_Valor extends Instruccion{
         }
         if(!simbolo.arreglo)
             return new Excepcion("Semantico","No es un Array: "+ this.id_valor,""+this.fila, this.columna+"");
-            
+        
         if(this.tipo != simbolo.tipo)
             return new Excepcion("Semantico","No Coinciden los tipos "+ this.id_valor,""+this.fila, this.columna+"");
             
