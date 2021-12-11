@@ -41,13 +41,12 @@ println('cadena1','cadena2');\
 ";
 
 principa.ejecutar("\
-                  \
-                struct mi_struct{int v};\
-                  mi_struct m = mi_struct(10);\
-                  m.v = 43234;\
-                  println(m.v);\
-                  \
-                  \ ");
+                   struct my_struct{int a}; \
+                   my_struct m = my_struct(2);\
+                   int a =0;\
+                   a = m.a;\
+                   println(a);\
+                   ");
 // principa.ejecutar ('println(6>5);   '
 //                     +'if(1>5){'
 //                     +'println("entra if6>5");'

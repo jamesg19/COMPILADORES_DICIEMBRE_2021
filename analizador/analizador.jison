@@ -342,15 +342,12 @@ FOR_IN
 ;
 
 ASIGNACION 
-  : id igual EXP punto_coma {  $$ = new Asignacion($1, $3,false,@1.firt_line,@1.firt_column); }
-  | ACCESO_STRUCT igual EXP punto_coma    {$$ = new Asignacion_Struct($1,$3,@1.first_line,@1.first_column);  }
-
+  : id igual EXP punto_coma               {  $$ = new Asignacion($1, $3,false,@1.firt_line,@1.firt_column);       }
+  | ACCESO_STRUCT igual EXP punto_coma    {  $$ = new Asignacion_Struct($1,$3,@1.first_line,@1.first_column);     }
+  //| id igual ACCESO_STRUCT  punto_coma    {  $$ = new Asignacion_VAR_STRUCT($1,$3,@1.first_line,@1.first_column); }
   // type.accesos = EXP ; || type.accesos[][] = EXP;
   
  // | id LISTA_ACCESOS_TYPE TIPO_IGUAL EXP PT_COMA {   }
-
-  //variable[][] = EXP ;
-  
   
 ;
 
