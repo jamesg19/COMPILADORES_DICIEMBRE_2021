@@ -18,9 +18,14 @@ con un tipado fuerte, datos inmutables y otras caracteristicas
 
 ## Funciones Nativas
 
-- Matematicas
+- $$Matematicas
 
 - **Artimeticas** ``` suma, resta, multiplicacion y division ```
 - **pow** ``` pow(base,exponente); ```
 - **sen** ``` sen(exp); ``` donde exp pueden ser array's y devolvera el sen de cada termino
 - **cos** ``` sen(exp); ``` donde exp pueden ser array's y devolvera el sen de cada termino
+
+- **tan** ```tan(exp)``` devuelve la tangete de la expresion
+
+- cadena^exp: devuelve una cadena con la cantidad de veces que indica exp. ```exp es una expresion numerica```
+

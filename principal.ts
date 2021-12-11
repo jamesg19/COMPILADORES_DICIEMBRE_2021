@@ -21,7 +21,7 @@ export class Principal{
      
      //interpreto
      instrucciones.forEach((element:Instruccion) => {
-         console.log(element)
+         //console.log(element)
          if(element instanceof Funcion){
              ast.funciones.push(element)
          }else
@@ -42,9 +42,11 @@ println('cadena1','cadena2');\
 
 principa.ejecutar("\
                   \
-                struct mi_struct{int v,mi_struct s};\
-                  mi_struct m = mi_struct(10,null);\
+                struct mi_struct{int v};\
+                  mi_struct m = mi_struct(10);\
+                  m.v = 43234;\
                   println(m.v);\
+                  \
                   \ ");
 // principa.ejecutar ('println(6>5);   '
 //                     +'if(1>5){'

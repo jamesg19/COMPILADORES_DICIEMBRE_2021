@@ -202,6 +202,8 @@
     const { Dec_Struct } = require('../expresiones/struct/instancia_struct')
     const { Atributo }   = require('../expresiones/struct/atributo')
     const { Acceso_Struct }   = require('../expresiones/struct/acceso_struct')
+    const { Asignacion_Struct }   = require('../expresiones/struct/asignacion_struct')
+    //Asignacion_Struct
     //JAMES
     const { If } = require('../instruccion/if');
     const { Switch } = require('../instruccion/switch');
@@ -289,7 +291,7 @@ INSTRUCCION:
   | PRINT                           {   $$ = $1 } //listo
   | LLAMADA_FUNCION_EXP punto_coma  {   $$ = $1 }
   | MODIFICAR_ARREGLO               {   $$ = $1 }
-  //| ACCESO_TYPE                 { $$ = $1 }
+  
   | error {console.log("errir",$1)}
   
 ;
@@ -341,6 +343,7 @@ FOR_IN
 
 ASIGNACION 
   : id igual EXP punto_coma {  $$ = new Asignacion($1, $3,false,@1.firt_line,@1.firt_column); }
+  | ACCESO_STRUCT igual EXP punto_coma    {$$ = new Asignacion_Struct($1,$3,@1.first_line,@1.first_column);  }
 
   // type.accesos = EXP ; || type.accesos[][] = EXP;
   
@@ -471,7 +474,9 @@ ATRIBUTO
   : TIPO_VARIABLE_NATIVA id   { $$ = new Atributo($2,$1,false,@1.firt_line,@1.firt_column);   }
   | TIPO_VARIABLE_NATIVA id   LISTA_CORCHETES { $$ = new Atributo($2,$1,true,@1.firt_line,@1.firt_column);}
 ;
-
+//ASIGNACION_VALUE_STRUCT:
+  
+//;
 //=========================================>fin
 
 DECLARACION_VARIABLE 
@@ -565,9 +570,9 @@ EXP
   | corchete_abierto LISTA_EXPRESIONES corchete_cerrado {   $$ = $2;  }
   
   //Types - accesos
-  | ACCESO_TYPE     { $$ = $1;   }
+  | ACCESO_STRUCT                                       { $$ = $1;   }
   | TYPE            {    }
-  | id id                                               { $$ = new Struct_Param($1,$2,@1.first_line,@1.first_column);}
+  //| id id                                               { $$ = new Struct_Param($1,$2,@1.first_line,@1.first_column);}
   //Ternario
   | TERNARIO                                             {  $$ = $1;  }
   
@@ -596,7 +601,7 @@ TERNARIO
   : EXP interrogacion EXP dos_puntos EXP          {  $$ = new Ternario($1,$3,$5,@1.firt_line,@1.firt_column);  }
 ;
 
-ACCESO_TYPE                                      //$1 => id struct //$2 objetos del struct
+ACCESO_STRUCT                                      //$1 => id struct //$2 objetos del struct
   : id LISTA_ACCESOS_TYPE                         {  $$ = new Acceso_Struct($1,$2,@1.first_line,@1.first_column);   }
   
 ;
@@ -610,10 +615,6 @@ LISTA_ACCESOS_TYPE
   //| punto id LISTA_ACCESOS_ARREGLO                              {    }
 ;
 
-LISTA_ACCESOS_ARREGLO 
-  : LISTA_ACCESOS_ARREGLO corchete_abierto EXP corchete_cerrado {    }
-  | corchete_abierto EXP corchete_cerrado {    }
-;
 
 LISTA_EXPRESIONES 
   : LISTA_EXPRESIONES coma EXP {  $1.push($3); $$ = $1;  }
