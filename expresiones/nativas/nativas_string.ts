@@ -89,7 +89,7 @@ export class NativasString extends Instruccion{
                     return b;
                 }
                 var cadena=variable.getValor()+"";
-
+                
                 if(this.inicio.tipo != TIPO.ENTERO){
                     return new Excepcion('Semantico','Parametro inicio en subString no es Entero',`${this.fila}`,`${this.columna}`);
                 }

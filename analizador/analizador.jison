@@ -53,6 +53,8 @@
 'toUppercase' return 'toUppercase';
 'subString' return 'subString';
 'caracterOfPosition' return 'caracterOfPosition';
+//casteos
+'parse'     return 'parse';
 
 //kw
 'true'      return 'true';
@@ -114,8 +116,8 @@
 
 
 //Patrones para cadenas
-\"[^\"]*\"			{ yytext = yytext.substr(0,yyleng-0); return 'string'; }
-\'[^\']*\'			{ yytext = yytext.substr(0,yyleng-0); return 'string'; }
+\"[^\"]*\"			{ yytext = yytext.slice(1,-1); return 'string'; }
+\'[^\']*\'			{ yytext = yytext.slice(1,-1); return 'string'; }
 //\`[^\`]*\`			{ yytext = yytext.substr(0,yyleng-0); return 'string'; }
 
 
@@ -196,6 +198,7 @@
     const { NativasString} = require('../expresiones/nativas/nativas_string');
     const { RepeticionCadena} = require('../expresiones/nativas/repeticion_cadena');
     const { TIPO_NATIVA_CADENA} = require('../expresiones/nativas/tiponativacadena');
+    const { Casteos} = require('../expresiones/nativas/casteos');
 
 
     const { Struct }     = require('../expresiones/struct/struct')
@@ -533,6 +536,10 @@ EXP
   { $$= new NativasString($1,TIPO_NATIVA_CADENA.CARACTER_POSITION,$5,null,@1.firt_line,@1.firt_column); }
   | EXP repeticion EXP         
   { $$= new RepeticionCadena($1,TIPO_NATIVA_CADENA.REPETICION,$3,null,@1.firt_line,@1.firt_column); }
+
+  //casteos
+  | int punto parse par_abierto EXP par_cerrado
+  { $$=new Casteos($5,TIPO_NATIVA_CADENA.INTPARSE,@1.firt_line,@1.firt_column); }
 
 
   //Operaciones de Comparacion
