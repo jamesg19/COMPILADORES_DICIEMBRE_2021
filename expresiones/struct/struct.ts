@@ -2,7 +2,6 @@ import { Instruccion } from '../../abs/Instruccion';
 import { TablaSimbolos } from '../../table/tablasimbolos';
 import { Excepcion } from '../../table/excepcion';
 import { Simbolo } from '../../table/simbolo';
-import { TIPO } from '../../table/tipo';
 import { Type } from '../../table/Type';
 import { Arbol } from '../../table/arbol';
 import { Atributo } from './atributo';
@@ -11,10 +10,19 @@ import { TIPO } from '../../table/TipoNativo';
 
 export class Struct extends Instruccion{
 
-  lista_atributos: Atributo[]; //[{id, exp}]
+  //crep que esto es mejor guardarlo en un map
+  //para verificar que no existan atributos repetidos
+  lista_atributos: Atributo[]; 
   
+  
+  //var_list:Map<string,any>;
   id:string;
-
+  /**
+   * @param  {string} id nombre del struct
+   * @param  {Atributo[]} lista_atributos
+   * @param  {number} fila
+   * @param  {number} columna
+   */
   constructor(id:string ,lista_atributos: Atributo[],fila:number,columna:number){
     super(fila,columna);
     this.id = id;    
@@ -22,7 +30,12 @@ export class Struct extends Instruccion{
    this.lista_atributos = lista_atributos;  
     //Object.assign(this, {lista_atributos});
   }
-
+  
+  /**
+   * @param  {TablaSimbolos} entorno
+   * @param  {Arbol} arbol
+   * @returns any
+   */
   interpretar(entorno: TablaSimbolos,arbol:Arbol):any {
     const entorno_local = new TablaSimbolos(entorno);
     
@@ -31,8 +44,6 @@ export class Struct extends Instruccion{
         this.lista_atributos.forEach((atributo ) => {
           //Validación objeto
 
-          
-          
             //Validacion de id unico
             let variable = entorno_local.getSimbolo(atributo.id);
             const reasignable = true;

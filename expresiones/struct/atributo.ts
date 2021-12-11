@@ -1,5 +1,7 @@
-import { TIPO } from "../../table/tipo";
+import { TIPO } from "../../table/TipoNativo";
 import { Instruccion } from '../../abs/Instruccion';
+import { TablaSimbolos } from '../../table/tablasimbolos';
+import { Arbol } from '../../table/arbol';
 
 
 export class Atributo {
@@ -8,6 +10,7 @@ export class Atributo {
     fila: number;
     columna: number;
     valor: Instruccion;
+    value:any;
     arreglo: boolean;
     //struct: boolean;
     constante:boolean;
@@ -21,9 +24,13 @@ export class Atributo {
         this.arreglo = arreglo;
         //this.struct = struct;
         this.constante = false;
+        this.valor = null;
 
     }
-
+    interpretar(entorno:TablaSimbolos,arbol:Arbol){
+     
+            
+    }
 
 
 }

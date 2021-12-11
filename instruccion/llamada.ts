@@ -14,7 +14,7 @@ export class Llamada extends Instruccion{
     
     // clase para llamar funciones
     // con o sin parametros
-    constructor(id:string, fila:number,columna:number,lista_parmetros?:Array<Instruccion> ){
+constructor(id:string, fila:number,columna:number,lista_parmetros?:Array<Instruccion> ){
         super(fila,columna);
         this.id = id;
         this.lista_parametros = lista_parmetros;
@@ -53,7 +53,7 @@ export class Llamada extends Instruccion{
                     if( llamar_funcion.lista_parametros[contador]['tipo'] == x.tipo ){
                      
                      
-                    let ident:string = llamar_funcion[contador]['id']+"";
+                    let ident:string = llamar_funcion.lista_parametros[contador]['id']+"";
                      let simbolo:Simbolo = new Simbolo(ident,x.tipo,super.fila,super.columna,result_parametros,false,false );
                      //agregar la verificacion de arrays y struct
                      entorno_local.addSimbolo(simbolo);

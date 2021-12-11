@@ -41,6 +41,16 @@ println('cadena1','cadena2');\
 ";
 
 principa.ejecutar("\
+function int my(int tipo){\
+    println(tipo);\
+    return tipo;\
+    \
+}\
+                  println(my(10));\
+                struct mi_struct{int v,mi_struct c};\
+                  \
+                  string cadena = \"james GAY\";\
+                  println(cadena);\
                   int[] a = [33,5,[4,[1,3,4],[6,7,8]] ];\
                    println(a);\
                    println(a[2][1].pop());\

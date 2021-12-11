@@ -133,6 +133,7 @@
     const { D_Id    } = require('../instruccion/declaracion_id');
     const { Funcion } = require('../instruccion/funcion');
     const { Llamada } = require ('../instruccion/llamada');
+    const { Return } = require ('../instruccion/Return');
     const { Asignacion } = require('../instruccion/asignacion');
     const { Modificar } = require('../expresiones/array/modificar_array');
     const { Acceso } = require('../expresiones/array/acceso');
@@ -177,7 +178,7 @@
     //Arreglo_Valor
     const { Arreglo_Valor } = require('../expresiones/array/array_valor')
     const { DecrementoVariable} = require('../expresiones/artimetica/decremento_variable');
-    const { IncrementoVariable} = require('../expresiones/artimetica/incremento_variable');
+    //const { IncrementoVariable} = require('../expresiones/artimetica/Incremento_variable');
 
     //nativas
     const { Seno} = require('../expresiones/nativas/seno');
@@ -293,11 +294,6 @@ LLAMAR_FUNCION
   | id par_abierto LISTA_EXPRESIONES par_cerrado PT_COMA {  $$ = new Llamada($1,@1.first_line,@1.first_column,$3); }
 ;
 
-//---------------------LLAMAR A FUNCION EXP
-LLAMAR_FUNCION_EXP 
-  : id par_abierto par_cerrado                   {   }
-  | id par_abierto LISTA_EXPRESIONES par_cerrado {   }
-;
 
 WHILE 
   : while par_abierto EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada 
@@ -448,7 +444,7 @@ PARAMETRO
 //=========================================>declaracion de struct<=========================================>
 
 DECLARACION_TYPE 
-  : struct id  llave_abierta LISTA_ATRIBUTOS llave_cerrada punto_coma { $$ = new Struct($1,$4)    }
+  : struct id  llave_abierta LISTA_ATRIBUTOS llave_cerrada punto_coma { $$ = new Struct($1,$4,@1.first_linem,@1.first_column);    }
 ;
 
 LISTA_ATRIBUTOS 
@@ -498,16 +494,6 @@ DEC_ID_TIPO_CORCHETES_EXP
 //let id : TIPO_VARIABLE_NATIVA = EXP;
 DEC_ID_TIPO_EXP                                 
   : TIPO_VARIABLE_NATIVA id   igual EXP               {  $$ = new D_IdExp($1, $2, $3,false,@1.firt_line,@1.firt_column);   }
-;
-
-//let id = EXP ;
-DEC_ID_EXP 
-  : id igual EXP                                      {    }
-;
-
-//let id : TIPO_VARIABLE_NATIVA ;
-DEC_ID_TIPO  
-  : id dos_puntos TIPO_VARIABLE_NATIVA                {    }
 ;
 
 //let id ;
@@ -564,11 +550,11 @@ EXP
   | null                            { $$ = new Primitivo(TIPO.NULL,$1,@1.firt_line,@1.firt_column);  }
   
   //Arreglos
-  | ACCESO_ARREGLO                  {   $$ = $1; }
-  | ARRAY_LENGTH                    {   $$ = $1; }
-  | ARRAY_POP                       {   $$ = $1; }
-  | corchete_abierto LISTA_EXPRESIONES corchete_cerrado { $$ = $2}
-  //| MODIFICAR_ARREGLO
+  | ACCESO_ARREGLO                                      {   $$ = $1; }
+  | ARRAY_LENGTH                                        {   $$ = $1; }
+  | ARRAY_POP                                           {   $$ = $1; }
+  | corchete_abierto LISTA_EXPRESIONES corchete_cerrado {   $$ = $2;  }
+  
   //Types - accesos
   | ACCESO_TYPE     {    }
   | TYPE            {    }
@@ -601,15 +587,17 @@ TERNARIO
   : EXP interrogacion EXP dos_puntos EXP          {  $$ = new Ternario($1,$3,$5,@1.firt_line,@1.firt_column);  }
 ;
 
-ACCESO_TYPE 
-  : id LISTA_ACCESOS_TYPE {    }
+ACCESO_TYPE                                      //$1 => id struct //$2 objetos del struct
+  : id LISTA_ACCESOS_TYPE //{  $$ = new Struct_Acces($1,$2,@1.first_line,@first_column);   }
 ;
-
+//------------------------------------------------------------------------------------------------------
+//----------------------------------------------PRUEBA--------------------------------------------------
+//------------------------------------------------------------------------------------------------------
 LISTA_ACCESOS_TYPE 
-  : LISTA_ACCESOS_TYPE punto id {    }
-  | punto id {    }
-  | LISTA_ACCESOS_TYPE punto id LISTA_ACCESOS_ARREGLO {    }
-  | punto id LISTA_ACCESOS_ARREGLO {    }
+  : LISTA_ACCESOS_TYPE punto id                                 {  $$ = $1.push($3);  }
+  | punto id                                                    {  $$ = [$2];         }
+  | LISTA_ACCESOS_TYPE punto id LISTA_ACCESOS_ARREGLO           {    }
+  | punto id LISTA_ACCESOS_ARREGLO                              {    }
 ;
 
 LISTA_ACCESOS_ARREGLO 
@@ -626,14 +614,14 @@ LISTA_EXPRESIONES
 
 TIPO_DEC_VARIABLE
   :string                      {  $$ = TIPO.CADENA;  }
-  | int                        {  $$ = 0;  }
+  | int                        {  $$ = 0;            }
   | double                     {  $$ = TIPO.DECIMAL; }
   | boolean                    {  $$ = TIPO.BOOLEAN; }
 ;
 
 TIPO_VARIABLE_NATIVA
   : string                     { $$ = TIPO.CADENA;  } 
-  | int                        { $$ = 0;  }
+  | int                        { $$ = 0;            }
   | double                     { $$ = TIPO.DECIMAL; }
   | boolean                    { $$ = TIPO.BOOLEAN; }
   | void                       { $$ = TIPO.VOID;    }
@@ -665,7 +653,7 @@ DEC_ARRAY //Arreglo del tipo---> int[] arr = [exp1,exp2, [exp3] ]
 
 LISTA_CORCHETES 
   : LISTA_CORCHETES corchete_abierto corchete_cerrado   {  $$ = $2+$1  }
-  | corchete_abierto corchete_cerrado                   {  $$ = 1;  }
+  | corchete_abierto corchete_cerrado                   {  $$ = 1;     }
 ;
 
 MODIFICAR_ARREGLO:
@@ -680,5 +668,11 @@ ACCESO_ARREGLO:
 EXPS_CORCHETE:
     EXPS_CORCHETE corchete_abierto EXP corchete_cerrado { $1.push($3); $$ = $1; }
   | corchete_abierto EXP corchete_cerrado               { $$ = [$2]             } 
+;
+
+INSTANCIA_STRUCT:
+  id id igual id par_abierto LISTA_EXPRESIONES par_cerrado punto_coma
+  //{$$ = new Instancia_Struct($1,$2,$4,$6,@1.first_line,@1.first_column); }
+
 ;
 
