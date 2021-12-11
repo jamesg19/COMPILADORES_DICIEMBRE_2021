@@ -5,6 +5,7 @@ import { TablaSimbolos } from "../../table/tablasimbolos";
 import { Arbol } from "../../table/arbol";
 import { Excepcion } from "../../table/excepcion";
 import { Simbolo } from "../../table/simbolo";
+import { TIPO } from "../../table/TipoNativo";
 
 export class Dec_Struct extends Instruccion {
   template_struct: string; //tipo de estruct a crear
@@ -13,8 +14,8 @@ export class Dec_Struct extends Instruccion {
   id: string;
 
   values_atributos: Instruccion[];
-  list_atributos: Atributo[];
-
+  list_atributos: Atributo[]; //null
+  list_simbolos: Map<string, Simbolo>;
   constructor(
     template_struct: string,
     id: string,
@@ -29,6 +30,7 @@ export class Dec_Struct extends Instruccion {
     this.values_atributos = values_atributos;
     this.id_struct = id_struct;
     this.list_atributos = null;
+    this.list_simbolos = new Map();
   }
 
   /**
@@ -56,8 +58,8 @@ export class Dec_Struct extends Instruccion {
 
     //getsimbolo para verificar  si existe una variable con el mismo id
     let create_struct = entorno.getSimbolo(this.id);
-
-    if (!create_struct)
+    //console.log(!create_struct);
+    if (create_struct)
       return new Excepcion(
         "Semantico",
         "Existe una variable con " +
@@ -70,25 +72,61 @@ export class Dec_Struct extends Instruccion {
     //obtengo el struct
     let template: Struct | undefined = arbol.structs.get(this.template_struct);
 
-    console.log(template);
-    //hago una copia de los atributos del struct
-    //   = JSON.parse(JSON.stringify(template));
+    //console.log(template);
 
     // //comparo que las listas sean del mismo tama;o
     // //para saber si los parametros son en misma cantidad que los
     // //atributos en el struct
-    // if (this.list_atributos.length != this.values_atributos.length)
-    //   return new Excepcion(
-    //     "Semantico",
-    //     "se esperaba una cantidad diferente de atributos para el Struct " +
-    //       this.template_struct,
-    //     "" + this.fila,
-    //     "" + this.columna
-    //   );
 
+    if (this.values_atributos.length != template?.lista_atributos.length)
+      return new Excepcion(
+        "Semantico",
+        "se esperaba una cantidad diferente de atributos para el Struct " +
+          this.template_struct,
+        "" + this.fila,
+        "" + this.columna
+      );
+    //hago una copia de los atributos del struct
+    //let lst_simbolos:Map<string,Simbolo> = new Map();
+
+    //  lst_simbolos = JSON.parse(JSON.stringify(template?.lista_simbolo));
+
+    //    console.log("lst_simbolos",lst_simbolos);
+    let contador: number = 0;
+
+    template?.lista_simbolo.forEach((x) => {
+      let result = this.values_atributos[contador].interpretar(entorno, arbol);
+
+      if (this.values_atributos[contador].tipo != x.tipo)
+        return new Excepcion(
+          "Semantico",
+          "El tipo de parametro no coince con el del struct",
+          this.fila + "",
+          this.columna + ""
+        );
+
+      if (result instanceof Excepcion) return result;
+
+      let sim: Simbolo = JSON.parse(JSON.stringify(x));
+      sim.valor = result;
+
+      this.list_simbolos.set(sim.id, sim);
+    });
+    
+    let simbolo: Simbolo = new Simbolo(
+      this.id,
+      TIPO.STRUCT,
+      this.fila,
+      this.columna,
+      this.list_simbolos,
+      false,
+      true
+    );
+    entorno.addSimbolo(simbolo);
+    //console.log("this", this);
     // //recorro la lista de valores para que se asigen a
     // //los valores del struct
-    // let contador: number = 0;
+
     // this.values_atributos.forEach((x) => {
     //   let value = x.interpretar(entorno, arbol);
 
@@ -102,8 +140,8 @@ export class Dec_Struct extends Instruccion {
 
     //   if (value instanceof Excepcion) return value;
 
-    //   //comparo los tipos del atributo
-    //   if (this.list_atributos[contador].tipo != x.tipo)
+    //     //comparo los tipos del atributo
+    //   if (template?.lista_atributos[contador].tipo != x.tipo)
     //     return new Excepcion(
     //       "Semantico",
     //       "Existen atributos con tipos diferentes",
@@ -111,19 +149,22 @@ export class Dec_Struct extends Instruccion {
     //       this.columna + ""
     //     );
 
-    //   let sim: Simbolo = new Simbolo(
-    //     this.list_atributos[contador].id,
-    //     this.list_atributos[contador].tipo,
-    //     super.fila,
-    //     super.columna,
-    //     value,
-    //     x.arra,
-    //     x.struct
-    //   );
+    //   console.log(simbolo);
 
-    //   entorno_local.addSimbolo(sim);
+    //     let sim: Simbolo = new Simbolo(
+    //       this.list_atributos[contador].id,
+    //       this.list_atributos[contador].tipo,
+    //       super.fila,
+    //       super.columna,
+    //       value,
+    //       x.arra,
+    //       x.struct
+    //     );
+
+    //     entorno_local.addSimbolo(sim);
+    //   });
+
+    //   entorno.addSimbolo
     // });
-
-    //entorno.addSimbolo
   }
 }

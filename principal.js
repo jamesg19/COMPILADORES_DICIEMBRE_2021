@@ -14,6 +14,7 @@ class Principal {
         const ast = new arbol_1.Arbol(ts_global, instrucciones);
         //interpreto
         instrucciones.forEach((element) => {
+            
             if (element instanceof funcion_1.Funcion) {
                 ast.funciones.push(element);
             }
@@ -31,24 +32,11 @@ holaMundo(1,13.4);\
 println('cadena1','cadena2');\
 ";
 principa.ejecutar("\
-function int my(int tipo){\
-    println(tipo);\
-    return tipo;\
-    \
-}\
-                  println(my(10));\
-                struct mi_struct{int v,mi_struct c};\
                   \
-                  string cadena = \"james GAY\";\
-                  println(cadena);\
-                  int[] a = [33,5,[4,[1,3,4],[6,7,8]] ];\
-                   println(a);\
-                   println(a[2][1].pop());\
-                   println('[33,5,[4,[1,3],[6,7,8]]] ==> ',a);\
-                   println(a[2][2]);\
-                   println(a[2][2].push(1000));\
-                   println(a);\
-                   ");
+                struct mi_struct{int v,mi_struct s};\
+                  mi_struct m = mi_struct(10,null);\
+                  println(m.v);\
+                  \ ");
 // principa.ejecutar ('println(6>5);   '
 //                     +'if(1>5){'
 //                     +'println("entra if6>5");'
