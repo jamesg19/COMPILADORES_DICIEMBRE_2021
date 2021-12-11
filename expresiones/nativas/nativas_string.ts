@@ -37,6 +37,8 @@ export class NativasString extends Instruccion{
     interpretar(entorno: TablaSimbolos, arbol: Arbol): any {
         try {
 
+
+
             //VERIFICA QUE LA VARIABLE O ID EXISTAN
             const variable = entorno.getSimbolo(this.identificador);
             if (variable == null) {
@@ -74,6 +76,7 @@ export class NativasString extends Instruccion{
                 var cadena=variable.getValor()+"";
                 return cadena.length;
             }
+            
             //DETERMINA SI ES SUBSTRING
             if(this.tipo_operacion == TIPO_NATIVA_CADENA.SUBSTRING){
                 const aa=this.inicio.interpretar(entorno,arbol);

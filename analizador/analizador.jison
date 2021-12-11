@@ -48,6 +48,7 @@
 'sqrt'        return 'sqrt';
 'pow'        return 'pow';
 //nativas String
+'^' return 'repeticion';
 'toLowercase' return 'toLowercase';
 'toUppercase' return 'toUppercase';
 'subString' return 'subString';
@@ -192,6 +193,7 @@
     const { Pow} = require('../expresiones/nativas/pow');
     const { Log} = require('../expresiones/nativas/log');
     const { NativasString} = require('../expresiones/nativas/nativas_string');
+    const { RepeticionCadena} = require('../expresiones/nativas/repeticion_cadena');
     const { TIPO_NATIVA_CADENA} = require('../expresiones/nativas/tiponativacadena');
 
 
@@ -218,7 +220,7 @@
 %left 'igual_que' 'dif_que' //listo
 %left 'mayor' 'menor' 'mayor_igual' 'menor_igual' //listo
 %left 'mas' 'menos'
-%left 'por' 'div' 'mod'
+%left 'por' 'div' 'mod' 'repeticion'
 %left 'umenos'
 %right 'potencia'
 %left 'mas_mas' 'menos_menos' //listo
@@ -229,7 +231,7 @@
 %left 'igual_que' 'dif_que' //listo
 %left 'mayor' 'menor' 'mayor_igual' 'menor_igual' //listo
 %left 'mas' 'menos'
-%left 'por' 'div' 'mod'
+%left 'por' 'div' 'mod' 'repeticion'
 %left 'umenos'
 %right 'potencia'
 %left 'mas_mas' 'menos_menos' //listo
@@ -557,6 +559,8 @@ EXP
   { $$= new NativasString($1,TIPO_NATIVA_CADENA.SUBSTRING,$5,$7,@1.firt_line,@1.firt_column); }
   | id punto caracterOfPosition par_abierto EXP par_cerrado         
   { $$= new NativasString($1,TIPO_NATIVA_CADENA.CARACTER_POSITION,$5,null,@1.firt_line,@1.firt_column); }
+  | EXP repeticion EXP         
+  { $$= new RepeticionCadena($1,TIPO_NATIVA_CADENA.REPETICION,$3,null,@1.firt_line,@1.firt_column); }
 
 
   //Operaciones de Comparacion
