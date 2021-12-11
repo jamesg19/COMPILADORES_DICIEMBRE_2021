@@ -550,6 +550,8 @@ EXP
   //casteos INT
   | toInt par_abierto EXP par_cerrado
   { $$=new CasteosTo($3,TIPO_NATIVA_CADENA.TOINT,@1.firt_line,@1.firt_column); }
+  | toDouble par_abierto EXP par_cerrado
+  { $$=new CasteosTo($3,TIPO_NATIVA_CADENA.TODOUBLE,@1.firt_line,@1.firt_column); }
 
 
 

@@ -35,7 +35,7 @@ export class CasteosTo extends Instruccion{
         try {
             //VERIFICA SI ES UN IDENTIFICADOR
             if(this.identificador instanceof Identificador){
-                console.log(this.identificador.id);
+               
                 //VERIFICA QUE LA VARIABLE O ID EXISTAN
                 const variable = entorno.getSimbolo(this.identificador.id+"");
                 if (variable == null) {
