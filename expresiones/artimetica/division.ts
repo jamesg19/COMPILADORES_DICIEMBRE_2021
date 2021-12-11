@@ -57,24 +57,24 @@ export class Division extends Instruccion{
                     //ENTERO / ENTERO
                     if(this.operadorIzq.tipo===TIPO.ENTERO && this.operadorDer.tipo===TIPO.ENTERO ){
                         this.tipo=TIPO.DECIMAL;
-                        return this.obtenerVal(this.operadorIzq.tipo,izq) - this.obtenerVal(this.operadorDer.tipo,der);
+                        return this.obtenerVal(this.operadorIzq.tipo,izq) / this.obtenerVal(this.operadorDer.tipo,der);
                     }
                     //ENTERO / DECIMAL
                     else if(this.operadorIzq.tipo===TIPO.ENTERO && this.operadorDer.tipo===TIPO.DECIMAL ){
                         this.tipo=TIPO.DECIMAL;
-                        return this.obtenerVal(this.operadorIzq.tipo,izq) - this.obtenerVal(this.operadorDer.tipo,der);
+                        return this.obtenerVal(this.operadorIzq.tipo,izq) / this.obtenerVal(this.operadorDer.tipo,der);
                     }
 
                     ////--------DECIMAL
                     //DECIMAL / ENTERO
                     else if(this.operadorIzq.tipo===TIPO.DECIMAL && this.operadorDer.tipo===TIPO.ENTERO ){
                         this.tipo=TIPO.DECIMAL;
-                        return this.obtenerVal(this.operadorIzq.tipo,izq) - this.obtenerVal(this.operadorDer.tipo,der);
+                        return this.obtenerVal(this.operadorIzq.tipo,izq) / this.obtenerVal(this.operadorDer.tipo,der);
                     }
                     //DECIMAL / DECIMAL
                     else if(this.operadorIzq.tipo===TIPO.DECIMAL && this.operadorDer.tipo===TIPO.DECIMAL ){
                         this.tipo=TIPO.DECIMAL;
-                        return this.obtenerVal(this.operadorIzq.tipo,izq) - this.obtenerVal(this.operadorDer.tipo,der);
+                        return this.obtenerVal(this.operadorIzq.tipo,izq) / this.obtenerVal(this.operadorDer.tipo,der);
                     }
                 }else{
                     return new Excepcion("Semantico",`Math Error no es posible dividir sobre 0 `,`${this.fila}`,`${this.columna}`);

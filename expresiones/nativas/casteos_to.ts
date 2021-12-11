@@ -9,7 +9,7 @@ import { Primitivo } from "../primitivo";
 import { Identificador } from "../identificador";
 
 
-export class Casteos extends Instruccion{
+export class CasteosTo extends Instruccion{
     identificador:Instruccion;
     tipo_casteo:TIPO_NATIVA_CADENA;
     fila: number;
@@ -46,53 +46,42 @@ export class Casteos extends Instruccion{
 
                     return new Excepcion("Semantico", "Error de operacion en variable NULL", `${this.fila}`, `${this.columna}`);
                 }
-                if(variable.tipo != TIPO.CADENA){
-
-                    return new Excepcion("Semantico", "Error de operacion en Casteo variable diferente a Cadena", `${this.fila}`, `${this.columna}`);
+                if(variable.tipo != TIPO.ENTERO){
+                    if(variable.tipo != TIPO.DECIMAL){
+                        
+                        return new Excepcion("Semantico", "Error de operacion en Casteo variable diferente a NUMERO.. ", `${this.fila}`, `${this.columna}`);
+                    }
                 }
 
-                if(this.tipo_casteo == TIPO_NATIVA_CADENA.INTPARSE  ){
+                if(this.tipo_casteo == TIPO_NATIVA_CADENA.TOINT  ){
                     this.tipo=TIPO.ENTERO;
                     return Number(this.identificador.interpretar(entorno,arbol)+"");
                 }
-                if(this.tipo_casteo == TIPO_NATIVA_CADENA.DOUBLEPARSE){
+                if(this.tipo_casteo == TIPO_NATIVA_CADENA.TODOUBLE){
                     this.tipo=TIPO.DECIMAL;
                     return Number(this.identificador.interpretar(entorno,arbol)+"")*(1.0);
                 }
                 
-                if(this.tipo_casteo== TIPO_NATIVA_CADENA.BOOLEANPARSE){
-                    this.tipo=TIPO.BOOLEAN;
-                    return Boolean(this.identificador.interpretar(entorno,arbol) );
-                }
+                
             }else{
                 //verifica que la expresion sea CADENA
                 const test=this.identificador.interpretar(entorno,arbol);
 
-                if(this.identificador.tipo != TIPO.CADENA){
-                    return new Excepcion("Semantico", "Error de operacion en Casteo variable diferente a Cadena", `${this.fila}`, `${this.columna}`);
+                if(this.identificador.tipo != TIPO.ENTERO){
+                    if(this.identificador.tipo != TIPO.DECIMAL){
+                        return new Excepcion("Semantico", "Error de operacion en Casteo variable diferente a NUMERO", `${this.fila}`, `${this.columna}`);
+                    }
                 }
 
-                if(this.tipo_casteo == TIPO_NATIVA_CADENA.INTPARSE){
+                if(this.tipo_casteo == TIPO_NATIVA_CADENA.TOINT){
                     this.tipo=TIPO.ENTERO;
                     return Number(this.identificador.interpretar(entorno,arbol)+"");
                 }
-                if(this.tipo_casteo == TIPO_NATIVA_CADENA.DOUBLEPARSE){
-                    this.tipo=TIPO.BOOLEAN;
+                if(this.tipo_casteo == TIPO_NATIVA_CADENA.TODOUBLE){
+                    this.tipo=TIPO.DECIMAL;
                     return Number(this.identificador.interpretar(entorno,arbol)+"")*(1.0);
                 }
-                if(this.tipo_casteo== TIPO_NATIVA_CADENA.BOOLEANPARSE){
-                    try {
-                        this.tipo=TIPO.BOOLEAN;
-                        return Boolean(Number(this.identificador.interpretar(entorno,arbol)));
-                    } catch (error) {
-                        this.tipo=TIPO.BOOLEAN;
-                        return Boolean(this.identificador.interpretar(entorno,arbol) );
-                    }
-
-                    return Boolean(this.identificador.interpretar(entorno,arbol) );
-                }
-
-
+                
             }
 
 
