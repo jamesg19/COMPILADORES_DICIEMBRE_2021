@@ -77,7 +77,7 @@ export class Casteos extends Instruccion{
                     return Number(this.identificador.interpretar(entorno,arbol)+"");
                 }
                 if(this.tipo_casteo == TIPO_NATIVA_CADENA.DOUBLEPARSE){
-                    this.tipo=TIPO.BOOLEAN;
+                    this.tipo=TIPO.DECIMAL;
                     return Number(this.identificador.interpretar(entorno,arbol)+"")*(1.0);
                 }
                 if(this.tipo_casteo== TIPO_NATIVA_CADENA.BOOLEANPARSE){

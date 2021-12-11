@@ -38,6 +38,31 @@ export class CasteosTo extends Instruccion{
                
                 //VERIFICA QUE LA VARIABLE O ID EXISTAN
                 const variable = entorno.getSimbolo(this.identificador.id+"");
+
+                //TIPO TYPE_OF
+                if(this.tipo_casteo == TIPO_NATIVA_CADENA.TYPEOF){
+                    this.tipo=TIPO.CADENA;
+
+                    if(variable.tipo == TIPO.CADENA){
+                        return 'string';
+                    }
+                    else if(variable.tipo == TIPO.ENTERO){
+                        return 'int';
+                    }
+                    else if(variable.tipo == TIPO.DECIMAL){
+                        return 'double';
+                    }
+                    else if(variable.tipo == TIPO.BOOLEAN){
+                        return 'boolean';
+                    }
+                    else{
+                        return 'char';
+                    }
+                    //return Number(this.identificador.interpretar(entorno,arbol)+"")*(1.0);
+                }
+
+
+
                 if (variable == null) {
                     return new Excepcion("Semantico","No existe la variable " + `${this.identificador}`, `${this.fila}`,`${this.columna}`);
                 }
@@ -62,10 +87,35 @@ export class CasteosTo extends Instruccion{
                     return Number(this.identificador.interpretar(entorno,arbol)+"")*(1.0);
                 }
                 
-                
-            }else{
+
+            }
+            
+            else{
                 //verifica que la expresion sea CADENA
                 const test=this.identificador.interpretar(entorno,arbol);
+                //TYPEOF
+                if(this.tipo_casteo ==TIPO_NATIVA_CADENA.TYPEOF){
+                    this.tipo=TIPO.CADENA;
+
+                    if(variable.tipo == TIPO.CADENA){
+                        return 'string';
+                    }
+                    else if(variable.tipo == TIPO.ENTERO){
+                        return 'int';
+                    }
+                    else if(variable.tipo == TIPO.DECIMAL){
+                        return 'double';
+                    }
+                    else if(variable.tipo == TIPO.BOOLEAN){
+                        return 'boolean';
+                    }
+                    else{
+                        return 'char';
+                    }
+                }
+
+
+
 
                 if(this.identificador.tipo != TIPO.ENTERO){
                     if(this.identificador.tipo != TIPO.DECIMAL){
@@ -81,6 +131,7 @@ export class CasteosTo extends Instruccion{
                     this.tipo=TIPO.DECIMAL;
                     return Number(this.identificador.interpretar(entorno,arbol)+"")*(1.0);
                 }
+                
                 
             }
 

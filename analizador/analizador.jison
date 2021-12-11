@@ -56,7 +56,8 @@
 //casteos
 'parse'     return 'parse';
 'toInt'     return 'toInt';
-'toDouble'     return 'toDouble';
+'toDouble'  return 'toDouble';
+'typeof'    return 'typeof';
 
 //kw
 'true'      return 'true';
@@ -552,6 +553,8 @@ EXP
   { $$=new CasteosTo($3,TIPO_NATIVA_CADENA.TOINT,@1.firt_line,@1.firt_column); }
   | toDouble par_abierto EXP par_cerrado
   { $$=new CasteosTo($3,TIPO_NATIVA_CADENA.TODOUBLE,@1.firt_line,@1.firt_column); }
+  | typeof par_abierto EXP par_cerrado
+  { $$=new CasteosTo($3,TIPO_NATIVA_CADENA.TYPEOF,@1.firt_line,@1.firt_column); }
 
 
 
