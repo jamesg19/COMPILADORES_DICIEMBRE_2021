@@ -75,6 +75,15 @@ export class Casteos extends Instruccion{
                 if(this.tipo_casteo == TIPO_NATIVA_CADENA.DOUBLEPARSE){
                     return Number(this.identificador.interpretar(entorno,arbol)+"")*(1.0);
                 }
+                if(this.tipo_casteo== TIPO_NATIVA_CADENA.BOOLEANPARSE){
+                    try {
+                        return Boolean(Number(this.identificador.interpretar(entorno,arbol)));
+                    } catch (error) {
+                        return Boolean(this.identificador.interpretar(entorno,arbol) );
+                    }
+
+                    return Boolean(this.identificador.interpretar(entorno,arbol) );
+                }
 
 
             }
