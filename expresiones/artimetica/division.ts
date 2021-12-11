@@ -56,7 +56,7 @@ export class Division extends Instruccion{
                     //-------ENTERO
                     //ENTERO / ENTERO
                     if(this.operadorIzq.tipo===TIPO.ENTERO && this.operadorDer.tipo===TIPO.ENTERO ){
-                        this.tipo=TIPO.ENTERO;
+                        this.tipo=TIPO.DECIMAL;
                         return this.obtenerVal(this.operadorIzq.tipo,izq) - this.obtenerVal(this.operadorDer.tipo,der);
                     }
                     //ENTERO / DECIMAL

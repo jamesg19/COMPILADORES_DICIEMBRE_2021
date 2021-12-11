@@ -47,6 +47,11 @@
 'tan'         return 'tan';
 'sqrt'        return 'sqrt';
 'pow'        return 'pow';
+//nativas String
+'toLowercase' return 'toLowercase';
+'toUppercase' return 'toUppercase';
+'subString' return 'subString';
+'caracterOfPosition' return 'caracterOfPosition';
 
 //kw
 'true'      return 'true';
@@ -186,6 +191,8 @@
     const { Sqrt} = require('../expresiones/nativas/sqrt');
     const { Pow} = require('../expresiones/nativas/pow');
     const { Log} = require('../expresiones/nativas/log');
+    const { NativasString} = require('../expresiones/nativas/nativas_string');
+    const { TIPO_NATIVA_CADENA} = require('../expresiones/nativas/tiponativacadena');
 
 
     const { Struct } = require('../expresiones/struct/struct')
@@ -539,6 +546,18 @@ EXP
   | sqrt par_abierto EXP par_cerrado            {  $$ = new Sqrt($3,@1.firt_line,@1.firt_column);  }
   | pow par_abierto EXP coma EXP par_cerrado    {  $$ = new Pow($3,$5,@1.firt_line,@1.firt_column);  }
   | log10 par_abierto EXP par_cerrado           {  $$ = new Log($3,@1.firt_line,@1.firt_column);  }
+  //nativas string
+  | id punto toLowercase par_abierto par_cerrado         
+  { $$= new NativasString($1,TIPO_NATIVA_CADENA.TOLOWER,null,null,@1.firt_line,@1.firt_column); }
+  | id punto toUppercase par_abierto par_cerrado         
+  { $$= new NativasString($1,TIPO_NATIVA_CADENA.TOUPPER,null,null,@1.firt_line,@1.firt_column); }
+  | id punto length par_abierto par_cerrado         
+  { $$= new NativasString($1,TIPO_NATIVA_CADENA.LENGHT,null,null,@1.firt_line,@1.firt_column); }
+  | id punto subString par_abierto EXP coma EXP par_cerrado         
+  { $$= new NativasString($1,TIPO_NATIVA_CADENA.SUBSTRING,$5,$7,@1.firt_line,@1.firt_column); }
+  | id punto caracterOfPosition par_abierto EXP par_cerrado         
+  { $$= new NativasString($1,TIPO_NATIVA_CADENA.CARACTER_POSITION,$5,null,@1.firt_line,@1.firt_column); }
+
 
   //Operaciones de Comparacion
   | EXP mayor EXP                   {   $$ = new Mayor($1,$3,@1.firt_line,@1.firt_column);       }
