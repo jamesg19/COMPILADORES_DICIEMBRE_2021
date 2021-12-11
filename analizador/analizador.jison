@@ -540,6 +540,8 @@ EXP
   //casteos
   | int punto parse par_abierto EXP par_cerrado
   { $$=new Casteos($5,TIPO_NATIVA_CADENA.INTPARSE,@1.firt_line,@1.firt_column); }
+  | double punto parse par_abierto EXP par_cerrado
+  { $$=new Casteos($5,TIPO_NATIVA_CADENA.DOUBLEPARSE,@1.firt_line,@1.firt_column); }
 
 
   //Operaciones de Comparacion

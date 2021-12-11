@@ -51,8 +51,11 @@ export class Casteos extends Instruccion{
                     return new Excepcion("Semantico", "Error de operacion en Casteo variable diferente a Cadena", `${this.fila}`, `${this.columna}`);
                 }
 
-                if(this.tipo_casteo == TIPO_NATIVA_CADENA.INTPARSE || this.tipo_casteo==TIPO_NATIVA_CADENA.DOUBLEPARSE ){
+                if(this.tipo_casteo == TIPO_NATIVA_CADENA.INTPARSE  ){
                     return Number(this.identificador.interpretar(entorno,arbol)+"");
+                }
+                if(this.tipo_casteo == TIPO_NATIVA_CADENA.DOUBLEPARSE){
+                    return Number(this.identificador.interpretar(entorno,arbol)+"")*(1.0);
                 }
                 
                 if(this.tipo_casteo== TIPO_NATIVA_CADENA.BOOLEANPARSE){
@@ -66,8 +69,11 @@ export class Casteos extends Instruccion{
                     return new Excepcion("Semantico", "Error de operacion en Casteo variable diferente a Cadena", `${this.fila}`, `${this.columna}`);
                 }
 
-                if(this.tipo_casteo == TIPO_NATIVA_CADENA.INTPARSE || this.tipo_casteo==TIPO_NATIVA_CADENA.DOUBLEPARSE ){
+                if(this.tipo_casteo == TIPO_NATIVA_CADENA.INTPARSE){
                     return Number(this.identificador.interpretar(entorno,arbol)+"");
+                }
+                if(this.tipo_casteo == TIPO_NATIVA_CADENA.DOUBLEPARSE){
+                    return Number(this.identificador.interpretar(entorno,arbol)+"")*(1.0);
                 }
 
 
