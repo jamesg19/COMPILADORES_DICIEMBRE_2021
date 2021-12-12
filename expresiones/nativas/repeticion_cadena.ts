@@ -6,6 +6,7 @@ import { Excepcion} from "../../table/excepcion"
 import { TIPO } from "../../table/TipoNativo";
 import {TIPO_NATIVA_CADENA } from "./tiponativacadena";
 import { Primitivo } from "../primitivo";
+import { Identificador } from "../identificador";
 
 
 export class RepeticionCadena extends Instruccion{
@@ -36,13 +37,41 @@ export class RepeticionCadena extends Instruccion{
     }
     interpretar(entorno: TablaSimbolos, arbol: Arbol): any {
         try {
-
+            const iden=this.identificador.interpretar(entorno,arbol);
+           
             //DETERMINA SI ES REPETICION
-            if(this.tipo_operacion == TIPO_NATIVA_CADENA.REPETICION){
+            if(this.identificador instanceof Identificador){
+
+                const simboll=entorno.getSimbolo(this.identificador.id+"");
+                //verifica si existe
+                if(simboll instanceof Excepcion){
+                    return simboll;
+                }
+
+                if(simboll ==null){
+                    return new Excepcion("Semantico","No existe la variable " + `${this.identificador.id}`, `${this.fila}`,`${this.columna}`);
+                }else{
+                    var texto="";
+                    for(let i=0;i<this.inicio.interpretar(entorno,arbol);i++){
+                        texto+=this.identificador.interpretar(entorno,arbol);
+                    }
+                    return texto;
+                }
+                
+            }
+            //  SI ES UNA CADENA SIMPLE
+            else{
+
 
                 const start=this.inicio.interpretar(entorno,arbol);
                 const id=this.identificador.interpretar(entorno,arbol);
 
+                if(id instanceof Excepcion){
+                    return id;
+                }
+                if(start instanceof Excepcion){
+                    return start;
+                }
                 //VERIFICA QUE LAS REPETICIONES SEA UN ENTERO
                 if(this.inicio.tipo != TIPO.ENTERO){
                     return new Excepcion('Semantico','El parametro de repeticiones debe ser entero',`${this.fila}`,`${this.columna}`);
@@ -59,14 +88,17 @@ export class RepeticionCadena extends Instruccion{
                 for(let i=0;i<this.inicio.interpretar(entorno,arbol);i++){
                     cadena+=this.identificador.interpretar(entorno,arbol);
                 }
-                
+
                 return cadena;
+
+
+
             }
 
 
 
 
-            return new Excepcion("Semantico",`Tipo de datos invalido para metodo nativo string() `,`${this.fila}`,`${this.columna}`);
+            return new Excepcion("Semantico",`Tipo de datos invalido para metodo nativo repeticion string() `,`${this.fila}`,`${this.columna}`);
 
         } catch (error) {
 
