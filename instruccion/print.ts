@@ -7,6 +7,7 @@ import { Simbolo } from "../table/simbolo";
 import { Acceso_Struct } from "../expresiones/struct/acceso_struct";
 import { Identificador } from "../expresiones/identificador";
 import { Primitivo } from "../expresiones/primitivo";
+import { Dec_Struct } from "../expresiones/struct/instancia_struct";
 
 export class Print extends Instruccion {
   fila: number;
@@ -41,8 +42,11 @@ export class Print extends Instruccion {
           return value;
         }
         if (value != undefined) {
-          if (exp_print instanceof Simbolo) {
+          
+          if (exp_print instanceof Dec_Struct ) {
+          console.log("mal")
             value = value.valor;
+          
           }
           
         } else {
@@ -54,5 +58,15 @@ export class Print extends Instruccion {
         
       });
     }
+  }
+  
+  print_struct(exp:Simbolo):string{
+    let formato:string=exp.name_struct+" ( ";
+    if(exp.valor instanceof Map){
+      exp.valor.forEach(element => {
+        console.log(element);
+      });
+    }
+    return formato;
   }
 }

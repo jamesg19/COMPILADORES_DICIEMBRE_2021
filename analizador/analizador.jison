@@ -46,19 +46,20 @@
 'cos'         return 'cos';
 'tan'         return 'tan';
 'sqrt'        return 'sqrt';
-'pow'        return 'pow';
+'pow'         return 'pow';
 //nativas String
-'^' return 'repeticion';
+'^'           return 'repeticion';
 'toLowercase' return 'toLowercase';
 'toUppercase' return 'toUppercase';
-'subString' return 'subString';
+'subString'   return 'subString';
 'caracterOfPosition' return 'caracterOfPosition';
 
 //kw
 'true'      return 'true';
 'false'     return 'false';
 'pop'       return 'pop';
-'push'      return'push';
+'push'      return 'push';
+'main'      return 'main';
 
 //Patrones numericos
 [0-9]+\b  	return 'entero';
@@ -141,6 +142,7 @@
     const { Llamada } = require ('../instruccion/llamada');
     const { Return } = require ('../instruccion/Return');
     const { Asignacion } = require('../instruccion/asignacion');
+    const { Main } = require('../instruccion/main');
     const { Modificar } = require('../expresiones/array/modificar_array');
     const { Acceso } = require('../expresiones/array/acceso');
     const { Pop } = require('../expresiones/array/pop');
@@ -291,9 +293,16 @@ INSTRUCCION:
   | PRINT                           {   $$ = $1 } //listo
   | LLAMADA_FUNCION_EXP punto_coma  {   $$ = $1 }
   | MODIFICAR_ARREGLO               {   $$ = $1 }
+  | MAIN                            {   $$ = $1 }
   
-  | error {console.log("errir",$1)}
+  //| error punto_coma                {console.log("err0r",$1)}
   
+;
+
+
+MAIN:
+  void main par_abierto par_cerrado llave_abierta INSTRUCCIONES llave_cerrada 
+  { $$ = new Main($6,@1.first_line,@1.first_column); }
 ;
 
 
@@ -436,11 +445,6 @@ DECLARACION_FUNCION
 
   //Funcion con parametros y con tipo -> function TIPO[][] test ( LISTA_PARAMETROS )  { INSTRUCCIONES }
   //| function TIPO_VARIABLE_NATIVA LISTA_CORCHETES id par_abierto LISTA_PARAMETROS par_cerrado llave_abierta INSTRUCCIONES llave_cerrada {    }
-
-  //Funcion con parametros y sin tipo -> function test ( LISTA_PARAMETROS ) { INSTRUCCIONES }
-  
-  //| function id par_abierto LISTA_PARAMETROS par_cerrado llave_abierta INSTRUCCIONES llave_cerrada {    }
-
 ;
 
 LISTA_PARAMETROS 
@@ -450,7 +454,7 @@ LISTA_PARAMETROS
 
 PARAMETRO 
   : TIPO_VARIABLE_NATIVA id                                { $$ = {'tipo':$1, 'id':$2, 'arreglo':false}   }
-  //| TIPO_VARIABLE_NATIVA LISTA_CORCHETES id              {    }
+  //| TIPO_VARIABLE_NATIVA LISTA_CORCHETES id              { $$ = {'tipo':$1, 'id':$2, 'arreglo':true }    }
   //| id dos_puntos Array menor TIPO_VARIABLE_NATIVA mayor {    }
 ;
 
@@ -576,6 +580,7 @@ EXP
   //Funciones
   | LLAMADA_FUNCION_EXP                                  {  $$ = $1  }
   
+  
 ;
 
 
@@ -620,7 +625,7 @@ LISTA_EXPRESIONES
 
 
 TIPO_DEC_VARIABLE
-  : string                      {  $$ = TIPO.CADENA;  }
+  : string                     {  $$ = TIPO.CADENA;  }
   | int                        {  $$ = 0;            }
   | double                     {  $$ = TIPO.DECIMAL; }
   | boolean                    {  $$ = TIPO.BOOLEAN; }
@@ -628,7 +633,7 @@ TIPO_DEC_VARIABLE
 
 TIPO_VARIABLE_NATIVA
   : string                     { $$ = TIPO.CADENA;  } 
-  | int                        { $$ = 0;            }
+  | int                        { $$ = TIPO.ENTERO;  }
   | double                     { $$ = TIPO.DECIMAL; }
   | boolean                    { $$ = TIPO.BOOLEAN; }
   | void                       { $$ = TIPO.VOID;    }
@@ -659,7 +664,7 @@ DEC_ARRAY //Arreglo del tipo---> int[] arr = [exp1,exp2, [exp3] ]
 
 
 LISTA_CORCHETES 
-  : LISTA_CORCHETES corchete_abierto corchete_cerrado   {  $$ = $2+$1  }
+  : LISTA_CORCHETES corchete_abierto corchete_cerrado   {  $$ = Number($2)+Number($1)  }
   | corchete_abierto corchete_cerrado                   {  $$ = 1;     }
 ;
 
@@ -679,7 +684,7 @@ EXPS_CORCHETE:
 
 INSTANCIA_STRUCT:
   id id igual id par_abierto LISTA_EXPRESIONES par_cerrado punto_coma
-  {$$ = new Dec_Struct($1,$2,$4,$6,@1.first_line,@1.first_column); }
+  { $$ = new Dec_Struct($1,$2,$4,$6,@1.first_line,@1.first_column); }
 
 ;
 
