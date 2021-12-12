@@ -6,6 +6,7 @@ import { Arbol } from '../table/arbol';
 import { Excepcion } from '../table/excepcion';
 import { Break } from './break';
 import { Return } from './Return';
+import { If } from './if';
 
 
 export class Funcion extends Instruccion{
@@ -37,7 +38,6 @@ export class Funcion extends Instruccion{
         
         this.instrucciones.forEach((instruccion)=>{
             let value = instruccion.interpretar(entorno_local,arbol);
-            //console.log()
             
             if(value instanceof Excepcion ){
                 arbol.excepciones.push(value);
@@ -47,14 +47,16 @@ export class Funcion extends Instruccion{
                 arbol.excepciones.push(new Excepcion("Semantico","Sentencia break fuera de ciclo ",super.fila+"",super.columna+""));
                 arbol.consola = arbol.consola + value;
             }
+
             if (value instanceof Return){
+              //console.log("TODO BIEN CARNALIn");
                 //this.tipo = value 
                 if(this.tipo == value.value.tipo){
-                  //console.log(value.return_value);
-                  return  return_value = instruccion.return_value;
+                  //return  return_value = instruccion.return_value;
+                  return  return_value = value.value?.interpretar(entorno,arbol);
                 }
             }
-        })  ;    
+        })  ; 
         return return_value;  
         
     }

@@ -7,6 +7,7 @@ import { TablaSimbolos } from "../table/tablasimbolos";
 import { TIPO } from "../table/tipo";
 import { Break } from "./break";
 import { Continue } from "./continue";
+import { Return } from "./Return";
 
 export class If extends Instruccion{
     condicion:Instruccion;
@@ -62,6 +63,11 @@ export class If extends Instruccion{
                         this.ins=result;
                         return result;
                     }
+                    if(result instanceof Return){
+                        this.ins=result;
+                        //console.log("HAY RETURN EN INSTRUCCIONES1 "+result.value?.interpretar(entorno,arbol));
+                        return result;
+                    }
                     
                 });
 
@@ -89,6 +95,10 @@ export class If extends Instruccion{
                             this.ins=result;
                             return result;
                         }
+                        if(result instanceof Return){
+                            this.ins=result;
+                            return result;
+                        }
                     });
                 } 
                 //INSTRUCCIONES ELSE IF
@@ -105,6 +115,10 @@ export class If extends Instruccion{
                             //arbol.actualizar_consola(result.toString());
                         }
                         if(result instanceof Break || result instanceof Continue ){
+                            this.ins=result;
+                            return result;
+                        }
+                        if(result instanceof Return){
                             this.ins=result;
                             return result;
                         }

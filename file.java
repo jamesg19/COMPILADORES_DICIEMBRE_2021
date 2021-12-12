@@ -20,13 +20,15 @@ void hanoi( int discos, int origen, int auxiliar, int destino)
     }
 }
 
-int factorial(int num)
-{
+int factorial(int num){
+    
+    //println(num);
     if (num == 1){
         return 1;
     }else{
         return num * factorial(num - 1);
     }
+
 }
 
 void main()
@@ -37,9 +39,9 @@ void main()
     println("");
 
     println("==============FACTORIAL==============================");
-    println(factorial(5));
+    //println(factorial(10));
     println("===============ACKERMAN==============================");
-    //println(ackerman(3, 5));
+    //println(ackerman(3, 5) );
     println("===============HANOI=================================");
-   // hanoi(3, 1, 2, 3);
+    hanoi(3, 1, 2, 3);
 }

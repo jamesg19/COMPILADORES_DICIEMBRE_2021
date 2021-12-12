@@ -4,6 +4,7 @@ import { TablaSimbolos } from '../table/tablasimbolos';
 import { Excepcion } from '../table/excepcion';
 import { Simbolo } from '../table/simbolo';
 import { TIPO } from "../table/TipoNativo";
+import { Return } from "./Return";
 
 
 export class Llamada extends Instruccion{
@@ -73,7 +74,7 @@ constructor(id:string, fila:number,columna:number,lista_parmetros?:Array<Instruc
             let exec_funcion = llamar_funcion.interpretar(entorno_local,arbol);
             
             if(exec_funcion instanceof Excepcion ) return exec_funcion;
-            
+
             this.tipo = llamar_funcion.tipo;            
             
             return exec_funcion;            
