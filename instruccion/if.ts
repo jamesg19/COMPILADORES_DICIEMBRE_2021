@@ -42,7 +42,7 @@ export class If extends Instruccion{
         if(this.condicion.tipo == TIPO.BOOLEAN){
             
             //verifica que la condicion sea TRUE
-            if(condition==true){
+            if(condition){
 
                 //CREA UN ENTORNO PARA LAS INSTRUCCIONES DENTRO DEL IF
                 const nuevaTabla=new TablaSimbolos(entorno);

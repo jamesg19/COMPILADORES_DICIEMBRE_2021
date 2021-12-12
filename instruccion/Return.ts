@@ -1,6 +1,7 @@
 import { Instruccion } from '../abs/Instruccion';
 import { TablaSimbolos } from '../table/tablasimbolos';
 import { Arbol } from '../table/arbol';
+import { TIPO } from '../table/TipoNativo';
 
 export class Return extends Instruccion {
   
@@ -9,6 +10,7 @@ export class Return extends Instruccion {
   has_value: boolean;
   value: Instruccion|undefined;
   return_value:any;
+  tipo:TIPO;
   /**
    * @param  {boolean} has_value
    * @param  {number} fila
@@ -21,6 +23,7 @@ export class Return extends Instruccion {
     this.columna = columna;
     this.value = value;
     this.has_value = has_value
+    this.tipo = TIPO.VOID;
     Object.assign(this, { has_value, value });
   }
   
@@ -29,16 +32,16 @@ export class Return extends Instruccion {
    * @param  {Arbol} arbol
    */
   interpretar(e: TablaSimbolos,arbol:Arbol) {
-    console.log("Return");
+    
     if(this.has_value && this.value != null){
       
       this.return_value = this.value.interpretar(e,arbol);
-      console.log(this.return_value);
+      this.tipo = this.value.tipo;  
       return new Return(this.has_value, this.fila,this.columna,this.value);
       
     }
     else{
-      console.log(this.return_value);
+      
       return new Return(this.has_value, this.fila,this.columna);
     }
     

@@ -32,7 +32,7 @@ constructor(id:string, fila:number,columna:number,lista_parmetros?:Array<Instruc
      * @returns any
      */
     interpretar(entorno:TablaSimbolos, arbol:Arbol):any{
-        console.log('en llamada');
+        
         let llamar_funcion = arbol.getFunctionByName(this.id);
         
         if(!llamar_funcion)

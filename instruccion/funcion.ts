@@ -33,10 +33,11 @@ export class Funcion extends Instruccion{
     interpretar(entorno:TablaSimbolos, arbol:Arbol){
       
         let entorno_local:TablaSimbolos = new TablaSimbolos(entorno);
+        let return_value;
         
         this.instrucciones.forEach((instruccion)=>{
             let value = instruccion.interpretar(entorno_local,arbol);
-            console.log()
+            //console.log()
             
             if(value instanceof Excepcion ){
                 arbol.excepciones.push(value);
@@ -49,11 +50,12 @@ export class Funcion extends Instruccion{
             if (value instanceof Return){
                 //this.tipo = value 
                 if(this.tipo == value.value.tipo){
-                  console.log(value.return_value);
-                  return  value.return_value;
+                  //console.log(value.return_value);
+                  return  return_value = instruccion.return_value;
                 }
             }
-        })  ;      
+        })  ;    
+        return return_value;  
         
     }
   hasReturn() : boolean{

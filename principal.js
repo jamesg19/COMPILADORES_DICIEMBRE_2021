@@ -88,17 +88,16 @@ class Principal {
     }
 }
 exports.Principal = Principal;
-let principa = new Principal();
-principa.ejecutar('\
-struct Estructura{ int x, int y};\
-Estructura m = Estructura(10,90); \
-\
-void main(){\
-  int a = 10;          \
-  println(m);  \
-  println(a);\
-}\
-');
+//let principa: Principal = new Principal();
+const fs = require("fs"), NOMBRE_ARCHIVO = "file.java";
+fs.readFile(NOMBRE_ARCHIVO, 'utf8', (error, datos) => {
+    if (error)
+        throw error;
+    let principa = new Principal();
+    // console.log(datos)
+    principa.ejecutar(datos);
+    //console.log("El contenido es: ", datos);
+});
 // principa.ejecutar ('println(6>5);   '
 //                     +'if(1>5){'
 //                     +'println("entra if6>5");'
