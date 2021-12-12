@@ -47,7 +47,8 @@ export class Print extends Instruccion {
           console.log("mal")
             value = value.valor;
           
-          }
+          }else
+          value - value.valor;
           
         } else {
           value = "Indefinido";

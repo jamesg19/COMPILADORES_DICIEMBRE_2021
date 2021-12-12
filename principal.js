@@ -90,8 +90,9 @@ class Principal {
 exports.Principal = Principal;
 let principa = new Principal();
 principa.ejecutar('\
-struct Estructura{ int x};\
-Estructura m = Estructura(10); \
+struct Estructura{ int x, int y};\
+Estructura m = Estructura(10,90); \
+\
 void main(){\
   int a = 10;          \
   println(m);  \

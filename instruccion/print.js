@@ -36,6 +36,8 @@ class Print extends Instruccion_1.Instruccion {
                         console.log("mal");
                         value = value.valor;
                     }
+                    else
+                        value - value.valor;
                 }
                 else {
                     value = "Indefinido";

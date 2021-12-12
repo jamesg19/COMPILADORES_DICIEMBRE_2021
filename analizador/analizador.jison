@@ -145,7 +145,7 @@
     const { D_Id    } = require('../instruccion/declaracion_id');
     const { Funcion } = require('../instruccion/funcion');
     const { Llamada } = require ('../instruccion/llamada');
-    const { Return } = require ('../instruccion/Return');
+    const { Return  } = require ('../instruccion/Return');
     const { Asignacion } = require('../instruccion/asignacion');
     const { Main } = require('../instruccion/main');
     const { Modificar } = require('../expresiones/array/modificar_array');
@@ -438,34 +438,6 @@ PUSH_ARREGLO
 ;
 
 
-//------------------------------------- DECLARACION DE FUNCION ---------------------------------
-DECLARACION_FUNCION 
-  //   1          2                3     4           5           6            7
-  : funcion TIPO_VARIABLE_NATIVA id par_abierto par_cerrado llave_abierta INSTRUCCIONES llave_cerrada { $$ = new Funcion($3,$7,$2,@1.first_line,@1.first_column);   }
-
-   //Funcion sin parametros y con tipo -> function TIPO[][] test()  { INSTRUCCIONES }
-  //| function TIPO_VARIABLE_NATIVA  id par_abierto par_cerrado llave_abierta INSTRUCCIONES llave_cerrada {    }
-   
-  //Funcion con parametros y con tipo -> function TIPO test ( LISTA_PARAMETROS )  { INSTRUCCIONES }
-  //1         2                   3     4         5                   6           
-  | function TIPO_VARIABLE_NATIVA id par_abierto LISTA_PARAMETROS par_cerrado  llave_abierta INSTRUCCIONES llave_cerrada {  $$ = new Funcion($3,$8,$2,@1.first_line,@1.first_column,$5);    }
-
-  //Funcion con parametros y con tipo -> function TIPO[][] test ( LISTA_PARAMETROS )  { INSTRUCCIONES }
-  //| function TIPO_VARIABLE_NATIVA LISTA_CORCHETES id par_abierto LISTA_PARAMETROS par_cerrado llave_abierta INSTRUCCIONES llave_cerrada {    }
-;
-
-LISTA_PARAMETROS 
-  : LISTA_PARAMETROS coma PARAMETRO                        {  $1.push($3); $$ = $1;   }
-  | PARAMETRO                                              {  $$ =  [$1]              }
-;
-
-PARAMETRO 
-  : TIPO_VARIABLE_NATIVA id                                { $$ = {'tipo':$1, 'id':$2, 'arreglo':false}   }
-  //| TIPO_VARIABLE_NATIVA LISTA_CORCHETES id              { $$ = {'tipo':$1, 'id':$2, 'arreglo':true }    }
-  //| id dos_puntos Array menor TIPO_VARIABLE_NATIVA mayor {    }
-;
-
-
 
 //=========================================>declaracion de struct<=========================================>
 
@@ -655,6 +627,7 @@ TIPO_DEC_VARIABLE
   | int                        {  $$ = 0;            }
   | double                     {  $$ = TIPO.DECIMAL; }
   | boolean                    {  $$ = TIPO.BOOLEAN; }
+  
 ;
 
 TIPO_VARIABLE_NATIVA
@@ -712,5 +685,26 @@ INSTANCIA_STRUCT:
   id id igual id par_abierto LISTA_EXPRESIONES par_cerrado punto_coma
   { $$ = new Dec_Struct($1,$2,$4,$6,@1.first_line,@1.first_column); }
 
+;
+
+
+//------------------------------------- DECLARACION DE FUNCION ---------------------------------
+DECLARACION_FUNCION 
+  //   1          2                3     4           5           6            7
+  :  TIPO_VARIABLE_NATIVA id par_abierto par_cerrado llave_abierta INSTRUCCIONES llave_cerrada { $$ = new Funcion($3,$7,$2,@1.first_line,@1.first_column);   }
+  
+  //1         2                   3     4         5                   6           
+  |   TIPO_VARIABLE_NATIVA id par_abierto LISTA_PARAMETROS par_cerrado  llave_abierta INSTRUCCIONES llave_cerrada {  $$ = new Funcion($3,$8,$2,@1.first_line,@1.first_column,$5);    }
+;
+
+LISTA_PARAMETROS 
+  : LISTA_PARAMETROS coma PARAMETRO                        {  $1.push($3); $$ = $1;   }
+  | PARAMETRO                                              {  $$ =  [$1]              }
+;
+
+PARAMETRO :
+  //: TIPO_VARIABLE_NATIVA id                                { $$ = {'tipo':$1, 'id':$2, 'arreglo':false}   }
+  //| TIPO_VARIABLE_NATIVA LISTA_CORCHETES id              { $$ = {'tipo':$1, 'id':$2, 'arreglo':true }    }
+  //| id dos_puntos Array menor TIPO_VARIABLE_NATIVA mayor {    }
 ;
 
