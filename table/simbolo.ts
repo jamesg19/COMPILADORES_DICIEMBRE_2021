@@ -75,7 +75,7 @@ export class Simbolo {
     getStruct() {
         return this.struct
     }
-
+    
 
 
 }

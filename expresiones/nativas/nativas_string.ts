@@ -53,12 +53,20 @@ export class NativasString extends Instruccion{
                 return new Excepcion("Semantico", "Error de operacion en variable NULL", `${this.fila}`, `${this.columna}`);
             }
 
-            if( variable.tipo == TIPO.ARREGLO){
-            //     console.log("LENGTH EN ARRAY");
-            //     if(this.tipo_operacion == TIPO_NATIVA_CADENA.LENGHT){
-            //         console.log("LENGTH EN ARRAY");
-            //     }
-            // }
+
+            //VERIFICACION DE OPERACIONES NATIVAS EN ARREGLOS
+            if( variable.arreglo){
+                
+                if(this.tipo_operacion == TIPO_NATIVA_CADENA.LENGHT){
+                    //codigo para length
+                    return variable.valor.length;
+
+                }
+            }
+
+
+
+
             if( variable.tipo != TIPO.CADENA){
 
                 return new Excepcion("Semantico", "Error de operacion en variable diferente a Cadena", `${this.fila}`, `${this.columna}`);
@@ -80,7 +88,7 @@ export class NativasString extends Instruccion{
             }
             //DETERMINA SI ES LENGTH
             if(this.tipo_operacion == TIPO_NATIVA_CADENA.LENGHT){
-                console.log(" ES LENGTH ");
+                
                 if(this.tipo_operacion.tipo == TIPO.ARREGLO){
                     
                 }
