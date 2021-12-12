@@ -432,15 +432,17 @@ PUSH_ARREGLO
 //------------------------------------- DECLARACION DE FUNCION ---------------------------------
 DECLARACION_FUNCION 
   //   1          2                3     4           5           6            7
-  : funcion TIPO_VARIABLE_NATIVA id par_abierto par_cerrado llave_abierta INSTRUCCIONES llave_cerrada { $$ = new Funcion($3,$7,$2,@1.first_line,@1.first_column);   }
-
+  :  TIPO_DEC_VARIABLE id par_abierto par_cerrado llave_abierta INSTRUCCIONES llave_cerrada { $$ = new Funcion($3,$7,$2,@1.first_line,@1.first_column);   }
+  | void id par_abierto par_cerrado llave_abierta INSTRUCCIONES llave_cerrada
+  | id id par_abierto par_cerrado llave_abierta INSTRUCCIONES llave_cerrada
    //Funcion sin parametros y con tipo -> function TIPO[][] test()  { INSTRUCCIONES }
   //| function TIPO_VARIABLE_NATIVA  id par_abierto par_cerrado llave_abierta INSTRUCCIONES llave_cerrada {    }
    
   //Funcion con parametros y con tipo -> function TIPO test ( LISTA_PARAMETROS )  { INSTRUCCIONES }
   //1         2                   3     4         5                   6           
-  | function TIPO_VARIABLE_NATIVA id par_abierto LISTA_PARAMETROS par_cerrado  llave_abierta INSTRUCCIONES llave_cerrada {  $$ = new Funcion($3,$8,$2,@1.first_line,@1.first_column,$5);    }
-
+  |  TIPO_DEC_VARIABLE id par_abierto LISTA_PARAMETROS par_cerrado  llave_abierta INSTRUCCIONES llave_cerrada {  $$ = new Funcion($3,$8,$2,@1.first_line,@1.first_column,$5);    }
+  | void id par_abierto LISTA_PARAMETROS par_cerrado  llave_abierta INSTRUCCIONES llave_cerrada
+  | id id par_abierto LISTA_PARAMETROS par_cerrado  llave_abierta INSTRUCCIONES llave_cerrada
   //Funcion con parametros y con tipo -> function TIPO[][] test ( LISTA_PARAMETROS )  { INSTRUCCIONES }
   //| function TIPO_VARIABLE_NATIVA LISTA_CORCHETES id par_abierto LISTA_PARAMETROS par_cerrado llave_abierta INSTRUCCIONES llave_cerrada {    }
 
@@ -456,7 +458,9 @@ LISTA_PARAMETROS
 ;
 
 PARAMETRO 
-  : TIPO_VARIABLE_NATIVA id                                { $$ = {'tipo':$1, 'id':$2, 'arreglo':false}   }
+  : TIPO_DEC_VARIABLE id                                { $$ = {'tipo':$1, 'id':$2, 'arreglo':false}   }
+    | id id
+  
   //| TIPO_VARIABLE_NATIVA LISTA_CORCHETES id              {    }
   //| id dos_puntos Array menor TIPO_VARIABLE_NATIVA mayor {    }
 ;
@@ -475,8 +479,10 @@ LISTA_ATRIBUTOS
 ;
 
 ATRIBUTO 
-  : TIPO_VARIABLE_NATIVA id   { $$ = new Atributo($2,$1,false,@1.firt_line,@1.firt_column);   }
-  | TIPO_VARIABLE_NATIVA id   LISTA_CORCHETES { $$ = new Atributo($2,$1,true,@1.firt_line,@1.firt_column);}
+  : TIPO_DEC_VARIABLE id   { $$ = new Atributo($2,$1,false,@1.firt_line,@1.firt_column);   }
+  | id id
+  | TIPO_DEC_VARIABLE id   LISTA_CORCHETES { $$ = new Atributo($2,$1,true,@1.firt_line,@1.firt_column);}
+  | id id LISTA_CORCHETES
 ;
 
 //=========================================>fin
@@ -495,7 +501,8 @@ DECLARACION_VARIABLE_FOR
 
 //let id : TIPO_VARIABLE_NATIVA = EXP;
 DEC_ID_TIPO_EXP                                 
-  : TIPO_VARIABLE_NATIVA id   igual EXP               {  $$ = new D_IdExp($1, $2, $3,false,@1.firt_line,@1.firt_column);   }
+  : TIPO_DEC_VARIABLE id   igual EXP               {  $$ = new D_IdExp($1, $2, $3,false,@1.firt_line,@1.firt_column);   }
+  | id id igual EXP
 ;
 
 //let id ;
@@ -654,14 +661,14 @@ TIPO_DEC_VARIABLE
   | boolean                    {  $$ = TIPO.BOOLEAN; }
 ;
 
-TIPO_VARIABLE_NATIVA
-  : string                     { $$ = TIPO.CADENA;  } 
-  | int                        { $$ = 0;            }
-  | double                     { $$ = TIPO.DECIMAL; }
-  | boolean                    { $$ = TIPO.BOOLEAN; }
-  | void                       { $$ = TIPO.VOID;    }
-  | id                         { $$ = TIPO.STRUCT;  }
-;
+// TIPO_VARIABLE_NATIVA
+//   : string                     { $$ = TIPO.CADENA;  } 
+//   | int                        { $$ = 0;            }
+//   | double                     { $$ = TIPO.DECIMAL; }
+//   | boolean                    { $$ = TIPO.BOOLEAN; }
+//   | void                       { $$ = TIPO.VOID;    }
+//   | id                         { $$ = TIPO.STRUCT;  }
+// ;
 LLAMADA_FUNCION_EXP:
       id par_abierto par_cerrado                     { $$ = new Llamada($1,@1.first_line,@1.first_column); }
     | id par_abierto PARAMETROS_LLAMADA par_cerrado  { $$ = new Llamada($1,@1.first_line,@1.first_column,$3); }    
