@@ -1,11 +1,11 @@
-import { Arbol } from "./table/arbol";
+import { Arbol }         from "./table/arbol";
 import { TablaSimbolos } from "./table/tablasimbolos";
-import { Instruccion } from "./abs/Instruccion";
-import { Funcion } from "./instruccion/funcion";
-import { Struct } from "./expresiones/struct/struct";
-import { Excepcion } from "./table/excepcion";
-import { Arreglo } from "./expresiones/array/declarar_array";
-import { D_IdExp } from "./instruccion/declaracion_idexp";
+import { Instruccion }   from "./abs/Instruccion";
+import { Funcion }       from "./instruccion/funcion";
+import { Struct }        from "./expresiones/struct/struct";
+import { Excepcion }     from "./table/excepcion";
+import { Arreglo }       from "./expresiones/array/declarar_array";
+import { D_IdExp }       from "./instruccion/declaracion_idexp";
 import { Asignacion_Struct } from "./expresiones/struct/asignacion_struct";
 import { D_Id } from "./instruccion/declaracion_id";
 import { Dec_Struct } from "./expresiones/struct/instancia_struct";
@@ -18,6 +18,7 @@ const Parser = require("./analizador/analizador");
 
 export class Principal {
   ejecutar(code: string) {
+    
     const instrucciones = Parser.parse(code);
 
     //tabla
@@ -124,20 +125,18 @@ export class Principal {
   }
 }
 
-let principa: Principal = new Principal();
+//let principa: Principal = new Principal();
 
-principa.ejecutar(
-  '\
-struct Estructura{ int x, int y};\
-Estructura m = Estructura(10,90); \
-\
-void main(){\
-  int a = 10;          \
-  println(m);  \
-  println(a);\
-}\
-'
-);
+const fs = require("fs"),
+    NOMBRE_ARCHIVO = "file.java";
+    fs.readFile(NOMBRE_ARCHIVO, 'utf8', (error, datos) => {
+      if (error) throw error;
+      let principa: Principal = new Principal();
+     // console.log(datos)
+    principa.ejecutar(datos);
+      //console.log("El contenido es: ", datos);
+      
+  });
 
 // principa.ejecutar ('println(6>5);   '
 //                     +'if(1>5){'

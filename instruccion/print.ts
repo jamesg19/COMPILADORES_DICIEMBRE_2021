@@ -36,6 +36,7 @@ export class Print extends Instruccion {
     //const value = this.value.interpretar(entorno,arbol);
     if (this.value != undefined) {
       this.value.forEach((exp_print) => {
+        
         let value = exp_print.interpretar(entorno, arbol);
         if (value instanceof Excepcion) {
           console.log(value);

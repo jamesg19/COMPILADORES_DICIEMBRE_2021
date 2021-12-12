@@ -23,7 +23,6 @@
 'length'    return 'length';
 'pop'       return 'pop';
 
-'function'  return 'function';
 'return'    return 'return';
 'null'      return 'null';
 
@@ -46,7 +45,7 @@
 'cos'         return 'cos';
 'tan'         return 'tan';
 'sqrt'        return 'sqrt';
-'pow'        return 'pow';
+'pow'         return 'pow';
 //nativas String
 '^' return 'repeticion';
 'toLowercase' return 'toLowercase';
@@ -63,7 +62,8 @@
 'true'      return 'true';
 'false'     return 'false';
 'pop'       return 'pop';
-'push'      return'push';
+'push'      return 'push';
+'main'      return 'main';
 
 //Patrones numericos
 [0-9]+\b  	return 'entero';
@@ -144,10 +144,11 @@
     const { D_Id    } = require('../instruccion/declaracion_id');
     const { Funcion } = require('../instruccion/funcion');
     const { Llamada } = require ('../instruccion/llamada');
-    const { Return } = require ('../instruccion/Return');
+    const { Return }  = require ('../instruccion/Return');
+    const { Main }    = require ('../instruccion/main');
     const { Asignacion } = require('../instruccion/asignacion');
-    const { Modificar } = require('../expresiones/array/modificar_array');
-    const { Acceso } = require('../expresiones/array/acceso');
+    const { Modificar }  = require('../expresiones/array/modificar_array');
+    const { Acceso }     = require('../expresiones/array/acceso');
     const { Pop } = require('../expresiones/array/pop');
     const { Pop_List } = require('../expresiones/array/pop_list');
     const { Push_List } = require('../expresiones/array/push_list');
@@ -273,7 +274,8 @@ INSTRUCCIONES:
 
 INSTRUCCION: 
   //init_inst
-   DEC_ARRAY
+    MAIN                            {   $$ = $1 } 
+  | DEC_ARRAY                       {   $$ = $1 } 
   |  DECLARACION_VARIABLE           {   $$ = $1 }//falta cuando hay una lista de id's
   | DECLARACION_FUNCION             {   $$ = $1 }//listo
   | DECLARACION_TYPE                {   $$ = $1 } //aca se crea la 'plantilla' para despues crear instancias
@@ -301,7 +303,10 @@ INSTRUCCION:
   
 ;
 
+MAIN:
 
+void main par_abierto par_cerrado llave_abierta INSTRUCCIONES llave_cerrada { $$ = new Main($6,@1.firt_line,@1.first_column); } 
+;
 PRINT  :  println par_abierto LISTA_EXPRESIONES par_cerrado punto_coma  { $$ = new Print(@1.firt_line,@1.firt_column,$3);  }
 ;
 
@@ -431,18 +436,17 @@ PUSH_ARREGLO
 
 //------------------------------------- DECLARACION DE FUNCION ---------------------------------
 DECLARACION_FUNCION 
-  //   1          2                3     4           5           6            7
-  :  TIPO_DEC_VARIABLE id par_abierto par_cerrado llave_abierta INSTRUCCIONES llave_cerrada { $$ = new Funcion($3,$7,$2,@1.first_line,@1.first_column);   }
-  | void id par_abierto par_cerrado llave_abierta INSTRUCCIONES llave_cerrada
-  | id id par_abierto par_cerrado llave_abierta INSTRUCCIONES llave_cerrada
-   //Funcion sin parametros y con tipo -> function TIPO[][] test()  { INSTRUCCIONES }
-  //| function TIPO_VARIABLE_NATIVA  id par_abierto par_cerrado llave_abierta INSTRUCCIONES llave_cerrada {    }
-   
+  //   1               2         3     4           5           6            7
+  :  TIPO_DEC_VARIABLE id par_abierto par_cerrado llave_abierta INSTRUCCIONES llave_cerrada 
+  { $$ = new Funcion($2,$6,$1,@1.first_line,@1.first_column);   }
+  | void id par_abierto par_cerrado llave_abierta INSTRUCCIONES llave_cerrada               { $$ = new Funcion($2,$6,TIPO.VOID,@1.first_line,@1.first_column);   }
+  | id id par_abierto par_cerrado llave_abierta INSTRUCCIONES llave_cerrada                 { $$ = new Funcion($2,$6,TIPO.STRUCT,@1.first_line,@1.first_column);   }
   //Funcion con parametros y con tipo -> function TIPO test ( LISTA_PARAMETROS )  { INSTRUCCIONES }
   //1         2                   3     4         5                   6           
-  |  TIPO_DEC_VARIABLE id par_abierto LISTA_PARAMETROS par_cerrado  llave_abierta INSTRUCCIONES llave_cerrada {  $$ = new Funcion($3,$8,$2,@1.first_line,@1.first_column,$5);    }
-  | void id par_abierto LISTA_PARAMETROS par_cerrado  llave_abierta INSTRUCCIONES llave_cerrada
-  | id id par_abierto LISTA_PARAMETROS par_cerrado  llave_abierta INSTRUCCIONES llave_cerrada
+  |  TIPO_DEC_VARIABLE id par_abierto LISTA_PARAMETROS par_cerrado  llave_abierta INSTRUCCIONES llave_cerrada
+   {  $$ = new Funcion($2,$7,$1,@1.first_line,@1.first_column,$4);    }
+  | void id par_abierto LISTA_PARAMETROS par_cerrado  llave_abierta INSTRUCCIONES llave_cerrada {  $$ = new Funcion($2,$7,TIPO.VOID,@1.first_line,@1.first_column,$4);    }
+  | id id par_abierto LISTA_PARAMETROS par_cerrado  llave_abierta INSTRUCCIONES llave_cerrada{  $$ = new Funcion($2,$7,TIPO.STRUCT,@1.first_line,@1.first_column,$4);    }
   //Funcion con parametros y con tipo -> function TIPO[][] test ( LISTA_PARAMETROS )  { INSTRUCCIONES }
   //| function TIPO_VARIABLE_NATIVA LISTA_CORCHETES id par_abierto LISTA_PARAMETROS par_cerrado llave_abierta INSTRUCCIONES llave_cerrada {    }
 
@@ -459,8 +463,7 @@ LISTA_PARAMETROS
 
 PARAMETRO 
   : TIPO_DEC_VARIABLE id                                { $$ = {'tipo':$1, 'id':$2, 'arreglo':false}   }
-    | id id
-  
+    | id id                                             { $$ = {'tipo':TIPO.STRUCT, 'id':$2, 'arreglo':false}   }  
   //| TIPO_VARIABLE_NATIVA LISTA_CORCHETES id              {    }
   //| id dos_puntos Array menor TIPO_VARIABLE_NATIVA mayor {    }
 ;
@@ -479,10 +482,10 @@ LISTA_ATRIBUTOS
 ;
 
 ATRIBUTO 
-  : TIPO_DEC_VARIABLE id   { $$ = new Atributo($2,$1,false,@1.firt_line,@1.firt_column);   }
-  | id id
+  : TIPO_DEC_VARIABLE id                   { $$ = new Atributo($2,$1,false,@1.firt_line,@1.firt_column);   }
+  | id id                                  { $$ = new Atributo($2,TIPO.STRUCT,false,@1.firt_line,@1.firt_column);   }
   | TIPO_DEC_VARIABLE id   LISTA_CORCHETES { $$ = new Atributo($2,$1,true,@1.firt_line,@1.firt_column);}
-  | id id LISTA_CORCHETES
+  | id id LISTA_CORCHETES                  { $$ = new Atributo($2,TIPO.STRUCT,true,@1.firt_line,@1.firt_column);}  
 ;
 
 //=========================================>fin
@@ -501,8 +504,8 @@ DECLARACION_VARIABLE_FOR
 
 //let id : TIPO_VARIABLE_NATIVA = EXP;
 DEC_ID_TIPO_EXP                                 
-  : TIPO_DEC_VARIABLE id   igual EXP               {  $$ = new D_IdExp($1, $2, $3,false,@1.firt_line,@1.firt_column);   }
-  | id id igual EXP
+  : TIPO_DEC_VARIABLE id   igual EXP               {  $$ = new D_IdExp($1, $2, $3,false,@1.firt_line,@1.firt_column);            }
+  | id id igual EXP                                {  $$ = new D_IdExp(TIPO.STRUCT, $2, $3,false,@1.firt_line,@1.firt_column);   }
 ;
 
 //let id ;
