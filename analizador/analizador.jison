@@ -53,6 +53,11 @@
 'toUppercase' return 'toUppercase';
 'subString'   return 'subString';
 'caracterOfPosition' return 'caracterOfPosition';
+//casteos
+'parse'     return 'parse';
+'toInt'     return 'toInt';
+'toDouble'  return 'toDouble';
+'typeof'    return 'typeof';
 
 //kw
 'true'      return 'true';
@@ -115,8 +120,8 @@
 
 
 //Patrones para cadenas
-\"[^\"]*\"			{ yytext = yytext.substr(0,yyleng-0); return 'string'; }
-\'[^\']*\'			{ yytext = yytext.substr(0,yyleng-0); return 'string'; }
+\"[^\"]*\"			{ yytext = yytext.slice(1,-1); return 'string'; }
+\'[^\']*\'			{ yytext = yytext.slice(1,-1); return 'string'; }
 //\`[^\`]*\`			{ yytext = yytext.substr(0,yyleng-0); return 'string'; }
 
 
@@ -198,6 +203,8 @@
     const { NativasString} = require('../expresiones/nativas/nativas_string');
     const { RepeticionCadena} = require('../expresiones/nativas/repeticion_cadena');
     const { TIPO_NATIVA_CADENA} = require('../expresiones/nativas/tiponativacadena');
+    const { Casteos} = require('../expresiones/nativas/casteos');
+    const { CasteosTo} = require('../expresiones/nativas/casteos_to');
 
 
     const { Struct }     = require('../expresiones/struct/struct')
@@ -539,6 +546,25 @@ EXP
   { $$= new NativasString($1,TIPO_NATIVA_CADENA.CARACTER_POSITION,$5,null,@1.firt_line,@1.firt_column); }
   | EXP repeticion EXP         
   { $$= new RepeticionCadena($1,TIPO_NATIVA_CADENA.REPETICION,$3,null,@1.firt_line,@1.firt_column); }
+
+  //casteos CADENA
+  | int punto parse par_abierto EXP par_cerrado
+  { $$=new Casteos($5,TIPO_NATIVA_CADENA.INTPARSE,@1.firt_line,@1.firt_column); }
+  | double punto parse par_abierto EXP par_cerrado
+  { $$=new Casteos($5,TIPO_NATIVA_CADENA.DOUBLEPARSE,@1.firt_line,@1.firt_column); }
+  | boolean punto parse par_abierto EXP par_cerrado
+  { $$=new Casteos($5,TIPO_NATIVA_CADENA.BOOLEANPARSE,@1.firt_line,@1.firt_column); }
+  //casteos INT
+  | toInt par_abierto EXP par_cerrado
+  { $$=new CasteosTo($3,TIPO_NATIVA_CADENA.TOINT,@1.firt_line,@1.firt_column); }
+  | toDouble par_abierto EXP par_cerrado
+  { $$=new CasteosTo($3,TIPO_NATIVA_CADENA.TODOUBLE,@1.firt_line,@1.firt_column); }
+  | typeof par_abierto EXP par_cerrado
+  { $$=new CasteosTo($3,TIPO_NATIVA_CADENA.TYPEOF,@1.firt_line,@1.firt_column); }
+  | string par_abierto EXP par_cerrado
+  { $$=new CasteosTo($3,TIPO_NATIVA_CADENA.TOSTRING,@1.firt_line,@1.firt_column); }
+
+
 
 
   //Operaciones de Comparacion
