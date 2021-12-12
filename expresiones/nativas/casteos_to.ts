@@ -14,6 +14,7 @@ export class CasteosTo extends Instruccion{
     tipo_casteo:TIPO_NATIVA_CADENA;
     fila: number;
     columna:number;
+    tipo:TIPO;
 
     /**
      * CONSTRUCTOR DE OPERACION TANGENTE()
@@ -28,6 +29,7 @@ export class CasteosTo extends Instruccion{
         this.tipo_casteo=tipo_casteo;
         this.fila=fila;
         this.columna=columna;
+        this.tipo=9;
         
 
     }
@@ -42,6 +44,10 @@ export class CasteosTo extends Instruccion{
                 if(test instanceof Excepcion){
                     return test;
                 }
+                if (variable == null) {
+                    return new Excepcion("Semantico","No existe la variable " + `${this.identificador}`, `${this.fila}`,`${this.columna}`);
+                }
+
                 //TIPO TYPE_OF
                 if(this.tipo_casteo == TIPO_NATIVA_CADENA.TYPEOF){
                     this.tipo=TIPO.CADENA;

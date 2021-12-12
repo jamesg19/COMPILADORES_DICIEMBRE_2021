@@ -1,0 +1,127 @@
+import { Instruccion } from "../abs/Instruccion";
+import { NodoAST } from "../abs/nodo";
+import { Identificador } from "../expresiones/identificador";
+import { Primitivo } from "../expresiones/primitivo";
+import { Arbol } from "../table/arbol";
+import { Excepcion } from "../table/excepcion";
+import { Simbolo } from "../table/simbolo";
+import { TablaSimbolos } from "../table/tablasimbolos";
+import { TIPO } from "../table/TipoNativo";
+import { Asignacion } from "./asignacion";
+import { Break } from "./break";
+import { Continue } from "./continue";
+import { D_Id } from "./declaracion_id";
+import { D_IdExp } from "./declaracion_idexp";
+import { Return } from "./Return";
+
+export class ForEach extends Instruccion {
+    temporal:string;
+    condicion:Instruccion;
+    instrucciones:Instruccion[];
+    fila: number;
+    columna:number;
+    hayContinue:boolean;
+
+    
+    //for letra in cadena{
+    //instrucciones ...
+    //}
+    constructor(temporal:string,condicion:Instruccion,instrucciones:Instruccion[],fila:number,columna:number){
+        super(fila,columna);
+        this.fila=fila;
+        this.columna=columna;
+        this.temporal=temporal;
+        this.condicion=condicion;
+        this.instrucciones=instrucciones;
+        this.hayContinue=false;
+    }
+    /**
+     * METODO INTERPRETAR CICLO FOR
+     * @param entorno 
+     * @param arbol 
+     */
+    interpretar(entorno: TablaSimbolos, arbol: Arbol) {
+
+        //verifica que la condicion no sea una Excepcion
+        const condition=this.condicion.interpretar(entorno,arbol);
+        if(condition instanceof Excepcion){
+            return condition;
+        }
+
+        //verifica que sea un identificador
+        if(this.condicion instanceof Identificador){
+
+            //verifica que exista el IDENTIFICADOR
+            const variable=entorno.getSimbolo(this.condicion.id+"");
+            if (variable == null) {
+                return new Excepcion("Semantico","No existe la variable " + `${this.condicion.id}`, `${this.fila}`,`${this.columna}`);
+            }
+            //verifica si es un ARREGLO
+            if( variable.arreglo){
+
+            }
+            //caso contrario es una variable tradicional
+            else{
+
+                //declara la variable temporal
+                const declaracion_temp=new D_Id(TIPO.CADENA,this.temporal,false,this.fila,this.columna);
+                const declaracion_tmp=declaracion_temp.interpretar(entorno,arbol);
+                if(declaracion_tmp instanceof Excepcion){
+                    return declaracion_tmp;
+                }
+
+                var cantidad=this.condicion.interpretar(entorno,arbol);
+                
+                for(let i=0;i<cantidad.length;i++){
+                    const nueva_tabla=new TablaSimbolos(entorno);
+                    //creamos el objeto primitivo del valor en la posicion i
+                    const valor=new Primitivo(TIPO.CADENA,cantidad.charAt(i),this.fila,this.columna);
+                    
+                    //asignacion del valor a la variable temporal
+                    const asignacion_temp= new Asignacion(this.temporal,valor,this.fila,this.columna);
+                    asignacion_temp.interpretar(nueva_tabla,arbol);
+
+                    //ejecucion de las instrucciones
+                    //ejecuta las instrucciones que estan dentro del FOR
+                    this.instrucciones.forEach((element:Instruccion) => {
+                        
+                        const result=element.interpretar(nueva_tabla,arbol);
+
+                        if(result instanceof Excepcion){
+                            arbol.excepciones.push(result);
+                            arbol.updateConsolaError(result.toString());
+                        }
+                        
+                        if(result instanceof Break){
+                            return result;
+                        }
+                        if(result instanceof Return){
+                            return result;
+                        }
+
+                    });
+                    
+                }
+            }
+
+
+
+        }
+        //SI ES Una CADENA NORMAL
+
+
+    }
+
+    getNodo(){
+        const nodo=new NodoAST("FOR");
+        const instruccionesNodo=new NodoAST("INSTRUCCIONES");
+
+        this.instrucciones.forEach((element)=>{
+            //instruccionesNodo.agregarHijoNodo(element.getNodo());
+
+        });
+        nodo.agregarHijoNodo(instruccionesNodo);
+        return nodo;
+    }
+
+}
