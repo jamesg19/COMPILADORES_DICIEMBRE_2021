@@ -6,6 +6,7 @@ import { Excepcion} from "../../table/excepcion"
 import { TIPO } from "../../table/TipoNativo";
 import {TIPO_NATIVA_CADENA } from "./tiponativacadena";
 import { Primitivo } from "../primitivo";
+import { Console } from "console";
 
 
 export class NativasString extends Instruccion{
@@ -37,7 +38,7 @@ export class NativasString extends Instruccion{
     interpretar(entorno: TablaSimbolos, arbol: Arbol): any {
         try {
 
-
+           
 
             //VERIFICA QUE LA VARIABLE O ID EXISTAN
             const variable = entorno.getSimbolo(this.identificador);
@@ -51,7 +52,14 @@ export class NativasString extends Instruccion{
 
                 return new Excepcion("Semantico", "Error de operacion en variable NULL", `${this.fila}`, `${this.columna}`);
             }
-            if(variable.tipo != TIPO.CADENA){
+
+            if( variable.tipo == TIPO.ARREGLO){
+            //     console.log("LENGTH EN ARRAY");
+            //     if(this.tipo_operacion == TIPO_NATIVA_CADENA.LENGHT){
+            //         console.log("LENGTH EN ARRAY");
+            //     }
+            // }
+            if( variable.tipo != TIPO.CADENA){
 
                 return new Excepcion("Semantico", "Error de operacion en variable diferente a Cadena", `${this.fila}`, `${this.columna}`);
             }
@@ -72,7 +80,11 @@ export class NativasString extends Instruccion{
             }
             //DETERMINA SI ES LENGTH
             if(this.tipo_operacion == TIPO_NATIVA_CADENA.LENGHT){
-
+                console.log(" ES LENGTH ");
+                if(this.tipo_operacion.tipo == TIPO.ARREGLO){
+                    
+                }
+                console.log(this.tipo_operacion.tipo);
                 var cadena=variable.getValor()+"";
                 return cadena.length;
             }

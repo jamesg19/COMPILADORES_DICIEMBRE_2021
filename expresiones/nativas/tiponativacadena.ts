@@ -11,7 +11,7 @@ export enum TIPO_NATIVA_CADENA{
     TOINT,
     TOSTRING,
     TODOUBLE,
-    STRING,
+    TOSTRING,
     TYPEOF,
 
 }

@@ -38,7 +38,10 @@ export class CasteosTo extends Instruccion{
                
                 //VERIFICA QUE LA VARIABLE O ID EXISTAN
                 const variable = entorno.getSimbolo(this.identificador.id+"");
-
+                const test=this.identificador.interpretar(entorno,arbol);
+                if(test instanceof Excepcion){
+                    return test;
+                }
                 //TIPO TYPE_OF
                 if(this.tipo_casteo == TIPO_NATIVA_CADENA.TYPEOF){
                     this.tipo=TIPO.CADENA;
@@ -60,7 +63,10 @@ export class CasteosTo extends Instruccion{
                     }
                     //return Number(this.identificador.interpretar(entorno,arbol)+"")*(1.0);
                 }
-
+                if(this.tipo_casteo == TIPO_NATIVA_CADENA.TOSTRING  ){
+                    this.tipo=TIPO.CADENA;
+                    return this.identificador.interpretar(entorno,arbol)+"";
+                }
 
 
                 if (variable == null) {
@@ -77,7 +83,7 @@ export class CasteosTo extends Instruccion{
                         return new Excepcion("Semantico", "Error de operacion en Casteo variable diferente a NUMERO.. ", `${this.fila}`, `${this.columna}`);
                     }
                 }
-
+                
                 if(this.tipo_casteo == TIPO_NATIVA_CADENA.TOINT  ){
                     this.tipo=TIPO.ENTERO;
                     return Number(this.identificador.interpretar(entorno,arbol)+"");
@@ -91,30 +97,44 @@ export class CasteosTo extends Instruccion{
             }
             
             else{
+                ///////////////////////////////////////////////////////
+                ///////////////////////////////////////////////////////
                 //verifica que la expresion sea CADENA
                 const test=this.identificador.interpretar(entorno,arbol);
+                if(test instanceof Excepcion){
+                    return test;
+                }
                 //TYPEOF
                 if(this.tipo_casteo ==TIPO_NATIVA_CADENA.TYPEOF){
-                    this.tipo=TIPO.CADENA;
-
-                    if(variable.tipo == TIPO.CADENA){
+                    //this.tipo=TIPO.CADENA;
+                    //console.log(this.identificador.tipo+"    TEST  ");
+                    if(this.identificador.tipo == TIPO.CADENA){
+                        console.log("ES CADENA ");
                         return 'string';
                     }
-                    else if(variable.tipo == TIPO.ENTERO){
+                    else if(this.identificador.tipo == TIPO.ENTERO){
                         return 'int';
                     }
-                    else if(variable.tipo == TIPO.DECIMAL){
+                    else if(this.identificador.tipo == TIPO.DECIMAL){
                         return 'double';
                     }
-                    else if(variable.tipo == TIPO.BOOLEAN){
+                    else if(this.identificador.tipo == TIPO.BOOLEAN){
                         return 'boolean';
                     }
+                    else if(this.identificador.tipo == TIPO.ARREGLO){
+                        return 'arreglo';
+                    }
                     else{
+                        console.log(this.identificador.tipo);
                         return 'char';
                     }
+                    
                 }
-
-
+                //realiza el to String()
+                if(this.tipo_casteo == TIPO_NATIVA_CADENA.TOSTRING  ){
+                    this.tipo=TIPO.CADENA;
+                    return String(this.identificador.interpretar(entorno,arbol)+"");
+                }
 
 
                 if(this.identificador.tipo != TIPO.ENTERO){
@@ -122,7 +142,7 @@ export class CasteosTo extends Instruccion{
                         return new Excepcion("Semantico", "Error de operacion en Casteo variable diferente a NUMERO", `${this.fila}`, `${this.columna}`);
                     }
                 }
-
+                
                 if(this.tipo_casteo == TIPO_NATIVA_CADENA.TOINT){
                     this.tipo=TIPO.ENTERO;
                     return Number(this.identificador.interpretar(entorno,arbol)+"");

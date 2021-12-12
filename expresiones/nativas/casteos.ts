@@ -33,6 +33,10 @@ export class Casteos extends Instruccion{
     }
     interpretar(entorno: TablaSimbolos, arbol: Arbol): any {
         try {
+            const test1=this.identificador.interpretar(entorno,arbol);
+            if(test1 instanceof Excepcion){
+                return test1;
+            }
             //VERIFICA SI ES UN IDENTIFICADOR
             if(this.identificador instanceof Identificador){
                 console.log(this.identificador.id);
@@ -67,7 +71,9 @@ export class Casteos extends Instruccion{
             }else{
                 //verifica que la expresion sea CADENA
                 const test=this.identificador.interpretar(entorno,arbol);
-
+                if(test instanceof Excepcion){
+                    return test;
+                }
                 if(this.identificador.tipo != TIPO.CADENA){
                     return new Excepcion("Semantico", "Error de operacion en Casteo variable diferente a Cadena", `${this.fila}`, `${this.columna}`);
                 }

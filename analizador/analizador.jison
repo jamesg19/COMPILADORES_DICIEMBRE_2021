@@ -555,6 +555,8 @@ EXP
   { $$=new CasteosTo($3,TIPO_NATIVA_CADENA.TODOUBLE,@1.firt_line,@1.firt_column); }
   | typeof par_abierto EXP par_cerrado
   { $$=new CasteosTo($3,TIPO_NATIVA_CADENA.TYPEOF,@1.firt_line,@1.firt_column); }
+  | string par_abierto EXP par_cerrado
+  { $$=new CasteosTo($3,TIPO_NATIVA_CADENA.TOSTRING,@1.firt_line,@1.firt_column); }
 
 
 
