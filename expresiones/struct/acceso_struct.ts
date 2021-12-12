@@ -4,7 +4,7 @@ import { TablaSimbolos } from "../../table/tablasimbolos";
 import { Arbol } from "../../table/arbol";
 import { Excepcion } from "../../table/excepcion";
 import { Simbolo } from '../../table/simbolo';
-import { threadId } from "worker_threads";
+
 
 export class Acceso_Struct extends Instruccion {
   id: string;
@@ -49,11 +49,11 @@ export class Acceso_Struct extends Instruccion {
     let temp = sim_struct;
     let value_return =new Excepcion("Semantico",this.ids[this.ids.length-1]+" no se encontro en "+this.id,this.fila+"",this.columna+"");
     this.ids.forEach((x) => {
-        console.log("x",x)
+        
         if(temp.valor instanceof Map){
           if(temp.valor.has(x) && contador == 1){
             
-            return value_return =  temp.valor.get(x);
+            return value_return =  temp.valor.get(x).valor;
           }
           temp = temp.valor.get(x);
         }

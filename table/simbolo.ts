@@ -9,6 +9,7 @@ export class Simbolo {
     arreglo: boolean;
     struct: boolean;
     constante:boolean;
+    name_struct:string;
     /**
      * @param  {string} id
      * @param  {TIPO} tipo
@@ -26,7 +27,7 @@ export class Simbolo {
         this.arreglo = arreglo;
         
         this.valor = valor;//arreglo? JSON.parse(JSON.stringify(valor)):valor;
-        
+        this.name_struct = "";
         this.struct = struct;
         this.constante = false;
         

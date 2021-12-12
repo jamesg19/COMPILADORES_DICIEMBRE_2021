@@ -18,6 +18,7 @@ class Simbolo {
         this.columna = columna;
         this.arreglo = arreglo;
         this.valor = valor; //arreglo? JSON.parse(JSON.stringify(valor)):valor;
+        this.name_struct = "";
         this.struct = struct;
         this.constante = false;
     }

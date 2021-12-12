@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Print = void 0;
 const Instruccion_1 = require("../abs/Instruccion");
 const excepcion_1 = require("../table/excepcion");
-const acceso_struct_1 = require("../expresiones/struct/acceso_struct");
+const instancia_struct_1 = require("../expresiones/struct/instancia_struct");
 class Print extends Instruccion_1.Instruccion {
     /**
      * @param  {number} fila
@@ -32,8 +32,12 @@ class Print extends Instruccion_1.Instruccion {
                     return value;
                 }
                 if (value != undefined) {
-                    if (exp_print instanceof acceso_struct_1.Acceso_Struct)
+                    if (exp_print instanceof instancia_struct_1.Dec_Struct) {
+                        console.log("mal");
                         value = value.valor;
+                    }
+                    else
+                        value - value.valor;
                 }
                 else {
                     value = "Indefinido";
@@ -42,6 +46,15 @@ class Print extends Instruccion_1.Instruccion {
                 console.log(value);
             });
         }
+    }
+    print_struct(exp) {
+        let formato = exp.name_struct + " ( ";
+        if (exp.valor instanceof Map) {
+            exp.valor.forEach(element => {
+                console.log(element);
+            });
+        }
+        return formato;
     }
 }
 exports.Print = Print;

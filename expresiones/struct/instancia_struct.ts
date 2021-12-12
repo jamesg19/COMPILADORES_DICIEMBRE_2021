@@ -14,7 +14,7 @@ export class Dec_Struct extends Instruccion {
   id: string;
 
   values_atributos: Instruccion[];
-  list_atributos: Atributo[]; //null
+  
   list_simbolos: Map<string, Simbolo>;
   constructor(
     template_struct: string,
@@ -29,8 +29,9 @@ export class Dec_Struct extends Instruccion {
     this.id = id;
     this.values_atributos = values_atributos;
     this.id_struct = id_struct;
-    this.list_atributos = null;
+    
     this.list_simbolos = new Map();
+    
   }
 
   /**
@@ -71,7 +72,7 @@ export class Dec_Struct extends Instruccion {
 
     //obtengo el struct
     let template: Struct | undefined = arbol.structs.get(this.template_struct);
-
+    //console.log("template",template);
     //console.log(template);
 
     // //comparo que las listas sean del mismo tama;o
@@ -122,6 +123,9 @@ export class Dec_Struct extends Instruccion {
       false,
       true
     );
+    simbolo.name_struct = template.id;
+    
+    //console.log("this.template_struct",this.template_struct);
     entorno.addSimbolo(simbolo);
     //console.log("this", this);
     // //recorro la lista de valores para que se asigen a

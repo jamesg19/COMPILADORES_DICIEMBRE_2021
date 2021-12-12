@@ -31,10 +31,12 @@ export class Funcion extends Instruccion{
     Object.assign(this, {id, instrucciones, tipo_return, lista_parametros});
   }
     interpretar(entorno:TablaSimbolos, arbol:Arbol){
+      
         let entorno_local:TablaSimbolos = new TablaSimbolos(entorno);
         
         this.instrucciones.forEach((instruccion)=>{
             let value = instruccion.interpretar(entorno_local,arbol);
+            console.log()
             
             if(value instanceof Excepcion ){
                 arbol.excepciones.push(value);
@@ -47,6 +49,7 @@ export class Funcion extends Instruccion{
             if (value instanceof Return){
                 //this.tipo = value 
                 if(this.tipo == value.value.tipo){
+                  console.log(value.return_value);
                   return  value.return_value;
                 }
             }
