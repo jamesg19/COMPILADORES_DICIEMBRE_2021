@@ -678,7 +678,7 @@ LLAMADA_FUNCION_EXP:
 ;
 
 PARAMETROS_LLAMADA :
-    PARAMETROS_LLAMADA coma PARAMETRO_LLAMADA       { $1.push(3); $$ = $1; }
+    PARAMETROS_LLAMADA coma PARAMETRO_LLAMADA       { $1.push($3); $$ = $1; }
   | PARAMETRO_LLAMADA                               { $$ = [$1];           }
 ;
 
