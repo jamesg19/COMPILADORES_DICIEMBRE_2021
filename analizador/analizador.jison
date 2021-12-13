@@ -161,6 +161,9 @@
     const { Rango_Complete } = require('../expresiones/array/rango_complete');
     
     const { Multiplicacion_Arr } = require('../expresiones/array/operaciones/multiplicacion');
+    const { Division_Arr } = require('../expresiones/array/operaciones/division');
+    const { Suma_Arr } = require('../expresiones/array/operaciones/suma');
+    const { Resta_Arr } = require('../expresiones/array/operaciones/resta');
     //Tipos
     const { Primitivo } = require('../expresiones/primitivo');
     
@@ -738,5 +741,18 @@ INSTANCIA_STRUCT:
 
 ARRAY_METHOD:
   id nmral por EXP {$$ = new Multiplicacion_Arr($1,$4,@1.first_line,@1.first_column);}
+ | id nmral div EXP {$$ = new Division_Arr($1,$4,@1.first_line,@1.first_column);}
+ | id nmral menos EXP {$$ = new Resta_Arr($1,$4,@1.first_line,@1.first_column);}
+ | id nmral mas EXP {$$ = new Suma_Arr($1,$4,@1.first_line,@1.first_column);}
 ;
 
+/*
+'++'        return 'mas_mas';
+'+'         return 'mas';
+'--'        return 'menos_menos'
+'-'         return 'menos';
+'**'        return 'potencia';
+'*'         return 'por';
+'/'         return 'div';
+'%'         return 'mod';
+*/

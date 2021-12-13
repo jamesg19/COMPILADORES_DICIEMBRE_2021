@@ -5,7 +5,7 @@ import { Simbolo } from '../../../table/simbolo';
 import { Excepcion } from '../../../table/excepcion';
 import { TIPO } from '../../../table/TipoNativo';
 
-export class Multiplicacion_Arr extends Instruccion {
+export class Division_Arr extends Instruccion {
     
     id:string;
     exp:Instruccion;
@@ -39,8 +39,10 @@ export class Multiplicacion_Arr extends Instruccion {
         if(!(arr.valor instanceof Array))
         return new Excepcion("Semantico","Se esperaba un Arrego "+this.id,this.fila+"",this.columna+"");
      
+         if(value_exp == 0 )
+         return new Excepcion("Semantico","Error Aritmetico div/0 <-"+this.id,this.fila+"",this.columna+"");
          
-        let value_result = arr.valor.map((x)=> x*value_exp);
+        let value_result = arr.valor.map((x)=> x/value_exp);
         return value_result;
     }
     
