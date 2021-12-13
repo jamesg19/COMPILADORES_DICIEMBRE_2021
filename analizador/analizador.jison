@@ -160,6 +160,7 @@
     const { Fin_Rango } = require('../expresiones/array/fin_rango');
     const { Rango_Complete } = require('../expresiones/array/rango_complete');
     
+    const { Multiplicacion_Arr } = require('../expresiones/array/operaciones/multiplicacion');
     //Tipos
     const { Primitivo } = require('../expresiones/primitivo');
     
@@ -605,6 +606,7 @@ EXP
   | ARRAY_LENGTH                                        {   $$ = $1; }
   | ARRAY_POP                                           {   $$ = $1; }
   | corchete_abierto LISTA_EXPRESIONES corchete_cerrado {   $$ = $2;  }
+  | ARRAY_METHOD                                        {   $$ = $1; }
   
   //Types - accesos
   | ACCESO_TYPE     { $$ = $1;   }
@@ -729,5 +731,10 @@ INSTANCIA_STRUCT:
   id id igual id par_abierto LISTA_EXPRESIONES par_cerrado punto_coma
   {$$ = new Dec_Struct($1,$2,$4,$6,@1.first_line,@1.first_column); }
 
+;
+
+
+ARRAY_METHOD:
+  id nmral por EXP {$$ = new Multiplicacion_Arr($1,$4,@1.first_line,@1.first_column);}
 ;
 

@@ -51,4 +51,6 @@ void main()
     println(a[1:2]);
     println(a[2:end]);
     println(a[begin:2]);
+    println(a#*2);
+    
 }
