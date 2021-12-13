@@ -64,6 +64,8 @@
 'pop'       return 'pop';
 'push'      return 'push';
 'main'      return 'main';
+'begin'     return 'begin';
+'end'       return 'end';
 
 //Patrones numericos
 [0-9]+\b  	return 'entero';
@@ -153,6 +155,10 @@
     const { Pop_List } = require('../expresiones/array/pop_list');
     const { Push_List } = require('../expresiones/array/push_list');
     const { Push } = require('../expresiones/array/push');
+    const { Rango } = require('../expresiones/array/rango');
+    const { Begin_Rango } = require('../expresiones/array/begin_rango');
+    const { Fin_Rango } = require('../expresiones/array/fin_rango');
+    const { Rango_Complete } = require('../expresiones/array/rango_complete');
     
     //Tipos
     const { Primitivo } = require('../expresiones/primitivo');
@@ -299,8 +305,8 @@ INSTRUCCION:
   | PRINT                           {   $$ = $1 } //listo
   | LLAMADA_FUNCION_EXP punto_coma  {   $$ = $1 }
   | MODIFICAR_ARREGLO               {   $$ = $1 }
-  //| ACCESO_TYPE                 { $$ = $1 }
-  | error {console.log("errir",$1)}
+  | ACCESO_TYPE                     { $$ = $1 }
+  //| error {console.log("errir",$1)}
   
 ;
 
@@ -707,7 +713,11 @@ MODIFICAR_ARREGLO:
   id EXPS_CORCHETE igual EXP punto_coma                 {  $$ = new Modificar($1,$2, $4,@1.first_line,@1.first_column); }
 ;
 ACCESO_ARREGLO:
-  id  EXPS_CORCHETE                                     {  $$ = new Acceso($1,$2,@1.first_line,@1.first_column); }
+   id  EXPS_CORCHETE                                            {  $$ = new Acceso($1,$2,@1.first_line,@1.first_column); }
+  | id  corchete_abierto begin dos_puntos EXP corchete_cerrado  {  $$ = new Fin_Rango($1,$5,@1.first_line,@1.first_column); }
+  | id  corchete_abierto EXP dos_puntos end corchete_cerrado    {  $$ = new Begin_Rango($1,$3,@1.first_line,@1.first_column); }
+  | id  corchete_abierto EXP dos_puntos EXP corchete_cerrado    {  $$ = new Rango($1,$3 ,$5,@1.first_line,@1.first_column); }
+  | id  corchete_abierto begin dos_puntos end corchete_cerrado    {  $$ = new Rango_Complete($1,$3 ,$5,@1.first_line,@1.first_column); }
 ;
 
 
