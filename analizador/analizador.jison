@@ -112,7 +112,7 @@
 //operadores logicos
 '!='        return 'dif_que';
 '&&'        return 'and';
-'&'         return 'concatenacion';
+'&'         return 'mas';
 '||'        return 'or';
 '!'         return 'not';
 '?'         return 'interrogacion';
@@ -149,6 +149,9 @@
     const { Return }  = require ('../instruccion/Return');
     const { Main }    = require ('../instruccion/main');
     const { Asignacion } = require('../instruccion/asignacion');
+    const { Asignacion_Mas } = require('../instruccion/asignacion_mas');
+    const { List_Declaracion } = require('../instruccion/list_declaracion');
+    //List_Declaracion
     const { Modificar }  = require('../expresiones/array/modificar_array');
     const { Acceso }     = require('../expresiones/array/acceso');
     const { Pop } = require('../expresiones/array/pop');
@@ -159,7 +162,14 @@
     const { Begin_Rango } = require('../expresiones/array/begin_rango');
     const { Fin_Rango } = require('../expresiones/array/fin_rango');
     const { Rango_Complete } = require('../expresiones/array/rango_complete');
+    const { Seno_Arr } = require('../expresiones/array/operaciones/seno');
+    const { Cos_Arr } = require('../expresiones/array/operaciones/cos');
+    const { Tan_Arr } = require('../expresiones/array/operaciones/tan');
     
+    const { Multiplicacion_Arr } = require('../expresiones/array/operaciones/multiplicacion');
+    const { Division_Arr } = require('../expresiones/array/operaciones/division');
+    const { Suma_Arr } = require('../expresiones/array/operaciones/suma');
+    const { Resta_Arr } = require('../expresiones/array/operaciones/resta');
     //Tipos
     const { Primitivo } = require('../expresiones/primitivo');
     
@@ -350,8 +360,10 @@ FOR_IN
 ;
 
 ASIGNACION 
-  : id igual EXP punto_coma {  $$ = new Asignacion($1, $3,false,@1.firt_line,@1.firt_column); }
-
+  : id igual EXP punto_coma       {  $$ = new Asignacion($1, $3,false,@1.firt_line,@1.firt_column); }
+  | id mas igual EXP punto_coma   {  $$ = new Asignacion_Mas($1, $4,true,@1.firt_line,@1.firt_column); }
+  | id menos igual EXP punto_coma   {  $$ = new Asignacion_Mas($1, $4,false,@1.firt_line,@1.firt_column); }
+  
   // type.accesos = EXP ; || type.accesos[][] = EXP;
   
  // | id LISTA_ACCESOS_TYPE TIPO_IGUAL EXP PT_COMA {   }
@@ -489,10 +501,15 @@ ATRIBUTO
 //=========================================>fin
 
 DECLARACION_VARIABLE 
-  : TIPO_DEC_VARIABLE id igual EXP punto_coma  {  $$ = new D_IdExp($1, $2, $4,false,@1.firt_line,@1.firt_column);  }
-  | TIPO_DEC_VARIABLE id punto_coma            {  $$ = new D_Id($1, $2,false,@1.firt_line,@1.firt_column);  }   
+  : TIPO_DEC_VARIABLE id igual EXP punto_coma      {  $$ = new D_IdExp($1, $2, $4,false,@1.firt_line,@1.firt_column);  }
+  | TIPO_DEC_VARIABLE id           punto_coma      {  $$ = new D_Id($1, $2,false,@1.firt_line,@1.firt_column);         }   
+  | TIPO_DEC_VARIABLE id coma  LIST_ID punto_coma  {  $4.push(2) ; $$ = new List_Declaracion($1,$4,@1.first_line,@1.first_column)   }
   
-  //| TIPO_DEC_VARIABLE LIST_ID punto_coma     {  $$ = new D_IdList($1, $2,false,@1.firt_line,@1.firt_column);  }   
+     
+;
+LIST_ID:
+    LIST_ID coma id                            { $1.push($3); $$ = $1;}
+  | id                                         { $$ = [$1]}
 ;
 
 DECLARACION_VARIABLE_FOR 
@@ -597,6 +614,7 @@ EXP
   | ARRAY_LENGTH                                        {   $$ = $1; }
   | ARRAY_POP                                           {   $$ = $1; }
   | corchete_abierto LISTA_EXPRESIONES corchete_cerrado {   $$ = $2;  }
+  | ARRAY_METHOD                                        {   $$ = $1; }
   
   //Types - accesos
   | ACCESO_TYPE     { $$ = $1;   }
@@ -723,3 +741,24 @@ INSTANCIA_STRUCT:
 
 ;
 
+
+ARRAY_METHOD:
+  id nmral por EXP {$$ = new Multiplicacion_Arr($1,$4,@1.first_line,@1.first_column);}
+ | id nmral div EXP {$$ = new Division_Arr($1,$4,@1.first_line,@1.first_column);}
+ | id nmral menos EXP {$$ = new Resta_Arr($1,$4,@1.first_line,@1.first_column);}
+ | id nmral mas EXP {$$ = new Suma_Arr($1,$4,@1.first_line,@1.first_column);}
+ | sin nmral par_abierto id par_cerrado { $$ = new Seno_Arr($4,@1.first_line,@1.first_column);}
+ | cos nmral par_abierto id par_cerrado {$$ = new Cos_Arr($4,@1.first_line,@1.first_column);}
+ | tan nmral par_abierto id par_cerrado {$$ = new Tan_Arr($4,@1.first_line,@1.first_column);}
+;
+
+/*
+'++'        return 'mas_mas';
+'+'         return 'mas';
+'--'        return 'menos_menos'
+'-'         return 'menos';
+'**'        return 'potencia';
+'*'         return 'por';
+'/'         return 'div';
+'%'         return 'mod';
+*/

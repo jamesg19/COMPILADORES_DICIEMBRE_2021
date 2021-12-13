@@ -46,9 +46,27 @@ void main()
    // println(ackerman(3, 5) );
     // println("===============HANOI=================================");
     // hanoi(3, 1, 2, 3);
-    int[] a = [1,2,3,4,5,6];
+    int[] a = [ 1,2,3,4,5,6 ];
+    int  b, c,d,e;
+    
+    c += 123;
+    c -= 4;
+    
+    a = sin#(a);
+    println(a);
+    
+    println('b = ' & b);
+    println('c = ' & c);
     println(a[begin:end]);
     println(a[1:2]);
     println(a[2:end]);
     println(a[begin:2]);
+    println(a#*2);
+    println(a#-2);
+    println(a#/2);
+    println(a#+2);
+    
+    println(sin#(a));
+    println(cos#(a));
+    println(tan#(a));
 }
