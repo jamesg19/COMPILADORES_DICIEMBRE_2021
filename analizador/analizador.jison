@@ -159,6 +159,9 @@
     const { Begin_Rango } = require('../expresiones/array/begin_rango');
     const { Fin_Rango } = require('../expresiones/array/fin_rango');
     const { Rango_Complete } = require('../expresiones/array/rango_complete');
+    const { Seno_Arr } = require('../expresiones/array/operaciones/seno');
+    const { Cos_Arr } = require('../expresiones/array/operaciones/cos');
+    const { Tan_Arr } = require('../expresiones/array/operaciones/tan');
     
     const { Multiplicacion_Arr } = require('../expresiones/array/operaciones/multiplicacion');
     const { Division_Arr } = require('../expresiones/array/operaciones/division');
@@ -744,6 +747,9 @@ ARRAY_METHOD:
  | id nmral div EXP {$$ = new Division_Arr($1,$4,@1.first_line,@1.first_column);}
  | id nmral menos EXP {$$ = new Resta_Arr($1,$4,@1.first_line,@1.first_column);}
  | id nmral mas EXP {$$ = new Suma_Arr($1,$4,@1.first_line,@1.first_column);}
+ | sin nmral par_abierto id par_cerrado { $$ = new Seno_Arr($4,@1.first_line,@1.first_column);}
+ | cos nmral par_abierto id par_cerrado {$$ = new Cos_Arr($4,@1.first_line,@1.first_column);}
+ | tan nmral par_abierto id par_cerrado {$$ = new Tan_Arr($4,@1.first_line,@1.first_column);}
 ;
 
 /*

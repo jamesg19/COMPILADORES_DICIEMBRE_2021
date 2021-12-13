@@ -56,4 +56,7 @@ void main()
     println(a#/2);
     println(a#+2);
     
+    println(sin#(a));
+    println(cos#(a));
+    println(tan#(a));
 }
