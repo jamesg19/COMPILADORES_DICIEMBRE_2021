@@ -10,6 +10,7 @@ export class Simbolo {
     struct: boolean;
     constante:boolean;
     name_struct:string;
+    print_text:string
     /**
      * @param  {string} id
      * @param  {TIPO} tipo
@@ -76,7 +77,29 @@ export class Simbolo {
     getStruct() {
         return this.struct
     }
-    
+    toString():string{
+        let value:string  = this.valor;
+        
+        if(this.struct){
+            
+            value = "";
+            
+            value = this.name_struct + "( ";
+            console.log()
+              if (this.valor instanceof Map) {
+                //sim.valor.map((x)=> console.log(x));
+                this.valor.forEach((x) => {
+                    //if(x instanceof Simbolo)
+                    value += x.id+ " = "+x.valor+", ";//x.toString()//x();
+                });
+                value = value.slice(0, value.length - 2);
+                value += " )";
+              }
+            //else if(this.valor instanceof )
+            
+        }
+        return value;
+    }
 
 
 }

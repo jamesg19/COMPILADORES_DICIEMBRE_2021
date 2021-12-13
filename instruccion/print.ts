@@ -36,36 +36,38 @@ export class Print extends Instruccion {
     //const value = this.value.interpretar(entorno,arbol);
     if (this.value != undefined) {
       this.value.forEach((exp_print) => {
-        
         let value = exp_print.interpretar(entorno, arbol);
         if (value instanceof Excepcion) {
           console.log(value);
           return value;
         }
         if (value != undefined) {
-          
-          if (exp_print instanceof Dec_Struct ) {
-          console.log("mal")
+          if (exp_print instanceof Dec_Struct) {
+            console.log("mal");
             value = value.valor;
-          
-          }else
-          value - value.valor;
-          
+          } else if (exp_print instanceof Identificador) {
+            let sim = entorno.getSimbolo(exp_print.id);
+            
+            if (sim?.struct) {
+              
+              value = sim.toString();
+              
+            } else value - value.valor;
+          } else value - value.valor;
         } else {
           value = "Indefinido";
         }
 
         arbol.consola += value;
         console.log(value);
-        
       });
     }
   }
-  
-  print_struct(exp:Simbolo):string{
-    let formato:string=exp.name_struct+" ( ";
-    if(exp.valor instanceof Map){
-      exp.valor.forEach(element => {
+
+  print_struct(exp: Simbolo): string {
+    let formato: string = exp.name_struct + " ( ";
+    if (exp.valor instanceof Map) {
+      exp.valor.forEach((element) => {
         console.log(element);
       });
     }

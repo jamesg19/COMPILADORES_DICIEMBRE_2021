@@ -1,72 +1,52 @@
-int ackerman(int m, int n)
-{    
-    if (m == 0){
-        return n + 1;
-    }else if (m > 0 && n == 0){
-        return ackerman(m - 1, 1);
-    }else{
-        return ackerman(m - 1, ackerman(m, n - 1));
-    }
-}
+// int ackerman(int m, int n)
+// {    
+//     if (m == 0){
+//         return n + 1;
+//     }else if (m > 0 && n == 0){
+//         return ackerman(m - 1, 1);
+//     }else{
+//         return ackerman(m - 1, ackerman(m, n - 1));
+//     }
+// }
 
-void hanoi( int discos, int origen, int auxiliar, int destino)
-{
-    println(discos);
+// void hanoi( int discos, int origen, int auxiliar, int destino)
+// {
+//     println(discos);
     
-    // if (discos == 1){
-    //     println("Mover de " + origen + " a " + destino);
-    // }else{
-    //     hanoi(discos - 1, origen, destino, auxiliar);
-    //     println("Mover de " + origen + " a " + destino);
-    //     hanoi(discos - 1, auxiliar, origen, destino);
-    // }
-}
+//     // if (discos == 1){
+//     //     println("Mover de " + origen + " a " + destino);
+//     // }else{
+//     //     hanoi(discos - 1, origen, destino, auxiliar);
+//     //     println("Mover de " + origen + " a " + destino);
+//     //     hanoi(discos - 1, auxiliar, origen, destino);
+//     // }
+// }
 
-int factorial(int num){
+// int factorial(int num){
     
-    //println(num);
-    if (num == 1){
-        return 1;
-    }else{
-        return num * factorial(num - 1);
-    }
+//     //println(num);
+//     if (num == 1){
+//         return 1;
+//     }else{
+//         return num * factorial(num - 1);
+//     }
 
-}
+// }
 
+struct mi_struct{int a, int b};
+struct otro{int c, mi_struct c};
 void main()
 {
     // println("=====================================================");
-    // println("===========FUNCIONES RECURSIVAS======================");
+    // println("=========== Struct======================");
     // println("=====================================================");
     // println("");
+    int[] v = [1,2,3,4];
+    int a ,b,c,d;
+    println(a,b,c,d);
+    mi_struct m = mi_struct(1,v);
+    otro o = otro(1,m);
+    println (m.a);
+    println(o);
 
-    println("==============FACTORIAL==============================");
-   // println(factorial(6));
-   // println("===============ACKERMAN==============================");
-   // println(ackerman(3, 5) );
-    // println("===============HANOI=================================");
-    // hanoi(3, 1, 2, 3);
-    int[] a = [ 1,2,3,4,5,6 ];
-    int  b, c,d,e;
-    
-    c += 123;
-    c -= 4;
-    
-    a = sin#(a);
-    println(a);
-    
-    println('b = ' & b);
-    println('c = ' & c);
-    println(a[begin:end]);
-    println(a[1:2]);
-    println(a[2:end]);
-    println(a[begin:2]);
-    println(a#*2);
-    println(a#-2);
-    println(a#/2);
-    println(a#+2);
-    
-    println(sin#(a));
-    println(cos#(a));
-    println(tan#(a));
 }

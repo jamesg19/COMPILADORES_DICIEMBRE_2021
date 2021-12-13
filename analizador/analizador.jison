@@ -513,7 +513,7 @@ ATRIBUTO
 DECLARACION_VARIABLE 
   : TIPO_DEC_VARIABLE id igual EXP punto_coma      {  $$ = new D_IdExp($1, $2, $4,false,@1.firt_line,@1.firt_column);  }
   | TIPO_DEC_VARIABLE id           punto_coma      {  $$ = new D_Id($1, $2,false,@1.firt_line,@1.firt_column);         }   
-  | TIPO_DEC_VARIABLE id coma  LIST_ID punto_coma  {  $4.push(2) ; $$ = new List_Declaracion($1,$4,@1.first_line,@1.first_column)   }
+  | TIPO_DEC_VARIABLE id coma  LIST_ID punto_coma  {  $4.push($2) ; $$ = new List_Declaracion($1,$4,@1.first_line,@1.first_column)   }
   
      
 ;
@@ -748,6 +748,7 @@ EXPS_CORCHETE:
 INSTANCIA_STRUCT:
   id id igual id par_abierto LISTA_EXPRESIONES par_cerrado punto_coma
   {$$ = new Dec_Struct($1,$2,$4,$6,@1.first_line,@1.first_column); }
+  //| id id  {$$ = new Dec_Struct($1,$2,,$6,@1.first_line,@1.first_column); }
 
 ;
 

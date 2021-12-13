@@ -49,11 +49,14 @@ export class Acceso_Struct extends Instruccion {
     let temp = sim_struct;
     let value_return =new Excepcion("Semantico",this.ids[this.ids.length-1]+" no se encontro en "+this.id,this.fila+"",this.columna+"");
     this.ids.forEach((x) => {
+      
+        
         
         if(temp.valor instanceof Map){
           if(temp.valor.has(x) && contador == 1){
+            value_return =  temp.valor.get(x).valor;
             
-            return value_return =  temp.valor.get(x).valor;
+            return value_return;//value_return =  temp.valor.get(x).valor;
           }
           temp = temp.valor.get(x);
         }

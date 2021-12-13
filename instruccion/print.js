@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Print = void 0;
 const Instruccion_1 = require("../abs/Instruccion");
 const excepcion_1 = require("../table/excepcion");
+const identificador_1 = require("../expresiones/identificador");
 const instancia_struct_1 = require("../expresiones/struct/instancia_struct");
 class Print extends Instruccion_1.Instruccion {
     /**
@@ -36,6 +37,14 @@ class Print extends Instruccion_1.Instruccion {
                         console.log("mal");
                         value = value.valor;
                     }
+                    else if (exp_print instanceof identificador_1.Identificador) {
+                        let sim = entorno.getSimbolo(exp_print.id);
+                        if (sim === null || sim === void 0 ? void 0 : sim.struct) {
+                            value = sim.toString();
+                        }
+                        else
+                            value - value.valor;
+                    }
                     else
                         value - value.valor;
                 }
@@ -50,7 +59,7 @@ class Print extends Instruccion_1.Instruccion {
     print_struct(exp) {
         let formato = exp.name_struct + " ( ";
         if (exp.valor instanceof Map) {
-            exp.valor.forEach(element => {
+            exp.valor.forEach((element) => {
                 console.log(element);
             });
         }
