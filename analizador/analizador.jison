@@ -242,17 +242,7 @@
 %left 'umenos'
 %right 'potencia'
 %left 'mas_mas' 'menos_menos' //listo
-%left 'interrogacion'
-%left 'or' //listo
-%left 'and'//listo
-%left 'not' //listo
-%left 'igual_que' 'dif_que' //listo
-%left 'mayor' 'menor' 'mayor_igual' 'menor_igual' //listo
-%left 'mas' 'menos'
-%left 'por' 'div' 'mod' 'repeticion'
-%left 'umenos'
-%right 'potencia'
-%left 'mas_mas' 'menos_menos' //listo
+
 
 %start INICIO 
 

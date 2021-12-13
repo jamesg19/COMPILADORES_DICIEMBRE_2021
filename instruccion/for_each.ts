@@ -194,7 +194,7 @@ export class ForEach extends Instruccion {
 
 
 
-
+            //new Arreglo ($1,$3,$6,$1,$3,@1.first_line,@1.first_column)
 
 
 
