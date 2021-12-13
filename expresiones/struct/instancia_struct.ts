@@ -95,7 +95,7 @@ export class Dec_Struct extends Instruccion {
     //    console.log("lst_simbolos",lst_simbolos);
     let contador: number = 0;
 
-    template?.lista_simbolo.forEach((x) => {
+    template?.lista_atributos.forEach((x) => {
       let result = this.values_atributos[contador].interpretar(entorno, arbol);
 
       if (this.values_atributos[contador].tipo != x.tipo)
@@ -125,7 +125,7 @@ export class Dec_Struct extends Instruccion {
     );
     simbolo.name_struct = template.id;
     
-    //console.log("this.template_struct",this.template_struct);
+    
     entorno.addSimbolo(simbolo);
     //console.log("this", this);
     // //recorro la lista de valores para que se asigen a
