@@ -112,7 +112,7 @@
 //operadores logicos
 '!='        return 'dif_que';
 '&&'        return 'and';
-'&'         return 'concatenacion';
+'&'         return 'mas';
 '||'        return 'or';
 '!'         return 'not';
 '?'         return 'interrogacion';
@@ -149,6 +149,9 @@
     const { Return }  = require ('../instruccion/Return');
     const { Main }    = require ('../instruccion/main');
     const { Asignacion } = require('../instruccion/asignacion');
+    const { Asignacion_Mas } = require('../instruccion/asignacion_mas');
+    const { List_Declaracion } = require('../instruccion/list_declaracion');
+    //List_Declaracion
     const { Modificar }  = require('../expresiones/array/modificar_array');
     const { Acceso }     = require('../expresiones/array/acceso');
     const { Pop } = require('../expresiones/array/pop');
@@ -367,8 +370,10 @@ FOR_IN
 ;
 
 ASIGNACION 
-  : id igual EXP punto_coma {  $$ = new Asignacion($1, $3,false,@1.firt_line,@1.firt_column); }
-
+  : id igual EXP punto_coma       {  $$ = new Asignacion($1, $3,false,@1.firt_line,@1.firt_column); }
+  | id mas igual EXP punto_coma   {  $$ = new Asignacion_Mas($1, $4,true,@1.firt_line,@1.firt_column); }
+  | id menos igual EXP punto_coma   {  $$ = new Asignacion_Mas($1, $4,false,@1.firt_line,@1.firt_column); }
+  
   // type.accesos = EXP ; || type.accesos[][] = EXP;
   
  // | id LISTA_ACCESOS_TYPE TIPO_IGUAL EXP PT_COMA {   }
@@ -506,10 +511,15 @@ ATRIBUTO
 //=========================================>fin
 
 DECLARACION_VARIABLE 
-  : TIPO_DEC_VARIABLE id igual EXP punto_coma  {  $$ = new D_IdExp($1, $2, $4,false,@1.firt_line,@1.firt_column);  }
-  | TIPO_DEC_VARIABLE id punto_coma            {  $$ = new D_Id($1, $2,false,@1.firt_line,@1.firt_column);  }   
+  : TIPO_DEC_VARIABLE id igual EXP punto_coma      {  $$ = new D_IdExp($1, $2, $4,false,@1.firt_line,@1.firt_column);  }
+  | TIPO_DEC_VARIABLE id           punto_coma      {  $$ = new D_Id($1, $2,false,@1.firt_line,@1.firt_column);         }   
+  | TIPO_DEC_VARIABLE id coma  LIST_ID punto_coma  {  $4.push(2) ; $$ = new List_Declaracion($1,$4,@1.first_line,@1.first_column)   }
   
-  //| TIPO_DEC_VARIABLE LIST_ID punto_coma     {  $$ = new D_IdList($1, $2,false,@1.firt_line,@1.firt_column);  }   
+     
+;
+LIST_ID:
+    LIST_ID coma id                            { $1.push($3); $$ = $1;}
+  | id                                         { $$ = [$1]}
 ;
 
 DECLARACION_VARIABLE_FOR 

@@ -41,7 +41,7 @@ export class Suma_Arr extends Instruccion {
         return new Excepcion("Semantico","Se esperaba un Arrego "+this.id,this.fila+"",this.columna+"");
      
          
-        let value_result = arr.valor.map((x)=> Number(x) + value_exp);
+        let value_result = arr.valor.map((x)=> Number(x) + Number(value_exp));
         return value_result;
     }
     

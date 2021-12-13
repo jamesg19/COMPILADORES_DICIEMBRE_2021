@@ -30,7 +30,7 @@ export class Cos_Arr extends Instruccion {
         if(!(arr.valor instanceof Array))
         return new Excepcion("Semantico","Se esperaba un Arrego "+this.id,this.fila+"",this.columna+"");
      
-         console.log("coseno")
+         
         let value_result = arr.valor.
                                 map((x)=>  Math.cos(parseFloat(x)));
         return value_result;
