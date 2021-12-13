@@ -89,7 +89,7 @@ export class RepeticionCadena extends Instruccion{
                 for(let i=0;i<this.inicio.interpretar(entorno,arbol);i++){
                     cadena+=this.identificador.interpretar(entorno,arbol);
                 }
-
+                this.tipo=TIPO.CADENA;
                 return cadena;
 
 
