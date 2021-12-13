@@ -49,11 +49,13 @@ export class Funcion extends Instruccion{
             }
 
             if (value instanceof Return){
-              //console.log("TODO BIEN CARNALIn");
+              
                 //this.tipo = value 
+                
                 if(this.tipo == value.value.tipo){
                   //return  return_value = instruccion.return_value;
-                  return  return_value = value.value?.interpretar(entorno,arbol);
+                  //console.log(value.value?.interpretar(entorno,arbol)+" VALOR KK");
+                  return  return_value = value.return_value;
                 }
             }
         })  ; 
