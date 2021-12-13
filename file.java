@@ -48,5 +48,7 @@ void main()
     // hanoi(3, 1, 2, 3);
     int[] a = [1,2,3,4,5,6];
     println(a[begin:end]);
+    println(a[1:2]);
+    println(a[2:end]);
     println(a[begin:2]);
 }

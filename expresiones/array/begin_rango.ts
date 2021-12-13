@@ -17,7 +17,7 @@ export class Begin_Rango extends Instruccion {
   interpretar(entorno: TablaSimbolos, arbol: Arbol) {
     let final_value = this.fin.interpretar(entorno, arbol);
     if (final_value instanceof Excepcion) return final_value;
-    if (final_value)
+    if (!final_value)
       return new Excepcion(
         "Semantico",
         " Se requiere una expresion ",
@@ -26,6 +26,7 @@ export class Begin_Rango extends Instruccion {
       );
 
       final_value = Number(final_value);
+
     if (!isNumber(final_value))
       return new Excepcion(
         "Semantico",
