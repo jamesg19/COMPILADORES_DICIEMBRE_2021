@@ -112,7 +112,7 @@
 //operadores logicos
 '!='        return 'dif_que';
 '&&'        return 'and';
-'&'         return 'mas';
+'&'         return 'mass';
 '||'        return 'or';
 '!'         return 'not';
 '?'         return 'interrogacion';
@@ -247,22 +247,12 @@
 %left 'not' //listo
 %left 'igual_que' 'dif_que' //listo
 %left 'mayor' 'menor' 'mayor_igual' 'menor_igual' //listo
-%left 'mas' 'menos'
+%left 'mas' 'menos' 'mass'
 %left 'por' 'div' 'mod' 'repeticion'
 %left 'umenos'
 %right 'potencia'
 %left 'mas_mas' 'menos_menos' //listo
-%left 'interrogacion'
-%left 'or' //listo
-%left 'and'//listo
-%left 'not' //listo
-%left 'igual_que' 'dif_que' //listo
-%left 'mayor' 'menor' 'mayor_igual' 'menor_igual' //listo
-%left 'mas' 'menos'
-%left 'por' 'div' 'mod' 'repeticion'
-%left 'umenos'
-%right 'potencia'
-%left 'mas_mas' 'menos_menos' //listo
+
 
 %start INICIO 
 
@@ -547,6 +537,7 @@ EXP
   //Operaciones Aritmeticas
   : menos EXP %prec UMENOS          { $$ = new NegacionNum(6,$2,0,@1.firt_line,@1.firt_column);   }
   | EXP mas EXP                     { $$ = new Suma(0,$1,$3,@1.firt_line,@1.firt_column);         }
+  | EXP mass EXP                    { $$ = new Suma(0,$1,$3,@1.firt_line,@1.firt_column);         }
   | EXP menos EXP                   { $$ = new Resta(1,$1,$3,@1.firt_line,@1.firt_column);        } 
   | EXP por EXP                     { $$ = new Multiplicar(2,$1,$3,@1.firt_line,@1.firt_column);  }
   | EXP div EXP                     { $$ = new Division(3,$1,$3,@1.firt_line,@1.firt_column);     }
