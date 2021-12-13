@@ -224,6 +224,7 @@
     const { Default } = require('../instruccion/default');
     const { Break } = require('../instruccion/break');
     const { For } = require('../instruccion/for');
+    const { ForEach } = require('../instruccion/for_each');
     const { While } = require('../instruccion/while');
     const { DoWhile } = require('../instruccion/do_while');
     const { Continue } = require('../instruccion/continue');
@@ -299,7 +300,7 @@ INSTRUCCION:
   | DO_WHILE 	                      {   $$ = $1 }
   | FOR 	                          {   $$ = $1 }
   | FOR1_OF 	                      {   $$ = $1 }
-  | FOR2_IN 	                      {   $$ = $1 }
+  | FOR_IN 	                        {   $$ = $1 }
   | INCREMENTO_DECREMENTO           {   $$ = $1 }
   | PRINTLN                         {   $$ = $1 }
   | PRINT                           {   $$ = $1 } //listo
@@ -355,7 +356,8 @@ FOR_OF
 
 
 FOR_IN 
-  : for par_abierto TIPO_DEC_VARIABLE id in EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada {   }
+  : for id in EXP  llave_abierta INSTRUCCIONES llave_cerrada 
+  { $$=new ForEach($2,$4,$6,@1.first_line,@1.first_column);  }
 ;
 
 ASIGNACION 
