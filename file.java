@@ -44,6 +44,9 @@ void main()
    // println(factorial(6));
    // println("===============ACKERMAN==============================");
    // println(ackerman(3, 5) );
-    println("===============HANOI=================================");
-    hanoi(3, 1, 2, 3);
+    // println("===============HANOI=================================");
+    // hanoi(3, 1, 2, 3);
+    int[] a = [1,2,3,4,5,6];
+    println(a[begin:end]);
+    println(a[begin:2]);
 }
