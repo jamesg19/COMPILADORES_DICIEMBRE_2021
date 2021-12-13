@@ -21,6 +21,7 @@ export class ForEach extends Instruccion {
     fila: number;
     columna:number;
     hayContinue:boolean;
+    hayBreak:boolean;
 
     
     //for letra in cadena{
@@ -34,6 +35,7 @@ export class ForEach extends Instruccion {
         this.condicion=condicion;
         this.instrucciones=instrucciones;
         this.hayContinue=false;
+        this.hayBreak=false;
     }
     /**
      * METODO INTERPRETAR CICLO FOR
@@ -54,24 +56,86 @@ export class ForEach extends Instruccion {
             //verifica que exista el IDENTIFICADOR
             const variable=entorno.getSimbolo(this.condicion.id+"");
             if (variable == null) {
-                return new Excepcion("Semantico","No existe la variable " + `${this.condicion.id}`, `${this.fila}`,`${this.columna}`);
+                return new Excepcion("Semantico","No existe la variable " + `${this.condicion}`, `${this.fila}`,`${this.columna}`);
             }
-            //verifica si es un ARREGLO
+
+
+            //declara la variable temporal
+            const declaracion_temp=new D_Id(TIPO.CADENA,this.temporal,false,this.fila,this.columna);
+            const declaracion_tmp=declaracion_temp.interpretar(entorno,arbol);
+            if(declaracion_tmp instanceof Excepcion){
+                return declaracion_tmp;
+            }
+
+            //--------------------------------verifica si es un ARREGLO-----------------------------
             if( variable.arreglo){
 
-            }
-            //caso contrario es una variable tradicional
-            else{
+                var cantidad=this.condicion.interpretar(entorno,arbol);
+                if(cantidad instanceof Excepcion){
+                    return cantidad;
+                }
+                for(let i=0;i<cantidad.length;i++){
+                    const nueva_tabla=new TablaSimbolos(entorno);
+                    //creamos el objeto primitivo del valor en la posicion i
+                    const valor=new Primitivo(variable.tipo,cantidad[i],this.fila,this.columna);
+                    
+                    //asignacion del valor a la variable temporal
+                    const asignacion_temp= new Asignacion(this.temporal,valor,this.fila,this.columna);
+                    asignacion_temp.interpretar(nueva_tabla,arbol);
 
-                //declara la variable temporal
-                const declaracion_temp=new D_Id(TIPO.CADENA,this.temporal,false,this.fila,this.columna);
-                const declaracion_tmp=declaracion_temp.interpretar(entorno,arbol);
-                if(declaracion_tmp instanceof Excepcion){
-                    return declaracion_tmp;
+                    //ejecucion de las instrucciones
+                    //ejecuta las instrucciones que estan dentro del FOR
+                    this.instrucciones.forEach((element:Instruccion) => {
+                        
+                        const result=element.interpretar(nueva_tabla,arbol);
+
+                        if(result instanceof Excepcion){
+                            arbol.excepciones.push(result);
+                            arbol.updateConsolaError(result.toString());
+                        }
+                        
+                        if(result instanceof Break){
+                            this.hayBreak=true;
+                            return result;
+                        }
+                        if(result instanceof Return){
+                            return result;
+                        }
+                        //VERIFICA SI VIENE UN CONTINUE
+                        if(result instanceof Continue){
+                            this.hayContinue=true;
+                            return result;
+                        }
+
+                    });
+                     //verifica si viene un continue en ForEach   
+                    if(this.hayContinue){
+                        
+                        //i++;
+                        this.hayContinue=false;
+                        continue;
+                    }
+                    if(this.hayBreak){
+                        
+                        this.hayBreak=false;
+                        break;
+                    }
+                    
                 }
 
-                var cantidad=this.condicion.interpretar(entorno,arbol);
+            }
+            //--------------------caso contrario es una variable tradicional-----------------------
+            //--------------------caso contrario es una variable tradicional-----------------------
+            //--------------------caso contrario es una variable tradicional-----------------------
+            //--------------------caso contrario es una variable tradicional-----------------------
+            else{
+
                 
+
+                var cantidad=this.condicion.interpretar(entorno,arbol);
+                if(cantidad instanceof Excepcion){
+                    return cantidad;
+                }
                 for(let i=0;i<cantidad.length;i++){
                     const nueva_tabla=new TablaSimbolos(entorno);
                     //creamos el objeto primitivo del valor en la posicion i
@@ -93,16 +157,114 @@ export class ForEach extends Instruccion {
                         }
                         
                         if(result instanceof Break){
+                            this.hayBreak=true;
                             return result;
                         }
                         if(result instanceof Return){
                             return result;
                         }
+                        //VERIFICA SI VIENE UN CONTINUE
+                        if(result instanceof Continue){
+                            this.hayContinue=true;
+                            return result;
+                        }
 
                     });
+                     //verifica si viene un continue en ForEach   
+                    if(this.hayContinue){
+                        
+                        //i++;
+                        this.hayContinue=false;
+                        continue;
+                    }
+                    if(this.hayBreak){
+                        
+                        this.hayBreak=false;
+                        break;
+                    }
                     
                 }
             }
+
+
+
+        }else{
+
+            //verifica qsi es un arreglo
+
+
+
+
+
+
+
+
+
+            
+
+
+
+            //declara la variable temporal
+            const declaracion_temp=new D_Id(TIPO.CADENA,this.temporal,false,this.fila,this.columna);
+            const declaracion_tmp=declaracion_temp.interpretar(entorno,arbol);
+            if(declaracion_tmp instanceof Excepcion){
+                return declaracion_tmp;
+            }
+
+            var cantidad=this.condicion.interpretar(entorno,arbol);
+            if(cantidad instanceof Excepcion){
+                return cantidad;
+            }
+            for(let i=0;i<cantidad.length;i++){
+                const nueva_tabla=new TablaSimbolos(entorno);
+                //creamos el objeto primitivo del valor en la posicion i
+                const valor=new Primitivo(TIPO.CADENA,cantidad.charAt(i),this.fila,this.columna);
+                
+                //asignacion del valor a la variable temporal
+                const asignacion_temp= new Asignacion(this.temporal,valor,this.fila,this.columna);
+                asignacion_temp.interpretar(nueva_tabla,arbol);
+
+                //ejecucion de las instrucciones
+                //ejecuta las instrucciones que estan dentro del FOR
+                this.instrucciones.forEach((element:Instruccion) => {
+                    
+                    const result=element.interpretar(nueva_tabla,arbol);
+
+                    if(result instanceof Excepcion){
+                        arbol.excepciones.push(result);
+                        arbol.updateConsolaError(result.toString());
+                    }
+                    
+                    if(result instanceof Break){
+                        this.hayBreak=true;
+                        return result;
+                    }
+                    if(result instanceof Return){
+                        return result;
+                    }
+                    //VERIFICA SI VIENE UN CONTINUE
+                    if(result instanceof Continue){
+                        this.hayContinue=true;
+                        return result;
+                    }
+
+                });
+                 //verifica si viene un continue en ForEach   
+                if(this.hayContinue){
+                    
+                    //i++;
+                    this.hayContinue=false;
+                    continue;
+                }
+                if(this.hayBreak){
+                    
+                    this.hayBreak=false;
+                    break;
+                }
+                
+            }
+
+
 
 
 

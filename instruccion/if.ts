@@ -119,7 +119,6 @@ export class If extends Instruccion{
                         }
                         if(result instanceof Break || result instanceof Continue ){
                             this.ins=result;
-                            
                             return result;
                         }
                         if(result instanceof Return){

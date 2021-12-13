@@ -16,6 +16,7 @@ export class For extends Instruccion {
     fila: number;
     columna:number;
     hayContinue:boolean;
+    hayBreak:boolean;
 
     // FOR( DECLARACION; CONDICION; ACTUALIZACION )
     constructor(declaracion:Instruccion,condicion:Instruccion,actualizacion:Instruccion,instrucciones:Instruccion[],fila:number,columna:number){
@@ -27,6 +28,7 @@ export class For extends Instruccion {
         this.actualizacion=actualizacion;
         this.instrucciones=instrucciones;
         this.hayContinue=false;
+        this.hayBreak=false;
     }
     /**
      * METODO INTERPRETAR CICLO FOR
@@ -82,6 +84,7 @@ export class For extends Instruccion {
 
                         }
                         if(result instanceof Break){
+                            this.hayBreak=true;
                             return;
                         }
                         if(result instanceof Return){
@@ -101,6 +104,9 @@ export class For extends Instruccion {
                 this.hayContinue=false;
                 console.log("CONTINUE DENTRO DEL FOR");
                 continue;
+            }
+            if(this.hayBreak){
+                break;
             }
 
             //ACTUALIZA LA VARIABLE DE ITERACION
