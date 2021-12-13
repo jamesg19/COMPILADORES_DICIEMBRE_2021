@@ -37,12 +37,12 @@ export class Return extends Instruccion {
       
       this.return_value = this.value.interpretar(e,arbol);
       this.tipo = this.value.tipo;  
-      return new Return(this.has_value, this.fila,this.columna,this.value);
+      return this;
       
     }
     else{
       
-      return new Return(this.has_value, this.fila,this.columna);
+      return this;
     }
     
   }

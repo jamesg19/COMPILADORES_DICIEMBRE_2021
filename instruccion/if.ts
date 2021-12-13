@@ -42,11 +42,12 @@ export class If extends Instruccion{
         //verifica que la condicion sea boolean
         if(this.condicion.tipo == TIPO.BOOLEAN){
             
+
             //verifica que la condicion sea TRUE
             if(condition){
-
                 //CREA UN ENTORNO PARA LAS INSTRUCCIONES DENTRO DEL IF
                 const nuevaTabla=new TablaSimbolos(entorno);
+                
                 //EJECUTA LAS INSTRUCCIONES
 
                 this.instruccionesIf.forEach((element:Instruccion) => {
@@ -55,8 +56,8 @@ export class If extends Instruccion{
                     if(result instanceof Excepcion){
                         ///
                         ///
-                        //arbol.excepciones.push(result);
-                        //arbol.actualizar_consola(result.toString());
+                        arbol.excepciones.push(result);
+                        arbol.updateConsolaError(result.toString());
                         
                     }
                     if(result instanceof Break || result instanceof Continue ){
@@ -65,13 +66,12 @@ export class If extends Instruccion{
                     }
                     if(result instanceof Return){
                         this.ins=result;
-                        //console.log("HAY RETURN EN INSTRUCCIONES1 "+result.value?.interpretar(entorno,arbol));
+                    
+                        //console.log(result.value?.interpretar(nuevaTabla,arbol)+"VALUE RETURN");
                         return result;
                     }
                     
                 });
-
-
             }
             //SI ES FALSA
             else{
@@ -88,8 +88,8 @@ export class If extends Instruccion{
                         if(result instanceof Excepcion){
                             ///
                             ///
-                            //arbol.excepciones.push(result);
-                            //arbol.actualizar_consola(result.toString());
+                            arbol.excepciones.push(result);
+                            arbol.updateConsolaError(result.toString());
                         }
                         if(result instanceof Break || result instanceof Continue ){
                             this.ins=result;
@@ -97,6 +97,7 @@ export class If extends Instruccion{
                         }
                         if(result instanceof Return){
                             this.ins=result;
+                            //console.log(result.value?.interpretar(nuevaTabla,arbol)+"VALUE RETURN");
                             return result;
                         }
                     });
@@ -105,21 +106,25 @@ export class If extends Instruccion{
                 else if(this.ElseIf !=null || this.ElseIf != undefined){
 
                     //ejecuta instrucciones else
-
+                    const nuevaTabla=new TablaSimbolos(entorno);
                     this.ElseIf.forEach((element2) => {
-                        const result=element2.interpretar(entorno,arbol);
+
+                        const result=element2.interpretar(nuevaTabla,arbol);
+                        
                         if(result instanceof Excepcion){
                             ///
                             ///
-                            //arbol.excepciones.push(result);
-                            //arbol.actualizar_consola(result.toString());
+                            arbol.excepciones.push(result);
+                            arbol.updateConsolaError(result.toString());
                         }
                         if(result instanceof Break || result instanceof Continue ){
                             this.ins=result;
+                            
                             return result;
                         }
                         if(result instanceof Return){
                             this.ins=result;
+                            //console.log(result.value?.interpretar(nuevaTabla,arbol)+"VALUE RETURN");
                             return result;
                         }
                     });
