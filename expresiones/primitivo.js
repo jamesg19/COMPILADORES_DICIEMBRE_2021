@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Primitivo = void 0;
 const Instruccion_1 = require("../abs/Instruccion");
+const tipo_1 = require("../table/tipo");
 const nodo_1 = require("../abs/nodo");
 class Primitivo extends Instruccion_1.Instruccion {
     /**
@@ -23,7 +24,7 @@ class Primitivo extends Instruccion_1.Instruccion {
      */
     interpretar(entorno, arbol) {
         //console.log(this.value);
-        if (this.tipo == 0 /* ENTERO */ || this.tipo == 1 /* DECIMAL */) {
+        if (this.tipo == tipo_1.TIPO.ENTERO || this.tipo == tipo_1.TIPO.DECIMAL) {
             return this.value;
         }
         return this.value;

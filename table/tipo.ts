@@ -1,4 +1,4 @@
-export const enum TIPO{
+export enum TIPO{
     ENTERO,
     DECIMAL,
     BOOLEAN,

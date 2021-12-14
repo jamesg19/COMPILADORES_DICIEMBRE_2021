@@ -3,7 +3,7 @@ import { Arbol } from "../../table/arbol";
 import { TablaSimbolos } from "../../table/tablasimbolos";
 import { Excepcion } from "../../table/excepcion";
 import { exit } from "process";
-import { TIPO } from "../../table/TipoNativo";
+import { TIPO } from "../../table/tipo";
 
 export class Modificar extends Instruccion {
   id: string;

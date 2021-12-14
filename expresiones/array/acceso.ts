@@ -2,7 +2,8 @@ import { Instruccion } from "../../abs/Instruccion";
 import { Arbol } from "../../table/arbol";
 import { TablaSimbolos } from "../../table/tablasimbolos";
 import { Excepcion } from "../../table/excepcion";
-import { TIPO } from "../../table/TipoNativo";
+import { TIPO } from "../../table/tipo";
+import { NodoAST } from "../../abs/nodo";
 
 export class Acceso extends Instruccion {
 
@@ -93,5 +94,13 @@ export class Acceso extends Instruccion {
     });
     return value_return;
   }
-  
+  getNodo():NodoAST {
+      const nodo= new NodoAST("ACCESO ");
+      nodo.agregarHijo(this.id);
+
+      this.list_expresiones.forEach((instr)=>{
+        nodo.agregarHijoNodo(instr.getNodo());
+      });
+      return nodo;
+  }
 }

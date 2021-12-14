@@ -3,8 +3,9 @@ import { Arbol } from "../table/arbol";
 import { TablaSimbolos } from '../table/tablasimbolos';
 import { Excepcion } from '../table/excepcion';
 import { Simbolo } from '../table/simbolo';
-import { TIPO } from "../table/TipoNativo";
+import { TIPO } from "../table/tipo";
 import { Return } from "./Return";
+import { NodoAST } from "../abs/nodo";
 
 
 export class Llamada extends Instruccion{
@@ -80,6 +81,18 @@ constructor(id:string, fila:number,columna:number,lista_parmetros?:Array<Instruc
             return exec_funcion;            
         
     }
+
+    getNodo() {
+        const nodo=new NodoAST("LLAMADA FUNCION");
+        nodo.agregarHijo(this.id);
+
+        const parametros= new NodoAST("PARAMETROS");
+        this.lista_parametros?.forEach(element => {
+            parametros.agregarHijoNodo(element.getNodo());    
+        });
+        nodo.agregarHijoNodo(parametros);
+        return nodo;
+    }}
     
     
     

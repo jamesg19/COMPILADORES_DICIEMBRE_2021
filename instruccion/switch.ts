@@ -86,6 +86,24 @@ export class Switch extends Instruccion{
         return this;
     }
     getNodo():NodoAST{
-        return new NodoAST("IF");
+        const nodo=new NodoAST("SWITCH");
+        const lst_cases=new NodoAST("LISTA_CASE");
+
+        this.lst_case.forEach((element)=>{
+            lst_cases.agregarHijoNodo(element.getNodo());
+        });
+
+        nodo.agregarHijoNodo(lst_cases);
+
+        if(this.defaultt != null || this.defaultt != undefined ){
+
+            const defaultt= new NodoAST("DEFAULT");
+            defaultt.agregarHijoNodo(this.defaultt.getNodo());
+            nodo.agregarHijoNodo(defaultt);
+            
+        }
+
+
+        return nodo;
     }
 }

@@ -5,7 +5,7 @@ import { TablaSimbolos } from "../../table/tablasimbolos";
 import { Arbol } from "../../table/arbol";
 import { Excepcion } from "../../table/excepcion";
 import { Simbolo } from "../../table/simbolo";
-import { TIPO } from "../../table/TipoNativo";
+import { TIPO } from "../../table/tipo";
 
 export class Dec_Struct extends Instruccion {
   template_struct: string; //tipo de estruct a crear

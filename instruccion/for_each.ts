@@ -6,7 +6,7 @@ import { Arbol } from "../table/arbol";
 import { Excepcion } from "../table/excepcion";
 import { Simbolo } from "../table/simbolo";
 import { TablaSimbolos } from "../table/tablasimbolos";
-import { TIPO } from "../table/TipoNativo";
+import { TIPO } from "../table/tipo";
 import { Asignacion } from "./asignacion";
 import { Break } from "./break";
 import { Continue } from "./continue";
@@ -275,11 +275,11 @@ export class ForEach extends Instruccion {
     }
 
     getNodo(){
-        const nodo=new NodoAST("FOR");
+        const nodo=new NodoAST("FOR EACH");
         const instruccionesNodo=new NodoAST("INSTRUCCIONES");
 
         this.instrucciones.forEach((element)=>{
-            //instruccionesNodo.agregarHijoNodo(element.getNodo());
+            instruccionesNodo.agregarHijoNodo(element.getNodo());
 
         });
         nodo.agregarHijoNodo(instruccionesNodo);

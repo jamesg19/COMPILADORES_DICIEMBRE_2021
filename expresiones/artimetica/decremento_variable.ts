@@ -1,7 +1,7 @@
 import { Instruccion } from "../../abs/Instruccion";
 import { Arbol } from "../../table/arbol";
 import { TablaSimbolos } from "../../table/tablasimbolos";
-import { TIPO } from "../../table/TipoNativo";
+import { TIPO } from "../../table/tipo";
 import { ARITMETICO } from "../../table/tipo";
 import { Excepcion} from "../../table/excepcion"
 import { Primitivo } from "../primitivo";

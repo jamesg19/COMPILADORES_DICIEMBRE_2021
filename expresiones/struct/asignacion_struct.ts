@@ -3,7 +3,7 @@ import { Instruccion } from "../../abs/Instruccion";
 import { TablaSimbolos } from "../../table/tablasimbolos";
 import { Arbol } from "../../table/arbol";
 import { Excepcion } from "../../table/excepcion";
-import { TIPO } from '../../table/TipoNativo';
+import { TIPO } from '../../table/tipo';
 import { Simbolo } from "../../table/simbolo";
 
 export class Asignacion_Struct extends Instruccion {

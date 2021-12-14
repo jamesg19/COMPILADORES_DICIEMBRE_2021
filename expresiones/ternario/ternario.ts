@@ -1,6 +1,7 @@
 import { Instruccion } from "../../abs/Instruccion";
 import { TablaSimbolos } from "../../table/tablasimbolos";
 import { Arbol } from "../../table/arbol";
+import { NodoAST } from "../../abs/nodo";
 
 export class Ternario extends Instruccion {
   condicion: Instruccion;
@@ -35,5 +36,11 @@ export class Ternario extends Instruccion {
     return this.condicion.interpretar(e, arbol)
       ? this.exp_true.interpretar(e, arbol)
       : this.exp_false.interpretar(e, arbol);
+  }
+
+  getNodo() {
+      const nodo=new NodoAST("TERNARIO");
+      nodo.agregarHijo(this.condicion.getNodo());
+      return nodo;
   }
 }

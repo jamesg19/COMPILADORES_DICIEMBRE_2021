@@ -3,7 +3,7 @@ import { NodoAST } from "../abs/nodo";
 import { Arbol } from "../table/arbol";
 import { Excepcion } from "../table/excepcion";
 import { TablaSimbolos } from "../table/tablasimbolos";
-import { TIPO } from "../table/TipoNativo";
+import { TIPO } from "../table/tipo";
 import { Break } from "./break";
 import { Continue } from "./continue";
 import { Return } from "./Return";
@@ -125,7 +125,7 @@ export class For extends Instruccion {
         const instruccionesNodo=new NodoAST("INSTRUCCIONES");
 
         this.instrucciones.forEach((element)=>{
-            //instruccionesNodo.agregarHijoNodo(element.getNodo());
+            instruccionesNodo.agregarHijoNodo(element.getNodo());
 
         });
         nodo.agregarHijoNodo(instruccionesNodo);

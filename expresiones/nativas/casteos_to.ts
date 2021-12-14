@@ -3,7 +3,7 @@ import { Arbol } from "../../table/arbol";
 import { TablaSimbolos } from "../../table/tablasimbolos";
 
 import { Excepcion} from "../../table/excepcion"
-import { TIPO } from "../../table/TipoNativo";
+import { TIPO } from "../../table/tipo";
 import {TIPO_NATIVA_CADENA } from "./tiponativacadena";
 import { Primitivo } from "../primitivo";
 import { Identificador } from "../identificador";

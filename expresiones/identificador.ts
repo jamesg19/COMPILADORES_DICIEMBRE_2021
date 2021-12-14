@@ -1,5 +1,5 @@
 import { Instruccion } from "../abs/Instruccion";
-import { TIPO } from "../table/TipoNativo";
+import { TIPO } from "../table/tipo";
 import { TablaSimbolos } from '../table/tablasimbolos';
 import { Arbol } from '../table/arbol';
 import { Simbolo } from "../table/simbolo";
@@ -41,7 +41,7 @@ export class Identificador extends Instruccion {
 
     getNodo(){
         const nodo= new NodoAST("ID");
-        nodo.agregarHijo(this.id+"");
+        nodo.agregarHijo(this.id);
         return nodo;
     }
 }

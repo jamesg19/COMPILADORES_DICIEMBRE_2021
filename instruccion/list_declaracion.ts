@@ -1,9 +1,10 @@
 import { Instruccion } from "../abs/Instruccion";
-import { TIPO } from "../table/TipoNativo";
+import { TIPO } from "../table/tipo";
 import { TablaSimbolos } from '../table/tablasimbolos';
 import { Arbol } from "../table/arbol";
 import { Simbolo } from '../table/simbolo';
 import { Excepcion } from "../table/excepcion";
+import { NodoAST } from "../abs/nodo";
 
 export class List_Declaracion extends Instruccion{
     tipo:TIPO;
@@ -40,6 +41,16 @@ export class List_Declaracion extends Instruccion{
           case TIPO.STRUCT:
             return undefined;
         }
+      }
+
+      getNodo(){
+        const nodo=new NodoAST("DECLARACION");
+        this.list_id.forEach((instr)=>{
+          nodo.agregarHijo(this.tipo+"");
+          nodo.agregarHijo(instr+"");
+        });
+        return nodo;
+
       }
     
     

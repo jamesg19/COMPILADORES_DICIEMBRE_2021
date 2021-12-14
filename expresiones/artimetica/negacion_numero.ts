@@ -68,6 +68,7 @@ export class NegacionNum extends Instruccion{
     getNodo(){
         const nodo= new NodoAST("NEGACION");
         nodo.agregarHijo(this.operadorIzq.value+"");
+        return nodo;
     }
 
 

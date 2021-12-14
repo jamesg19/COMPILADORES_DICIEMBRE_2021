@@ -1,4 +1,4 @@
-import { TIPO } from "./TipoNativo";
+import { TIPO } from "./tipo";
 
 export class Simbolo {
   id: string;

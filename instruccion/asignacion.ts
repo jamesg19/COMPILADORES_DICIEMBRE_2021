@@ -2,7 +2,7 @@ import { Instruccion } from "../abs/Instruccion";
 import { TablaSimbolos } from "../table/tablasimbolos";
 import { Arbol } from "../table/arbol";
 import { Excepcion } from "../table/excepcion";
-import { TIPO } from "../table/TipoNativo";
+import { TIPO } from "../table/tipo";
 import { NodoAST } from "../abs/nodo";
 
 export class Asignacion extends Instruccion {
@@ -87,8 +87,9 @@ export class Asignacion extends Instruccion {
 
   getNodo(){
     const nodo=new NodoAST("ASIGNACION");
-    nodo.agregarHijo(this.id+"");
-    nodo.agregarHijoNodo(this.expresion.getNodo());
+    nodo.agregarHijo(this.id+" ID ");
+    nodo.agregarHijoNodo(this.exp.getNodo());
+    return nodo;
   }
 
 }

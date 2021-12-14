@@ -1,4 +1,4 @@
-import { TIPO } from "../../table/TipoNativo";
+import { TIPO } from "../../table/tipo";
 import { Instruccion } from '../../abs/Instruccion';
 import { TablaSimbolos } from '../../table/tablasimbolos';
 import { Arbol } from '../../table/arbol';

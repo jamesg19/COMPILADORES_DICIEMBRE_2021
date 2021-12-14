@@ -1,7 +1,8 @@
 import { Instruccion } from '../abs/Instruccion';
 import { TablaSimbolos } from '../table/tablasimbolos';
 import { Arbol } from '../table/arbol';
-import { TIPO } from '../table/TipoNativo';
+import { TIPO } from '../table/tipo';
+import { NodoAST } from '../abs/nodo';
 
 export class Return extends Instruccion {
   
@@ -45,6 +46,14 @@ export class Return extends Instruccion {
       return this;
     }
     
+  }
+
+  getNodo() {
+      const nodo=new NodoAST("RETURN");
+      if(this.has_value){
+        nodo.agregarHijoNodo(this.value?.getNodo());         
+      }
+      return nodo;
   }
 
 }

@@ -1,5 +1,5 @@
 import { Instruccion } from '../abs/Instruccion';
-import { TIPO } from '../table/TipoNativo';
+import { TIPO } from '../table/tipo';
 import { TablaSimbolos } from '../table/tablasimbolos';
 import { Simbolo } from '../table/simbolo';
 import { Arbol } from '../table/arbol';
@@ -7,6 +7,7 @@ import { Excepcion } from '../table/excepcion';
 import { Break } from './break';
 import { Return } from './Return';
 import { If } from './if';
+import { NodoAST } from '../abs/nodo';
 
 
 export class Funcion extends Instruccion{
@@ -81,5 +82,28 @@ export class Funcion extends Instruccion{
     let salida = `Funcion: ${this.id} - Parametros: ${parametros} - Return Asignado: ${this.hasReturn()?'Si':'No'}`;
     return salida;
     
+  }
+  getNodo() {
+      const nodo=new NodoAST("FUNCION");
+      nodo.agregarHijo(this.id);
+      const parametros=new NodoAST("PARAMETROS");
+
+      if(this.lista_parametros != null){
+          this.lista_parametros.forEach((instr)=>{
+              const parametro=new NodoAST("PARAMETROS");
+              parametro.agregarHijo(instr.tipo+"");
+              parametro.agregarHijo(instr.id+"");
+              parametros.agregarHijoNodo(parametro);
+          });
+          nodo.agregarHijoNodo(parametros);
+
+          const instrucciones=new NodoAST("INSTRUCCIONES");
+          
+          this.instrucciones.forEach((instr)=>{
+            instrucciones.agregarHijoNodo(instr.getNodo());          
+          });
+          nodo.agregarHijoNodo(instrucciones);
+      }
+
   }
 }

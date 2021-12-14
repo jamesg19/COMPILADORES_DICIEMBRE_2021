@@ -3,7 +3,8 @@ import { Arbol } from '../../../table/arbol';
 import { TablaSimbolos } from '../../../table/tablasimbolos';
 import { Simbolo } from '../../../table/simbolo';
 import { Excepcion } from '../../../table/excepcion';
-import { TIPO } from '../../../table/TipoNativo';
+import { TIPO } from '../../../table/tipo';
+import { NodoAST } from '../../../abs/nodo';
 
 export class Cos_Arr extends Instruccion {
     
@@ -34,6 +35,13 @@ export class Cos_Arr extends Instruccion {
         let value_result = arr.valor.
                                 map((x)=>  Math.cos(parseFloat(x)));
         return value_result;
+    }
+
+    getNodo():NodoAST {
+        const nodo= new NodoAST("COSENO #");
+        nodo.agregarHijo(this.id);
+        return nodo;
+        
     }
     
 }

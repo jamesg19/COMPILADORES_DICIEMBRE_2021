@@ -1,6 +1,6 @@
 import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript';
 import { Instruccion } from '../../abs/Instruccion';
-import { TIPO } from '../../table/TipoNativo';
+import { TIPO } from '../../table/tipo';
 import { TablaSimbolos } from '../../table/tablasimbolos';
 import { Arbol } from '../../table/arbol';
 import { Excepcion } from '../../table/excepcion';
