@@ -45,16 +45,16 @@ export class Default extends Instruccion{
         return this;
         
     }
-    // getNodo():NodoAST{
-    //     const nodo=new NodoAST("CASE");
-    //     const instruccionesNodo=new NodoAST("INSTRUCCIONES");
+    getNodo():NodoAST{
+        const nodo=new NodoAST("CASE");
+        const instruccionesNodo=new NodoAST("INSTRUCCIONES");
 
-    //     this.instrucciones.forEach((element:Instruccion) => {
-    //         //instruccionesNodo.agregarHijo(element.getNodo());
-    //     });
-    //     nodo.agregarHijoNodo(instruccionesNodo);
-    //     return nodo;
-    // }
+        this.instrucciones.forEach((element:Instruccion) => {
+            //instruccionesNodo.agregarHijo(element.getNodo());
+        });
+        nodo.agregarHijoNodo(instruccionesNodo);
+        return nodo;
+    }
 
 
 

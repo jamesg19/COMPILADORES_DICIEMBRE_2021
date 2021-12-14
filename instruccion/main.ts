@@ -1,4 +1,5 @@
 import { Instruccion } from '../abs/Instruccion';
+import { NodoAST } from '../abs/nodo';
 import { Arbol } from '../table/arbol';
 import { Excepcion } from '../table/excepcion';
 import { TablaSimbolos } from '../table/tablasimbolos';
@@ -31,5 +32,19 @@ export class Main extends Instruccion{
         });
         
         
+    }
+
+    getNodo():NodoAST{
+        const nodo= new NodoAST("MAIN");
+        const instruccioness= new NodoAST("INSTRUCCIONES");
+
+        this.instrucciones.forEach((instr:Instruccion) => {
+            instruccioness.agregarHijoNodo(instr.getNodo());
+
+
+        });
+        nodo.agregarHijoNodo(instruccioness);
+
+        return nodo;
     }
 }

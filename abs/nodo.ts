@@ -18,9 +18,9 @@ export class NodoAST{
         return this.valor;
 
     }
-    // getHijos():NodoAST[]{
-    //     return this.hijos;
-    // }
+    getHijos():NodoAST[]{
+        return this.hijos;
+    }
 
     // setHijos(hijos:NodoAST[]){
     //     this.hijos=hijos;

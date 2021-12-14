@@ -77,7 +77,7 @@ export class D_IdExp extends Instruccion{
         nodo.agregarHijo("VOID");
       }
       nodo.agregarHijo(this.id);
-      nodo.agregarHijoNodo(this.expresion.getNodo());
+      nodo.agregarHijoNodo(this.exp.getNodo());
       return nodo;
     }
   
