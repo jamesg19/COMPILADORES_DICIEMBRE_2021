@@ -109,7 +109,7 @@ export class D_Id extends Instruccion {
       nodo.agregarHijo("VOID");
     }
     nodo.agregarHijo(this.id);
-    nodo.agregarHijoNodo(this.expresion.getNodo());
+    //nodo.agregarHijoNodo(this.);
     return nodo;
   }
 }

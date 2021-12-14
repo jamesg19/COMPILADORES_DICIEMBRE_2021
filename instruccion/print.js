@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Print = void 0;
 const Instruccion_1 = require("../abs/Instruccion");
 const excepcion_1 = require("../table/excepcion");
+const nodo_1 = require("../abs/nodo");
 class Print extends Instruccion_1.Instruccion {
     /**
      * @param  {number} fila
@@ -49,6 +50,11 @@ class Print extends Instruccion_1.Instruccion {
             });
         }
         return formato;
+    }
+    getNodo() {
+        const nodo = new nodo_1.NodoAST("IMPRIMIR");
+        nodo.agregarHijoNodo(this.value);
+        return nodo;
     }
 }
 exports.Print = Print;

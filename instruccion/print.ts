@@ -9,6 +9,7 @@ import { Identificador } from "../expresiones/identificador";
 import { Primitivo } from "../expresiones/primitivo";
 import { Dec_Struct } from "../expresiones/struct/instancia_struct";
 import { sign } from "crypto";
+import { NodoAST } from "../abs/nodo";
 
 export class Print extends Instruccion {
   fila: number;
@@ -65,5 +66,12 @@ export class Print extends Instruccion {
       });
     }
     return formato;
+  }
+
+  getNodo() {
+    const nodo = new  NodoAST("IMPRIMIR");
+    nodo.agregarHijoNodo(this.value)
+
+    return nodo;
   }
 }

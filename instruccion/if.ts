@@ -142,6 +142,34 @@ export class If extends Instruccion{
         return this.ins;
     }
     getNodo():NodoAST{
-        return new NodoAST("IF");
+        const nodo=new NodoAST("IF");
+        const instruccionesIf=new NodoAST("INSTRUCCION IF");
+
+        this.instruccionesIf.forEach((instr:Instruccion)=>{
+            
+            instruccionesIf.agregarHijoNodo(instr.getNodo());
+
+        });
+        nodo.agregarHijoNodo(instruccionesIf);
+
+        if(this.instruccionesElse!=null || this.instruccionesElse!=undefined){
+            const instruccionesElse=new NodoAST("INSTRUCCIONES ELSE");
+            
+            this.instruccionesElse.forEach((instr:Instruccion)=>{
+                instruccionesElse.agregarHijoNodo(instr.getNodo());
+            });
+            nodo.agregarHijoNodo(instruccionesElse);
+        } else if(this.ElseIf!=null || this.ElseIf!=undefined){
+
+            const elseIf=new NodoAST("INSTRUCCIONES ELSE IF");
+            
+            this.ElseIf.forEach((instr:Instruccion)=>{
+                elseIf.agregarHijoNodo(instr.getNodo());
+            });
+            nodo.agregarHijoNodo(elseIf);
+
+        }
+
+        return nodo;
     }
 }
