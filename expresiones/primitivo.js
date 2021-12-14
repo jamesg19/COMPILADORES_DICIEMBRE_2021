@@ -21,6 +21,10 @@ class Primitivo extends Instruccion_1.Instruccion {
      * @param  {Arbol} arbol
      */
     interpretar(entorno, arbol) {
+        //console.log(this.value);
+        if (this.tipo == 0 /* ENTERO */ || this.tipo == 1 /* DECIMAL */) {
+            return this.value;
+        }
         return this.value;
     }
 }

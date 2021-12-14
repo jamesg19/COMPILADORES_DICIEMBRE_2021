@@ -32,28 +32,24 @@ export class While extends Instruccion {
      */
     interpretar(entorno: TablaSimbolos, arbol: Arbol) {
 
-        const nuevaTabla=new TablaSimbolos(entorno);
-
-
-
-
         while(true){
-            //NUEVO ENTONO DENTRO DEL CICLO
-            const nuevaTabla2=new TablaSimbolos(nuevaTabla);
-            try {
-                const condicionn=this.condicion.interpretar(nuevaTabla2,arbol);
-                if(condicionn instanceof Excepcion){
-                    return condicionn;
-                }
-            } catch (error) {
-                return this.condicion;
+            
+            
+            const condicionn=this.condicion.interpretar(entorno,arbol);
+            if(condicionn instanceof Excepcion){
+                return condicionn;
             }
+            
             //VERIFICA QUE LA CONDICION SEA TIPO BOOLEAN
             if(this.condicion.tipo ==TIPO.BOOLEAN ){
                 
                 
                 //VERIFICA QUE LA CONDICION SE CUMPLA sea TRUE
-                if(this.condicion.interpretar(nuevaTabla2,arbol) == true){
+                if(condicionn == true){
+
+                    //NUEVO ENTONO DENTRO DEL CICLO
+                    const nuevaTabla2=new TablaSimbolos(entorno);
+
                     //ejecuta las instrucciones que estan dentro del WHILE
                     this.instrucciones.forEach((element:Instruccion) => {
                         
