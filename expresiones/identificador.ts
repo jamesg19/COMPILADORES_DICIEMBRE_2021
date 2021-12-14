@@ -4,6 +4,7 @@ import { TablaSimbolos } from '../table/tablasimbolos';
 import { Arbol } from '../table/arbol';
 import { Simbolo } from "../table/simbolo";
 import { Excepcion } from "../table/excepcion";
+import { NodoAST } from "../abs/nodo";
 
 
 export class Identificador extends Instruccion {
@@ -36,5 +37,11 @@ export class Identificador extends Instruccion {
         } catch (error) {
             return new Excepcion('Semantico',`Error al obtener valor de identificador `,`${this.fila}`,`${this.columna}`);
         }            
+    }
+
+    getNodo(){
+        const nodo= new NodoAST("ID");
+        nodo.agregarHijo(this.id+"");
+        return nodo;
     }
 }

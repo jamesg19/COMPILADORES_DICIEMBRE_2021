@@ -252,9 +252,9 @@
 %left 'mayor' 'menor' 'mayor_igual' 'menor_igual' //listo
 %left 'mas' 'menos' 'mass'
 %left 'por' 'div' 'mod' 'repeticion'
-%left 'umenos'
 %right 'potencia'
 %left 'mas_mas' 'menos_menos' //listo
+%left 'umenos'
 
 
 %start INICIO 

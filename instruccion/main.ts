@@ -21,6 +21,7 @@ export class Main extends Instruccion{
             if(value instanceof Excepcion){
                 arbol.excepciones.push(value);
                 arbol.updateConsolaError(value.toString());
+                console.log(value);
             }
             if (value instanceof Break){
                 let excepcion = new Excepcion("Semantico","Sentencia Break fuera de ciclo",this.fila+"",this.columna+"")

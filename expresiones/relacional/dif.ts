@@ -2,6 +2,8 @@ import { Instruccion } from '../../abs/Instruccion';
 import { TablaSimbolos } from '../../table/tablasimbolos';
 import { TIPO } from '../../table/tipo';
 import { Arbol } from '../../table/arbol';
+import { Excepcion } from '../../table/excepcion';
+import { NodoAST } from '../../abs/nodo';
 
 export class Diff extends Instruccion{
     expIzq: Instruccion;
@@ -38,9 +40,46 @@ export class Diff extends Instruccion{
       
       
       this.tipo = TIPO.BOOLEAN;
-      return exp1 != exp2;
+      return this.obtenerVal(this.expIzq.tipo,exp1) !=this.obtenerVal(this.expDer.tipo,exp2);
       
   
     }
+    getNodo(){
+        const nodo= new NodoAST("RELACIONAL");
+        if( (this.expDer!=null) || (this.expDer != undefined)){
+            nodo.agregarHijoNodo(this.expIzq.getNodo());
+            nodo.agregarHijo("DIFERENTE");
+            nodo.agregarHijoNodo(this.expDer.getNodo());
+            return nodo;
+        }else{
+            nodo.agregarHijo("DIFERENTE");
+            nodo.agregarHijoNodo(this.expIzq.getNodo());
+            return nodo;
+        }
+    }
+
+    obtenerVal(tipo:TIPO,val:string):any{
+      try {
+          if(tipo === TIPO.ENTERO|| tipo === TIPO.DECIMAL){
+              return Number(val);
+          }
+          else if(tipo === TIPO.BOOLEAN){
+              if(val.toLowerCase() === "true"){
+                  return true;
+              }else{
+                  return false;
+              }
+          }
+          else if(tipo === TIPO.CADENA){
+              return val;
+          }else{
+              return val;
+          }
+  
+      } catch (error) {
+          return new Excepcion("Semantico",`No se pudo obtener el valor en division`,`${this.fila}`,`${this.columna}`);
+      }
+  
+  }
   }
   

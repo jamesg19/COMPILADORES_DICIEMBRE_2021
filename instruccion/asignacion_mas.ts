@@ -3,6 +3,7 @@ import { TablaSimbolos } from "../table/tablasimbolos";
 import { Arbol } from "../table/arbol";
 import { Excepcion } from "../table/excepcion";
 import { TIPO } from '../table/TipoNativo';
+import { NodoAST } from "../abs/nodo";
 
 export class Asignacion_Mas extends Instruccion {
   id: string;
@@ -50,7 +51,7 @@ export class Asignacion_Mas extends Instruccion {
     let valor = this.exp.interpretar(e, arbol);
     let value = JSON.parse(JSON.stringify(valor));  
     
-    if((valor instanceof Array ){
+    if(valor instanceof Array ){
       // if(variable.valor instanceof Array){
       //   variable.valor = value;
       //   e.actualizarSimboloEnTabla(variable);
@@ -99,5 +100,11 @@ export class Asignacion_Mas extends Instruccion {
     );
     
     
+  }
+
+  getNodo(){
+    const nodo=new NodoAST("ASIGNACION");
+    nodo.agregarHijo(this.id+"");
+    nodo.agregarHijoNodo(this.expresion.getNodo());
   }
 }

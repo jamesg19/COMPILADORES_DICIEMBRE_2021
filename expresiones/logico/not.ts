@@ -4,6 +4,7 @@ import { Excepcion } from '../../table/excepcion';
 import { Arbol } from '../../table/arbol';
 import { TIPO } from '../../table/tipo';
 import { Primitivo } from '../primitivo';
+import { NodoAST } from '../../abs/nodo';
 
 
 export class Not extends Instruccion{
@@ -33,9 +34,18 @@ export class Not extends Instruccion{
       if (expression1 instanceof Excepcion) return expression1;
       
       if(this.expression.tipo === TIPO.BOOLEAN) return !expression1;
-      
+      console.log("ERROR EN !  not");
       return new Excepcion("Semantico","Se requiere un tipo Boolean ", super.fila+"",super.columna+"");
     
     }
+
+    getNodo(){
+      const nodo= new NodoAST("LOGICA");
+      
+      nodo.agregarHijo("NOT");
+      nodo.agregarHijoNodo(this.expression.getNodo());
+      return nodo;
+      
+  } 
   }
   

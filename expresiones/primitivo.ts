@@ -1,7 +1,8 @@
 import { Instruccion } from "../abs/Instruccion";
-import { TIPO } from "../table/TipoNativo";
+import { TIPO } from "../table/tipo";
 import { TablaSimbolos } from "../table/tablasimbolos";
 import { Arbol } from "../table/arbol";
+import { NodoAST } from "../abs/nodo";
 
 export class Primitivo extends Instruccion {
   fila: number;
@@ -27,6 +28,15 @@ export class Primitivo extends Instruccion {
    * @param  {Arbol} arbol
    */
   interpretar(entorno: TablaSimbolos, arbol: Arbol) {
+    //console.log(this.value);
+    if(this.tipo==TIPO.ENTERO || this.tipo== TIPO.DECIMAL){
+      return this.value;
+    }
     return this.value;
+  }
+  getNodo(){
+    const nodo=new NodoAST("PRIMITIVO");
+    nodo.agregarHijo(this.value);
+    return nodo;
   }
 }

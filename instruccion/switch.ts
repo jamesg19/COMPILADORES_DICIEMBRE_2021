@@ -56,9 +56,7 @@ export class Switch extends Instruccion{
                 if(value_expresion instanceof Excepcion){
                     return value_expresion;
                 }
-                //console.log(value_expresion+"");  
-                //console.log(value_case+"");  
-                //COMPARA QUE LA CONDICION SWITCH COINCIDA CON EL CASE
+
                 if(value_expresion+"" === value_case+""){
                     //si el valor de la condicion SWITCH COINDICE CON LA CONDICION CASE
                     // ENTONCES LO EJECUTA
