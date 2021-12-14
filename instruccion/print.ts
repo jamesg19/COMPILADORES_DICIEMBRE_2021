@@ -44,6 +44,10 @@ export class Print extends Instruccion {
         }
 
         if (value != undefined) {
+          if(exp_print instanceof Identificador){
+            let simbol = entorno.getSimbolo(exp_print.id);
+            value = simbol.toString();
+          }else
          
           value = value.toString()
 

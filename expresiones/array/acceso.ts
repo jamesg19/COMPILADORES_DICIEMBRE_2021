@@ -52,7 +52,7 @@ export class Acceso extends Instruccion {
       );
 
     let contador = this.list_expresiones.length;
-    let temp:any = undefined;
+    let temp:any =  (exist.valor);
     let value_return;
 
     if (contador == 1) temp = exist?.valor;
@@ -87,7 +87,8 @@ export class Acceso extends Instruccion {
         //return (value_return = JSON.parse(JSON.stringify(temp[index])));
       } else {
         this.tipo = exist.tipo;
-        temp = (exist?.valor)[index];
+        temp = (temp)[index];
+        
       }
     });
     return value_return;

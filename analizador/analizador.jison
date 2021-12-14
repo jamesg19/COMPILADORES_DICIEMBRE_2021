@@ -366,8 +366,8 @@ ASIGNACION
   : id igual EXP          punto_coma         {  $$ = new Asignacion($1, $3,false,@1.firt_line,@1.firt_column); }
   | id mas igual EXP      punto_coma         {  $$ = new Asignacion_Mas($1, $4,true,@1.firt_line,@1.firt_column); }
   | id menos igual EXP    punto_coma         {  $$ = new Asignacion_Mas($1, $4,false,@1.firt_line,@1.firt_column); }
-  | ACCESO_TYPE igual id punto_coma          {  $$ = new Asignacion_VAR_STRUCT($3,$1,@1.first_line,@1.first_column);}  
-  | ACCESO_TYPE igual EXP punto_coma          {  $$ = new Asignacion_Struct_Exp($1,$3,@1.first_line,@1.first_column);}  
+  | ACCESO_TYPE igual id  punto_coma          {  $$ = new Asignacion_VAR_STRUCT($3,$1,@1.first_line,@1.first_column);}  
+  
   
   // type.accesos = EXP ; || type.accesos[][] = EXP;
   
@@ -498,9 +498,9 @@ LISTA_ATRIBUTOS
 
 ATRIBUTO 
   : TIPO_DEC_VARIABLE id                   { $$ = new Simbolo($2,$1,@1.first_line,@1.first_column,null,false,false)}//$$ = new Atributo($2,$1,false,@1.firt_line,@1.firt_column);   }
-  | id id                                  { $$ = new Simbolo($2,TIPO.STRUCT,@1.first_line,@1.first_column,$1,false,false)}//{ $$ = new Atributo($2,TIPO.STRUCT,false,@1.firt_line,@1.firt_column);   }
+  | id id                                  { $$ = new Simbolo($2,TIPO.STRUCT,@1.first_line,@1.first_column,$1,false,true)}//{ $$ = new Atributo($2,TIPO.STRUCT,false,@1.firt_line,@1.firt_column);   }
   | TIPO_DEC_VARIABLE id   LISTA_CORCHETES { $$ = new Simbolo($2,$1,@1.first_line,@1.first_column,null,false,false)}//{ $$ = new Atributo($2,$1,true,@1.firt_line,@1.firt_column);}
-  //| id id LISTA_CORCHETES                 { $$ = new Simbolo($2,$1,@1.first_line,@1.first_column,null,false,false)}// { $$ = new Atributo($2,TIPO.STRUCT,true,@1.firt_line,@1.firt_column);}  
+  | id LISTA_CORCHETES id                   { $$ = new Simbolo($2,$1,@1.first_line,@1.first_column,$1,true,true)}// { $$ = new Atributo($2,TIPO.STRUCT,true,@1.firt_line,@1.firt_column);}  
 ;
 
 //=========================================>fin
@@ -619,13 +619,14 @@ EXP
   | ACCESO_ARREGLO                                      {   $$ = $1; }
   | ARRAY_LENGTH                                        {   $$ = $1; }
   | ARRAY_POP                                           {   $$ = $1; }
-  | corchete_abierto LISTA_EXPRESIONES corchete_cerrado {   $$ = $2;  }
+  | corchete_abierto LISTA_EXPRESIONES corchete_cerrado {   $$ = $2; }
   | ARRAY_METHOD                                        {   $$ = $1; }
+  | corchete_abierto corchete_cerrado                    {    }
   
   //Types - accesos
-  | ACCESO_TYPE     { $$ = $1;   }
-  | TYPE            {    }
-  | id id                                               { $$ = new Struct_Param($1,$2,@1.first_line,@1.first_column);}
+  | ACCESO_TYPE                                          { $$ = $1;   }
+  | ACCESO_TYPE igual EXP punto_coma                    {  $$ = new Asignacion_Struct_Exp($1,$3,@1.first_line,@1.first_column);}  
+  //| id id                                               { $$ = new Struct_Param($1,$2,@1.first_line,@1.first_column);}
   //Ternario
   | TERNARIO                                             {  $$ = $1;  }
   
@@ -664,7 +665,7 @@ ACCESO_TYPE                                                   //$1 => id struct 
 //------------------------------------------------------------------------------------------------------
 LISTA_ACCESOS_TYPE 
   : LISTA_ACCESOS_TYPE punto id                                 {  $1.push($3);$$ = $1;  }
-  | punto id                                                    {  $$ = [$2];         }
+  | punto id                                                    {  $$ = [$2];            }
   //| LISTA_ACCESOS_TYPE punto id LISTA_ACCESOS_ARREGLO           {    }
   //| punto id LISTA_ACCESOS_ARREGLO                              {    }
 ;

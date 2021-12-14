@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Print = void 0;
 const Instruccion_1 = require("../abs/Instruccion");
 const excepcion_1 = require("../table/excepcion");
+const identificador_1 = require("../expresiones/identificador");
 class Print extends Instruccion_1.Instruccion {
     /**
      * @param  {number} fila
@@ -31,7 +32,12 @@ class Print extends Instruccion_1.Instruccion {
                     return value;
                 }
                 if (value != undefined) {
-                    value = value.toString();
+                    if (exp_print instanceof identificador_1.Identificador) {
+                        let simbol = entorno.getSimbolo(exp_print.id);
+                        value = simbol.toString();
+                    }
+                    else
+                        value = value.toString();
                 }
                 else {
                     value = "Indefinido";
