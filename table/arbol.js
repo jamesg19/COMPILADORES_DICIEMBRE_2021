@@ -8,6 +8,8 @@ class Arbol {
      */
     constructor(TSglobal, instrucciones) {
         this.consola = "";
+        this.contador = 0;
+        this.dot = "";
         this.excepciones =
             this.funciones = new Array();
         this.TSglobal = TSglobal;
@@ -28,6 +30,35 @@ class Arbol {
                 funcion = x;
         });
         return funcion;
+    }
+    getInstrucciones() {
+        return this.instrucciones;
+    }
+    getDot(raiz) {
+        this.dot = "";
+        this.dot += "digraph{ \n ";
+        this.dot += "n0[label=\"" + raiz.getValor() + "\"];\n";
+        this.contador = 1;
+        this.recorrerAST("n0", raiz);
+        this.dot += "}";
+        console.log("RETORNA DOT : )");
+        return this.dot;
+    }
+    recorrerAST(idPadre, nodoPadre) {
+        nodoPadre.getHijos().forEach((hijo) => {
+            const nombreHijo = "n" + this.contador;
+            this.dot += nombreHijo + " [label=\"" + hijo.getValor() + "\"];\n";
+            this.dot += idPadre + "->" + nombreHijo + ";\n";
+            this.contador += 1;
+            this.recorrerAST(nombreHijo, hijo);
+        });
+        // for(const hijo in nodoPadre.getHijos()){
+        //     const nombreHijo="n"+this.contador;
+        //     this.dot+=nombreHijo+" [label=\""+hijo.getValor()+ "\"];\n"
+        //     this.dot+=idPadre+"->"+nombreHijo+ ";\n";
+        //     this.contador+=1;
+        //     this.recorrerAST(nombreHijo,hijo);
+        // }
     }
 }
 exports.Arbol = Arbol;

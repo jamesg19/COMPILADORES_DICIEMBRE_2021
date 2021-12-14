@@ -16,7 +16,9 @@ export abstract class  Instruccion{
     }
     abstract interpretar(entorno:TablaSimbolos,arbol:Arbol):any;
     
-    
+    abstract getNodo():any;
+
+
         
     
 }

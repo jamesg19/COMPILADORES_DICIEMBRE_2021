@@ -14,6 +14,7 @@ import { Arreglo_Valor } from "./expresiones/array/array_valor";
 import { Break } from "./instruccion/break";
 import { Main } from "./instruccion/main";
 import { Print } from "./instruccion/print";
+import { NodoAST } from "./abs/nodo";
 const Parser = require("./analizador/analizador");
 
 export class Principal {
@@ -122,6 +123,23 @@ export class Principal {
         //console.log("Sentencias fuera de Main")
         
     });
+  console.log("PROBANDO DOT.......*/*/*/*/");
+  //generacion de AST 
+  const init=new NodoAST("RAIZ");
+  const instr=new NodoAST("INSTRUCCIONES");
+  ast.getInstrucciones().forEach((instruccion:Instruccion) => {
+    instr.agregarHijoNodo(instruccion.getNodo());
+
+  });
+
+  init.agregarHijoNodo(instr);
+  //devuelve el codigo GRAPHIZ DEL AST
+  const grafo=ast.getDot(init);
+  
+  console.log(grafo);
+  
+  
+  
   }
 }
 

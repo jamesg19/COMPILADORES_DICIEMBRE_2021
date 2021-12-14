@@ -3,6 +3,7 @@ import { TablaSimbolos } from './tablasimbolos';
 import { Instruccion } from '../abs/Instruccion';
 import { Struct } from '../expresiones/struct/struct';
 import { Funcion } from '../instruccion/funcion';
+import { NodoAST } from '../abs/nodo';
 
 export class Arbol{
     
@@ -11,7 +12,9 @@ export class Arbol{
     funciones:Array<Funcion>;
     structs:Map<string,Struct>;
     consola:string= ""
-    TSglobal:TablaSimbolos;   
+    TSglobal:TablaSimbolos; 
+    contador:number=0;  
+    dot:string="";
     
     /**
      * @param  {TablaSimbolos} TSglobal
@@ -39,6 +42,40 @@ export class Arbol{
            if(x.id===nombre) funcion = x;
         });
         return funcion;
+    }
+    getInstrucciones():Instruccion[]{
+        return this.instrucciones;
+    }
+
+    getDot(raiz:NodoAST){
+        this.dot="";
+        this.dot+="digraph{ \n ";
+        this.dot+="n0[label=\""+raiz.getValor()+ "\"];\n";
+        this.contador=1;
+        this.recorrerAST("n0",raiz);
+        this.dot+="}"
+        console.log("RETORNA DOT : )");
+        return this.dot;
+
+    }
+    recorrerAST(idPadre:string,nodoPadre:NodoAST){
+
+        nodoPadre.getHijos().forEach((hijo:NodoAST) => {
+
+            const nombreHijo="n"+this.contador;
+            this.dot+=nombreHijo+" [label=\""+hijo.getValor()+ "\"];\n"
+            this.dot+=idPadre+"->"+nombreHijo+ ";\n";
+            this.contador+=1;
+            this.recorrerAST(nombreHijo,hijo);
+        });
+
+        // for(const hijo in nodoPadre.getHijos()){
+        //     const nombreHijo="n"+this.contador;
+        //     this.dot+=nombreHijo+" [label=\""+hijo.getValor()+ "\"];\n"
+        //     this.dot+=idPadre+"->"+nombreHijo+ ";\n";
+        //     this.contador+=1;
+        //     this.recorrerAST(nombreHijo,hijo);
+        // }
     }
     
 }
