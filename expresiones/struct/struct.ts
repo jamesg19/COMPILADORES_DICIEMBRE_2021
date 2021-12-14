@@ -6,6 +6,7 @@ import { Type } from "../../table/Type";
 import { Arbol } from "../../table/arbol";
 import { Atributo } from "./atributo";
 import { TIPO } from "../../table/TipoNativo";
+import { Dec_Struct } from './instancia_struct';
 
 export class Struct extends Instruccion {
   //crep que esto es mejor guardarlo en un map
@@ -33,6 +34,8 @@ export class Struct extends Instruccion {
     this.lista_atributos = lista_atributos;
     //Object.assign(this, {lista_atributos});
     this.lista_simbolo = new Map();
+    let contador = 0;
+    
   }
 
   /**
@@ -63,7 +66,7 @@ export class Struct extends Instruccion {
         const valor = this.getValue(atributo.tipo);
         //{reasignable, id, valor}
         
-
+      
         
         variable = new Simbolo(
           atributo.id,

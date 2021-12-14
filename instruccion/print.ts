@@ -8,6 +8,7 @@ import { Acceso_Struct } from "../expresiones/struct/acceso_struct";
 import { Identificador } from "../expresiones/identificador";
 import { Primitivo } from "../expresiones/primitivo";
 import { Dec_Struct } from "../expresiones/struct/instancia_struct";
+import { sign } from "crypto";
 
 export class Print extends Instruccion {
   fila: number;
@@ -41,19 +42,11 @@ export class Print extends Instruccion {
           console.log(value);
           return value;
         }
+
         if (value != undefined) {
-          if (exp_print instanceof Dec_Struct) {
-            console.log("mal");
-            value = value.valor;
-          } else if (exp_print instanceof Identificador) {
-            let sim = entorno.getSimbolo(exp_print.id);
-            
-            if (sim?.struct) {
-              
-              value = sim.toString();
-              
-            } else value - value.valor;
-          } else value - value.valor;
+         
+          value = value.toString()
+
         } else {
           value = "Indefinido";
         }
