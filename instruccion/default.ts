@@ -46,11 +46,11 @@ export class Default extends Instruccion{
         
     }
     getNodo():NodoAST{
-        const nodo=new NodoAST("CASE");
+        const nodo=new NodoAST("DEFAULT");
         const instruccionesNodo=new NodoAST("INSTRUCCIONES");
 
         this.instrucciones.forEach((element:Instruccion) => {
-            //instruccionesNodo.agregarHijo(element.getNodo());
+            instruccionesNodo.agregarHijo(element.getNodo());
         });
         nodo.agregarHijoNodo(instruccionesNodo);
         return nodo;

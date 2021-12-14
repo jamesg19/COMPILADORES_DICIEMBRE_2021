@@ -4,6 +4,7 @@ exports.Print = void 0;
 const Instruccion_1 = require("../abs/Instruccion");
 const excepcion_1 = require("../table/excepcion");
 const identificador_1 = require("../expresiones/identificador");
+const nodo_1 = require("../abs/nodo");
 class Print extends Instruccion_1.Instruccion {
     /**
      * @param  {number} fila
@@ -55,6 +56,15 @@ class Print extends Instruccion_1.Instruccion {
             });
         }
         return formato;
+    }
+    getNodo() {
+        var _a;
+        const nodo = new nodo_1.NodoAST("IMPRIMIR");
+        (_a = this.value) === null || _a === void 0 ? void 0 : _a.forEach((x) => {
+            nodo.agregarHijoNodo(x.getNodo());
+        });
+        //un nodo
+        return nodo;
     }
 }
 exports.Print = Print;
