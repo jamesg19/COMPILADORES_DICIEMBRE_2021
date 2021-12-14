@@ -140,6 +140,7 @@
 %{
   
   
+  const { Simbolo   } = require('../table/simbolo');
   //Instrucciones
     const { Print   } = require('../instruccion/print');
     const { D_IdExp } = require('../instruccion/declaracion_idexp');
@@ -149,6 +150,7 @@
     const { Return }  = require ('../instruccion/Return');
     const { Main }    = require ('../instruccion/main');
     const { Asignacion } = require('../instruccion/asignacion');
+    const { Asignacion_VAR_STRUCT } = require('../expresiones/struct/asignacion_var_struct');
     const { Asignacion_Mas } = require('../instruccion/asignacion_mas');
     const { List_Declaracion } = require('../instruccion/list_declaracion');
     //List_Declaracion
@@ -283,7 +285,7 @@ INSTRUCCION:
   //init_inst
     MAIN                            {   $$ = $1 } 
   | DEC_ARRAY                       {   $$ = $1 } 
-  |  DECLARACION_VARIABLE           {   $$ = $1 }//falta cuando hay una lista de id's
+  | DECLARACION_VARIABLE           {   $$ = $1 }//falta cuando hay una lista de id's
   | DECLARACION_FUNCION             {   $$ = $1 }//listo
   | DECLARACION_TYPE                {   $$ = $1 } //aca se crea la 'plantilla' para despues crear instancias
   | INSTANCIA_STRUCT                {   $$ = $1 } 
@@ -360,9 +362,10 @@ FOR_IN
 ;
 
 ASIGNACION 
-  : id igual EXP punto_coma       {  $$ = new Asignacion($1, $3,false,@1.firt_line,@1.firt_column); }
-  | id mas igual EXP punto_coma   {  $$ = new Asignacion_Mas($1, $4,true,@1.firt_line,@1.firt_column); }
-  | id menos igual EXP punto_coma   {  $$ = new Asignacion_Mas($1, $4,false,@1.firt_line,@1.firt_column); }
+  : id igual EXP          punto_coma         {  $$ = new Asignacion($1, $3,false,@1.firt_line,@1.firt_column); }
+  | id mas igual EXP      punto_coma         {  $$ = new Asignacion_Mas($1, $4,true,@1.firt_line,@1.firt_column); }
+  | id menos igual EXP    punto_coma         {  $$ = new Asignacion_Mas($1, $4,false,@1.firt_line,@1.firt_column); }
+  | ACCESO_TYPE igual id punto_coma          {  $$ = new Asignacion_VAR_STRUCT($3,$1,@1.first_line,@1.first_column);}  
   
   // type.accesos = EXP ; || type.accesos[][] = EXP;
   
@@ -374,9 +377,9 @@ ASIGNACION
 ;
 
 TIPO_IGUAL 
-  : igual {    }
-  | mas igual {    }
-  | menos igual {    }
+  : igual           {    }
+  | mas igual       {    }
+  | menos igual     {    }
 ;
 // CONDICION_FOR
 // : id TIPO_IGUAL EXP {    }
@@ -492,10 +495,10 @@ LISTA_ATRIBUTOS
 ;
 
 ATRIBUTO 
-  : TIPO_DEC_VARIABLE id                   { $$ = new Atributo($2,$1,false,@1.firt_line,@1.firt_column);   }
-  | id id                                  { $$ = new Atributo($2,TIPO.STRUCT,false,@1.firt_line,@1.firt_column);   }
-  | TIPO_DEC_VARIABLE id   LISTA_CORCHETES { $$ = new Atributo($2,$1,true,@1.firt_line,@1.firt_column);}
-  | id id LISTA_CORCHETES                  { $$ = new Atributo($2,TIPO.STRUCT,true,@1.firt_line,@1.firt_column);}  
+  : TIPO_DEC_VARIABLE id                   { $$ = new Simbolo($2,$1,@1.first_line,@1.first_column,null,false,false)}//$$ = new Atributo($2,$1,false,@1.firt_line,@1.firt_column);   }
+  | id id                                  { $$ = new Simbolo($2,TIPO.STRUCT,@1.first_line,@1.first_column,$1,false,false)}//{ $$ = new Atributo($2,TIPO.STRUCT,false,@1.firt_line,@1.firt_column);   }
+  | TIPO_DEC_VARIABLE id   LISTA_CORCHETES { $$ = new Simbolo($2,$1,@1.first_line,@1.first_column,null,false,false)}//{ $$ = new Atributo($2,$1,true,@1.firt_line,@1.firt_column);}
+  //| id id LISTA_CORCHETES                 { $$ = new Simbolo($2,$1,@1.first_line,@1.first_column,null,false,false)}// { $$ = new Atributo($2,TIPO.STRUCT,true,@1.firt_line,@1.firt_column);}  
 ;
 
 //=========================================>fin
@@ -649,15 +652,16 @@ TERNARIO
   : EXP interrogacion EXP dos_puntos EXP          {  $$ = new Ternario($1,$3,$5,@1.firt_line,@1.firt_column);  }
 ;
 
-ACCESO_TYPE                                      //$1 => id struct //$2 objetos del struct
-  : id LISTA_ACCESOS_TYPE                         {  $$ = new Acceso_Struct($1,$2,@1.first_line,@1.first_column);   }
+ACCESO_TYPE                                                   //$1 => id struct //$2 objetos del struct
+  : id LISTA_ACCESOS_TYPE                         {   $$ = new Acceso_Struct($1,$2,@1.first_line,@1.first_column);   }
+ // | id = id LISTA_ACCESOS_TYPE  punto_coma       // {   $$ = new ($1,$2,@1.first_line,@1.first_column);   }
   
 ;
 //------------------------------------------------------------------------------------------------------
 //----------------------------------------------PRUEBA--------------------------------------------------
 //------------------------------------------------------------------------------------------------------
 LISTA_ACCESOS_TYPE 
-  : LISTA_ACCESOS_TYPE punto id                                 {  $$ = $1.push($3);  }
+  : LISTA_ACCESOS_TYPE punto id                                 {  $1.push($3);$$ = $1;  }
   | punto id                                                    {  $$ = [$2];         }
   //| LISTA_ACCESOS_TYPE punto id LISTA_ACCESOS_ARREGLO           {    }
   //| punto id LISTA_ACCESOS_ARREGLO                              {    }
@@ -708,8 +712,8 @@ PARAMETRO_LLAMADA:
 DEC_ARRAY //Arreglo del tipo---> int[] arr = [exp1,exp2, [exp3] ]
 
   : TIPO_DEC_VARIABLE LISTA_CORCHETES id  igual corchete_abierto  LISTA_EXPRESIONES corchete_cerrado punto_coma
-   { $$ = new Arreglo ($1,$3,$6,$1,$3,@1.first_line,@1.first_column);    }
-  | TIPO_DEC_VARIABLE LISTA_CORCHETES id  igual  nmral id { $$ = new Arreglo_Valor($1,$3,$6,@1.first_line,@1.first_column); }
+                                                                          { $$ = new Arreglo ($1,$3,$6,$1,$3,@1.first_line,@1.first_column);    }
+  | TIPO_DEC_VARIABLE LISTA_CORCHETES id  igual  nmral id                 { $$ = new Arreglo_Valor($1,$3,$6,@1.first_line,@1.first_column); }
 ;
 
 
@@ -738,20 +742,20 @@ EXPS_CORCHETE:
 
 INSTANCIA_STRUCT:
   id id igual id par_abierto LISTA_EXPRESIONES par_cerrado punto_coma
-  {$$ = new Dec_Struct($1,$2,$4,$6,@1.first_line,@1.first_column); }
+  { $$ = new Dec_Struct($1,$2,$4,$6,@1.first_line,@1.first_column); }
   //| id id  {$$ = new Dec_Struct($1,$2,,$6,@1.first_line,@1.first_column); }
 
 ;
 
 
 ARRAY_METHOD:
-  id nmral por EXP {$$ = new Multiplicacion_Arr($1,$4,@1.first_line,@1.first_column);}
- | id nmral div EXP {$$ = new Division_Arr($1,$4,@1.first_line,@1.first_column);}
- | id nmral menos EXP {$$ = new Resta_Arr($1,$4,@1.first_line,@1.first_column);}
- | id nmral mas EXP {$$ = new Suma_Arr($1,$4,@1.first_line,@1.first_column);}
- | sin nmral par_abierto id par_cerrado { $$ = new Seno_Arr($4,@1.first_line,@1.first_column);}
- | cos nmral par_abierto id par_cerrado {$$ = new Cos_Arr($4,@1.first_line,@1.first_column);}
- | tan nmral par_abierto id par_cerrado {$$ = new Tan_Arr($4,@1.first_line,@1.first_column);}
+  id nmral por EXP                                        {$$ = new Multiplicacion_Arr($1,$4,@1.first_line,@1.first_column);}
+ | id nmral div EXP                                       {$$ = new Division_Arr($1,$4,@1.first_line,@1.first_column);}
+ | id nmral menos EXP                                     {$$ = new Resta_Arr($1,$4,@1.first_line,@1.first_column);}
+ | id nmral mas EXP                                       {$$ = new Suma_Arr($1,$4,@1.first_line,@1.first_column);}
+ | sin nmral par_abierto id par_cerrado                   {$$ = new Seno_Arr($4,@1.first_line,@1.first_column);}
+ | cos nmral par_abierto id par_cerrado                   {$$ = new Cos_Arr($4,@1.first_line,@1.first_column);}
+ | tan nmral par_abierto id par_cerrado                   {$$ = new Tan_Arr($4,@1.first_line,@1.first_column);}
 ;
 
 /*

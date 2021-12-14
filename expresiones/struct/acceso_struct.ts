@@ -47,14 +47,21 @@ export class Acceso_Struct extends Instruccion {
     
     let contador = this.ids.length;
     let temp = sim_struct;
+   // console.log("temp", temp)
     let value_return =new Excepcion("Semantico",this.ids[this.ids.length-1]+" no se encontro en "+this.id,this.fila+"",this.columna+"");
     this.ids.forEach((x) => {
-      
-        
-        
+ 
         if(temp.valor instanceof Map){
           if(temp.valor.has(x) && contador == 1){
-            value_return =  temp.valor.get(x).valor;
+            //Object.setPrototypeOf({ a: 1 }, Foo.prototype)
+            
+            let simbolo:Simbolo = Object.setPrototypeOf(temp.valor.get(x),Simbolo.prototype);
+            
+            if (simbolo instanceof Simbolo){
+              value_return =  temp.valor.get(x);//simbolo
+             // console.log("simbolo instance of Simbolo",temp.valor.get(x));  
+            }
+            
             
             return value_return;//value_return =  temp.valor.get(x).valor;
           }

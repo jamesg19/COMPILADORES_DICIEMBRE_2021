@@ -30,6 +30,7 @@ export class Dec_Struct extends Instruccion {
     this.values_atributos = values_atributos;
     this.id_struct = id_struct;
     
+    
     this.list_simbolos = new Map();
     
   }
@@ -98,6 +99,7 @@ export class Dec_Struct extends Instruccion {
     template?.lista_atributos.forEach((x) => {
       let result = this.values_atributos[contador].interpretar(entorno, arbol);
 
+
       if (this.values_atributos[contador].tipo != x.tipo)
         return new Excepcion(
           "Semantico",
@@ -109,8 +111,16 @@ export class Dec_Struct extends Instruccion {
       if (result instanceof Excepcion) return result;
 
       let sim: Simbolo = JSON.parse(JSON.stringify(x));
+      
+      if(x.tipo == TIPO.STRUCT){
+      
+        sim.name_struct = sim.valor;
+        sim.struct = true;
+        
+      }
+      
       sim.valor = result;
-
+      contador++;
       this.list_simbolos.set(sim.id, sim);
     });
     

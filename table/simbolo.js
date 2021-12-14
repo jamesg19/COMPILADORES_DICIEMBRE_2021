@@ -70,12 +70,15 @@ class Simbolo {
         if (this.struct) {
             value = "";
             value = this.name_struct + "( ";
-            console.log();
             if (this.valor instanceof Map) {
                 //sim.valor.map((x)=> console.log(x));
                 this.valor.forEach((x) => {
-                    //if(x instanceof Simbolo)
-                    value += x.id + " = " + x.valor + ", "; //x.toString()//x();
+                    if (x.struct) {
+                        let simbolo = Object.setPrototypeOf((x), Simbolo.prototype);
+                        value += x.id + " = " + simbolo.toString() + " )";
+                    }
+                    else
+                        value += x.id + " = " + x.valor + ", "; //x.toString()//x();
                 });
                 value = value.slice(0, value.length - 2);
                 value += " )";
@@ -83,6 +86,8 @@ class Simbolo {
             //else if(this.valor instanceof )
         }
         return value;
+    }
+    getparametros() {
     }
 }
 exports.Simbolo = Simbolo;
