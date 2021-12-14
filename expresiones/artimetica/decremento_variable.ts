@@ -7,6 +7,7 @@ import { Excepcion} from "../../table/excepcion"
 import { Primitivo } from "../primitivo";
 import { Simbolo } from "../../table/simbolo";
 import { isUndefined } from "util";
+import { NodoAST } from "../../abs/nodo";
 
 
 export class DecrementoVariable extends Instruccion{
@@ -60,7 +61,11 @@ export class DecrementoVariable extends Instruccion{
         }
     }
 
-
+    getNodo(){
+        const nodo=new NodoAST("DECREMENTO --");
+        nodo.agregarHijo(this.id);
+        return nodo;
+    }
 
 
 

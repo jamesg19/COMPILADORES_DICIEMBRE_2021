@@ -4,6 +4,7 @@ import { Excepcion } from "../table/excepcion";
 import { TIPO } from "../table/TipoNativo";
 import { Arbol } from "../table/arbol";
 import { Simbolo } from "../table/simbolo";
+import { NodoAST } from "../abs/nodo";
 
 export class D_Id extends Instruccion {
   tipo: TIPO;
@@ -84,5 +85,31 @@ export class D_Id extends Instruccion {
       case TIPO.STRUCT:
         return undefined;
     }
+  }
+
+  getNodo():NodoAST{
+    const nodo=new NodoAST("DECLARACION");
+    if(this.tipo==TIPO.ARREGLO){
+      nodo.agregarHijo("ARREGLO");
+    } else if(this.tipo==TIPO.BOOLEAN){
+      nodo.agregarHijo("BOOLEAN");
+    } else if(this.tipo==TIPO.CADENA){
+      nodo.agregarHijo("CADENA");
+    } else if(this.tipo==TIPO.CARACTER){
+      nodo.agregarHijo("CARACTER");
+    } else if(this.tipo==TIPO.DECIMAL){
+      nodo.agregarHijo("DECIMAL");
+    } else if(this.tipo==TIPO.ENTERO){
+      nodo.agregarHijo("ENTERO");
+    } else if(this.tipo==TIPO.NULL){
+      nodo.agregarHijo("NULL");
+    } else if(this.tipo==TIPO.STRUCT){
+      nodo.agregarHijo("STRUCT");
+    } else if(this.tipo==TIPO.VOID){
+      nodo.agregarHijo("VOID");
+    }
+    nodo.agregarHijo(this.id);
+    nodo.agregarHijoNodo(this.expresion.getNodo());
+    return nodo;
   }
 }

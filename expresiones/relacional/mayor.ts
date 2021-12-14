@@ -3,6 +3,7 @@ import { TablaSimbolos } from '../../table/tablasimbolos';
 import { TIPO } from '../../table/tipo';
 import { Arbol } from '../../table/arbol';
 import { Excepcion } from '../../table/excepcion';
+import { NodoAST } from '../../abs/nodo';
 
 
 export class Mayor extends Instruccion{
@@ -63,6 +64,19 @@ export class Mayor extends Instruccion{
         return this.obtenerVal(this.leftExpression.tipo,exp1) >this.obtenerVal(this.rigthExpression.tipo,exp2);
       }
 
+  }
+  getNodo(){
+    const nodo= new NodoAST("RELACIONAL");
+    if( (this.rigthExpression!=null) || (this.rigthExpression != undefined)){
+        nodo.agregarHijoNodo(this.leftExpression.getNodo());
+        nodo.agregarHijo(">");
+        nodo.agregarHijoNodo(this.rigthExpression.getNodo());
+        return nodo;
+    }else{
+        nodo.agregarHijo(">");
+        nodo.agregarHijoNodo(this.leftExpression.getNodo());
+        return nodo;
+    }
   }
 
 

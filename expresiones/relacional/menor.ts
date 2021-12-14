@@ -3,6 +3,7 @@ import { TablaSimbolos } from '../../table/tablasimbolos';
 import { TIPO } from '../../table/tipo';
 import { Arbol } from '../../table/arbol';
 import { Excepcion } from '../../table/excepcion';
+import { NodoAST } from '../../abs/nodo';
 
 
 export class Menor extends Instruccion{
@@ -64,7 +65,19 @@ export class Menor extends Instruccion{
       }
 
   }
-
+  getNodo(){
+    const nodo= new NodoAST("RELACIONAL");
+    if( (this.rigthExpression!=null) || (this.rigthExpression != undefined)){
+        nodo.agregarHijoNodo(this.leftExpression.getNodo());
+        nodo.agregarHijo("<");
+        nodo.agregarHijoNodo(this.rigthExpression.getNodo());
+        return nodo;
+    }else{
+        nodo.agregarHijo("<");
+        nodo.agregarHijoNodo(this.leftExpression.getNodo());
+        return nodo;
+    }
+  }
 
   obtenerVal(tipo:TIPO,val:string):any{
     try {

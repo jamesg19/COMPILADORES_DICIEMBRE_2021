@@ -7,6 +7,7 @@ import { TIPO } from "../../table/TipoNativo";
 import {TIPO_NATIVA_CADENA } from "./tiponativacadena";
 import { Primitivo } from "../primitivo";
 import { Identificador } from "../identificador";
+import { NodoAST } from "../../abs/nodo";
 
 
 export class RepeticionCadena extends Instruccion{
@@ -107,7 +108,19 @@ export class RepeticionCadena extends Instruccion{
 
         }
     }
-
+    getNodo(){
+        const nodo= new NodoAST("REPEAT");
+        if( (this.inicio!=null) || (this.inicio != undefined)){
+            nodo.agregarHijoNodo(this.expresion.getNodo());
+            nodo.agregarHijo("^");
+            nodo.agregarHijoNodo(this.inicio.getNodo());
+            return nodo;
+        }else{
+            nodo.agregarHijo("^");
+            nodo.agregarHijoNodo(this.expresion.getNodo());
+            return nodo;
+        }
+    }
 
 
     obtenerVal(tipo:TIPO,val:string):any{

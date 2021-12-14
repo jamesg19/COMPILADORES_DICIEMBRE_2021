@@ -3,6 +3,7 @@ import { TablaSimbolos } from "../table/tablasimbolos";
 import { Arbol } from "../table/arbol";
 import { Excepcion } from "../table/excepcion";
 import { TIPO } from "../table/TipoNativo";
+import { NodoAST } from "../abs/nodo";
 
 export class Asignacion extends Instruccion {
   id: string;
@@ -83,4 +84,11 @@ export class Asignacion extends Instruccion {
     variable.tipo=this.exp.tipo;
     e.actualizarSimboloEnTabla(variable);
   }
+
+  getNodo(){
+    const nodo=new NodoAST("ASIGNACION");
+    nodo.agregarHijo(this.id+"");
+    nodo.agregarHijoNodo(this.expresion.getNodo());
+  }
+
 }

@@ -5,6 +5,7 @@ import { TIPO } from "../../table/tipo";
 import { ARITMETICO } from "../../table/tipo";
 import { Excepcion} from "../../table/excepcion"
 import { Primitivo } from "../primitivo";
+import { NodoAST } from "../../abs/nodo";
 
 
 export class Pow extends Instruccion{
@@ -79,7 +80,19 @@ export class Pow extends Instruccion{
         }
     }
 
-
+    getNodo(){
+        const nodo= new NodoAST("ARITMETICA");
+        if( (this.potencia!=null) || (this.potencia != undefined)){
+            nodo.agregarHijoNodo(this.base.getNodo());
+            nodo.agregarHijo("POW");
+            nodo.agregarHijoNodo(this.potencia.getNodo());
+            return nodo;
+        }else{
+            nodo.agregarHijo("POW");
+            nodo.agregarHijoNodo(this.base.getNodo());
+            return nodo;
+        }
+    }
 
     obtenerVal(tipo:TIPO,val:string):any{
         try {

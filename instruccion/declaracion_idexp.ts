@@ -4,6 +4,7 @@ import { Excepcion } from '../table/excepcion';
 import { TIPO } from '../table/TipoNativo';
 import { Arbol } from '../table/arbol';
 import { Simbolo } from '../table/simbolo';
+import { NodoAST } from '../abs/nodo';
 
 export class D_IdExp extends Instruccion{
     
@@ -51,6 +52,33 @@ export class D_IdExp extends Instruccion{
       
       let simbolo = new Simbolo(this.id,this.tipo,super.fila,super.columna,valor,false,false);
       e.addSimbolo(simbolo);//valor: any, arreglo: boolean, struct: boolean
+    }
+
+
+    getNodo():NodoAST{
+      const nodo=new NodoAST("DECLARACION");
+      if(this.tipo==TIPO.ARREGLO){
+        nodo.agregarHijo("ARREGLO");
+      } else if(this.tipo==TIPO.BOOLEAN){
+        nodo.agregarHijo("BOOLEAN");
+      } else if(this.tipo==TIPO.CADENA){
+        nodo.agregarHijo("CADENA");
+      } else if(this.tipo==TIPO.CARACTER){
+        nodo.agregarHijo("CARACTER");
+      } else if(this.tipo==TIPO.DECIMAL){
+        nodo.agregarHijo("DECIMAL");
+      } else if(this.tipo==TIPO.ENTERO){
+        nodo.agregarHijo("ENTERO");
+      } else if(this.tipo==TIPO.NULL){
+        nodo.agregarHijo("NULL");
+      } else if(this.tipo==TIPO.STRUCT){
+        nodo.agregarHijo("STRUCT");
+      } else if(this.tipo==TIPO.VOID){
+        nodo.agregarHijo("VOID");
+      }
+      nodo.agregarHijo(this.id);
+      nodo.agregarHijoNodo(this.expresion.getNodo());
+      return nodo;
     }
   
 }

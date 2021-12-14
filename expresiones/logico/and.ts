@@ -4,6 +4,7 @@ import { Excepcion } from '../../table/excepcion';
 import { Instruccion } from '../../abs/Instruccion';
 import { TIPO } from '../../table/tipo';
 import { Primitivo } from '../primitivo';
+import { NodoAST } from '../../abs/nodo';
 
 export class And extends Instruccion{
     leftExpressio: Primitivo;
@@ -67,6 +68,20 @@ export class And extends Instruccion{
           return new Excepcion("Semantico",`No se pudo obtener el valor en division`,`${this.fila}`,`${this.columna}`);
       }
   
+    }
+
+    getNodo(){
+        const nodo= new NodoAST("LOGICA");
+        if( (this.rightExpression!=null) || (this.rightExpression != undefined)){
+            nodo.agregarHijoNodo(this.leftExpressio.getNodo());
+            nodo.agregarHijo(" AND");
+            nodo.agregarHijoNodo(this.rightExpression.getNodo());
+            return nodo;
+        }else{
+            nodo.agregarHijo("AND");
+            nodo.agregarHijoNodo(this.leftExpressio.getNodo());
+            return nodo;
+        }
     }
   }
   

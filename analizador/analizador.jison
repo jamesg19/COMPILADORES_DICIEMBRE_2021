@@ -249,9 +249,9 @@
 %left 'mayor' 'menor' 'mayor_igual' 'menor_igual' //listo
 %left 'mas' 'menos' 'mass'
 %left 'por' 'div' 'mod' 'repeticion'
-%left 'umenos'
 %right 'potencia'
 %left 'mas_mas' 'menos_menos' //listo
+%left 'umenos'
 
 
 %start INICIO 
@@ -739,7 +739,6 @@ EXPS_CORCHETE:
 INSTANCIA_STRUCT:
   id id igual id par_abierto LISTA_EXPRESIONES par_cerrado punto_coma
   {$$ = new Dec_Struct($1,$2,$4,$6,@1.first_line,@1.first_column); }
-  //| id id  {$$ = new Dec_Struct($1,$2,,$6,@1.first_line,@1.first_column); }
 
 ;
 

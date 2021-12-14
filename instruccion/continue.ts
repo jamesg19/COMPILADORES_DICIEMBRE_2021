@@ -19,6 +19,7 @@ export class Continue extends Instruccion{
         return new Continue(this.fila, this.columna);
     }
     getNodo():NodoAST{
-        return new NodoAST("CONTINUE");
+        const nodo=new NodoAST("CONTINUE");
+        return nodo;
     }
 }

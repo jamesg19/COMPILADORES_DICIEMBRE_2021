@@ -3,6 +3,7 @@ import { TablaSimbolos } from '../../table/tablasimbolos';
 import { Arbol } from '../../table/arbol';
 import { TIPO } from '../../table/tipo';
 import { Excepcion } from '../../table/excepcion';
+import { NodoAST } from '../../abs/nodo';
 
 export class IgualIgual extends Instruccion{
     
@@ -65,7 +66,21 @@ export class IgualIgual extends Instruccion{
           return new Excepcion("Semantico",`No se pudo obtener el valor en division`,`${this.fila}`,`${this.columna}`);
       }
   
-  }
+    }
+
+    getNodo(){
+      const nodo= new NodoAST("RELACIONAL");
+      if( (this.rightExpression!=null) || (this.rightExpression != undefined)){
+          nodo.agregarHijoNodo(this.leftExpression.getNodo());
+          nodo.agregarHijo("==");
+          nodo.agregarHijoNodo(this.rightExpression.getNodo());
+          return nodo;
+      }else{
+          nodo.agregarHijo("==");
+          nodo.agregarHijoNodo(this.leftExpression.getNodo());
+          return nodo;
+      }
+    }
 
   }
   

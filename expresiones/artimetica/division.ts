@@ -5,6 +5,7 @@ import { TIPO } from "../../table/tipo";
 import { ARITMETICO } from "../../table/tipo";
 import { Excepcion} from "../../table/excepcion"
 import { Primitivo } from "../primitivo";
+import { NodoAST } from "../../abs/nodo";
 
 
 export class Division extends Instruccion{
@@ -89,7 +90,19 @@ export class Division extends Instruccion{
 
         }
     }
-
+    getNodo(){
+        const nodo= new NodoAST("ARITMETICA");
+        if( (this.operadorDer!=null) || (this.operadorDer != undefined)){
+            nodo.agregarHijoNodo(this.operadorIzq.getNodo());
+            nodo.agregarHijo("/");
+            nodo.agregarHijoNodo(this.operadorDer.getNodo());
+            return nodo;
+        }else{
+            nodo.agregarHijo("/");
+            nodo.agregarHijoNodo(this.operadorIzq.getNodo());
+            return nodo;
+        }
+    }
 
 
 

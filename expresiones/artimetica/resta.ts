@@ -134,7 +134,19 @@ export class Resta extends Instruccion{
         }
     }
 
-
+    getNodo(){
+        const nodo= new NodoAST("ARITMETICA");
+        if( (this.operadorDer!=null) || (this.operadorDer != undefined)){
+            nodo.agregarHijoNodo(this.operadorIzq.getNodo());
+            nodo.agregarHijo("-");
+            nodo.agregarHijoNodo(this.operadorDer.getNodo());
+            return nodo;
+        }else{
+            nodo.agregarHijo("-");
+            nodo.agregarHijoNodo(this.operadorIzq.getNodo());
+            return nodo;
+        }
+    }
 
 
 

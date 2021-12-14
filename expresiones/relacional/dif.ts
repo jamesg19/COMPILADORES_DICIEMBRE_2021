@@ -3,6 +3,7 @@ import { TablaSimbolos } from '../../table/tablasimbolos';
 import { TIPO } from '../../table/tipo';
 import { Arbol } from '../../table/arbol';
 import { Excepcion } from '../../table/excepcion';
+import { NodoAST } from '../../abs/nodo';
 
 export class Diff extends Instruccion{
     expIzq: Instruccion;
@@ -42,6 +43,19 @@ export class Diff extends Instruccion{
       return this.obtenerVal(this.expIzq.tipo,exp1) !=this.obtenerVal(this.expDer.tipo,exp2);
       
   
+    }
+    getNodo(){
+        const nodo= new NodoAST("RELACIONAL");
+        if( (this.expDer!=null) || (this.expDer != undefined)){
+            nodo.agregarHijoNodo(this.expIzq.getNodo());
+            nodo.agregarHijo("DIFERENTE");
+            nodo.agregarHijoNodo(this.expDer.getNodo());
+            return nodo;
+        }else{
+            nodo.agregarHijo("DIFERENTE");
+            nodo.agregarHijoNodo(this.expIzq.getNodo());
+            return nodo;
+        }
     }
 
     obtenerVal(tipo:TIPO,val:string):any{

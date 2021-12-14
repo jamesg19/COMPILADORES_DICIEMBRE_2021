@@ -20,6 +20,7 @@ export class Break extends Instruccion{
         //return this;
     }
     getNodo():NodoAST{
-        return new NodoAST("BREAK");
+        const nodo=new NodoAST("BREAK");
+        return nodo;
     }
 }

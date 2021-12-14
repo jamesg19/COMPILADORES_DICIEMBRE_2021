@@ -7,6 +7,7 @@ import { TIPO } from "../../table/TipoNativo";
 import {TIPO_NATIVA_CADENA } from "./tiponativacadena";
 import { Primitivo } from "../primitivo";
 import { Console } from "console";
+import { NodoAST } from "../../abs/nodo";
 
 
 export class NativasString extends Instruccion{
@@ -170,7 +171,42 @@ export class NativasString extends Instruccion{
         }
     }
 
-
+    getNodo(){
+        const nodo= new NodoAST("NATIVAS STRING");
+        if(this.tipo_operacion==TIPO_NATIVA_CADENA.BOOLEANPARSE){
+            nodo.agregarHijo("BOOLEANPARSE");
+        }
+        else if(this.tipo_operacion==TIPO_NATIVA_CADENA.CARACTER_POSITION){
+            nodo.agregarHijo("CARACTER_POSITION");
+        } else if(this.tipo_operacion==TIPO_NATIVA_CADENA.DOUBLEPARSE){
+            nodo.agregarHijo("DOUBLEPARSE");
+        } else if(this.tipo_operacion==TIPO_NATIVA_CADENA.INTPARSE){
+            nodo.agregarHijo("INTPARSE");
+        } else if(this.tipo_operacion==TIPO_NATIVA_CADENA.LENGHT){
+            nodo.agregarHijo("LENGHT");
+        } else if(this.tipo_operacion==TIPO_NATIVA_CADENA.REPETICION){
+            nodo.agregarHijo("REPETICION");
+        } else if(this.tipo_operacion==TIPO_NATIVA_CADENA.SUBSTRING){
+            nodo.agregarHijo("SUBSTRING");
+        } else if(this.tipo_operacion==TIPO_NATIVA_CADENA.TODOUBLE){
+            nodo.agregarHijo("TODOUBLE");
+        } else if(this.tipo_operacion==TIPO_NATIVA_CADENA.TOINT){
+            nodo.agregarHijo("TOINT");
+        } else if(this.tipo_operacion==TIPO_NATIVA_CADENA.TOLOWER){
+            nodo.agregarHijo("TOLOWER");
+        } else if(this.tipo_operacion==TIPO_NATIVA_CADENA.TOSTRING){
+            nodo.agregarHijo("TOSTRING");
+        } else if(this.tipo_operacion==TIPO_NATIVA_CADENA.TOUPPER){
+            nodo.agregarHijo("TOUPPER");
+        } else if(this.tipo_operacion==TIPO_NATIVA_CADENA.TYPEOF){
+            nodo.agregarHijo("TYPEOF");
+        } else if(this.tipo_operacion==TIPO_NATIVA_CADENA.STRING){
+            nodo.agregarHijo("STRING");
+        }
+        nodo.agregarHijoNodo(this.identificador.getNodo());
+        return nodo
+        
+    }
 
     obtenerVal(tipo:TIPO,val:string):any{
         try {

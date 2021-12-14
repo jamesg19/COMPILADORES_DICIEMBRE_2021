@@ -2,6 +2,7 @@ import { Instruccion } from "../abs/Instruccion";
 import { TIPO } from "../table/tipo";
 import { TablaSimbolos } from "../table/tablasimbolos";
 import { Arbol } from "../table/arbol";
+import { NodoAST } from "../abs/nodo";
 
 export class Primitivo extends Instruccion {
   fila: number;
@@ -32,5 +33,10 @@ export class Primitivo extends Instruccion {
       return this.value;
     }
     return this.value;
+  }
+  getNodo(){
+    const nodo=new NodoAST("PRIMITIVO");
+    nodo.agregarHijo(this.value);
+    return nodo;
   }
 }

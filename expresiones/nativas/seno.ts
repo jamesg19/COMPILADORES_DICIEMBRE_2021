@@ -5,6 +5,7 @@ import { TIPO } from "../../table/tipo";
 import { ARITMETICO } from "../../table/tipo";
 import { Excepcion} from "../../table/excepcion"
 import { Primitivo } from "../primitivo";
+import { NodoAST } from "../../abs/nodo";
 
 
 export class Seno extends Instruccion{
@@ -71,7 +72,11 @@ export class Seno extends Instruccion{
         }
     }
 
-
+    getNodo(){
+        const nodo= new NodoAST("SENO");
+        nodo.agregarHijo(this.operadorIzq.value+"");
+        return nodo;
+    }
 
     obtenerVal(tipo:TIPO,val:string):any{
         try {
