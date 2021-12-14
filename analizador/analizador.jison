@@ -151,6 +151,7 @@
     const { Main }    = require ('../instruccion/main');
     const { Asignacion } = require('../instruccion/asignacion');
     const { Asignacion_VAR_STRUCT } = require('../expresiones/struct/asignacion_var_struct');
+    const { Asignacion_Struct_Exp } = require('../expresiones/struct/asignacion_struct_exp');
     const { Asignacion_Mas } = require('../instruccion/asignacion_mas');
     const { List_Declaracion } = require('../instruccion/list_declaracion');
     //List_Declaracion
@@ -366,6 +367,7 @@ ASIGNACION
   | id mas igual EXP      punto_coma         {  $$ = new Asignacion_Mas($1, $4,true,@1.firt_line,@1.firt_column); }
   | id menos igual EXP    punto_coma         {  $$ = new Asignacion_Mas($1, $4,false,@1.firt_line,@1.firt_column); }
   | ACCESO_TYPE igual id punto_coma          {  $$ = new Asignacion_VAR_STRUCT($3,$1,@1.first_line,@1.first_column);}  
+  | ACCESO_TYPE igual EXP punto_coma          {  $$ = new Asignacion_Struct_Exp($1,$3,@1.first_line,@1.first_column);}  
   
   // type.accesos = EXP ; || type.accesos[][] = EXP;
   

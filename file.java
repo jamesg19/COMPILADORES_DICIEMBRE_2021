@@ -47,7 +47,7 @@ void main()
     int a = o.c.a;
     a = 32222;
     
-    o.c.a = a;
+    o.c.a = 312;
     println(o.c.a);
     println("Valor A = 2000 ->" & a);
     
