@@ -180,7 +180,8 @@
     const { ARITMETICO } = require('../table/tipo');
     const { RELACIONAL } = require('../table/tipo');
     const { LOGICO} = require('../table/tipo');
-    const { TIPO } = require('../table/TipoNativo');
+    const { TIPO } = require('../table/tipo');
+    
     
     //relacionales
     const { Diff } = require('../expresiones/relacional/dif');
@@ -308,7 +309,7 @@ INSTRUCCION:
   | PRINT                           {   $$ = $1 } //listo
   | LLAMADA_FUNCION_EXP punto_coma  {   $$ = $1 }
   | MODIFICAR_ARREGLO               {   $$ = $1 }
-  | ACCESO_TYPE                     { $$ = $1 }
+  //| ACCESO_TYPE                     { $$ = $1 }
   //| error {console.log("errir",$1)}
   
 ;
@@ -366,7 +367,7 @@ ASIGNACION
   : id igual EXP          punto_coma         {  $$ = new Asignacion($1, $3,false,@1.firt_line,@1.firt_column); }
   | id mas igual EXP      punto_coma         {  $$ = new Asignacion_Mas($1, $4,true,@1.firt_line,@1.firt_column); }
   | id menos igual EXP    punto_coma         {  $$ = new Asignacion_Mas($1, $4,false,@1.firt_line,@1.firt_column); }
-  | ACCESO_TYPE igual id  punto_coma          {  $$ = new Asignacion_VAR_STRUCT($3,$1,@1.first_line,@1.first_column);}  
+  | ACCESO_TYPE igual EXP  punto_coma          {    $$ = new Asignacion_VAR_STRUCT($3,$1,@1.first_line,@1.first_column);}  
   
   
   // type.accesos = EXP ; || type.accesos[][] = EXP;

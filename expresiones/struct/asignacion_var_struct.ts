@@ -5,9 +5,11 @@ import { Arbol } from "../../table/arbol";
 import { Excepcion } from "../../table/excepcion";
 import { Simbolo } from "../../table/simbolo";
 import { timeStamp } from "console";
+import { isNumber } from 'util';
+import { TIPO } from "../../table/tipo";
 
 export class Asignacion_VAR_STRUCT extends Instruccion {
-  id: string;
+  id: Instruccion;
   acceso: Acceso_Struct;
 
   /**
@@ -17,7 +19,7 @@ export class Asignacion_VAR_STRUCT extends Instruccion {
    * @param  {number} columna
    */
   constructor(
-    id: string,
+    id: Instruccion,
     acceso: Acceso_Struct,
     fila: number,
     columna: number
@@ -32,9 +34,10 @@ export class Asignacion_VAR_STRUCT extends Instruccion {
    * @param  {Arbol} arbol
    */
   interpretar(entorno: TablaSimbolos, arbol: Arbol) {
-    let value = entorno.getSimbolo(this.id);
+    let value = this.id.interpretar(entorno,arbol);//entorno.getSimbolo(this.id);
     if (value instanceof Excepcion) return value;
-    if (value)
+    
+    if (!value)
       return new Excepcion(
         "Semantico",
         "No existe la variable " + this.id,
@@ -44,8 +47,10 @@ export class Asignacion_VAR_STRUCT extends Instruccion {
 
     let acceso_value = this.acceso.interpretar(entorno, arbol);
 
+    
     if (acceso_value instanceof Excepcion) return acceso_value;
 
+    
     if (!(acceso_value instanceof Simbolo))
       return new Excepcion(
         "Semantico",
@@ -54,7 +59,11 @@ export class Asignacion_VAR_STRUCT extends Instruccion {
         this.columna + ""
       );
       
-    if(acceso_value.tipo != value.tipo)
+      if((this.id.tipo == TIPO.ENTERO || this.id.tipo == TIPO.DECIMAL) && (acceso_value.tipo == TIPO.ENTERO || acceso_value.tipo==TIPO.DECIMAL) ){
+        acceso_value.valor=Number(value);
+        
+     }else 
+      if(acceso_value.tipo != this.id.tipo)
     return new Excepcion(
         "Semantico",
         "error en el valor de struct ",
@@ -62,6 +71,12 @@ export class Asignacion_VAR_STRUCT extends Instruccion {
         this.columna + ""
       );
       
-      value.valor = acceso_value.valor;
+     // console.log(acceso_value);
+      //value.valor = acceso_value.valor;
+      acceso_value.valor = value;
+      
+  }
+  getNodo(){
+    
   }
 }

@@ -5,7 +5,7 @@ import { Simbolo } from "../../table/simbolo";
 import { Type } from "../../table/Type";
 import { Arbol } from "../../table/arbol";
 import { Atributo } from "./atributo";
-import { TIPO } from "../../table/TipoNativo";
+import { TIPO } from "../../table/tipo";
 import { Dec_Struct } from './instancia_struct';
 
 export class Struct extends Instruccion {
