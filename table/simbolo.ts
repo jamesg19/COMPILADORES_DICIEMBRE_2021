@@ -11,6 +11,8 @@ export class Simbolo {
   constante: boolean;
   name_struct: string;
   print_text: string;
+  
+  
   /**
    * @param  {string} id
    * @param  {TIPO} tipo
@@ -108,8 +110,6 @@ export class Simbolo {
     }
     return value;
   }
-  getparametros(){
-    
-  }
+  
   
 }

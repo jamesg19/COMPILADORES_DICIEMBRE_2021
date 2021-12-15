@@ -97,7 +97,7 @@ export class Dec_Struct extends Instruccion {
     let contador: number = 0;
 
     template?.lista_atributos.forEach((x) => {
-      let result = ()
+      
       let result = this.values_atributos[contador].interpretar(entorno, arbol);
 
 
