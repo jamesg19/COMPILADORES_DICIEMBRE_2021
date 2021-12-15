@@ -1,5 +1,7 @@
-struct Estructura{
-    int x
+struct Persona{
+    string nombre,
+    string apellido,
+    Persona[] hijos
 };
 
 int cambiarAtributo(Estructura s){
@@ -8,12 +10,8 @@ int cambiarAtributo(Estructura s){
 
 void main(){
     
-Estructura a = Estructura(0);
-println(a);             // Imprime 'Estructura(0)'
-println(a.x);           // Imprime 0
+Persona p = Persona("Julio", "Fernando ",null);
+Persona p2 = Persona("Julio", "Fernando ",[p]);
 
-cambiarAtributo(a);
-
-println(a);             // Imprime 'Estructura(10)'
-println(a.x);           // Imprime 10
+println(p2);
 }

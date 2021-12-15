@@ -97,6 +97,7 @@ export class Dec_Struct extends Instruccion {
     let contador: number = 0;
 
     template?.lista_atributos.forEach((x) => {
+      let result = ()
       let result = this.values_atributos[contador].interpretar(entorno, arbol);
 
 
@@ -112,7 +113,7 @@ export class Dec_Struct extends Instruccion {
 
       let sim: Simbolo = JSON.parse(JSON.stringify(x));
       
-      if(x.tipo == TIPO.STRUCT){
+      if(x.struct){
       
         sim.name_struct = sim.valor;
         sim.struct = true;
@@ -180,5 +181,8 @@ export class Dec_Struct extends Instruccion {
 
     //   entorno.addSimbolo
     // });
+  }
+  getNodo(){
+    
   }
 }
