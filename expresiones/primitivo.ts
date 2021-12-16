@@ -39,4 +39,5 @@ export class Primitivo extends Instruccion {
     nodo.agregarHijo(this.value);
     return nodo;
   }
+  traducir()
 }

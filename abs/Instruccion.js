@@ -7,6 +7,7 @@ class Instruccion {
         this.fila = fila;
         this.struct = false;
         this.arra = false;
+        this.temp = 0;
     }
 }
 exports.Instruccion = Instruccion;

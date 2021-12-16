@@ -87,7 +87,5 @@ class Simbolo {
         }
         return value;
     }
-    getparametros() {
-    }
 }
 exports.Simbolo = Simbolo;

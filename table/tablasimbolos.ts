@@ -4,6 +4,7 @@
 import { Simbolo } from './simbolo';
 import { Excepcion } from './excepcion';
 import { Struct } from '../expresiones/struct/struct';
+import { getConfigFileParsingDiagnostics } from 'typescript';
 
 export class TablaSimbolos{
     
@@ -104,3 +105,5 @@ export class TablaSimbolos{
      
     
 }
+
+

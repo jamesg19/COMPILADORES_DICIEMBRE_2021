@@ -7,16 +7,19 @@ export abstract class  Instruccion{
     struct:boolean;
     arra:boolean;
     expresion: string;
+    temp:number;
     
     constructor(fila:number,columna:number){
             this.columna = columna;
             this.fila = fila;    
             this.struct = false;  
             this.arra = false;          
+            this.temp = 0;
     }
     abstract interpretar(entorno:TablaSimbolos,arbol:Arbol):any;
     
     abstract getNodo():any;
+    abstract traducir(entorno:TablaSimbolos,arbol:Arbol):string;
 
 
         
