@@ -15,7 +15,6 @@ const asignacion_1 = require("./instruccion/asignacion");
 const array_valor_1 = require("./expresiones/array/array_valor");
 const break_1 = require("./instruccion/break");
 const main_1 = require("./instruccion/main");
-const print_1 = require("./instruccion/print");
 const nativas_1 = require("./nativas");
 const Parser = require("./analizador/analizador");
 class Principal {
@@ -81,12 +80,12 @@ class Principal {
             }
         });
         //3era pasada
-        ast.instrucciones.forEach(element => {
-            //if(!(element instanceof Main || ) )    
+        ast.instrucciones.forEach((element) => {
+            //if(!(element instanceof Main || ) )
             //console.log("Sentencias fuera de Main")
         });
         // console.log("PROBANDO DOT.......*/*/*/*/");
-        // //generacion de AST 
+        // //generacion de AST
         // const init=new NodoAST("RAIZ");
         // const instr=new NodoAST("INSTRUCCIONES");
         // ast.getInstrucciones().forEach((instruccion:Instruccion) => {
@@ -110,15 +109,14 @@ class Principal {
         let nativa = new nativas_1.Nativas();
         let traducir = "";
         ast.instrucciones.forEach((element) => {
+            //console.log(element);
             element.traducir(ts_global, ast);
         });
         let code_objeto = "";
         let print_nativa = nativa.print_function(ast);
         //console.log(nativa.print_function());
-        if (print_1.Print.print)
-            code_objeto = ast.head + "\n" + ast.list_temporales() + "\n" + print_nativa + "\n";
-        else
-            code_objeto = ast.head + "\n";
+        code_objeto =
+            ast.head + "\n" + ast.list_temporales() + "\n" + print_nativa + "\n";
         console.log(code_objeto + "\n" + Principal.historial);
     }
 }
@@ -126,12 +124,12 @@ exports.Principal = Principal;
 Principal.contador = 0;
 Principal.temp = 0; //control de temporales
 Principal.etiqueta = 0; //contro de etiquetas
-Principal.posicion = 0; //guarda la poscion en el stack   
+Principal.posicion = 0; //guarda la poscion en el stack
 Principal.heap = 0; //posicion en el heap    ???
 Principal.historial = "";
 //let principa: Principal = new Principal();
 const fs = require("fs"), NOMBRE_ARCHIVO = "file.java";
-fs.readFile(NOMBRE_ARCHIVO, 'utf8', (error, datos) => {
+fs.readFile(NOMBRE_ARCHIVO, "utf8", (error, datos) => {
     if (error)
         throw error;
     let principa = new Principal();

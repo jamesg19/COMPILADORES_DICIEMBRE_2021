@@ -5,6 +5,7 @@ import { TIPO } from '../table/tipo';
 import { Arbol } from '../table/arbol';
 import { Simbolo } from '../table/simbolo';
 import { NodoAST } from '../abs/nodo';
+import { Principal } from '../principal';
 
 export class D_IdExp extends Instruccion{
     
@@ -80,6 +81,24 @@ export class D_IdExp extends Instruccion{
       nodo.agregarHijoNodo(this.exp.getNodo());
       return nodo;
     }
+    traducir(e: TablaSimbolos,arbol:Arbol):any {
+      //Validacion de variable existente
+      let variable = e.getSimbolo(this.id);//e.getVariable(this.id);
+      
+      if(variable)                  
+        return new Excepcion("Semantico"," no se pueden declarar variables con el mismo nombre"+this.id,super.fila+"",super.columna+"");
+
   
+      //Creacion de variable en el entorno
+      let valor = this.exp.traducir(e,arbol);
+      if(this.exp.tipo == TIPO.ARREGLO || this.exp.tipo == TIPO.STRUCT) {
+        Principal.historial += "/*           Crear metodo que copie un arreglo          */"
+        valor = JSON.parse(JSON.stringify(valor));
+      } 
+      
+      let simbolo = new Simbolo(this.id,this.tipo,super.fila,super.columna,valor,false,false);
+      e.addSimbolo(simbolo);//valor: any, arreglo: boolean, struct: boolean
+    }
+
 }
   

@@ -1,5 +1,6 @@
 import { Arbol } from "./table/arbol";
 import { Principal } from "./principal";
+import { Print } from "./instruccion/print";
 export class Nativas {
   constructor() {}
   print_function(arbol: Arbol): string {
@@ -36,6 +37,7 @@ export class Nativas {
       "\t"+label0+":\n" +
       "\treturn;\n" +
       "}\n";
-    return print_line;
+      
+    return (Print.print)?print_line:"";
   }
 }

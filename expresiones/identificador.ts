@@ -44,4 +44,5 @@ export class Identificador extends Instruccion {
         nodo.agregarHijo(this.id);
         return nodo;
     }
+    
 }

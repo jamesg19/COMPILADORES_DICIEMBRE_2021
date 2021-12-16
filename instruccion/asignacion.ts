@@ -4,6 +4,7 @@ import { Arbol } from "../table/arbol";
 import { Excepcion } from "../table/excepcion";
 import { TIPO } from "../table/tipo";
 import { NodoAST } from "../abs/nodo";
+import { Principal } from '../principal';
 
 export class Asignacion extends Instruccion {
   id: string;
@@ -77,7 +78,7 @@ export class Asignacion extends Instruccion {
     }
     else 
     if (this.exp.tipo != variable.tipo){
-      console.log(this.exp.tipo+" -> "+variable.tipo);
+      //console.log(this.exp.tipo+" -> "+variable.tipo);
       return new Excepcion("Semantico","Tipos diferentes " + this.id,super.fila + "",super.columna + "");
     }
     variable.valor = value;
@@ -91,5 +92,69 @@ export class Asignacion extends Instruccion {
     nodo.agregarHijoNodo(this.exp.getNodo());
     return nodo;
   }
-
+  
+  traducir(e:TablaSimbolos,arbol:Arbol):any{
+    
+      const variable = e.getSimbolo(this.id);
+      
+      if (!variable) {
+        return new Excepcion(
+          "Semantico",
+          "No existe la variable " + this.id,
+          super.fila + "",
+          super.columna + ""
+        );
+      }
+      
+      //verifico si es una constante
+      if (variable.constante) {
+        return new Excepcion(
+          "Semantico",
+          "No se puede cambiar de valor a una constante " + this.id,
+          super.fila + "",
+          super.columna + ""
+        );
+      }
+      
+  
+      let valor = this.exp.traducir(e, arbol);
+      
+      
+      if(valor instanceof Array ){
+        if(variable.valor instanceof Array){
+          Principal.historial += "/*Asingacion entre arreglos*/"
+          Principal.historial += "stack[(int) "+variable.posicion+"] ="+ valor+";\n";
+          
+          return ;
+        }
+          
+            
+       return new Excepcion(
+          "Semantico",
+          "Se esperaba almacenar un Arreglo dentro de un arreglo " + this.id,
+          super.fila + "",
+          super.columna + ""
+        );
+       
+      }
+      
+      
+        
+      //let value = JSON.parse(JSON.stringify(valor));
+      if((variable.tipo == TIPO.ENTERO || variable.tipo == TIPO.DECIMAL) && (this.exp.tipo == TIPO.ENTERO || this.exp.tipo==TIPO.DECIMAL) ){
+          
+          Principal.historial += "/*Asignacion de Variables*/\n";
+          Principal.historial += "stack[(int)"+variable.posicion+"] =" + valor+";\n"
+      }
+      else 
+      if (this.exp.tipo != variable.tipo){
+        
+        return new Excepcion("Semantico","Tipos diferentes " + this.id,super.fila + "",super.columna + "");
+      }
+      
+      
+      
+      Principal.historial += "/*Asignacion de Variables*/\n";
+      Principal.historial += "stack[(int)"+variable.posicion+"] =" + valor+";\n"
+  }
 }
