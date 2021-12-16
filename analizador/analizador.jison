@@ -68,8 +68,9 @@
 'end'       return 'end';
 
 //Patrones numericos
+[0-9]+("."[0-9]+)\b  	return 'decimal';
 [0-9]+\b  	return 'entero';
-[0-9]+("."[0-9]+)?\b  	return 'decimal';
+
 
 ([a-zA-Z])[a-zA-Z0-9_]* return 'id';
 
@@ -226,9 +227,9 @@
     const { CasteosTo} = require('../expresiones/nativas/casteos_to');
 
 
-    const { Struct }     = require('../expresiones/struct/struct')
-    const { Dec_Struct } = require('../expresiones/struct/instancia_struct')
-    const { Atributo }   = require('../expresiones/struct/atributo')
+    const { Struct }          = require('../expresiones/struct/struct')
+    const { Dec_Struct }      = require('../expresiones/struct/instancia_struct')
+    const { Atributo }        = require('../expresiones/struct/atributo')
     const { Acceso_Struct }   = require('../expresiones/struct/acceso_struct')
     //JAMES
     const { If } = require('../instruccion/if');

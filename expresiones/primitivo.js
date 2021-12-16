@@ -34,5 +34,25 @@ class Primitivo extends Instruccion_1.Instruccion {
         nodo.agregarHijo(this.value);
         return nodo;
     }
+    traducir(entorno, arbol) {
+        // let temp:string = "t"
+        // let temp += super.temp;
+        let codigo = this.value;
+        return codigo;
+    }
 }
 exports.Primitivo = Primitivo;
+// def traducir(self,ent,arbol):
+//         resultado3D = Resultado3D()
+//         resultado3D.codigo3D = ""
+//         if isinstance(self.valor, str):
+//             resultado3D.tipo = Tipo.CHAR
+//         elif isinstance(self.valor, int):
+//             resultado3D.tipo = Tipo.ENTERO
+//         elif isinstance(self.valor, float):
+//             resultado3D.tipo = Tipo.FLOAT
+//         if(resultado3D.tipo == Tipo.CHAR):
+//             resultado3D.temporal = Temporal("\""+self.valor+"\"")
+//         else:
+//             resultado3D.temporal = Temporal(str(self.valor))
+//         return resultado3D

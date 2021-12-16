@@ -4,6 +4,10 @@ import { Instruccion } from '../abs/Instruccion';
 import { Struct } from '../expresiones/struct/struct';
 import { Funcion } from '../instruccion/funcion';
 import { NodoAST } from '../abs/nodo';
+import { createNoSubstitutionTemplateLiteral } from 'typescript';
+import { Principal } from '../principal';
+import { Print } from '../instruccion/print';
+import { Nativas } from '../nativas';
 
 export class Arbol{
     
@@ -13,8 +17,17 @@ export class Arbol{
     structs:Map<string,Struct>;
     consola:string= ""
     TSglobal:TablaSimbolos; 
-    contador:number=0;  
+    
     dot:string="";
+    
+    
+    head:string = "#include <stdio.h>\n";
+    
+    etiqueta:string=""; //para crear los saltos
+    contador:number=0;  //para llevar el conteo de las etiquetas
+    //no confundir la variable anterior con la que esta en tablasimbolos
+    //este contador es para etiquetas y el otro es para los temporales
+    
     
     /**
      * @param  {TablaSimbolos} TSglobal
@@ -26,6 +39,8 @@ export class Arbol{
         this.TSglobal = TSglobal;
         this.instrucciones = instrucciones;
         this.structs = new Map();
+        this.head +="#include <math.h>\ndouble heap[30101999];\n" ;
+        this.head += "double stack[30101999];\ndouble P;\ndouble H;\n\n";
     }
     
     updateConsolaError(texto:string){
@@ -76,6 +91,21 @@ export class Arbol{
         //     this.contador+=1;
         //     this.recorrerAST(nombreHijo,hijo);
         // }
+        
     }
     
+    list_temporales():string{
+        //.slice(0, value.length - 2);
+        let temporales:string = "";
+        //console.log("contador",TablaSimbolos.contador);
+        //console.log("Temporales ", Principal.temp);
+        
+        for(let con:number = 0;con<=(Principal.temp+1);con++){
+            temporales += " t"+con+", ";
+        }
+        
+        
+        return (temporales.length >0 )?"double "+temporales.slice(0,temporales.length-2)+";":"";
+        
+    }
 }

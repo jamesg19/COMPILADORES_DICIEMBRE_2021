@@ -15,9 +15,18 @@ import { Break } from "./instruccion/break";
 import { Main } from "./instruccion/main";
 import { Print } from "./instruccion/print";
 import { NodoAST } from "./abs/nodo";
+import { Nativas } from './nativas';
 const Parser = require("./analizador/analizador");
 
 export class Principal {
+  
+  static contador:number=0;
+  static temp:number = 0;     //control de temporales
+  static etiqueta = 0;        //contro de etiquetas
+  static posicion:number = 0; //guarda la poscion en el stack   
+  static heap:number = 0;     //posicion en el heap    ???
+  static historial:string = "";
+  
   ejecutar(code: string) {
     
     const instrucciones = Parser.parse(code);
@@ -28,8 +37,6 @@ export class Principal {
     //ast
     const ast: Arbol = new Arbol(ts_global, instrucciones);
 
-    //falta capturar los errores lexicos y sintacticos
-    //1ra pasada
 
     //interpreto 1ra pasada
     ast.instrucciones.forEach((element: Instruccion) => {
@@ -123,6 +130,9 @@ export class Principal {
         //console.log("Sentencias fuera de Main")
         
     });
+    
+    
+    
   // console.log("PROBANDO DOT.......*/*/*/*/");
   // //generacion de AST 
   // const init=new NodoAST("RAIZ");
@@ -141,6 +151,43 @@ export class Principal {
   
   
   }
+                        
+/**************************************************Traduccion****************************************************** */                                              
+  traducir(code:string){
+    
+    const instrucciones = Parser.parse(code);
+
+    //tabla
+    let ts_global: TablaSimbolos = new TablaSimbolos(undefined);
+
+    //ast
+    const ast: Arbol = new Arbol(ts_global, instrucciones);
+
+    //falta capturar los errores lexicos y sintacticos
+    //1ra pasada
+    //interpreto 1ra pasada
+    let nativa:Nativas = new Nativas();
+    let traducir = "";
+    
+   
+    
+    ast.instrucciones.forEach((element: Instruccion) => {
+      element.traducir(ts_global,ast);
+      
+    });
+    let code_objeto =  "";
+    let print_nativa = nativa.print_function(ast);
+    //console.log(nativa.print_function());
+    
+    if(Print.print)
+    code_objeto = ast.head+"\n"+ast.list_temporales()+"\n"+print_nativa+"\n";
+    else 
+    code_objeto= ast.head+"\n";
+    
+    console.log(code_objeto+"\n"+Principal.historial);
+    
+     
+  }
 }
 
 //let principa: Principal = new Principal();
@@ -151,10 +198,11 @@ const fs = require("fs"),
       if (error) throw error;
       let principa: Principal = new Principal();
      // console.log(datos)
-    principa.ejecutar(datos);
+    principa.traducir(datos);
       //console.log("El contenido es: ", datos);
       
   });
+
 
 // principa.ejecutar ('println(6>5);   '
 //                     +'if(1>5){'

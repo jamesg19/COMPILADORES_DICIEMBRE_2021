@@ -21,6 +21,7 @@ class Simbolo {
         this.name_struct = "";
         this.struct = struct;
         this.constante = false;
+        this.posicion = 0;
     }
     /**
      */
@@ -86,6 +87,11 @@ class Simbolo {
             //else if(this.valor instanceof )
         }
         return value;
+    }
+    getTuPe() {
+        let pos_stack = this.posicion;
+        this.posicion++;
+        return pos_stack;
     }
 }
 exports.Simbolo = Simbolo;

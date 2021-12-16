@@ -7,7 +7,7 @@ export abstract class  Instruccion{
     struct:boolean;
     arra:boolean;
     expresion: string;
-    temp:number;
+    temp:number;//contador para los temporales
     
     constructor(fila:number,columna:number){
             this.columna = columna;
@@ -19,7 +19,7 @@ export abstract class  Instruccion{
     abstract interpretar(entorno:TablaSimbolos,arbol:Arbol):any;
     
     abstract getNodo():any;
-    abstract traducir(entorno:TablaSimbolos,arbol:Arbol):string;
+    abstract traducir(entorno:TablaSimbolos,arbol:Arbol):any;
 
 
         

@@ -5,6 +5,7 @@ import { Simbolo } from './simbolo';
 import { Excepcion } from './excepcion';
 import { Struct } from '../expresiones/struct/struct';
 import { getConfigFileParsingDiagnostics } from 'typescript';
+import { Principal } from '../principal';
 
 export class TablaSimbolos{
     
@@ -31,7 +32,15 @@ export class TablaSimbolos{
         if(simbolo.id in this.tabla){
             return new Excepcion("Semantico", "Variable "+simbolo.id+" ya existe en el entorno",simbolo.fila+"",simbolo.columna+"");
         }else{
-            this.tabla.set(simbolo.id,simbolo);             
+            
+            
+            
+            Principal.posicion += 1 ;            //contador  de posicion P
+            
+            simbolo.posicion =Principal.posicion;//para el 
+            
+            this.tabla.set(simbolo.id,simbolo);   
+            
         }
         
     }
@@ -80,6 +89,8 @@ export class TablaSimbolos{
     actualizarSimboloEnTabla(simbolo:Simbolo){
         let tabla_actual:TablaSimbolos|undefined = this;
         
+        
+        
         while (tabla_actual != null){
             
             if(tabla_actual.tabla.has(simbolo.id)){
@@ -101,6 +112,11 @@ export class TablaSimbolos{
         }
         return new Excepcion("Semantico", "Variable No encontrada en Asignacion", simbolo.fila+"", simbolo.columna+"");
         
+    }
+    get_temp():number{
+        let vale = TablaSimbolos.contador;
+        TablaSimbolos.contador++;
+        return vale;        
     }
      
     

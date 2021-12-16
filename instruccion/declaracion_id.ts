@@ -5,6 +5,7 @@ import { TIPO } from "../table/tipo";
 import { Arbol } from "../table/arbol";
 import { Simbolo } from "../table/simbolo";
 import { NodoAST } from "../abs/nodo";
+import { Principal } from "../principal";
 
 export class D_Id extends Instruccion {
   tipo: TIPO;
@@ -87,29 +88,115 @@ export class D_Id extends Instruccion {
     }
   }
 
-  getNodo():NodoAST{
-    const nodo=new NodoAST("DECLARACION");
-    if(this.tipo==TIPO.ARREGLO){
+  getNodo(): NodoAST {
+    const nodo = new NodoAST("DECLARACION");
+    if (this.tipo == TIPO.ARREGLO) {
       nodo.agregarHijo("ARREGLO");
-    } else if(this.tipo==TIPO.BOOLEAN){
+    } else if (this.tipo == TIPO.BOOLEAN) {
       nodo.agregarHijo("BOOLEAN");
-    } else if(this.tipo==TIPO.CADENA){
+    } else if (this.tipo == TIPO.CADENA) {
       nodo.agregarHijo("CADENA");
-    } else if(this.tipo==TIPO.CARACTER){
+    } else if (this.tipo == TIPO.CARACTER) {
       nodo.agregarHijo("CARACTER");
-    } else if(this.tipo==TIPO.DECIMAL){
+    } else if (this.tipo == TIPO.DECIMAL) {
       nodo.agregarHijo("DECIMAL");
-    } else if(this.tipo==TIPO.ENTERO){
+    } else if (this.tipo == TIPO.ENTERO) {
       nodo.agregarHijo("ENTERO");
-    } else if(this.tipo==TIPO.NULL){
+    } else if (this.tipo == TIPO.NULL) {
       nodo.agregarHijo("NULL");
-    } else if(this.tipo==TIPO.STRUCT){
+    } else if (this.tipo == TIPO.STRUCT) {
       nodo.agregarHijo("STRUCT");
-    } else if(this.tipo==TIPO.VOID){
+    } else if (this.tipo == TIPO.VOID) {
       nodo.agregarHijo("VOID");
     }
     nodo.agregarHijo(this.id);
     //nodo.agregarHijoNodo(this.);
     return nodo;
+  }
+  traducir(entorno: TablaSimbolos, arbol: Arbol): string {
+    //let
+    let variable = entorno.getSimbolo(this.id); //e.getVariable(this.id);
+
+    if (variable) console.log("error");
+    // return new Excepcion(
+    //   "Semantico",
+    //   " no se pueden declarar variables con el mismo nombre" + this.id,
+    //   super.fila + "",
+    //   super.columna + ""
+    // );
+
+    //Creacion de variable en el entorno
+
+    let valor = this.getValue(this.tipo);
+
+    let simbolo = new Simbolo(
+      this.id,
+      this.tipo,
+      super.fila,
+      super.columna,
+      valor,
+      false,
+      false
+    );
+
+    //comentario  para saber que variable se esta declarando
+    let cadena = "/*declarando variable :" + simbolo.id + "*/\n";
+    
+    //creacion de temporal 
+    let temp = Principal.temp++;
+    //switch para verificar si se almacena en el heap o en el stack
+    //
+    switch (this.tipo) {
+      case TIPO.ENTERO:
+      case TIPO.DECIMAL:
+        cadena +=
+          "stack[(int) " + simbolo.posicion + "] = " + simbolo.valor + ";\n";
+        break;
+      case TIPO.BOOLEAN:
+        cadena +=
+          "stack[(int) " +
+          simbolo.posicion +
+          "] = " +
+          Number(simbolo.valor) +
+          ";\n";
+        break;
+      case TIPO.CADENA:
+        cadena +=
+          "t" + temp + " = H;\n" 
+          + this.transform_cadena(simbolo.valor, arbol)
+        +"\nstack[(int) " +
+          simbolo.posicion +//apuntador
+          "] = " + //
+           "t"+temp+";\n"+
+           "//===================================="; //objeto apuntado
+               
+        break;
+    }
+
+    entorno.addSimbolo(simbolo); //valor: any, arreglo: boolean, struct: boolean
+
+    return cadena;
+  }
+
+  transform_cadena(x: string, arbol: Arbol): string {
+    let return_string: string = "";
+
+    return_string = "t" + Principal.temp + " = H;\n";
+    //obtener codigo ASCII de cada caracter de la cadena
+    //cadena en el heap
+    for (let i = 0; i < x.length; i++) {
+      let item: number = x.charCodeAt(i);
+      return_string += "heap[(int)H] = " + item + " ;\n";
+      return_string += "H = H + 1;\n";
+      //console.log(item);
+    }
+    return_string += "heap[(int)H] = -1 ;\n";
+    return_string += "H = H + 1;\n";
+
+    //referencia de la cadena desde el stack
+    Principal.posicion++;
+    return_string +=
+      "t" + Principal.posicion + " = P + " + Principal.posicion + ";\n";
+    return return_string;
   }
 }

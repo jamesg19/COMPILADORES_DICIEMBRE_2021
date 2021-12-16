@@ -15,6 +15,8 @@ const asignacion_1 = require("./instruccion/asignacion");
 const array_valor_1 = require("./expresiones/array/array_valor");
 const break_1 = require("./instruccion/break");
 const main_1 = require("./instruccion/main");
+const print_1 = require("./instruccion/print");
+const nativas_1 = require("./nativas");
 const Parser = require("./analizador/analizador");
 class Principal {
     ejecutar(code) {
@@ -23,8 +25,6 @@ class Principal {
         let ts_global = new tablasimbolos_1.TablaSimbolos(undefined);
         //ast
         const ast = new arbol_1.Arbol(ts_global, instrucciones);
-        //falta capturar los errores lexicos y sintacticos
-        //1ra pasada
         //interpreto 1ra pasada
         ast.instrucciones.forEach((element) => {
             if (element instanceof funcion_1.Funcion) {
@@ -97,8 +97,38 @@ class Principal {
         // const grafo=ast.getDot(init);
         // console.log(grafo);
     }
+    /**************************************************Traduccion****************************************************** */
+    traducir(code) {
+        const instrucciones = Parser.parse(code);
+        //tabla
+        let ts_global = new tablasimbolos_1.TablaSimbolos(undefined);
+        //ast
+        const ast = new arbol_1.Arbol(ts_global, instrucciones);
+        //falta capturar los errores lexicos y sintacticos
+        //1ra pasada
+        //interpreto 1ra pasada
+        let nativa = new nativas_1.Nativas();
+        let traducir = "";
+        ast.instrucciones.forEach((element) => {
+            element.traducir(ts_global, ast);
+        });
+        let code_objeto = "";
+        let print_nativa = nativa.print_function(ast);
+        //console.log(nativa.print_function());
+        if (print_1.Print.print)
+            code_objeto = ast.head + "\n" + ast.list_temporales() + "\n" + print_nativa + "\n";
+        else
+            code_objeto = ast.head + "\n";
+        console.log(code_objeto + "\n" + Principal.historial);
+    }
 }
 exports.Principal = Principal;
+Principal.contador = 0;
+Principal.temp = 0; //control de temporales
+Principal.etiqueta = 0; //contro de etiquetas
+Principal.posicion = 0; //guarda la poscion en el stack   
+Principal.heap = 0; //posicion en el heap    ???
+Principal.historial = "";
 //let principa: Principal = new Principal();
 const fs = require("fs"), NOMBRE_ARCHIVO = "file.java";
 fs.readFile(NOMBRE_ARCHIVO, 'utf8', (error, datos) => {
@@ -106,7 +136,7 @@ fs.readFile(NOMBRE_ARCHIVO, 'utf8', (error, datos) => {
         throw error;
     let principa = new Principal();
     // console.log(datos)
-    principa.ejecutar(datos);
+    principa.traducir(datos);
     //console.log("El contenido es: ", datos);
 });
 // principa.ejecutar ('println(6>5);   '

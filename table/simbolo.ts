@@ -11,8 +11,7 @@ export class Simbolo {
   constante: boolean;
   name_struct: string;
   print_text: string;
-  
-  
+  posicion:number;
   /**
    * @param  {string} id
    * @param  {TIPO} tipo
@@ -41,7 +40,10 @@ export class Simbolo {
     this.name_struct = "";
     this.struct = struct;
     this.constante = false;
+    this.posicion = 0;
+    
   }
+  
   /**
    */
   getID() {
@@ -85,6 +87,7 @@ export class Simbolo {
   getStruct() {
     return this.struct;
   }
+  
   toString(): string {
     let value: string = this.valor;
 
@@ -97,8 +100,10 @@ export class Simbolo {
         //sim.valor.map((x)=> console.log(x));
         this.valor.forEach((x) => {
           if(x.struct){
+            
             let simbolo:Simbolo = Object.setPrototypeOf((x),Simbolo.prototype);
             value += x.id + " = "+simbolo.toString()+" )";
+                       
           }else
           value += x.id + " = " + x.valor + ", "; //x.toString()//x();
         });
@@ -110,6 +115,12 @@ export class Simbolo {
     }
     return value;
   }
-  
+   getTuPe():number{
+    
+    let pos_stack = this.posicion;
+    this.posicion ++;
+    
+    return pos_stack;
+  }
   
 }

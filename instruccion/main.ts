@@ -4,6 +4,7 @@ import { Arbol } from '../table/arbol';
 import { Excepcion } from '../table/excepcion';
 import { TablaSimbolos } from '../table/tablasimbolos';
 import { Break } from './break';
+import { Principal } from '../principal';
 export class Main extends Instruccion{
     instrucciones:Instruccion[];
     
@@ -46,5 +47,25 @@ export class Main extends Instruccion{
         nodo.agregarHijoNodo(instruccioness);
 
         return nodo;
+    }
+    traducir(entorno:TablaSimbolos,arbol:Arbol):string{
+        let cadena:string = "";
+        
+        let entorno_local = new TablaSimbolos(entorno);
+        
+        
+        Principal.historial  += "/*------------Main---------*/\n"+"int main(){\n";
+        this.instrucciones.forEach(element => {
+            
+            element.traducir(entorno_local,arbol);
+            
+            
+        });
+          
+          cadena= "\t"+cadena+"}"
+          
+                            
+        Principal.historial += cadena;
+        return cadena;
     }
 }

@@ -1,20 +1,27 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Arbol = void 0;
+const principal_1 = require("../principal");
 class Arbol {
+    //no confundir la variable anterior con la que esta en tablasimbolos
+    //este contador es para etiquetas y el otro es para los temporales
     /**
      * @param  {TablaSimbolos} TSglobal
      * @param  {Instruccion[]} instrucciones
      */
     constructor(TSglobal, instrucciones) {
         this.consola = "";
-        this.contador = 0;
         this.dot = "";
+        this.head = "#include <stdio.h>\n";
+        this.etiqueta = ""; //para crear los saltos
+        this.contador = 0; //para llevar el conteo de las etiquetas
         this.excepciones =
             this.funciones = new Array();
         this.TSglobal = TSglobal;
         this.instrucciones = instrucciones;
         this.structs = new Map();
+        this.head += "#include <math.h>\ndouble heap[30101999];\n";
+        this.head += "double stack[30101999];\ndouble P;\ndouble H;\n\n";
     }
     updateConsolaError(texto) {
         this.consola += texto + '\n';
@@ -59,6 +66,16 @@ class Arbol {
         //     this.contador+=1;
         //     this.recorrerAST(nombreHijo,hijo);
         // }
+    }
+    list_temporales() {
+        //.slice(0, value.length - 2);
+        let temporales = "";
+        //console.log("contador",TablaSimbolos.contador);
+        //console.log("Temporales ", Principal.temp);
+        for (let con = 0; con <= (principal_1.Principal.temp + 1); con++) {
+            temporales += " t" + con + ", ";
+        }
+        return (temporales.length > 0) ? "double " + temporales.slice(0, temporales.length - 2) + ";" : "";
     }
 }
 exports.Arbol = Arbol;

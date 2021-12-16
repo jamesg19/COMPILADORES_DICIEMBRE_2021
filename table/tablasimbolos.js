@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TablaSimbolos = void 0;
 const excepcion_1 = require("./excepcion");
+const principal_1 = require("../principal");
 class TablaSimbolos {
     /**
      * @param  {TablaSimbolos|undefined} anterior
@@ -18,6 +19,8 @@ class TablaSimbolos {
             return new excepcion_1.Excepcion("Semantico", "Variable " + simbolo.id + " ya existe en el entorno", simbolo.fila + "", simbolo.columna + "");
         }
         else {
+            principal_1.Principal.posicion += 1; //contador  de posicion P
+            simbolo.posicion = principal_1.Principal.posicion; //para el 
             this.tabla.set(simbolo.id, simbolo);
         }
     }
@@ -73,6 +76,11 @@ class TablaSimbolos {
             }
         }
         return new excepcion_1.Excepcion("Semantico", "Variable No encontrada en Asignacion", simbolo.fila + "", simbolo.columna + "");
+    }
+    get_temp() {
+        let vale = TablaSimbolos.contador;
+        TablaSimbolos.contador++;
+        return vale;
     }
 }
 exports.TablaSimbolos = TablaSimbolos;
