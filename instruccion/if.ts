@@ -51,11 +51,14 @@ export class If extends Instruccion{
                 //EJECUTA LAS INSTRUCCIONES
 
                 this.instruccionesIf.forEach((element:Instruccion) => {
-         
+                    if(element instanceof Excepcion){
+                        arbol.excepciones.push(element);
+                        arbol.updateConsolaError(element.toString());
+                        console.log(element.toString());
+                    }else{
                     const result=element.interpretar(nuevaTabla,arbol);
                     if(result instanceof Excepcion){
-                        ///
-                        ///
+
                         arbol.excepciones.push(result);
                         arbol.updateConsolaError(result.toString());
                         
@@ -70,6 +73,7 @@ export class If extends Instruccion{
                         //console.log(result.value?.interpretar(nuevaTabla,arbol)+"VALUE RETURN");
                         return result;
                     }
+                }
                     
                 });
             }
@@ -82,7 +86,11 @@ export class If extends Instruccion{
                     
                     //ejecuta instrucciones else
                     this.instruccionesElse.forEach((element2:Instruccion) => {
-
+                        if(element2 instanceof Excepcion){
+                            arbol.excepciones.push(element2);
+                            arbol.updateConsolaError(element2.toString());
+                            console.log(element2.toString());
+                        }else{
                         const result=element2.interpretar(nuevaTabla,arbol);
 
                         if(result instanceof Excepcion){
@@ -100,6 +108,7 @@ export class If extends Instruccion{
                             //console.log(result.value?.interpretar(nuevaTabla,arbol)+"VALUE RETURN");
                             return result;
                         }
+                    }
                     });
                 } 
                 //INSTRUCCIONES ELSE IF
@@ -108,7 +117,11 @@ export class If extends Instruccion{
                     //ejecuta instrucciones else
                     const nuevaTabla=new TablaSimbolos(entorno);
                     this.ElseIf.forEach((element2) => {
-
+                        if(element2 instanceof Excepcion){
+                            arbol.excepciones.push(element2);
+                            arbol.updateConsolaError(element2.toString());
+                            console.log(element2.toString());
+                        }else{
                         const result=element2.interpretar(nuevaTabla,arbol);
                         
                         if(result instanceof Excepcion){
@@ -126,6 +139,8 @@ export class If extends Instruccion{
                             //console.log(result.value?.interpretar(nuevaTabla,arbol)+"VALUE RETURN");
                             return result;
                         }
+                    }
+
                     });
                 
           
@@ -156,7 +171,10 @@ export class If extends Instruccion{
             const instruccionesElse=new NodoAST("INSTRUCCIONES ELSE");
             
             this.instruccionesElse.forEach((instr:Instruccion)=>{
+                if(instr instanceof Excepcion){}
+            else{
                 instruccionesElse.agregarHijoNodo(instr.getNodo());
+            }
             });
             nodo.agregarHijoNodo(instruccionesElse);
         } else if(this.ElseIf!=null || this.ElseIf!=undefined){

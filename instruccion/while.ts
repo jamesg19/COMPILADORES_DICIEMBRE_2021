@@ -52,7 +52,11 @@ export class While extends Instruccion {
 
                     //ejecuta las instrucciones que estan dentro del WHILE
                     this.instrucciones.forEach((element:Instruccion) => {
-                        
+                        if(element instanceof Excepcion){
+                            arbol.excepciones.push(element);
+                            arbol.updateConsolaError(element.toString());
+                            console.log(element.toString());
+                        }else{
                         const result=element.interpretar(nuevaTabla2,arbol);
 
                         if(result instanceof Excepcion){
@@ -72,6 +76,7 @@ export class While extends Instruccion {
                         if(result instanceof Return){
                             return result;
                         }
+                    }
 
                     });
                 }else{
@@ -92,9 +97,13 @@ export class While extends Instruccion {
 
     getNodo(){
         const nodo=new NodoAST("WHILE");
+
         const instruccionesNodo=new NodoAST("INSTRUCCIONES");
         this.instrucciones.forEach((element)=>{
+            if(element instanceof Excepcion){}
+            else{
             instruccionesNodo.agregarHijoNodo(element.getNodo());
+            }
         });
         nodo.agregarHijoNodo(instruccionesNodo);
         return nodo;

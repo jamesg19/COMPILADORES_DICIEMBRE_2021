@@ -210,7 +210,7 @@
     //Arreglo_Valor
     const { Arreglo_Valor } = require('../expresiones/array/array_valor')
     const { DecrementoVariable} = require('../expresiones/artimetica/decremento_variable');
-    //const { IncrementoVariable} = require('../expresiones/artimetica/Incremento_variable');
+    const { IncrementoVariable} = require('../expresiones/artimetica/Incremento_variable');
 
     //nativas
     const { Seno} = require('../expresiones/nativas/seno');
@@ -241,6 +241,7 @@
     const { While } = require('../instruccion/while');
     const { DoWhile } = require('../instruccion/do_while');
     const { Continue } = require('../instruccion/continue');
+    const { Excepcion } = require('../table/excepcion');
 %}
 
 // Asociacion de operadores y precedencia
@@ -310,8 +311,7 @@ INSTRUCCION:
   | LLAMADA_FUNCION_EXP punto_coma  {   $$ = $1 }
   | MODIFICAR_ARREGLO               {   $$ = $1 }
   //| ACCESO_TYPE                     { $$ = $1 }
-  //| error {console.log("errir",$1)}
-  
+  | error  {$$=new Excepcion('Sintactico',`Error sintactico en ${$1}`,@1.first_line,@1.first_column); }
 ;
 
 MAIN:
@@ -319,6 +319,7 @@ MAIN:
 void main par_abierto par_cerrado llave_abierta INSTRUCCIONES llave_cerrada { $$ = new Main($6,@1.firt_line,@1.first_column); } 
 ;
 PRINT  :  println par_abierto LISTA_EXPRESIONES par_cerrado punto_coma  { $$ = new Print(@1.firt_line,@1.firt_column,$3);  }
+
 ;
 
 

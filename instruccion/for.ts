@@ -71,6 +71,7 @@ export class For extends Instruccion {
                         if(result instanceof Excepcion){
                             arbol.excepciones.push(result);
                             arbol.updateConsolaError(result.toString());
+                            console.log(result.toString());
                         }
                         //VERIFICA SI VIENE UN CONTINUE
                         if(result instanceof Continue){
@@ -90,6 +91,7 @@ export class For extends Instruccion {
                         if(result instanceof Return){
                             return result;
                         }
+                    
 
                     });
                 }else{
