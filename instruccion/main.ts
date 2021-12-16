@@ -37,14 +37,14 @@ export class Main extends Instruccion{
     getNodo():NodoAST{
         const nodo= new NodoAST("MAIN");
         const instruccioness= new NodoAST("INSTRUCCIONES");
-
+        //if(t){
         this.instrucciones.forEach((instr:Instruccion) => {
             instruccioness.agregarHijoNodo(instr.getNodo());
 
 
         });
         nodo.agregarHijoNodo(instruccioness);
-
+        //}
         return nodo;
     }
 }

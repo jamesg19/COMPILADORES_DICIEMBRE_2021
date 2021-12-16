@@ -84,15 +84,17 @@ constructor(id:string, fila:number,columna:number,lista_parmetros?:Array<Instruc
 
     getNodo() {
         const nodo=new NodoAST("LLAMADA FUNCION");
-        nodo.agregarHijo(this.id);
+        nodo.agregarHijo(this.id+" ");
 
         const parametros= new NodoAST("PARAMETROS");
+        if(this.lista_parametros!= null || this.lista_parametros != undefined){
         this.lista_parametros?.forEach(element => {
             parametros.agregarHijoNodo(element.getNodo());    
         });
         nodo.agregarHijoNodo(parametros);
+        }
         return nodo;
-    }}
+    }
     
     
     
