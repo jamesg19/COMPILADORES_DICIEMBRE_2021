@@ -4,6 +4,7 @@ import { TablaSimbolos } from "../../table/tablasimbolos";
 import { Arbol } from "../../table/arbol";
 import { Excepcion } from "../../table/excepcion";
 import { Simbolo } from "../../table/simbolo";
+import { NodoAST } from "../../abs/nodo";
 
 export class Arreglo extends Instruccion {
   id: string;
@@ -122,4 +123,43 @@ export class Arreglo extends Instruccion {
     });
     return value_array;
   }
+
+  getNodo():NodoAST{
+    const nodo=new NodoAST("DECLARACION ARRAY");
+    const lista_expresiones=new NodoAST("LISTA EXPRESION");
+    if(this.tipo==TIPO.ARREGLO){
+      nodo.agregarHijo("ARREGLO");
+    } else if(this.tipo==TIPO.BOOLEAN){
+      nodo.agregarHijo("BOOLEAN");
+    } else if(this.tipo==TIPO.CADENA){
+      nodo.agregarHijo("CADENA");
+    } else if(this.tipo==TIPO.CARACTER){
+      nodo.agregarHijo("CARACTER");
+    } else if(this.tipo==TIPO.DECIMAL){
+      nodo.agregarHijo("DECIMAL");
+    } else if(this.tipo==TIPO.ENTERO){
+      nodo.agregarHijo("ENTERO");
+    } else if(this.tipo==TIPO.NULL){
+      nodo.agregarHijo("NULL");
+    } else if(this.tipo==TIPO.STRUCT){
+      nodo.agregarHijo("STRUCT");
+    } else if(this.tipo==TIPO.VOID){
+      nodo.agregarHijo("VOID");
+    }
+    nodo.agregarHijo(this.id);
+
+    if(this.lst_expresiones!= null || this.lst_expresiones != undefined){
+        this.lst_expresiones.forEach((element)=>{
+          lista_expresiones.agregarHijoNodo(element.getNodo());
+
+        });
+        nodo.agregarHijoNodo(lista_expresiones);
+    }
+
+  
+    return nodo;
+  }
+
+
+
 }

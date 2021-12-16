@@ -95,12 +95,16 @@ export class Acceso extends Instruccion {
     return value_return;
   }
   getNodo():NodoAST {
-      const nodo= new NodoAST("ACCESO ");
+      const nodo= new NodoAST("ACCESO");
       nodo.agregarHijo(this.id);
-
-      this.list_expresiones.forEach((instr)=>{
-        nodo.agregarHijoNodo(instr.getNodo());
-      });
+      const lista_expresiones=new NodoAST("LISTA EXPRESIONES");
+      
+      if(this.list_expresiones!= null || this.list_expresiones!= undefined){
+        this.list_expresiones.forEach((instr)=>{
+          lista_expresiones.agregarHijoNodo(instr.getNodo());
+        });
+        nodo.agregarHijoNodo(lista_expresiones);
+      }
       return nodo;
   }
 }

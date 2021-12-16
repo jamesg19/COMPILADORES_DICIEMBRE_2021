@@ -7,6 +7,7 @@ import { Arbol } from "../../table/arbol";
 import { Atributo } from "./atributo";
 import { TIPO } from "../../table/tipo";
 import { Dec_Struct } from './instancia_struct';
+import { NodoAST } from "../../abs/nodo";
 
 export class Struct extends Instruccion {
   //crep que esto es mejor guardarlo en un map
@@ -112,5 +113,22 @@ export class Struct extends Instruccion {
       case TIPO.STRUCT:
         return undefined;
     }
+  }
+
+  getNodo() {
+      const nodo= new NodoAST("STRUCT");
+      nodo.agregarHijo(this.id);
+      if(this.lista_atributos!= null || this.lista_atributos != undefined){
+        
+        const lista_atributos=new NodoAST("LISTA ATRIBUTOS");
+        
+        this.lista_atributos.forEach((element)=>{
+          lista_atributos.agregarHijoNodo(element.getNodo());
+
+        });
+        nodo.agregarHijoNodo(lista_atributos);
+      }
+      return nodo;
+
   }
 }

@@ -4,6 +4,7 @@ import { TIPO } from '../../table/tipo';
 import { TablaSimbolos } from '../../table/tablasimbolos';
 import { Arbol } from '../../table/arbol';
 import { Excepcion } from '../../table/excepcion';
+import { NodoAST } from '../../abs/nodo';
 
 export class Pop extends Instruccion {
     
@@ -39,5 +40,12 @@ export class Pop extends Instruccion {
         }
                 
     }
+
+    getNodo() {
+        const nodo=new NodoAST("POP");
+        nodo.agregarHijo(this.id);
+        return nodo;
+    }
+
 
 }

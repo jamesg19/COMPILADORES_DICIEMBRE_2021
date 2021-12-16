@@ -4,6 +4,7 @@ import { Arbol } from "../../table/arbol";
 import { Excepcion } from "../../table/excepcion";
 import { TablaSimbolos } from "../../table/tablasimbolos";
 import { Simbolo } from "../../table/simbolo";
+import { NodoAST } from "../../abs/nodo";
 
 export class Rango extends Instruccion {
   id: string;
@@ -99,4 +100,21 @@ export class Rango extends Instruccion {
       );
     
   }
+
+  getNodo() {
+    const nodo= new NodoAST("RANGO");
+    const inicio= new NodoAST("INICIO");
+    const fin= new NodoAST("FIN");
+
+    nodo.agregarHijo(this.id);
+
+    inicio.agregarHijoNodo(this.inicio.getNodo());
+    fin.agregarHijoNodo(this.fin.getNodo());
+
+    nodo.agregarHijoNodo(inicio);
+    nodo.agregarHijoNodo(fin);
+
+    return nodo;
+  }
+
 }

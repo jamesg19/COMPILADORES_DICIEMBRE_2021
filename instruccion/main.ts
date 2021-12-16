@@ -18,6 +18,12 @@ export class Main extends Instruccion{
         
         this.instrucciones.forEach(element => {
             
+            if(element instanceof Excepcion){
+                arbol.excepciones.push(element);
+                arbol.updateConsolaError(element.toString());
+                console.log(element.toString());
+            }else{
+
             let value = element.interpretar(entorno_local,arbol);
             
             if(value instanceof Excepcion){
@@ -30,6 +36,7 @@ export class Main extends Instruccion{
                 arbol.excepciones.push(excepcion);
                 arbol.updateConsolaError(excepcion.toString());
             }
+        }
         });
         
         
@@ -38,14 +45,17 @@ export class Main extends Instruccion{
     getNodo():NodoAST{
         const nodo= new NodoAST("MAIN");
         const instruccioness= new NodoAST("INSTRUCCIONES");
-
+        //if(t){
         this.instrucciones.forEach((instr:Instruccion) => {
-            instruccioness.agregarHijoNodo(instr.getNodo());
-
+            if(instr instanceof Excepcion){
+                
+            }    else{
+                instruccioness.agregarHijoNodo(instr.getNodo());
+            }
 
         });
         nodo.agregarHijoNodo(instruccioness);
-
+        //}
         return nodo;
     }
     traducir(entorno:TablaSimbolos,arbol:Arbol):string{

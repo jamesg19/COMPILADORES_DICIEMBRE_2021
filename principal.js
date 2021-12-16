@@ -91,11 +91,11 @@ class Principal {
         // const instr=new NodoAST("INSTRUCCIONES");
         // ast.getInstrucciones().forEach((instruccion:Instruccion) => {
         //   instr.agregarHijoNodo(instruccion.getNodo());
-        // });
-        // init.agregarHijoNodo(instr);
-        // //devuelve el codigo GRAPHIZ DEL AST
-        // const grafo=ast.getDot(init);
-        // console.log(grafo);
+        //});
+        init.agregarHijoNodo(instr);
+        //devuelve el codigo GRAPHIZ DEL AST
+        const grafo = ast.getDot(init);
+        console.log(grafo);
     }
     /**************************************************Traduccion****************************************************** */
     traducir(code) {

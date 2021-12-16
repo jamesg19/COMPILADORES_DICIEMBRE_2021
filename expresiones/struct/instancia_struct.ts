@@ -6,6 +6,7 @@ import { Arbol } from "../../table/arbol";
 import { Excepcion } from "../../table/excepcion";
 import { Simbolo } from "../../table/simbolo";
 import { TIPO } from "../../table/tipo";
+import { NodoAST } from "../../abs/nodo";
 
 export class Dec_Struct extends Instruccion {
   template_struct: string; //tipo de estruct a crear
@@ -182,7 +183,21 @@ export class Dec_Struct extends Instruccion {
     //   entorno.addSimbolo
     // });
   }
-  getNodo(){
-    
+
+  getNodo() {
+        const nodo=new NodoAST("INSTANCIA STRUCT");
+        nodo.agregarHijo(this.id);
+        nodo.agregarHijo(this.id_struct);
+        const atributos=new NodoAST("ATRIBUTOS");
+        
+        if(this.values_atributos != null || this.values_atributos != undefined ){
+          this.values_atributos.forEach((element)=>{
+            atributos.agregarHijoNodo(element.getNodo());
+
+          });
+          nodo.agregarHijoNodo(atributos);
+        }
+        return nodo;
   }
+
 }

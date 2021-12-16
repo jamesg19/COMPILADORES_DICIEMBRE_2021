@@ -4,6 +4,7 @@ import { TablaSimbolos } from "../../table/tablasimbolos";
 import { Arbol } from "../../table/arbol";
 import { Excepcion } from "../../table/excepcion";
 import { Simbolo } from '../../table/simbolo';
+import { NodoAST } from "../../abs/nodo";
 
 
 export class Acceso_Struct extends Instruccion {
@@ -72,6 +73,23 @@ export class Acceso_Struct extends Instruccion {
         //return new Excepcion("Semantico",x+" no se encontro en "+this.id,this.fila+"",this.columna+"");
     });
     return value_return;
+  }
+
+  getNodo(){
+    const nodo=new NodoAST("ACCESO STRUCT");
+    nodo.agregarHijo(this.id);
+    const acceso=new NodoAST("IDS");
+    
+    if(this.ids != null || this.ids != undefined){
+      this.ids.forEach((instr)=>{
+        acceso.agregarHijo(instr);
+      });
+      nodo.agregarHijoNodo(acceso);
+    }
+
+    return nodo;
+
+
   }
   
 }

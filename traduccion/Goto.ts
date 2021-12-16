@@ -13,6 +13,6 @@ export class Goto{
         this.columna=columna;
     }
     traducir(e: TablaSimbolos, arbol: Arbol):any{
-        
+        console.log(`\n`+'goto'+this.id+';');
     }
 }

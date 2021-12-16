@@ -7,6 +7,7 @@ import { Simbolo } from "../../table/simbolo";
 import { timeStamp } from "console";
 import { isNumber } from 'util';
 import { TIPO } from "../../table/tipo";
+import { NodoAST } from "../../abs/nodo";
 
 export class Asignacion_VAR_STRUCT extends Instruccion {
   id: Instruccion;
@@ -76,7 +77,12 @@ export class Asignacion_VAR_STRUCT extends Instruccion {
       acceso_value.valor = value;
       
   }
-  getNodo(){
-    
+  getNodo() {
+    const nodo= new NodoAST("ASIGNACION VAR STRUCT"); 
+    nodo.agregarHijo(this.acceso.id);
+    nodo.agregarHijoNodo(this.id.getNodo());
+
+    return nodo;
+
   }
 }

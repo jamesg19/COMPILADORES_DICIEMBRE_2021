@@ -1,8 +1,14 @@
-export class Excepcion{
+import { Instruccion } from "../abs/Instruccion";
+import { NodoAST } from "../abs/nodo";
+import { Arbol } from "./arbol";
+import { TablaSimbolos } from "./tablasimbolos";
+
+export class Excepcion extends Instruccion{
+
     tipo:string;
     descripcion:string;
-    fila:string;
-    columna:string;
+    filaa:string;
+    columnaa:string;
     
     /**
      * @param  {string} tipo
@@ -11,10 +17,11 @@ export class Excepcion{
      * @param  {string} columna
      */
     constructor(tipo:string,desc:string,fila:string,columna:string){
+        super(Number(fila),Number(columna));
         this.tipo = tipo;
         this.descripcion = desc;
-        this.fila = fila;
-        this.columna = columna;
+        this.filaa = fila;
+        this.columnaa = columna;
             
           
     }
@@ -22,6 +29,16 @@ export class Excepcion{
      * @returns string
      */
     toString():string{
-        return `${this.tipo} - ${this.descripcion} - ${this.fila},${this.columna}`;
+        return `${this.tipo} - ${this.descripcion} - ${this.filaa},${this.columnaa}`;
+    }
+    interpretar(e: TablaSimbolos, arbol: Arbol): any {
+        const err=new Excepcion(this.tipo,this.descripcion,this.filaa, this.columnaa)
+        return this ; 
+    }
+    traducir(entorno: TablaSimbolos, arbol: Arbol): string {
+       return "";
+    }
+    getNodo() {
+        return new NodoAST("err");
     }
 }

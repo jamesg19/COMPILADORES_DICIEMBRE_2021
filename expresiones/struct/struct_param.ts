@@ -6,6 +6,7 @@ import { Arbol } from "../../table/arbol";
 import { Excepcion } from "../../table/excepcion";
 import { Simbolo } from "../../table/simbolo";
 import { TIPO } from "../../table/tipo";
+import { NodoAST } from "../../abs/nodo";
 
 export class Dec_Struct extends Instruccion {
   template_struct: string; //tipo de estruct a crear
@@ -85,5 +86,11 @@ export class Dec_Struct extends Instruccion {
     );
     entorno.addSimbolo(simbolo);
     
+  }
+  getNodo(){ 
+    const nodo=new NodoAST("PARAMETRO STRUCT");
+    nodo.agregarHijo(this.id);
+    nodo.agregarHijo(this.template_struct);
+    return nodo;
   }
 }

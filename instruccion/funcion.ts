@@ -97,13 +97,16 @@ export class Funcion extends Instruccion{
           });
           nodo.agregarHijoNodo(parametros);
 
-          const instrucciones=new NodoAST("INSTRUCCIONES");
           
+      }
+      const instrucciones=new NodoAST("INSTRUCCIONES");
+      if(this.instrucciones != null){   
           this.instrucciones.forEach((instr)=>{
             instrucciones.agregarHijoNodo(instr.getNodo());          
           });
           nodo.agregarHijoNodo(instrucciones);
       }
+      return nodo;
 
   }
 }

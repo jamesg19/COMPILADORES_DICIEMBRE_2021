@@ -4,6 +4,7 @@ import { Arbol } from "../../table/arbol";
 import { Excepcion } from "../../table/excepcion";
 import { TablaSimbolos } from "../../table/tablasimbolos";
 import { Simbolo } from "../../table/simbolo";
+import { NodoAST } from "../../abs/nodo";
 
 export class Fin_Rango extends Instruccion {
   id: string;
@@ -70,4 +71,15 @@ export class Fin_Rango extends Instruccion {
 
     return array_val.valor.slice(final_value, array_val.valor.length-1);
   }
+
+  getNodo() {
+    const nodo=new NodoAST(":END");
+    
+    nodo.agregarHijo(this.id);
+    nodo.agregarHijoNodo(this.fin.getNodo());
+
+    return nodo;
+
+}
+
 }

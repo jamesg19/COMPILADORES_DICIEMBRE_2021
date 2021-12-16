@@ -4,6 +4,7 @@ import { TIPO } from '../../table/tipo';
 import { TablaSimbolos } from '../../table/tablasimbolos';
 import { Arbol } from '../../table/arbol';
 import { Excepcion } from '../../table/excepcion';
+import { NodoAST } from '../../abs/nodo';
 
 export class Push extends Instruccion {
     
@@ -47,5 +48,12 @@ export class Push extends Instruccion {
         this.tipo = TIPO.NULL;
         return new Excepcion("Semantico","Push se aplica en arrays, "+this.id+" no es un array",super.fila+"",super.columna+"");        
     }
+
+    getNodo() {
+        const nodo=new NodoAST("PUSH");
+        nodo.agregarHijo(this.id);
+        return nodo;
+    }
+
 
 }

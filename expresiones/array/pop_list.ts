@@ -4,6 +4,7 @@ import { TIPO } from "../../table/tipo";
 import { TablaSimbolos } from "../../table/tablasimbolos";
 import { Arbol } from "../../table/arbol";
 import { Excepcion } from "../../table/excepcion";
+import { NodoAST } from "../../abs/nodo";
 
 export class Pop_List extends Instruccion {
   id: string;
@@ -103,4 +104,18 @@ export class Pop_List extends Instruccion {
     });
     return value_return;
   }
+
+  getNodo() {
+    const nodo=new NodoAST("POP LIST");
+    nodo.agregarHijo(this.id);
+
+    const pos= new NodoAST("POSICION");
+    if(this.list_expresiones!= null || this.list_expresiones !=  undefined){
+      this.list_expresiones.forEach((element)=>{
+          pos.agregarHijoNodo(element.getNodo());
+      });
+      nodo.agregarHijoNodo(pos);
+    }
+    return nodo;
+}
 }
