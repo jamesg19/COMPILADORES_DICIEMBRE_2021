@@ -4,6 +4,7 @@ import { TablaSimbolos } from "../../table/tablasimbolos";
 import { Excepcion } from "../../table/excepcion";
 import { exit } from "process";
 import { TIPO } from "../../table/tipo";
+import { NodoAST } from "../../abs/nodo";
 
 export class Modificar extends Instruccion {
   id: string;
@@ -112,4 +113,20 @@ export class Modificar extends Instruccion {
       if (exist?.valor instanceof Array) (exist?.valor)[index] = val;
     });
   }
+
+  getNodo() {
+      const nodo=new NodoAST("MODIFICAR ARRAY");
+      nodo.agregarHijo(this.id);
+
+      const pos= new NodoAST("POSICION");
+      if(this.list_expresiones!= null || this.list_expresiones !=  undefined){
+        this.list_expresiones.forEach((element)=>{
+            pos.agregarHijoNodo(element.getNodo());
+        });
+        nodo.agregarHijoNodo(pos);
+      }
+      return nodo;
+  }
+
+
 }

@@ -2,6 +2,7 @@ import { TIPO } from "../../table/tipo";
 import { Instruccion } from '../../abs/Instruccion';
 import { TablaSimbolos } from '../../table/tablasimbolos';
 import { Arbol } from '../../table/arbol';
+import { NodoAST } from "../../abs/nodo";
 
 
 export class Atributo {
@@ -58,6 +59,12 @@ export class Atributo {
      
             
     }
+    getNodo(){
+        const nodo= new NodoAST("ATRIBUTO");
+        nodo.agregarHijo(this.id);
 
+        return nodo;
+
+    }
 
 }

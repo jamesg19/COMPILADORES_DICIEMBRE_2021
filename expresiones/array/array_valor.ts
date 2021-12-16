@@ -4,6 +4,7 @@ import { TablaSimbolos } from '../../table/tablasimbolos';
 import { Arbol } from '../../table/arbol';
 import { Excepcion } from '../../table/excepcion';
 import { Simbolo } from '../../table/simbolo';
+import { NodoAST } from '../../abs/nodo';
 
 export class Arreglo_Valor extends Instruccion{
     tipo:TIPO;
@@ -41,6 +42,15 @@ export class Arreglo_Valor extends Instruccion{
         
         
     
+    }
+    getNodo() {
+        const nodo= new NodoAST("VALOR ARRAY");
+        nodo.agregarHijo(this.id);
+        nodo.agregarHijo(this.id_valor);
+
+        return nodo;
+
+
     }
     
     

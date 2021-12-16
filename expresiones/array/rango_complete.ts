@@ -4,6 +4,7 @@ import { Arbol } from "../../table/arbol";
 import { Excepcion } from "../../table/excepcion";
 import { TablaSimbolos } from "../../table/tablasimbolos";
 import { Simbolo } from "../../table/simbolo";
+import { NodoAST } from "../../abs/nodo";
 
 export class Rango_Complete extends Instruccion {
   id: string;
@@ -47,5 +48,11 @@ export class Rango_Complete extends Instruccion {
     return array_val.valor;
 
     
+  }
+
+  getNodo() {
+      const nodo= new NodoAST("RANGO");
+      nodo.agregarHijo(this.id);
+      return nodo;
   }
 }

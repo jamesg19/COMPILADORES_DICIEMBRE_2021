@@ -4,6 +4,7 @@ import { TIPO } from '../../table/tipo';
 import { TablaSimbolos } from '../../table/tablasimbolos';
 import { Arbol } from '../../table/arbol';
 import { Excepcion } from '../../table/excepcion';
+import { NodoAST } from '../../abs/nodo';
 
 export class Push_List extends Instruccion {
     
@@ -105,5 +106,22 @@ export class Push_List extends Instruccion {
         this.tipo = TIPO.NULL;
         return value_return;
     }
+
+    getNodo() {
+      const nodo=new NodoAST("PUSH LIST");
+      nodo.agregarHijo(this.id);
+      
+      const pos= new NodoAST("POSICION");
+      if(this.list_expresiones!= null || this.list_expresiones !=  undefined){
+        this.list_expresiones.forEach((element)=>{
+            pos.agregarHijoNodo(element.getNodo());
+        });
+        nodo.agregarHijoNodo(pos);
+      }
+      nodo.agregarHijoNodo(this.exp.getNodo());
+      return nodo;
+    }
+
+
 
 }

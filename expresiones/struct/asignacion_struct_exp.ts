@@ -5,6 +5,7 @@ import { Arbol } from "../../table/arbol";
 import { Excepcion } from "../../table/excepcion";
 import { TIPO } from '../../table/tipo';
 import { Simbolo } from "../../table/simbolo";
+import { NodoAST } from "../../abs/nodo";
 
 export class Asignacion_Struct_Exp extends Instruccion {
   acceso: Acceso_Struct;
@@ -49,5 +50,12 @@ export class Asignacion_Struct_Exp extends Instruccion {
       );
     
     value_acceso.valor = value_exp;
+  }
+
+  getNodo(){
+    const nodo=new NodoAST("ASIGNACION STRUCT");
+    nodo.agregarHijo(this.acceso.id);
+    nodo.agregarHijoNodo(this.exp.getNodo());
+    return nodo;
   }
 }
