@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>Quetzal Compiler</title>
     <link rel="stylesheet" type="text/css" href="assets/plug/lib/codemirror.css">
-    <link rel="stylesheet" type="text/css" href="assets/plug/theme/icecoder.css">
+    <link rel="stylesheet" type="text/css" href="assets/plug/theme/ayu-mirage.css">
     <link rel="stylesheet" href="assets/navbar/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700">
     <link rel="stylesheet" href="assets/navbar/css/Pages-Navbar.css">
@@ -37,7 +37,7 @@
 
     <div class="container-xxl">
     
-        <h1>EDITOR</h1>
+        <h4>EDITOR</h4>
         <div class="row" align="left">
             <div class="col-sm">
                 <textarea class="codemirror-textareaEditor"></textarea>
@@ -47,6 +47,56 @@
                 <textarea class="codemirror-textareaC3D"></textarea>
             </div>
         </div>
+        <div class="row" align="center">
+            <div class="col-sm">
+                <h2>ERRORES</h2>
+            </div>        
+            <div class="col-sm">
+                <h2>TABLA SIMBOLOS</h2>
+            </div>
+        </div>
+        <div class="row" align="left">
+            <div class="col-sm">
+                <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>TIPO</th>
+                            <th>DESCRIPCCION</th>
+                            <th>FILA</th>
+                            <th>COLUMNA</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr>
+                            <td>Lexico</td>
+                            <td>No se reconoce el caracter ♥</td>
+                            <td>1</td>
+                            <td>6</td>
+                        </tr>
+                        <tr>
+                            <td>Sintactico</td>
+                            <td>Se esperaba ;</td>
+                            <td>1</td>
+                            <td>12</td>
+                        </tr>
+                        <tr>
+                            <td>Semantico</td>
+                            <td>Conitnue fuera del ciclo</td>
+                            <td>15</td>
+                            <td>9</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div> 
+            <div class="col-sm">
+            </div>
+        </div>
+
+
+
+
 
     </div>
 
@@ -54,6 +104,8 @@
     <script type="text/javascript" src="assets/plug/lib/codemirror.js" ></script>
     <script type="text/javascript" src="assets/defaultC3D.js" ></script>
     <script type="text/javascript" src="assets/defaultEditor.js" ></script>
+
+    
 
 
    

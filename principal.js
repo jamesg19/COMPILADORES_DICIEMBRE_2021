@@ -15,6 +15,7 @@ const asignacion_1 = require("./instruccion/asignacion");
 const array_valor_1 = require("./expresiones/array/array_valor");
 const break_1 = require("./instruccion/break");
 const main_1 = require("./instruccion/main");
+const nodo_1 = require("./abs/nodo");
 const Parser = require("./analizador/analizador");
 class Principal {
     ejecutar(code) {
@@ -85,17 +86,17 @@ class Principal {
             //if(!(element instanceof Main || ) )    
             //console.log("Sentencias fuera de Main")
         });
-        // console.log("PROBANDO DOT.......*/*/*/*/");
-        // //generacion de AST 
-        // const init=new NodoAST("RAIZ");
-        // const instr=new NodoAST("INSTRUCCIONES");
-        // ast.getInstrucciones().forEach((instruccion:Instruccion) => {
-        //   instr.agregarHijoNodo(instruccion.getNodo());
-        // });
-        // init.agregarHijoNodo(instr);
-        // //devuelve el codigo GRAPHIZ DEL AST
-        // const grafo=ast.getDot(init);
-        // console.log(grafo);
+        console.log("PROBANDO DOT.......*/*/*/*/");
+        //generacion de AST 
+        const init = new nodo_1.NodoAST("RAIZ");
+        const instr = new nodo_1.NodoAST("INSTRUCCIONES");
+        ast.getInstrucciones().forEach((instruccion) => {
+            instr.agregarHijoNodo(instruccion.getNodo());
+        });
+        init.agregarHijoNodo(instr);
+        //devuelve el codigo GRAPHIZ DEL AST
+        const grafo = ast.getDot(init);
+        console.log(grafo);
     }
 }
 exports.Principal = Principal;

@@ -123,20 +123,20 @@ export class Principal {
         //console.log("Sentencias fuera de Main")
         
     });
-  // console.log("PROBANDO DOT.......*/*/*/*/");
-  // //generacion de AST 
-  // const init=new NodoAST("RAIZ");
-  // const instr=new NodoAST("INSTRUCCIONES");
-  // ast.getInstrucciones().forEach((instruccion:Instruccion) => {
-  //   instr.agregarHijoNodo(instruccion.getNodo());
+  console.log("PROBANDO DOT.......*/*/*/*/");
+  //generacion de AST 
+  const init=new NodoAST("RAIZ");
+  const instr=new NodoAST("INSTRUCCIONES");
+  ast.getInstrucciones().forEach((instruccion:Instruccion) => {
+    instr.agregarHijoNodo(instruccion.getNodo());
 
-  // });
+  });
 
-  // init.agregarHijoNodo(instr);
-  // //devuelve el codigo GRAPHIZ DEL AST
-  // const grafo=ast.getDot(init);
+  init.agregarHijoNodo(instr);
+  //devuelve el codigo GRAPHIZ DEL AST
+  const grafo=ast.getDot(init);
   
-  // console.log(grafo);
+  console.log(grafo);
   
   
   
