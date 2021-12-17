@@ -7,6 +7,7 @@ void main(){
 
 
 println(!false);
+println(10<30);
 println(b);
 println("mi cadena para imprimir");
 
