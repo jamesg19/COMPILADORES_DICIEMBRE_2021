@@ -40,7 +40,7 @@ export class Primitivo extends Instruccion {
     return nodo;
   }
 
-  traducir(entorno:TablaSimbolos, arbol:Arbol):string{
+  traducir(entorno:TablaSimbolos, arbol:Arbol):any{
     
     // let temp:string = "t"
     // let temp += super.temp;

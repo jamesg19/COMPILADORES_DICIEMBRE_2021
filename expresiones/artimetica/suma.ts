@@ -6,6 +6,7 @@ import { ARITMETICO } from "../../table/tipo";
 import { Excepcion} from "../../table/excepcion"
 import { Primitivo } from "../primitivo";
 import { NodoAST } from "../../abs/nodo";
+import { Principal } from "../../principal";
 
 
 export class Suma extends Instruccion{
@@ -245,6 +246,209 @@ export class Suma extends Instruccion{
             return new Excepcion("Semantico",`No se pudo obtener el valor suma `,`${this.fila}`,`${this.columna}`);
         }
 
+    }
+
+
+    traducir(entorno: TablaSimbolos, arbol: Arbol): any {
+        try{
+            const izq=this.operadorIzq.traducir(entorno,arbol);
+            const der=this.operadorDer.traducir(entorno,arbol);
+
+            if(izq instanceof Excepcion){
+                return izq;
+            }
+            if(this.operadorDer!= null || this.operadorDer != undefined){
+                
+                if(der instanceof Excepcion){
+                    return der;
+                }
+            }
+
+            //validaciones
+            if(this.operadorIzq.tipo == TIPO.NULL){
+                return new Excepcion("Semantico", "Error de operacion en variable NULA IZQ", `${this.fila}`, `${this.columna}`);
+            }
+            if(this.operadorDer.tipo == TIPO.NULL){
+                return new Excepcion("Semantico", "Error de operacion en variable NULA DER", `${this.fila}`, `${this.columna}`);
+            }
+            //-------ENTERO
+            //ENTERO + ENTERO
+            if(this.operadorIzq.tipo===TIPO.ENTERO && this.operadorDer.tipo===TIPO.ENTERO ){
+                this.tipo=TIPO.ENTERO;
+                return this.setAtributosC3D(izq+"",der+"");
+                //return this.obtenerVal(this.operadorIzq.tipo,izq) + this.obtenerVal(this.operadorDer.tipo,der);
+            }
+            //ENTERO + DECIMAL
+            else if(this.operadorIzq.tipo===TIPO.ENTERO && this.operadorDer.tipo===TIPO.DECIMAL ){
+                this.tipo=TIPO.DECIMAL;
+                return this.setAtributosC3D(izq+"",der+"");
+                //return this.obtenerVal(this.operadorIzq.tipo,izq) + this.obtenerVal(this.operadorDer.tipo,der);
+            }
+
+            //ENTERO + BOOLEAN
+            else if(this.operadorIzq.tipo===TIPO.ENTERO && this.operadorDer.tipo===TIPO.BOOLEAN ){
+                this.tipo=TIPO.ENTERO;
+                var valorBooleanq=0;
+                if(this.obtenerVal(this.operadorDer.tipo,der) === false){
+                    valorBooleanq=0;
+                }else{
+                    valorBooleanq=1;
+                }
+                return this.setAtributosC3D(izq+"",valorBooleanq+"");
+                //return this.obtenerVal(this.operadorIzq.tipo,izq) +valorBooleanq;
+            }
+            //ENTERO + CADENA
+            else if(this.operadorIzq.tipo===TIPO.ENTERO && this.operadorDer.tipo===TIPO.CADENA ){
+                this.tipo=TIPO.CADENA;
+                return this.setAtributosC3D(izq+"",der+"");
+                //return this.obtenerVal(this.operadorIzq.tipo,izq) + this.obtenerVal(this.operadorDer.tipo,der);
+            }
+            
+            ////--------DECIMAL
+            //DECIMAL + ENTERO
+            else if(this.operadorIzq.tipo===TIPO.DECIMAL && this.operadorDer.tipo===TIPO.ENTERO ){
+                this.tipo=TIPO.DECIMAL;
+                return this.setAtributosC3D(izq+"",der+"");
+                //return this.obtenerVal(this.operadorIzq.tipo,izq) + this.obtenerVal(this.operadorDer.tipo,der);
+            }
+            //DECIMAL + DECIMAL
+            else if(this.operadorIzq.tipo===TIPO.DECIMAL && this.operadorDer.tipo===TIPO.DECIMAL ){
+                this.tipo=TIPO.DECIMAL;
+                return this.setAtributosC3D(izq+"",der+"");
+                //return this.obtenerVal(this.operadorIzq.tipo,izq) + this.obtenerVal(this.operadorDer.tipo,der);
+            }
+            //DECIMAL + BOOLEAN
+            else if(this.operadorIzq.tipo===TIPO.DECIMAL && this.operadorDer.tipo===TIPO.BOOLEAN ){
+                this.tipo=TIPO.DECIMAL;
+                var valorBoolean11=0;
+                if(this.obtenerVal(this.operadorDer.tipo,der) === false){
+                    valorBoolean11=0;
+                }else{
+                    valorBoolean11=1;
+                }
+                return this.setAtributosC3D(izq+"",valorBoolean11+"");
+                //return this.obtenerVal(this.operadorIzq.tipo,izq) +valorBoolean11;
+            }
+            //DECIMAL + CADENA
+            else if(this.operadorIzq.tipo===TIPO.DECIMAL && this.operadorDer.tipo===TIPO.CADENA ){
+                this.tipo=TIPO.CADENA;
+                return this.setAtributosC3D(izq+"",der+"");
+                //return this.obtenerVal(this.operadorIzq.tipo,izq) + this.obtenerVal(this.operadorDer.tipo,der);
+            }
+            //----BOOLEANO
+            //BOOLEAN + ENTERO
+            else if(this.operadorIzq.tipo===TIPO.BOOLEAN && this.operadorDer.tipo===TIPO.ENTERO ){
+                this.tipo=TIPO.ENTERO;
+                var valorBoolean22=0;
+                if(this.obtenerVal(this.operadorIzq.tipo,izq) === false){
+                    valorBoolean22=0;
+                }else{
+                    valorBoolean22=1;
+                }
+                return this.setAtributosC3D(valorBoolean22+"",der+"");
+                //return valorBoolean22+this.obtenerVal(this.operadorDer.tipo,der);
+            }
+            //BOOLEAN + DECIMAL
+            else if(this.operadorIzq.tipo===TIPO.BOOLEAN && this.operadorDer.tipo===TIPO.DECIMAL ){
+                this.tipo=TIPO.DECIMAL;
+                var valorBoolean33=0;
+
+                if(this.obtenerVal(this.operadorIzq.tipo,izq) === false){
+                    valorBoolean33=0;
+                }else{
+                    valorBoolean33=1;
+                }
+                return this.setAtributosC3D(valorBoolean33+"",der+"");
+                //return valorBoolean33+this.obtenerVal(this.operadorDer.tipo,der);
+            }
+            //BOOLEAN + BOOLEAN
+            else if(this.operadorIzq.tipo===TIPO.BOOLEAN && this.operadorDer.tipo===TIPO.BOOLEAN ){
+                this.tipo=TIPO.ENTERO;
+                var valorBoolean1=0;
+                var valorBoolean2=0;
+                if(this.obtenerVal(this.operadorIzq.tipo,izq) === false){
+                    valorBoolean1=0;
+                }else{
+                    valorBoolean1=1;
+                }
+                if(this.obtenerVal(this.operadorDer.tipo,der) === false){
+                    valorBoolean2=0;
+                }else{
+                    valorBoolean2=1;
+                }
+                return this.setAtributosC3D(valorBoolean1+"",valorBoolean2+"");
+                //return valorBoolean1+valorBoolean2;
+            }
+            //BOOLEAN + CADENA
+            else if(this.operadorIzq.tipo===TIPO.BOOLEAN && this.operadorDer.tipo===TIPO.CADENA ){
+                this.tipo=TIPO.CADENA;
+                return this.setAtributosC3D(izq+"",der+"");
+                //return this.obtenerVal(this.operadorIzq.tipo,izq) + this.obtenerVal(this.operadorDer.tipo,der);
+            }
+            //------CARACTER
+            //CARACTER + CARACTER
+
+            else if(this.operadorIzq.tipo===TIPO.CARACTER && this.operadorDer.tipo===TIPO.CARACTER ){
+                this.tipo=TIPO.CADENA;
+                return this.setAtributosC3D(izq+"",der+"");
+                //return this.obtenerVal(this.operadorIzq.tipo,izq) + this.obtenerVal(this.operadorDer.tipo,der);
+            }
+            //CARACTER + CADENA
+            else if(this.operadorIzq.tipo===TIPO.CARACTER && this.operadorDer.tipo===TIPO.CADENA ){
+                this.tipo=TIPO.CADENA;
+                return this.setAtributosC3D(izq+"",der+"");
+                //return this.obtenerVal(this.operadorIzq.tipo,izq) + this.obtenerVal(this.operadorDer.tipo,der);
+            }
+            //------CADENA
+            //CADENA + ENTERO
+            else if(this.operadorIzq.tipo===TIPO.CADENA && this.operadorDer.tipo===TIPO.ENTERO ){
+                this.tipo=TIPO.CADENA;
+                return this.setAtributosC3D(izq+"",der+"");
+                //return this.obtenerVal(this.operadorIzq.tipo,izq) + this.obtenerVal(this.operadorDer.tipo,der);
+            }
+            //CADENA + DECIMAL
+            else if(this.operadorIzq.tipo===TIPO.CADENA && this.operadorDer.tipo===TIPO.DECIMAL ){
+                this.tipo=TIPO.CADENA;
+                return this.setAtributosC3D(izq+"",der+"");
+                //return this.obtenerVal(this.operadorIzq.tipo,izq) + this.obtenerVal(this.operadorDer.tipo,der);
+            }
+            //CADENA + CADENA
+            else if(this.operadorIzq.tipo===TIPO.CADENA && this.operadorDer.tipo===TIPO.CADENA ){
+                this.tipo=TIPO.CADENA;
+                return this.setAtributosC3D(izq+"",der+"");
+                //return this.obtenerVal(this.operadorIzq.tipo,izq) + this.obtenerVal(this.operadorDer.tipo,der);
+            }
+
+            //CADENA + BOOLEAN
+            else if(this.operadorIzq.tipo===TIPO.CADENA && this.operadorDer.tipo===TIPO.BOOLEAN ){
+                this.tipo=TIPO.CADENA;
+                return this.setAtributosC3D(izq+"",der+"");
+                //return this.obtenerVal(this.operadorIzq.tipo,izq) + this.obtenerVal(this.operadorDer.tipo,der);
+            }
+            //CADENA + CARACTER
+            else if(this.operadorIzq.tipo===TIPO.CADENA && this.operadorDer.tipo===TIPO.CARACTER ){
+                this.tipo=TIPO.CADENA;
+                return this.setAtributosC3D(izq+"",der+"");
+                //return this.obtenerVal(this.operadorIzq.tipo,izq) + this.obtenerVal(this.operadorDer.tipo,der);
+            }
+        } catch (error) {
+
+            return new Excepcion("Semantico","QUETZAL Null Pointer Exception Suma",`${this.fila}`,`${this.columna}`);
+
+        }
+    }
+    setAtributosC3D(izquierda:string,derecha:string){
+        
+        
+        let temp = Principal.temp;
+        temp++;
+        
+        let t = "t"+temp;
+        Principal.temp = temp;
+        Principal.historial += t +" = "+izquierda+" + "+derecha+";" ;
+        Principal.historial += "\n";
+        this.tipo = TIPO.DECIMAL;
+        return t; 
     }
 
 }
