@@ -119,6 +119,9 @@ class Principal {
             ast.head + "\n" + ast.list_temporales() + "\n" + print_nativa + "\n";
         console.log(code_objeto + "\n" + Principal.historial);
     }
+    static addComentario(comentario) {
+        Principal.historial += "/* " + comentario + " */\n";
+    }
 }
 exports.Principal = Principal;
 Principal.contador = 0;

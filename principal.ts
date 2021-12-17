@@ -170,6 +170,9 @@ export class Principal {
 
     console.log(code_objeto + "\n" + Principal.historial);
   }
+  static addComentario(comentario:string) {
+    Principal.historial += "/* "+comentario+" */\n"
+  }
 }
 
 //let principa: Principal = new Principal();

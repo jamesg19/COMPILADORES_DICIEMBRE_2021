@@ -5,6 +5,7 @@ import { Arbol } from "../table/arbol";
 import { Simbolo } from "../table/simbolo";
 import { Excepcion } from "../table/excepcion";
 import { NodoAST } from "../abs/nodo";
+import { isNumber } from 'util';
 
 export class Identificador extends Instruccion {
   id: string;
@@ -49,7 +50,11 @@ export class Identificador extends Instruccion {
       let simbol = entorno.getSimboloJ(this.id);
       //establecemos el tipo
       this.tipo = simbol?.tipo;
-      return simbol?.valor;
+      //return simbol?.valor;
+      if(this.tipo == TIPO.ENTERO) this.tipo = TIPO.DECIMAL;
+      
+      //console.log("TIpo========",simbol?.tipo);
+      return "stack[(int)"+simbol?.posicion+"]";
       
     } catch (error) {
       return new Excepcion(

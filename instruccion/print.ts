@@ -82,12 +82,14 @@ export class Print extends Instruccion {
     let cadena: string = "";
     let value_cadena: string = "";
     //me sirve para agregarle las comillas a la cadena
-
+  let contador:number = 0;
     this.value?.forEach((x) => {  //print(4+3);
       
-      let tr = x.traducir(entorno,arbol);
-      
-      
+      contador++;
+      console.log(contador);
+      let tr = x.traducir(entorno,arbol); //t[0]
+      console.log(x);
+        
         if (TIPO.CADENA == x.tipo) {
           Print.print = true;
           
@@ -106,6 +108,14 @@ export class Print extends Instruccion {
             tr +
             "<----\n*/\n";
           cadena += 'printf("%d\\n",' + tr + ");\n";
+        }
+        if (TIPO.BOOLEAN == x.tipo) {
+          cadena += "/*Imprimiendo secuencia de caracteres*/\n";
+          cadena +=
+            "/*Imprimiendo secuencia de caracteres\n---->" +
+            tr +
+            "<----\n*/\n";
+          cadena += 'printf("%f\\n",' + tr + ");\n";
         }
 
         if (TIPO.DECIMAL == x.tipo) {

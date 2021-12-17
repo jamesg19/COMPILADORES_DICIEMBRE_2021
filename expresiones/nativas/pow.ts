@@ -6,6 +6,7 @@ import { ARITMETICO } from "../../table/tipo";
 import { Excepcion} from "../../table/excepcion"
 import { Primitivo } from "../primitivo";
 import { NodoAST } from "../../abs/nodo";
+import { Principal } from "../../principal";
 
 
 export class Pow extends Instruccion{
@@ -117,6 +118,88 @@ export class Pow extends Instruccion{
         }
 
     }
+
+
+
+    traducir(entorno: TablaSimbolos, arbol: Arbol): any {
+
+        try{
+
+            const izq=this.base.traducir(entorno,arbol);
+            const der=this.potencia.traducir(entorno,arbol);
+
+            if(izq instanceof Excepcion){
+                return izq;
+            }
+            if(this.potencia!= null || this.potencia != undefined){
+                
+                if(der instanceof Excepcion){
+                    return der;
+                }
+            }
+
+
+            //validaciones
+            if(this.base.tipo == TIPO.NULL){
+                return new Excepcion("Semantico", "Error de operacion en variable NULA", `${this.fila}`, `${this.columna}`);
+            }
+            if(this.potencia.tipo == TIPO.NULL){
+                return new Excepcion("Semantico", "Error de operacion en variable NULA", `${this.fila}`, `${this.columna}`);
+            }
+
+
+                
+            //-------ENTERO
+            //ENTERO ^^ ENTERO
+            if(this.base.tipo===TIPO.ENTERO && this.potencia.tipo===TIPO.ENTERO ){
+                this.tipo=TIPO.DECIMAL;
+                return this.setAtributosC3D(izq,der);
+                //return this.obtenerVal(this.operadorIzq.tipo,izq) ^ this.obtenerVal(this.operadorDer.tipo,der);
+            }
+            //ENTERO ^ DECIMAL
+            else if(this.base.tipo===TIPO.ENTERO && this.potencia.tipo===TIPO.DECIMAL ){
+                this.tipo=TIPO.DECIMAL;
+                return this.setAtributosC3D(izq,der);
+                //return this.obtenerVal(this.operadorIzq.tipo,izq) ^ this.obtenerVal(this.operadorDer.tipo,der);
+            }
+
+            ////--------DECIMAL
+            //DECIMAL ^ ENTERO
+            else if(this.base.tipo===TIPO.DECIMAL && this.potencia.tipo===TIPO.ENTERO ){
+                this.tipo=TIPO.DECIMAL;
+                return this.setAtributosC3D(izq,der);
+                //return this.obtenerVal(this.operadorIzq.tipo,izq) ^ this.obtenerVal(this.operadorDer.tipo,der);
+            }
+            //DECIMAL ^ DECIMAL
+            else if(this.base.tipo===TIPO.DECIMAL && this.potencia.tipo===TIPO.DECIMAL ){
+                this.tipo=TIPO.DECIMAL;
+                return this.setAtributosC3D(izq,der);
+                //return this.obtenerVal(this.operadorIzq.tipo,izq) ^ this.obtenerVal(this.operadorDer.tipo,der);
+            }
+
+            return new Excepcion("Semantico",`Tipo de datos invalido para Modulo ${this.base.tipo} ^ ${this.potencia.tipo}  `,`${this.fila}`,`${this.columna}`);
+
+        } catch (error) {
+
+            return new Excepcion("Semantico","QUETZAL Null Pointer Exception Modulo",`${this.fila}`,`${this.columna}`);
+
+        }
+    }
+
+    setAtributosC3D(izquierda:string,derecha:string){
+        
+        
+        let temp = Principal.temp;
+        temp++;
+        
+        let t = "t"+temp;
+        Principal.temp = temp;
+        Principal.historial += t +" = pow("+izquierda+" , "+derecha+");" ;
+        Principal.historial += "\n";
+        this.tipo = TIPO.DECIMAL;
+        return t; 
+    }
+
 
 }
 

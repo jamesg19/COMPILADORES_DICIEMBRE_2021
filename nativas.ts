@@ -26,7 +26,7 @@ export class Nativas {
     let print_line: string =
       "/*------NATIVES------*/\n" +
       "void printString() {\n" +
-      "\t"+t1+"= P+1;\n" +
+      "\t"+t1+"= P;\n" +
       "\t"+t2+" = stack[(int)"+t1+"];\n" +
       "\t"+label1+":\n" +
       "\t"+t3+" = heap[(int)"+t2+"];\n" +
