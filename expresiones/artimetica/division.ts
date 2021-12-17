@@ -6,6 +6,7 @@ import { ARITMETICO } from "../../table/tipo";
 import { Excepcion} from "../../table/excepcion"
 import { Primitivo } from "../primitivo";
 import { NodoAST } from "../../abs/nodo";
+import { Principal } from "../../principal";
 
 
 export class Division extends Instruccion{
@@ -90,6 +91,87 @@ export class Division extends Instruccion{
 
         }
     }
+
+    traducir(entorno: TablaSimbolos, arbol: Arbol): any {
+
+        try{
+
+            const izq=this.operadorIzq.traducir(entorno,arbol);
+            const der=this.operadorDer.traducir(entorno,arbol);
+
+            if(izq instanceof Excepcion){
+                return izq;
+            }
+            if(this.operadorDer!= null || this.operadorDer != undefined){
+                
+                if(der instanceof Excepcion){
+                    return der;
+                }
+            }
+
+
+            //validaciones
+            if(this.operadorIzq.tipo == TIPO.NULL){
+                return new Excepcion("Semantico", "Error de operacion en variable NULA", `${this.fila}`, `${this.columna}`);
+            }
+            if(this.operadorDer.tipo == TIPO.NULL){
+                return new Excepcion("Semantico", "Error de operacion en variable NULA", `${this.fila}`, `${this.columna}`);
+            }
+
+
+            //-------ENTERO
+            //ENTERO / ENTERO
+            if(this.operadorIzq.tipo===TIPO.ENTERO && this.operadorDer.tipo===TIPO.ENTERO ){
+                this.tipo=TIPO.DECIMAL;
+                return this.setAtributosC3D(izq,der);
+                //return this.obtenerVal(this.operadorIzq.tipo,izq) / this.obtenerVal(this.operadorDer.tipo,der);
+            }
+            //ENTERO / DECIMAL
+            else if(this.operadorIzq.tipo===TIPO.ENTERO && this.operadorDer.tipo===TIPO.DECIMAL ){
+                this.tipo=TIPO.DECIMAL;
+                return this.setAtributosC3D(izq,der);
+                //return this.obtenerVal(this.operadorIzq.tipo,izq) / this.obtenerVal(this.operadorDer.tipo,der);
+            }
+
+            ////--------DECIMAL
+            //DECIMAL / ENTERO
+            else if(this.operadorIzq.tipo===TIPO.DECIMAL && this.operadorDer.tipo===TIPO.ENTERO ){
+                this.tipo=TIPO.DECIMAL;
+                return this.setAtributosC3D(izq,der);
+                //return this.obtenerVal(this.operadorIzq.tipo,izq) / this.obtenerVal(this.operadorDer.tipo,der);
+            }
+            //DECIMAL / DECIMAL
+            else if(this.operadorIzq.tipo===TIPO.DECIMAL && this.operadorDer.tipo===TIPO.DECIMAL ){
+                this.tipo=TIPO.DECIMAL;
+                return this.setAtributosC3D(izq,der);
+                //return this.obtenerVal(this.operadorIzq.tipo,izq) / this.obtenerVal(this.operadorDer.tipo,der);
+            }
+
+            return new Excepcion("Semantico",`Tipo de datos invalido para division ${this.operadorIzq.tipo} / ${this.operadorDer.tipo}  `,`${this.fila}`,`${this.columna}`);
+
+        } catch (error) {
+
+            return new Excepcion("Semantico","QUETZAL Null Pointer Exception Division",`${this.fila}`,`${this.columna}`);
+
+        }
+    }
+
+
+
+    setAtributosC3D(izquierda:string,derecha:string){
+        
+        
+        let temp = Principal.temp;
+        temp++;
+        
+        let t = "t"+temp;
+        Principal.temp = temp;
+        Principal.historial += t +" = "+izquierda+" / "+derecha+";" ;
+        Principal.historial += "\n";
+        this.tipo = TIPO.DECIMAL;
+        return t; 
+    }
+
     getNodo(){
         const nodo= new NodoAST("ARITMETICA");
         if( (this.operadorDer!=null) || (this.operadorDer != undefined)){
