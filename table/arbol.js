@@ -20,8 +20,8 @@ class Arbol {
         this.TSglobal = TSglobal;
         this.instrucciones = instrucciones;
         this.structs = new Map();
-        this.head += "#include <math.h>\ndouble heap[30101999];\n";
-        this.head += "double stack[30101999];\ndouble P;\ndouble H;\n\n";
+        this.head += "#include <math.h>\n\ndouble heap[30101999];\n";
+        this.head += "double stack[30101999];\n\ndouble P;\ndouble H;\n\n";
     }
     updateConsolaError(texto) {
         this.consola += texto + '\n';

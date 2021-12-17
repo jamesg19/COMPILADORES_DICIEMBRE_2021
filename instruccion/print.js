@@ -120,7 +120,7 @@ class Print extends Instruccion_1.Instruccion {
         return_string += "heap[(int)H] = -1 ;\n";
         return_string += "H = H + 1;\n";
         //referencia de la cadena desde el stack
-        principal_1.Principal.posicion++;
+        //Principal.posicion;
         return_string +=
             "t" + principal_1.Principal.posicion + " = P + " + principal_1.Principal.posicion + ";\n";
         return return_string;

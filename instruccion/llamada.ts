@@ -6,6 +6,8 @@ import { Simbolo } from '../table/simbolo';
 import { TIPO } from "../table/tipo";
 import { Return } from "./Return";
 import { NodoAST } from "../abs/nodo";
+import { Primitivo } from '../expresiones/primitivo';
+import { Principal } from '../principal';
 
 
 export class Llamada extends Instruccion{
@@ -95,7 +97,54 @@ constructor(id:string, fila:number,columna:number,lista_parmetros?:Array<Instruc
         }
         return nodo;
     }
-    
+    traducir(entorno:TablaSimbolos,arbol:Arbol):any{
+       Principal.historial += "/*Se realizo una llamada */\n";
+        let llamar_funcion = arbol.getFunctionByName(this.id);
+        
+        if(!llamar_funcion)
+            return new Excepcion("Semantico","No se encontro una funcion con el nombre "+this.id,this.fila+"",this.columna+"");
+        
+        let entorno_local = new TablaSimbolos(entorno);
+        
+        if(llamar_funcion.getParametrosSize())//verifico que no sea undefined
+        
+            if(llamar_funcion.getParametrosSize() == this.lista_parametros?.length){//verifico que tengan el mismo tamano
+                let contador:number = 0;
+                
+                this.lista_parametros?.forEach((x)=>{//for para comparar tipos
+                    let result_parametros = x.traducir(entorno,arbol);
+                    
+                    if(result_parametros instanceof Excepcion) return result_parametros;
+                    
+                    if( llamar_funcion.lista_parametros[contador]['tipo'] == x.tipo ){
+                     
+                     
+                    let ident:string = llamar_funcion.lista_parametros[contador]['id']+"";
+                    let simbolo:Simbolo = new Simbolo(ident,x.tipo,super.fila,super.columna,result_parametros,false,false );
+                    
+                     //agregar la verificacion de arrays y struct
+                     entorno_local.addSimbolo(simbolo);
+                     //Principal.historial += "stac";
+                     
+                    }else{
+                        return new Excepcion("Semantico", "Tipo de dato diferente en Parametros de la llamada.", super.fila+"", super.columna+"")
+                    }
+                    contador++;
+                                     
+                                        
+                })
+            }else{
+                return new Excepcion("Semantico", "hay una diferencia en la cantidad de parametros esperados.", super.fila+"", super.columna+"")
+            }
+            
+            let exec_funcion = llamar_funcion.traducir(entorno_local,arbol);
+            
+            if(exec_funcion instanceof Excepcion ) return exec_funcion;
+
+            this.tipo = llamar_funcion.tipo;            
+            
+            return exec_funcion;   
+    }
     
     
 }

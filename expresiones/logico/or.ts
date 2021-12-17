@@ -5,6 +5,7 @@ import { Instruccion } from "../../abs/Instruccion";
 import { TIPO } from "../../table/tipo";
 import { Primitivo } from "../primitivo";
 import { NodoAST } from "../../abs/nodo";
+import { Principal } from '../../principal';
 
 export class Or extends Instruccion {
   leftExpressio: Primitivo;
@@ -87,5 +88,28 @@ export class Or extends Instruccion {
           return new Excepcion("Semantico",`No se pudo obtener el valor en division`,`${this.fila}`,`${this.columna}`);
       }
   
+    }
+  
+    traducir(entorno: TablaSimbolos, arbol: Arbol): any {
+      const exp1 = this.leftExpressio.traducir(entorno, arbol);
+      const exp2 = this.rightExpression.traducir(entorno, arbol);
+      //comprobacion de errores
+      if (exp1 instanceof Excepcion) return exp1;
+      if (exp2 instanceof Excepcion) return exp2;
+  
+      if (this.leftExpressio.tipo === TIPO.BOOLEAN && this.rightExpression.tipo == TIPO.BOOLEAN) {
+        this.tipo = TIPO.BOOLEAN;
+        
+        let temp = Principal.temp ;
+        temp ++;
+        let t = "t"+temp;
+        Principal.temp =  temp;
+        Principal.historial += t+" = "+exp1 +" || "+exp2+";\n";
+        
+        
+        return exp1||exp2;
+      }
+      console.log("ERROR EN ||");
+      return new Excepcion("Semantico","Se requiere un tipo Boolean ",super.fila + "",super.columna + "");
     }
 }

@@ -6,7 +6,7 @@ void main(){
   int b= 30;
 
 
-println(10 -20 - 30 -4 -3);
+println(!false);
 println(b);
 println("mi cadena para imprimir");
 

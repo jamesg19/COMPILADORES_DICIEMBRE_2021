@@ -147,9 +147,10 @@ export class Print extends Instruccion {
     return_string += "H = H + 1;\n";
 
     //referencia de la cadena desde el stack
-    Principal.posicion++;
+    //Principal.posicion;
     return_string +=
       "t" + Principal.posicion + " = P + " + Principal.posicion + ";\n";
+      
     return return_string;
   }
 }
