@@ -88,41 +88,15 @@ export class Print extends Instruccion {
       let tr = x.traducir(entorno,arbol);
       
       
-      
-
-    
-      
-      
-
-      
-      //PRINT(5+6+7);
-
-      //exp=5+6+7
-      //exp.traducri
-
-      //t1=5+6;
-      //t2=t1+7;
-
-
-      //return t2;
-
-
-      //print(t2);
-      
-
-      
-      //if(x instanceof Identificador) return this.print_Cadena(x.)
-      
         if (TIPO.CADENA == x.tipo) {
           Print.print = true;
-
+          
           cadena += "/*Imprimiendo secuencia de caracteres*/\n";
-          cadena +=
-            "/*Imprimiendo secuencia de caracteres\n---->" +
-            tr +
-            "<----\n*/\n";
-          cadena += this.transform_cadena(tr, arbol);
+          cadena += "/*\nImprimiendo secuencia de caracteres\n---->" +
+                    x.value +"<----\n*/\n";
+          cadena += this.transform_cadena(x.value, arbol);
           cadena += "printString();\n";
+          
         }
 
         if (TIPO.ENTERO == x.tipo) {
@@ -136,10 +110,10 @@ export class Print extends Instruccion {
 
         if (TIPO.DECIMAL == x.tipo) {
           
-          cadena += "/*Imprimiendo secuencia de caracteres*/\n";
+          cadena += "/*Imprimiendo Decimales*/\n";
           cadena +=
             "/*Imprimiendo secuencia de caracteres\n---->\n" +
-            x.value +
+            tr +
             "<----\n*/\n";
           cadena += 'printf("%f\\n",' + tr + ");\n";
         }

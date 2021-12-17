@@ -73,22 +73,12 @@ class Print extends Instruccion_1.Instruccion {
         //me sirve para agregarle las comillas a la cadena
         (_a = this.value) === null || _a === void 0 ? void 0 : _a.forEach((x) => {
             let tr = x.traducir(entorno, arbol);
-            //PRINT(5+6+7);
-            //exp=5+6+7
-            //exp.traducri
-            //t1=5+6;
-            //t2=t1+7;
-            //return t2;
-            //print(t2);
-            //if(x instanceof Identificador) return this.print_Cadena(x.)
             if (tipo_1.TIPO.CADENA == x.tipo) {
                 Print.print = true;
                 cadena += "/*Imprimiendo secuencia de caracteres*/\n";
-                cadena +=
-                    "/*Imprimiendo secuencia de caracteres\n---->" +
-                        tr +
-                        "<----\n*/\n";
-                cadena += this.transform_cadena(tr, arbol);
+                cadena += "/*\nImprimiendo secuencia de caracteres\n---->" +
+                    x.value + "<----\n*/\n";
+                cadena += this.transform_cadena(x.value, arbol);
                 cadena += "printString();\n";
             }
             if (tipo_1.TIPO.ENTERO == x.tipo) {
@@ -100,10 +90,10 @@ class Print extends Instruccion_1.Instruccion {
                 cadena += 'printf("%d\\n",' + tr + ");\n";
             }
             if (tipo_1.TIPO.DECIMAL == x.tipo) {
-                cadena += "/*Imprimiendo secuencia de caracteres*/\n";
+                cadena += "/*Imprimiendo Decimales*/\n";
                 cadena +=
                     "/*Imprimiendo secuencia de caracteres\n---->\n" +
-                        x.value +
+                        tr +
                         "<----\n*/\n";
                 cadena += 'printf("%f\\n",' + tr + ");\n";
             }

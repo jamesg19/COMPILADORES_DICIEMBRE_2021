@@ -5,7 +5,7 @@ import { TIPO } from "../table/tipo";
 import { Arbol } from "../table/arbol";
 import { Simbolo } from "../table/simbolo";
 import { NodoAST } from "../abs/nodo";
-import { Principal } from "../principal";
+import { Principal } from '../principal';
 
 export class D_Id extends Instruccion {
   tipo: TIPO;
@@ -113,17 +113,17 @@ export class D_Id extends Instruccion {
     //nodo.agregarHijoNodo(this.);
     return nodo;
   }
-  traducir(entorno: TablaSimbolos, arbol: Arbol): string {
-    //let
-    let variable = entorno.getSimbolo(this.id); //e.getVariable(this.id);
+  traducir(e: TablaSimbolos, arbol: Arbol): any {
+    //Validacion de variable existente
+    let variable = e.getSimbolo(this.id); //e.getVariable(this.id);
 
-    if (variable) console.log("error");
-    // return new Excepcion(
-    //   "Semantico",
-    //   " no se pueden declarar variables con el mismo nombre" + this.id,
-    //   super.fila + "",
-    //   super.columna + ""
-    // );
+    if (variable)
+      return new Excepcion(
+        "Semantico",
+        " no se pueden declarar variables con el mismo nombre" + this.id,
+        super.fila + "",
+        super.columna + ""
+      );
 
     //Creacion de variable en el entorno
 
@@ -138,44 +138,12 @@ export class D_Id extends Instruccion {
       false,
       false
     );
-
-    //comentario  para saber que variable se esta declarando
-    let cadena = "/*declarando variable :" + simbolo.id + "*/\n";
     
-    //creacion de temporal 
-    let temp = Principal.temp++;
-    //switch para verificar si se almacena en el heap o en el stack
-    //
-    switch (this.tipo) {
-      case TIPO.ENTERO:
-      case TIPO.DECIMAL:
-        cadena +=
-          "stack[(int) " + simbolo.posicion + "] = " + simbolo.valor + ";\n";
-        break;
-      case TIPO.BOOLEAN:
-        cadena +=
-          "stack[(int) " +
-          simbolo.posicion +
-          "] = " +
-          Number(simbolo.valor) +
-          ";\n";
-        break;
-      case TIPO.CADENA:
-        cadena +=
-          "t" + temp + " = H;\n" 
-          + this.transform_cadena(simbolo.valor, arbol)
-        +"\nstack[(int) " +
-          simbolo.posicion +//apuntador
-          "] = " + //
-           "t"+temp+";\n"+
-           "//===================================="; //objeto apuntado
-               
-        break;
-    }
-
-    entorno.addSimbolo(simbolo); //valor: any, arreglo: boolean, struct: boolean
-
-    return cadena;
+    e.addSimbolo(simbolo); //valor: any, arreglo: boolean, struct: boolean
+    
+    let cadena = "/*Declaracion de Variales*/\n"+
+    "stack[(int)"+simbolo.posicion+"] = "+simbolo.valor+";\n";
+    Principal.historial += cadena;
   }
 
   transform_cadena(x: string, arbol: Arbol): string {

@@ -98,6 +98,7 @@ export class D_IdExp extends Instruccion{
       
       let simbolo = new Simbolo(this.id,this.tipo,super.fila,super.columna,valor,false,false);
       e.addSimbolo(simbolo);//valor: any, arreglo: boolean, struct: boolean
+      Principal.historial += "stack[(int)"+simbolo.posicion+"] = "+ valor + ";\n ";
     }
 
 }
