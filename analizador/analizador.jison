@@ -132,6 +132,9 @@
 .					{
   const er = new error_1.Error({ tipo: 'lexico', linea: `${yylineno + 1}`, descripcion: `El valor "${yytext}" no es valido, columna: ${yylloc.first_column + 1}` });
   errores_1.Errores.getInstance().push(er);
+
+  addReporte('Lexico',`El valor ${yytext} no se reconoce `,`${yylineno + 1}`,`${yylloc.first_column + 1}`)
+
   }
 
 //Fin del archivo
@@ -243,6 +246,30 @@
     const { DoWhile } = require('../instruccion/do_while');
     const { Continue } = require('../instruccion/continue');
     const { Excepcion } = require('../table/excepcion');
+    const { Reporte } = require('./reporte');
+    
+
+    const reporte=new Reporte();
+
+    var reporteGramatical =reporte.reporteGramatical;
+    var reporte_error =[];
+
+
+    // function reportarError(tipo,descripccion,linea,columna){
+    //     errores.push({tipo:tipo,descripccion:descripccion,linea:linea,columna:columna});
+    // }
+    function addReporte(produccion,regla){
+        reporte.reporteGramatical.push({produccion:produccion,regla:regla});
+    }
+
+    //METODOS GET PARA REPORTE DE ERRORES Y GRAMATICAL
+    function getReporteError(){
+      return reporte_error;
+    }
+    function getReporteGramatical(){
+      return reporteGramatical;
+    }
+
 %}
 
 // Asociacion de operadores y precedencia
@@ -268,13 +295,13 @@
 //terminales con minuscula
 //no terminales con mayuscula
 INICIO:
-    INSTRUCCIONES EOF                 { $$ = $1; return $$;   }
+    INSTRUCCIONES EOF                 { $$ = $1; return [$$,reporte];   }
     
 ;
 INSTRUCCIONES:
       
-    INSTRUCCIONES INSTRUCCION         {  $1.push($2); $$ = $1; }
-    | INSTRUCCION                     { $$ = [$1]              }
+    INSTRUCCIONES INSTRUCCION         {  addReporte('INSTRUCCIONES: INSTRUCCIONES INSTRUCCION','INSTRUCCIONES.val  INSTRUCCION.val'); $1.push($2); $$ = $1; }
+    | INSTRUCCION                     {  addReporte('INSTRUCCIONES: INSTRUCCION','INSTRUCCIONES.val:= INSTRUCCION.val');    $$ = [$1];   }
 
 ;
 
@@ -287,7 +314,7 @@ INSTRUCCIONES:
 
 INSTRUCCION: 
   //init_inst
-    MAIN                            {   $$ = $1 } 
+    MAIN                            {   addReporte('INSTRUCCION: MAIN',' MAIN: INSTRUCCION'); $$ = $1; } 
   | DEC_ARRAY                       {   $$ = $1 } 
   | DECLARACION_VARIABLE           {   $$ = $1 }//falta cuando hay una lista de id's
   | DECLARACION_FUNCION             {   $$ = $1 }//listo
@@ -319,57 +346,57 @@ MAIN:
 
 void main par_abierto par_cerrado llave_abierta INSTRUCCIONES llave_cerrada { $$ = new Main($6,@1.firt_line,@1.first_column); } 
 ;
-PRINT  :  println par_abierto LISTA_EXPRESIONES par_cerrado punto_coma  { $$ = new Print(@1.firt_line,@1.firt_column,$3);  }
+PRINT  :  println par_abierto LISTA_EXPRESIONES par_cerrado punto_coma  { addReporte('PRINT:= println par_abierto LISTA_EXPRESIONES par_cerrado punto_coma','PRINT.val := LISTA_EXPRESIONES.val'); $$ = new Print(@1.firt_line,@1.firt_column,$3);  }
 
 ;
 
 
 PT_COMA:
-   punto_coma
+   punto_coma {  }
 ;
 //--------------------LLAMADA DE UNA FUNCION--------------------
 
 LLAMAR_FUNCION 
-  : id par_abierto par_cerrado PT_COMA                   {  $$ = new Llamada($1,@1.first_line,@1.first_column); }
-  | id par_abierto LISTA_EXPRESIONES par_cerrado PT_COMA {  $$ = new Llamada($1,@1.first_line,@1.first_column,$3); }
+  : id par_abierto par_cerrado PT_COMA                   { addReporte('LLAMAR_FUNCION: id par_abierto par_cerrado );','');  $$ = new Llamada($1,@1.first_line,@1.first_column); }
+  | id par_abierto LISTA_EXPRESIONES par_cerrado PT_COMA { addReporte('LLAMAR_FUNCION: id par_abierto LISTA_EXPRESIONES par_cerrado','');  $$ = new Llamada($1,@1.first_line,@1.first_column,$3); }
 ;
 
 
 WHILE 
   : while par_abierto EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada 
-  { $$= new While($3,$6,@1.first_line,@1.first_column);  }
+  { addReporte('WHILE: while par_abierto EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada',''); $$= new While($3,$6,@1.first_line,@1.first_column);  }
 ;
 
 
 //---------------------------------DO WHILE----------------------
 DO_WHILE 
   : do llave_abierta INSTRUCCIONES llave_cerrada while par_abierto EXP par_cerrado PT_COMA 
-  { $$= new DoWhile($7,$3,@1.first_line,@1.first_column);   }
+  { addReporte('DO_WHILE: do llave_abierta INSTRUCCIONES llave_cerrada while par_abierto EXP par_cerrado PT_COMA',''); $$= new DoWhile($7,$3,@1.first_line,@1.first_column);   }
 ;
 
 
 FOR : 
   for par_abierto DECLARACION_VARIABLE_FOR  punto_coma EXP punto_coma INCREMENTO_FOR par_cerrado llave_abierta INSTRUCCIONES llave_cerrada 
-  {  $$= new For($3,$5,$7,$10,@1.firt_line,@1.firt_column); }
+  {  addReporte('FOR : for par_abierto DECLARACION_VARIABLE_FOR  punto_coma EXP punto_coma INCREMENTO_FOR par_cerrado llave_abierta INSTRUCCIONES llave_cerrada',''); $$= new For($3,$5,$7,$10,@1.firt_line,@1.firt_column); }
   //| for par_abierto ASIGNACION EXP punto_coma INCREMENTO_FOR par_cerrado llave_abierta INSTRUCCIONES llave_cerrada    {   }
 ;
 
-FOR_OF 
-  : for par_abierto TIPO_DEC_VARIABLE id of EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada 
-  {   }
-;
+// FOR_OF 
+//   : for par_abierto TIPO_DEC_VARIABLE id of EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada 
+//   {   }
+// ;
 
 
 FOR_IN 
   : for id in EXP  llave_abierta INSTRUCCIONES llave_cerrada 
-  { $$=new ForEach($2,$4,$6,@1.first_line,@1.first_column);  }
+  { addReporte('FOR_IN: for id in EXP  llave_abierta INSTRUCCIONES llave_cerrada','EXP:= EXP.val; '); $$=new ForEach($2,$4,$6,@1.first_line,@1.first_column);  }
 ;
 
 ASIGNACION 
-  : id igual EXP          punto_coma         {  $$ = new Asignacion($1, $3,false,@1.firt_line,@1.firt_column); }
-  | id mas igual EXP      punto_coma         {  $$ = new Asignacion_Mas($1, $4,true,@1.firt_line,@1.firt_column); }
-  | id menos igual EXP    punto_coma         {  $$ = new Asignacion_Mas($1, $4,false,@1.firt_line,@1.firt_column); }
-  | ACCESO_TYPE igual EXP  punto_coma          {    $$ = new Asignacion_VAR_STRUCT($3,$1,@1.first_line,@1.first_column);}  
+  : id igual EXP          punto_coma         { addReporte('ASIGNACION: id igual EXP ;','EXP:= EXP.val; ');  $$ = new Asignacion($1, $3,false,@1.firt_line,@1.firt_column); }
+  | id mas igual EXP      punto_coma         { addReporte('ASIGNACION: id += EXP ;','EXP:= EXP.val; '); $$ = new Asignacion_Mas($1, $4,true,@1.firt_line,@1.firt_column); }
+  | id menos igual EXP    punto_coma         { addReporte('ASIGNACION: id -= EXP ;','EXP:= EXP.val; '); $$ = new Asignacion_Mas($1, $4,false,@1.firt_line,@1.firt_column); }
+  | ACCESO_TYPE igual EXP  punto_coma          { addReporte('ASIGNACION: ACCESO_TYPE = EXP ;',' EXP:= EXP.val; ');   $$ = new Asignacion_VAR_STRUCT($3,$1,@1.first_line,@1.first_column);}  
   
   
   // type.accesos = EXP ; || type.accesos[][] = EXP;
@@ -537,13 +564,13 @@ DEC_ID
 ;
 
 INCREMENTO_DECREMENTO
-  : id mas_mas PT_COMA     {  $$=new IncrementoVariable($1,@1.firt_line,@1.firt_column);  }
-  | id menos_menos PT_COMA {  $$=new DecrementoVariable($1,@1.firt_line,@1.firt_column);  }
+  : id mas_mas PT_COMA     { addReporte('INCREMENTO_DECREMENTO: id ++ PT_COMA','id.val=id.val +1'); $$=new IncrementoVariable($1,@1.firt_line,@1.firt_column);  }
+  | id menos_menos PT_COMA { addReporte('INCREMENTO_DECREMENTO: id -- PT_COMA','id.val=id.val -1'); $$=new DecrementoVariable($1,@1.firt_line,@1.firt_column);  }
 ;
 
 EXP
   //Operaciones Aritmeticas
-  : menos EXP %prec UMENOS          { $$ = new NegacionNum(6,$2,0,@1.firt_line,@1.firt_column);   }
+  : menos EXP %prec UMENOS          { addReporte('EXP: - EXP %prec UMENOS ','EXP.val='); $$ = new NegacionNum(6,$2,0,@1.firt_line,@1.firt_column);   }
   | EXP mas EXP                     { $$ = new Suma(0,$1,$3,@1.firt_line,@1.firt_column);         }
   | EXP mass EXP                    { $$ = new Suma(0,$1,$3,@1.firt_line,@1.firt_column);         }
   | EXP menos EXP                   { $$ = new Resta(1,$1,$3,@1.firt_line,@1.firt_column);        } 
@@ -564,13 +591,27 @@ EXP
   //nativas string
   | id punto toLowercase par_abierto par_cerrado         
   { $$= new NativasString($1,TIPO_NATIVA_CADENA.TOLOWER,null,null,@1.firt_line,@1.firt_column); }
+  | string punto toLowercase par_abierto par_cerrado         
+  { $$= new NativasString($1,TIPO_NATIVA_CADENA.TOLOWER,null,null,@1.firt_line,@1.firt_column); }
+
   | id punto toUppercase par_abierto par_cerrado         
   { $$= new NativasString($1,TIPO_NATIVA_CADENA.TOUPPER,null,null,@1.firt_line,@1.firt_column); }
+  | string punto toUppercase par_abierto par_cerrado         
+  { $$= new NativasString($1,TIPO_NATIVA_CADENA.TOUPPER,null,null,@1.firt_line,@1.firt_column); }
+
   | id punto length par_abierto par_cerrado         
   { $$= new NativasString($1,TIPO_NATIVA_CADENA.LENGHT,null,null,@1.firt_line,@1.firt_column); }
+  | string punto length par_abierto par_cerrado         
+  { $$= new NativasString($1,TIPO_NATIVA_CADENA.LENGHT,null,null,@1.firt_line,@1.firt_column); }
+
   | id punto subString par_abierto EXP coma EXP par_cerrado         
   { $$= new NativasString($1,TIPO_NATIVA_CADENA.SUBSTRING,$5,$7,@1.firt_line,@1.firt_column); }
+  | string punto subString par_abierto EXP coma EXP par_cerrado         
+  { $$= new NativasString($1,TIPO_NATIVA_CADENA.SUBSTRING,$5,$7,@1.firt_line,@1.firt_column); }
+
   | id punto caracterOfPosition par_abierto EXP par_cerrado         
+  { $$= new NativasString($1,TIPO_NATIVA_CADENA.CARACTER_POSITION,$5,null,@1.firt_line,@1.firt_column); }
+  | string punto caracterOfPosition par_abierto EXP par_cerrado         
   { $$= new NativasString($1,TIPO_NATIVA_CADENA.CARACTER_POSITION,$5,null,@1.firt_line,@1.firt_column); }
   | EXP repeticion EXP         
   { $$= new RepeticionCadena($1,TIPO_NATIVA_CADENA.REPETICION,$3,null,@1.firt_line,@1.firt_column); }

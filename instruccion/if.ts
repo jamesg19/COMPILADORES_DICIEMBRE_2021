@@ -1,6 +1,7 @@
 import { Instruccion } from "../abs/Instruccion";
 import { NodoAST } from "../abs/nodo";
 import { Primitivo } from "../expresiones/primitivo";
+import { Principal } from "../principal";
 import { Arbol } from "../table/arbol";
 import { Excepcion } from "../table/excepcion";
 import { TablaSimbolos } from "../table/tablasimbolos";
@@ -190,4 +191,41 @@ export class If extends Instruccion{
 
         return nodo;
     }
+
+
+    traducir(entorno:TablaSimbolos,arbol:Arbol):any{
+        
+        let entorno_local = new TablaSimbolos(entorno);
+        
+        Principal.historial +="\nint main(){\n";
+        
+                                          
+        this.instrucciones.forEach(element => {
+            
+            if(element instanceof Excepcion){
+                arbol.excepciones.push(element);
+                arbol.updateConsolaError(element.toString());
+                console.log(element.toString());
+            }else{
+
+            let value = element.traducir(entorno_local,arbol);
+            
+            if(value instanceof Excepcion){
+                arbol.excepciones.push(value);
+                arbol.updateConsolaError(value.toString());
+                console.log(value);
+            }
+            if (value instanceof Break){
+                let excepcion = new Excepcion("Semantico","Sentencia Break fuera de ciclo",this.fila+"",this.columna+"")
+                arbol.excepciones.push(excepcion);
+                arbol.updateConsolaError(excepcion.toString());
+            }
+        }
+        });
+    Principal.historial += "return 0;\n"
+    Principal.historial += "\n}";
+    }
+
+
+
 }

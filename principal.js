@@ -15,15 +15,22 @@ const asignacion_1 = require("./instruccion/asignacion");
 const array_valor_1 = require("./expresiones/array/array_valor");
 const break_1 = require("./instruccion/break");
 const main_1 = require("./instruccion/main");
-const nativas_1 = require("./nativas");
 const Parser = require("./analizador/analizador");
 class Principal {
     ejecutar(code) {
         const instrucciones = Parser.parse(code);
+        const reporteE = instrucciones[1];
+        reporteE.reporteGramatical.reverse().forEach((x) => {
+            console.log(x);
+        });
+        // reporteE.forEach((x)=>{
+        console.log();
+        // });
+        //console.log(reporteE);
         //tabla
         let ts_global = new tablasimbolos_1.TablaSimbolos(undefined);
         //ast
-        const ast = new arbol_1.Arbol(ts_global, instrucciones);
+        const ast = new arbol_1.Arbol(ts_global, instrucciones[0]);
         //interpreto 1ra pasada
         ast.instrucciones.forEach((element) => {
             if (element instanceof funcion_1.Funcion) {
@@ -91,33 +98,10 @@ class Principal {
         // ast.getInstrucciones().forEach((instruccion:Instruccion) => {
         //   instr.agregarHijoNodo(instruccion.getNodo());
         //});
-        init.agregarHijoNodo(instr);
-        //devuelve el codigo GRAPHIZ DEL AST
-        const grafo = ast.getDot(init);
-        console.log(grafo);
-    }
-    /**************************************************Traduccion****************************************************** */
-    traducir(code) {
-        const instrucciones = Parser.parse(code);
-        //tabla
-        let ts_global = new tablasimbolos_1.TablaSimbolos(undefined);
-        //ast
-        const ast = new arbol_1.Arbol(ts_global, instrucciones);
-        //falta capturar los errores lexicos y sintacticos
-        //1ra pasada
-        //interpreto 1ra pasada
-        let nativa = new nativas_1.Nativas();
-        let traducir = "";
-        ast.instrucciones.forEach((element) => {
-            //console.log(element);
-            element.traducir(ts_global, ast);
-        });
-        let code_objeto = "";
-        let print_nativa = nativa.print_function(ast);
-        //console.log(nativa.print_function());
-        code_objeto =
-            ast.head + "\n" + ast.list_temporales() + "\n" + print_nativa + "\n";
-        console.log(code_objeto + "\n" + Principal.historial);
+        // init.agregarHijoNodo(instr);
+        // //devuelve el codigo GRAPHIZ DEL AST
+        // const grafo = ast.getDot(init);
+        // console.log(grafo);
     }
 }
 exports.Principal = Principal;
@@ -134,7 +118,8 @@ fs.readFile(NOMBRE_ARCHIVO, "utf8", (error, datos) => {
         throw error;
     let principa = new Principal();
     // console.log(datos)
-    principa.traducir(datos);
+    principa.ejecutar(datos);
+    //principa.traducir(datos);
     //console.log("El contenido es: ", datos);
 });
 // principa.ejecutar ('println(6>5);   '
