@@ -14,9 +14,9 @@ import { Arreglo_Valor } from "./expresiones/array/array_valor";
 import { Break } from "./instruccion/break";
 import { Main } from "./instruccion/main";
 import { Print } from "./instruccion/print";
-import { NodoAST } from "./abs/nodo";
-import { Nativas } from "./nativas";
-import { NativasString } from './expresiones/nativas/nativas_string';
+import { NativasString } from "./expresiones/nativas/nativas_string";
+//import { Reporte } from "./analizador/reporte";
+import { Reporte } from "./analizador/reporte";
 const Parser = require("./analizador/analizador");
 
 export class Principal {
@@ -30,11 +30,23 @@ export class Principal {
   ejecutar(code: string) {
     const instrucciones = Parser.parse(code);
 
+    const reporteE=instrucciones[1];
+    
+    
+    reporteE.reporteGramatical.reverse().forEach((x)=>{
+      console.log(x);
+    })
+
+    // reporteE.forEach((x)=>{
+    console.log();
+    // });
+
+    //console.log(reporteE);
     //tabla
     let ts_global: TablaSimbolos = new TablaSimbolos(undefined);
 
     //ast
-    const ast: Arbol = new Arbol(ts_global, instrucciones);
+    const ast: Arbol = new Arbol(ts_global, instrucciones[0]);
 
     //interpreto 1ra pasada
     ast.instrucciones.forEach((element: Instruccion) => {
@@ -134,54 +146,56 @@ export class Principal {
 
     //});
 
-    init.agregarHijoNodo(instr);
-    //devuelve el codigo GRAPHIZ DEL AST
-    const grafo = ast.getDot(init);
+    // init.agregarHijoNodo(instr);
+    // //devuelve el codigo GRAPHIZ DEL AST
+    // const grafo = ast.getDot(init);
 
-    console.log(grafo);
+    // console.log(grafo);
   }
 
-  /**************************************************Traduccion****************************************************** */
+  // /**************************************************Traduccion****************************************************** */
   traducir(code: string) {
     const instrucciones = Parser.parse(code);
     //tabla
     let ts_global: TablaSimbolos = new TablaSimbolos(undefined);
 
     //ast
-    const ast: Arbol = new Arbol(ts_global, instrucciones);
+    const ast: Arbol = new Arbol(ts_global, instrucciones[0]);
+    // console.log(instrucciones[0]);
+    // console.log(ast.instrucciones);
+    //ast.instrucciones[0].interpretar(ts_global, ast);
+     ast.instrucciones.forEach((element: Instruccion) => {
+       //console.log(element);
+       element.traducir(ts_global, ast);
+     });
 
-    //falta capturar los errores lexicos y sintacticos
-    //1ra pasada
-    //interpreto 1ra pasada
-    let nativa: Nativas = new Nativas();
-    let traducir = "";
-
-    ast.instrucciones.forEach((element: Instruccion) => {
-      //console.log(element);
-      element.traducir(ts_global, ast);
-    });
-    
     let code_objeto = "";
-    let print_nativa = (Print.print)?nativa.print_function(ast):"";
-    let string_upper = (NativasString.UPPER)?nativa.toUpper():"";
-    let string_len = (NativasString.LEN)?nativa.getLength():"";
-    let string_lower = (NativasString.LOWER)?nativa.toLower():"";
-    let string_char =  (NativasString.LOWER)?nativa.charAt():"";
-    //console.log(nativa.print_function());
+    let print_nativa = Print.print ? nativa.print_function(ast) : "";
+    let string_upper = NativasString.UPPER ? nativa.toUpper() : "";
+    let string_len = NativasString.LEN ? nativa.getLength() : "";
+    let string_lower = NativasString.LOWER ? nativa.toLower() : "";
+    let string_char = NativasString.LOWER ? nativa.charAt() : "";
 
-      code_objeto =
-        ast.head + "\n" + ast.list_temporales() + "\n" + 
-        string_upper + "\n"+
-        string_lower + "\n"+
-        string_len  + "\n"+
-        string_char  + "\n"+
-        print_nativa+"\n";
-    
+    code_objeto =
+      ast.head +
+      "\n" +
+      ast.list_temporales() +
+      "\n" +
+      string_upper +
+      "\n" +
+      string_lower +
+      "\n" +
+      string_len +
+      "\n" +
+      string_char +
+      "\n" +
+      print_nativa +
+      "\n";
 
     console.log(code_objeto + "\n" + Principal.historial);
   }
-  static addComentario(comentario:string) {
-    Principal.historial += "/* "+comentario+" */\n"
+  static addComentario(comentario: string) {
+    Principal.historial += "/* " + comentario + " */\n";
   }
 }
 
@@ -189,11 +203,13 @@ export class Principal {
 
 const fs = require("fs"),
   NOMBRE_ARCHIVO = "file.java";
+
 fs.readFile(NOMBRE_ARCHIVO, "utf8", (error, datos) => {
   if (error) throw error;
   let principa: Principal = new Principal();
   // console.log(datos)
   principa.traducir(datos);
+  //principa.traducir(datos);
   //console.log("El contenido es: ", datos);
 });
 

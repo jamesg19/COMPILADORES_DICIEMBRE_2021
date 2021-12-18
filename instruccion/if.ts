@@ -202,7 +202,7 @@ export class If extends Instruccion{
         
         this.ins=this;
         const condition=this.condicion.traducir(entorno,arbol);
-        
+        Principal.historial += "\t";
         if(condition instanceof Excepcion){
             return condition;
         }
