@@ -22,10 +22,10 @@ const nativas_1 = require("./nativas");
 class Principal {
     ejecutar(code) {
         const instrucciones = Parser.parse(code);
-        const reporteE = instrucciones[1];
-        reporteE.reporteGramatical.reverse().forEach((x) => {
-            console.log(x);
-        });
+        // const reporteE=instrucciones[1];
+        // reporteE.reporteGramatical.reverse().forEach((x)=>{
+        //   console.log(x);
+        // })
         // reporteE.forEach((x)=>{
         console.log();
         // });
@@ -120,8 +120,8 @@ class Principal {
             //console.log(element);
             element.traducir(ts_global, ast);
         });
-        let nativa = new nativas_1.Nativas();
         let code_objeto = "";
+        let nativa = new nativas_1.Nativas();
         let print_nativa = print_1.Print.print ? nativa.print_function(ast) : "";
         let string_upper = nativas_string_1.NativasString.UPPER ? nativa.toUpper() : "";
         let string_len = nativas_string_1.NativasString.LEN ? nativa.getLength() : "";
@@ -163,7 +163,7 @@ fs.readFile(NOMBRE_ARCHIVO, "utf8", (error, datos) => {
     let principa = new Principal();
     // console.log(datos)
     principa.traducir(datos);
-    //principa.traducir(datos);
+    //principa.ejecutar(datos);
     //console.log("El contenido es: ", datos);
 });
 // principa.ejecutar ('println(6>5);   '

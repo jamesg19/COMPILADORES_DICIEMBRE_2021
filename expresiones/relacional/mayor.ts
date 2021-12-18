@@ -250,7 +250,7 @@ export class Mayor extends Instruccion {
     temp++;
     let t: string = "t" + temp;
     Principal.temp = temp;
-    Principal.historial += t + "=" + izq + "<" + der + " ;\n";
+    Principal.historial += t + "=" + izq + ">" + der + " ;\n";
     return t;
   }
 }

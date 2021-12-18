@@ -19,6 +19,7 @@ import { NativasString } from "./expresiones/nativas/nativas_string";
 import { Reporte } from "./analizador/reporte";
 const Parser = require("./analizador/analizador");
 import { Nativas } from "./nativas";
+
 export class Principal {
   static contador: number = 0;
   static temp: number = 0; //control de temporales
@@ -30,12 +31,12 @@ export class Principal {
   ejecutar(code: string) {
     const instrucciones = Parser.parse(code);
 
-    const reporteE=instrucciones[1];
+    // const reporteE=instrucciones[1];
     
     
-    reporteE.reporteGramatical.reverse().forEach((x)=>{
-      console.log(x);
-    })
+    // reporteE.reporteGramatical.reverse().forEach((x)=>{
+    //   console.log(x);
+    // })
 
     // reporteE.forEach((x)=>{
     console.log();
@@ -169,8 +170,9 @@ export class Principal {
        element.traducir(ts_global, ast);
      });
 
-    let nativa: Nativas = new Nativas();
+    
     let code_objeto = "";
+    let nativa: Nativas = new Nativas();
     let print_nativa = Print.print ? nativa.print_function(ast) : "";
     let string_upper = NativasString.UPPER ? nativa.toUpper() : "";
     let string_len = NativasString.LEN ? nativa.getLength() : "";
@@ -210,7 +212,7 @@ fs.readFile(NOMBRE_ARCHIVO, "utf8", (error, datos) => {
   let principa: Principal = new Principal();
   // console.log(datos)
   principa.traducir(datos);
-  //principa.traducir(datos);
+  //principa.ejecutar(datos);
   //console.log("El contenido es: ", datos);
 });
 
