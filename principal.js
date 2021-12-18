@@ -103,6 +103,9 @@ class Principal {
         // const grafo = ast.getDot(init);
         // console.log(grafo);
     }
+    static addComentario(comentario) {
+        Principal.historial += "/* " + comentario + " */\n";
+    }
 }
 exports.Principal = Principal;
 Principal.contador = 0;

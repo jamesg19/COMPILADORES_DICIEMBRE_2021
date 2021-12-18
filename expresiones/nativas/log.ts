@@ -6,6 +6,7 @@ import { ARITMETICO } from "../../table/tipo";
 import { Excepcion} from "../../table/excepcion"
 import { Primitivo } from "../primitivo";
 import { NodoAST } from "../../abs/nodo";
+import { Principal } from "../../principal";
 
 
 export class Log extends Instruccion{
@@ -101,6 +102,71 @@ export class Log extends Instruccion{
             return new Excepcion("Semantico",`No se pudo obtener el valor en Sen() `,`${this.fila}`,`${this.columna}`);
         }
 
+    }
+
+
+
+    ///////////////////////////////////////////C3D///////////////////////////////////////
+    traducir(entorno: TablaSimbolos, arbol: Arbol): any {
+        try {
+            const izq=this.operadorIzq.interpretar(entorno,arbol);
+           
+            if(izq instanceof Excepcion){
+                return izq;
+            }
+
+                //validaciones
+                if(this.operadorIzq.tipo == TIPO.NULL){
+                    return new Excepcion("Semantico", "Error de operacion en variable NULA", `${this.fila}`, `${this.columna}`);
+                }
+                    
+                //-------ENTERO
+                //SQRT(ENTERO);
+                if(this.operadorIzq.tipo===TIPO.ENTERO  ){
+                    this.tipo=TIPO.DECIMAL;
+                    return this.setAtributosC3D(izq,"");
+                    //return Math.sin(this.obtenerVal(this.operadorIzq.tipo,izq)) ;
+                }
+
+                ////--------DECIMAL
+                //SQRT(DECIMAL)
+                else if(this.operadorIzq.tipo===TIPO.DECIMAL  ){
+                    this.tipo=TIPO.DECIMAL;
+                    return this.setAtributosC3D(izq,"");
+                    //return Math.sin(this.obtenerVal(this.operadorIzq.tipo,izq));
+                }
+                //SQRT(BOOLEAN)
+                else if(this.operadorIzq.tipo===TIPO.BOOLEAN  ){
+                    this.tipo=TIPO.DECIMAL;
+                    return this.setAtributosC3D(izq,"");
+                    //return Math.sin(this.obtenerVal(this.operadorIzq.tipo,izq));
+                }
+
+
+                return new Excepcion("Semantico",`Tipo de datos invalido para Log()  ${this.operadorIzq.tipo}`,`${this.fila}`,`${this.columna}`);
+
+        } catch (error) {
+
+            return new Excepcion("Semantico","QUETZAL Null Poiter Log() tipo dato incorrecto ",`${this.fila}`,`${this.columna}`);
+
+        }
+
+    }
+
+
+
+    setAtributosC3D(izquierda:string,derecha:string){
+        
+        
+        let temp = Principal.temp;
+        temp++;
+        
+        let t = "t"+temp;
+        Principal.temp = temp;
+        Principal.historial += t +" = log10("+izquierda+");" ;
+        Principal.historial += "\n";
+        this.tipo = TIPO.DECIMAL;
+        return t; 
     }
 
 }

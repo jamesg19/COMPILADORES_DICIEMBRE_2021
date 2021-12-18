@@ -183,8 +183,11 @@ export class Principal {
   //       ast.head + "\n" + ast.list_temporales() + "\n" + print_nativa + "\n";
     
 
-  //   console.log(code_objeto + "\n" + Principal.historial);
-  // }
+    //console.log(code_objeto + "\n" + Principal.historial);
+  //}
+  static addComentario(comentario:string) {
+    Principal.historial += "/* "+comentario+" */\n"
+  }
 }
 
 //let principa: Principal = new Principal();

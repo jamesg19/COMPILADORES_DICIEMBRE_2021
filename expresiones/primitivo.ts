@@ -3,6 +3,7 @@ import { TIPO } from "../table/tipo";
 import { TablaSimbolos } from "../table/tablasimbolos";
 import { Arbol } from "../table/arbol";
 import { NodoAST } from "../abs/nodo";
+import { isNumber } from 'util';
 
 export class Primitivo extends Instruccion {
   fila: number;
@@ -45,9 +46,9 @@ export class Primitivo extends Instruccion {
     // let temp:string = "t"
     // let temp += super.temp;
     
-    
+    if(isNumber(this.value)) this.tipo = TIPO.DECIMAL;
     let codigo=this.value;
-
+    
     
     return codigo;
   }

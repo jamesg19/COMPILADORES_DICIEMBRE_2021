@@ -4,6 +4,7 @@ exports.Primitivo = void 0;
 const Instruccion_1 = require("../abs/Instruccion");
 const tipo_1 = require("../table/tipo");
 const nodo_1 = require("../abs/nodo");
+const util_1 = require("util");
 class Primitivo extends Instruccion_1.Instruccion {
     /**
      * @param  {TIPO} tipo
@@ -37,6 +38,8 @@ class Primitivo extends Instruccion_1.Instruccion {
     traducir(entorno, arbol) {
         // let temp:string = "t"
         // let temp += super.temp;
+        if ((0, util_1.isNumber)(this.value))
+            this.tipo = tipo_1.TIPO.DECIMAL;
         let codigo = this.value;
         return codigo;
     }

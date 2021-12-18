@@ -167,7 +167,7 @@ export class Asignacion_Mas extends Instruccion {
         }
       else {
           Principal.historial += "/*Asignacion de variable: var -= exp;*/"
-          Principal.historial += "stack[(int)"+variable.posicion+"] = stack[(int)"+variable.posicion+"] + " + valor +";\n";
+          Principal.historial += "stack[(int)"+variable.posicion+"] = stack[(int)"+variable.posicion+"] - " + valor +";\n";
           
         }
 
