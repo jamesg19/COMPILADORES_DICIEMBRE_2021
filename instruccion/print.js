@@ -107,7 +107,7 @@ class Print extends Instruccion_1.Instruccion {
                 cadena += 'printf("%f",' + tr + ");\n";
             }
             else if (tipo_1.TIPO.CARACTER == x.tipo) {
-                cadena += 'printf("%c",' + "(int)" + tr + ");\n";
+                cadena += 'printf("%c",' + "(int)(" + tr + "));\n";
             }
             /*
             encerrar en un if para ver si requiere saltos de linea

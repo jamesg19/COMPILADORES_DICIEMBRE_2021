@@ -131,7 +131,7 @@ export class Print extends Instruccion {
         }else if (TIPO.CARACTER == x.tipo) {
           
           
-          cadena += 'printf("%c",' + "(int)"+tr + ");\n";
+          cadena += 'printf("%c",' + "(int)("+tr + "));\n";
           
           
         }

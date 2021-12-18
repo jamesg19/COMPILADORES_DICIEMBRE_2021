@@ -18,6 +18,7 @@ const main_1 = require("./instruccion/main");
 const print_1 = require("./instruccion/print");
 const nativas_string_1 = require("./expresiones/nativas/nativas_string");
 const Parser = require("./analizador/analizador");
+const nativas_1 = require("./nativas");
 class Principal {
     ejecutar(code) {
         const instrucciones = Parser.parse(code);
@@ -119,6 +120,7 @@ class Principal {
             //console.log(element);
             element.traducir(ts_global, ast);
         });
+        let nativa = new nativas_1.Nativas();
         let code_objeto = "";
         let print_nativa = print_1.Print.print ? nativa.print_function(ast) : "";
         let string_upper = nativas_string_1.NativasString.UPPER ? nativa.toUpper() : "";

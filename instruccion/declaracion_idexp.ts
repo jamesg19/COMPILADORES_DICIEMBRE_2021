@@ -158,11 +158,11 @@ export class D_IdExp extends Instruccion {
     Principal.temp++;
     let t: string = "t" + Principal.temp;
 
-    Principal.historial += t + " = P + " + Principal.posicion + ";\n";
+    //Principal.historial += t + " = P + " + Principal.posicion + ";\n";
 
-    Principal.historial += t + "= " + t + " + " + 1 + ";\n";
+    //Principal.historial += t + "= " + t + " + " + 1 + ";\n";
 
-    Principal.historial += "stack[(int)" + t + "] = " + t0 + ";\n";
+    //Principal.historial += "stack[(int)" + t + "] = " + t0 + ";\n";
 
     return t0;
   }

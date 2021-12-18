@@ -18,7 +18,7 @@ import { NativasString } from "./expresiones/nativas/nativas_string";
 //import { Reporte } from "./analizador/reporte";
 import { Reporte } from "./analizador/reporte";
 const Parser = require("./analizador/analizador");
-
+import { Nativas } from "./nativas";
 export class Principal {
   static contador: number = 0;
   static temp: number = 0; //control de temporales
@@ -169,6 +169,7 @@ export class Principal {
        element.traducir(ts_global, ast);
      });
 
+    let nativa: Nativas = new Nativas();
     let code_objeto = "";
     let print_nativa = Print.print ? nativa.print_function(ast) : "";
     let string_upper = NativasString.UPPER ? nativa.toUpper() : "";
