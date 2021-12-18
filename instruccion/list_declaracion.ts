@@ -88,8 +88,7 @@ export class List_Declaracion extends Instruccion {
       );
       entorno.addSimbolo(simbolo);
 
-      Principal.historial +=
-        "/*Declaracion de un Listado de Id, con el mismo Tipo*/\n";
+      Principal.historial +="/*Declaracion de un Listado de Id, con el mismo Tipo*/\n";
         
       Principal.historial += "stack[(int) "+ simbolo.posicion+"] = "+simbolo.valor+" ;\n";
     });

@@ -11,6 +11,7 @@ import { Dec_Struct } from "../expresiones/struct/instancia_struct";
 import { sign } from "crypto";
 import { NodoAST } from "../abs/nodo";
 import { Principal } from "../principal";
+import { NativasString } from '../expresiones/nativas/nativas_string';
 
 export class Print extends Instruccion {
   fila: number;
@@ -86,9 +87,10 @@ export class Print extends Instruccion {
     this.value?.forEach((x) => {  //print(4+3);
       
       contador++;
-      console.log(contador);
+      
       let tr = x.traducir(entorno,arbol); //t[0]
-      console.log(x);
+      
+        
         
         if (TIPO.CADENA == x.tipo) {
           Print.print = true;
@@ -96,17 +98,14 @@ export class Print extends Instruccion {
           cadena += "/*Imprimiendo secuencia de caracteres*/\n";
           cadena += "/*\nImprimiendo secuencia de caracteres\n---->" +
                     x.value +"<----\n*/\n";
+                    
           cadena += this.transform_cadena(x.value, arbol);
           cadena += "printString();\n";
           
         }
 
         if (TIPO.ENTERO == x.tipo) {
-          cadena += "/*Imprimiendo secuencia de caracteres*/\n";
-          cadena +=
-            "/*Imprimiendo secuencia de caracteres\n---->" +
-            tr +
-            "<----\n*/\n";
+          
           cadena += 'printf("%d\\n",' + tr + ");\n";
         }
         if (TIPO.BOOLEAN == x.tipo) {
@@ -147,7 +146,9 @@ export class Print extends Instruccion {
     return_string = "t" + Principal.temp + " = H;\n";
     //obtener codigo ASCII de cada caracter de la cadena
     //cadena en el heap
-    for (let i = 0; i < x.length; i++) {
+    if(!x) x="c";
+    
+    for (let i = 0; i < x.length-1; i++) {
       let item: number = x.charCodeAt(i);
       return_string += "heap[(int)H] = " + item + " ;\n";
       return_string += "H = H + 1;\n";
@@ -159,7 +160,7 @@ export class Print extends Instruccion {
     //referencia de la cadena desde el stack
     //Principal.posicion;
     return_string +=
-      "t" + Principal.posicion + " = P + " + Principal.posicion + ";\n";
+      "t" + Principal.temp + " = P + " + Principal.posicion + ";\n";
       
     return return_string;
   }

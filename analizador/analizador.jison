@@ -372,26 +372,16 @@ ASIGNACION
   | ACCESO_TYPE igual EXP  punto_coma          {    $$ = new Asignacion_VAR_STRUCT($3,$1,@1.first_line,@1.first_column);}  
   
   
-  // type.accesos = EXP ; || type.accesos[][] = EXP;
-  
- // | id LISTA_ACCESOS_TYPE TIPO_IGUAL EXP PT_COMA {   }
 
-  //variable[][] = EXP ;
   
   
 ;
 
-TIPO_IGUAL 
-  : igual           {    }
-  | mas igual       {    }
-  | menos igual     {    }
-;
-// CONDICION_FOR
-// : id TIPO_IGUAL EXP {    }
-// ;
+
+
 INCREMENTO_FOR 
   : //id TIPO_IGUAL EXP {    }
-  | id mas_mas      { $$= new IncrementoVariable($1,@1.firt_line,@1.firt_column); }
+   id mas_mas      { $$= new IncrementoVariable($1,@1.firt_line,@1.firt_column); }
   | id menos_menos  { $$= new DecrementoVariable($1,@1.firt_line,@1.firt_column); }
 ;
 

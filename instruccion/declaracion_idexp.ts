@@ -92,7 +92,7 @@ export class D_IdExp extends Instruccion{
       //Creacion de variable en el entorno
       let valor = this.exp.traducir(e,arbol);
       if(this.exp.tipo == TIPO.ARREGLO || this.exp.tipo == TIPO.STRUCT) {
-        Principal.historial += "/*           Crear metodo que copie un arreglo          */"
+        Principal.historial += "/*           Crear metodo que copie un arreglo          */\n";
         valor = JSON.parse(JSON.stringify(valor));
       } 
       

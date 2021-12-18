@@ -162,10 +162,11 @@ export class Principal {
     
     let code_objeto = "";
     let print_nativa = nativa.print_function(ast);
+    let string_upper = nativa.toUpper();
     //console.log(nativa.print_function());
 
       code_objeto =
-        ast.head + "\n" + ast.list_temporales() + "\n" + print_nativa + "\n";
+        ast.head + "\n" + ast.list_temporales() + "\n" + string_upper + "\n"+print_nativa+"\n";
     
 
     console.log(code_objeto + "\n" + Principal.historial);

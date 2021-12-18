@@ -74,9 +74,7 @@ class Print extends Instruccion_1.Instruccion {
         let contador = 0;
         (_a = this.value) === null || _a === void 0 ? void 0 : _a.forEach((x) => {
             contador++;
-            console.log(contador);
             let tr = x.traducir(entorno, arbol); //t[0]
-            console.log(x);
             if (tipo_1.TIPO.CADENA == x.tipo) {
                 Print.print = true;
                 cadena += "/*Imprimiendo secuencia de caracteres*/\n";
@@ -86,11 +84,6 @@ class Print extends Instruccion_1.Instruccion {
                 cadena += "printString();\n";
             }
             if (tipo_1.TIPO.ENTERO == x.tipo) {
-                cadena += "/*Imprimiendo secuencia de caracteres*/\n";
-                cadena +=
-                    "/*Imprimiendo secuencia de caracteres\n---->" +
-                        tr +
-                        "<----\n*/\n";
                 cadena += 'printf("%d\\n",' + tr + ");\n";
             }
             if (tipo_1.TIPO.BOOLEAN == x.tipo) {
@@ -123,7 +116,9 @@ class Print extends Instruccion_1.Instruccion {
         return_string = "t" + principal_1.Principal.temp + " = H;\n";
         //obtener codigo ASCII de cada caracter de la cadena
         //cadena en el heap
-        for (let i = 0; i < x.length; i++) {
+        if (!x)
+            x = "c";
+        for (let i = 0; i < x.length - 1; i++) {
             let item = x.charCodeAt(i);
             return_string += "heap[(int)H] = " + item + " ;\n";
             return_string += "H = H + 1;\n";
@@ -134,7 +129,7 @@ class Print extends Instruccion_1.Instruccion {
         //referencia de la cadena desde el stack
         //Principal.posicion;
         return_string +=
-            "t" + principal_1.Principal.posicion + " = P + " + principal_1.Principal.posicion + ";\n";
+            "t" + principal_1.Principal.temp + " = P + " + principal_1.Principal.posicion + ";\n";
         return return_string;
     }
 }

@@ -64,6 +64,7 @@ export class Main extends Instruccion{
         let entorno_local = new TablaSimbolos(entorno);
         
         Principal.historial +="\nint main(){\n";
+        
                                           
         this.instrucciones.forEach(element => {
             

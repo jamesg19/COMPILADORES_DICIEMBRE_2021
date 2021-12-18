@@ -3,10 +3,8 @@
 void main(){
   
   
-  int a ,b,c,d;
-  a +=1;
-  b -=1;
-  
+  string cadena = "texto";
+  println(cadena.toUppercase());
   println(cos(30));
   println(sin(30));
   
