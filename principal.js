@@ -15,7 +15,9 @@ const asignacion_1 = require("./instruccion/asignacion");
 const array_valor_1 = require("./expresiones/array/array_valor");
 const break_1 = require("./instruccion/break");
 const main_1 = require("./instruccion/main");
+const print_1 = require("./instruccion/print");
 const nativas_1 = require("./nativas");
+const nativas_string_1 = require("./expresiones/nativas/nativas_string");
 const Parser = require("./analizador/analizador");
 class Principal {
     ejecutar(code) {
@@ -113,11 +115,19 @@ class Principal {
             element.traducir(ts_global, ast);
         });
         let code_objeto = "";
-        let print_nativa = nativa.print_function(ast);
-        let string_upper = nativa.toUpper();
+        let print_nativa = (print_1.Print.print) ? nativa.print_function(ast) : "";
+        let string_upper = (nativas_string_1.NativasString.UPPER) ? nativa.toUpper() : "";
+        let string_len = (nativas_string_1.NativasString.LEN) ? nativa.getLength() : "";
+        let string_lower = (nativas_string_1.NativasString.LOWER) ? nativa.toLower() : "";
+        let string_char = (nativas_string_1.NativasString.LOWER) ? nativa.charAt() : "";
         //console.log(nativa.print_function());
         code_objeto =
-            ast.head + "\n" + ast.list_temporales() + "\n" + string_upper + "\n" + print_nativa + "\n";
+            ast.head + "\n" + ast.list_temporales() + "\n" +
+                string_upper + "\n" +
+                string_lower + "\n" +
+                string_len + "\n" +
+                string_char + "\n" +
+                print_nativa + "\n";
         console.log(code_objeto + "\n" + Principal.historial);
     }
     static addComentario(comentario) {

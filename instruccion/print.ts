@@ -90,42 +90,56 @@ export class Print extends Instruccion {
       
       let tr = x.traducir(entorno,arbol); //t[0]
       
-        
-        
-        if (TIPO.CADENA == x.tipo) {
+        //console.log(x);
+        // if(x instanceof NativasString){
+        //   Print.print = true;
+        //   Principal.addComentario("Imprimiendo una expresion cadena tr"+tr);
+        //   Principal.historial += "P = "+tr+";\n";
+        //   Principal.historial += "printString();\n";
+          
+          
+        //   Principal.historial += "printf(\"%s\",\"\\n\");\n"
+          
+        // }else 
+        if(x instanceof Identificador){
+          Print.print = true;
+          Principal.addComentario("Imprimiendo una expresion cadena tr"+tr);
+          Principal.historial += "P = "+tr+";\n";
+          Principal.historial += "printString();\n";
+          Principal.historial += "printf(\"%s\",\"\\n\");\n"
+          
+        }else if (TIPO.CADENA == x.tipo) {
           Print.print = true;
           
-          cadena += "/*Imprimiendo secuencia de caracteres*/\n";
-          cadena += "/*\nImprimiendo secuencia de caracteres\n---->" +
-                    x.value +"<----\n*/\n";
+          
                     
           cadena += this.transform_cadena(x.value, arbol);
           cadena += "printString();\n";
+          Principal.historial += "printf(\"%s\",\"\\n\");\n"
+          
+        }else if (TIPO.ENTERO == x.tipo) {
+          
+          cadena += 'printf("%d",' + tr + ");\n";
+        }else if (TIPO.BOOLEAN == x.tipo) {
+          
+          cadena += 'printf("%f",' + tr + ");\n";
+        }else if (TIPO.DECIMAL == x.tipo) {
+          Principal.addComentario("Imprimiendo Decimal")
+          cadena += 'printf("%f",' + tr + ");\n";
+          
+          
+        }else if (TIPO.CARACTER == x.tipo) {
+          
+          
+          cadena += 'printf("%c",' + "(int)"+tr + ");\n";
+          
           
         }
-
-        if (TIPO.ENTERO == x.tipo) {
-          
-          cadena += 'printf("%d\\n",' + tr + ");\n";
-        }
-        if (TIPO.BOOLEAN == x.tipo) {
-          cadena += "/*Imprimiendo secuencia de caracteres*/\n";
-          cadena +=
-            "/*Imprimiendo secuencia de caracteres\n---->" +
-            tr +
-            "<----\n*/\n";
-          cadena += 'printf("%f\\n",' + tr + ");\n";
-        }
-
-        if (TIPO.DECIMAL == x.tipo) {
-          
-          cadena += "/*Imprimiendo Decimales*/\n";
-          cadena +=
-            "/*Imprimiendo secuencia de caracteres\n---->\n" +
-            tr +
-            "<----\n*/\n";
-          cadena += 'printf("%f\\n",' + tr + ");\n";
-        }
+        
+        /*
+        encerrar en un if para ver si requiere saltos de linea 
+         */
+         cadena += 'printf("\\n");\n';
       
       //if (TIPO.ENTERO == x.tipo) cadena += 'printf("%f"+stack['+x.posicion+']);';
 

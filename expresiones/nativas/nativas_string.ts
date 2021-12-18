@@ -19,7 +19,10 @@ export class NativasString extends Instruccion{
     fila: number;
     columna:number;
     tipo:TIPO;
-    static UPPER:boolean;
+    static UPPER:boolean = false;
+    static LOWER:boolean = false;
+    static LEN:boolean = false;
+    static CHAR:boolean = false;
 
     /**
      * CONSTRUCTOR DE OPERACION TANGENTE()
@@ -86,7 +89,6 @@ export class NativasString extends Instruccion{
             //DETERMINA SI ES UPPER_CASE
             if(this.tipo_operacion == TIPO_NATIVA_CADENA.TOUPPER){
                 
-                this.UPPER = true;
                 var cadena=variable.getValor()+"";
                 return cadena.toUpperCase();
             }
@@ -263,9 +265,6 @@ export class NativasString extends Instruccion{
                 }
             }
 
-
-
-
             if( variable.tipo != TIPO.CADENA){
 
                 return new Excepcion("Semantico", "Error de operacion en variable diferente a Cadena", `${this.fila}`, `${this.columna}`);
@@ -274,25 +273,29 @@ export class NativasString extends Instruccion{
             //DETERMINA SI ES LOWER_CASE
             if(this.tipo_operacion == TIPO_NATIVA_CADENA.TOLOWER){
 
-                var cadena=variable.getValor()+"";
-                return cadena.toLowerCase();
+                Principal.addComentario("=========>ToLowerCase<============");
+                
+                Principal.historial +=  "P = "+variable.posicion+";\n";
+                Principal.historial += "toLower();\n";
+                NativasString.LOWER = true;
+                
+                Principal.addComentario("=========>Fin TO ToLowerCase<============");
+                
+                return "P";
             }
 
             //DETERMINA SI ES UPPER_CASE
             if(this.tipo_operacion == TIPO_NATIVA_CADENA.TOUPPER){
                 //////traduccion
-                Principal.addComentario("toUpperCase")
+                Principal.addComentario("=========>toUpperCase<============");
+                
+                Principal.historial +=  "P = "+variable.posicion+";\n";
+                Principal.historial += "toUpper();\n";
                 NativasString.UPPER = true;
-                let temp = Principal.temp;
-                temp++;
-                let t:string = "t"+temp;
-                Principal.temp += temp ;
-                Principal.historial += t+ "= H;\n" ;
-                var value = variable.getValor()+"";
-                var cadena=this.transform_cadena(value.toUpperCase(),arbol);
-                Principal.historial += cadena;
-                Principal.historial += "P = P + "+(Principal.posicion +1)+";\n";
-                return ";\n";//cadena.toUpperCase();
+                
+                Principal.addComentario("=========>Fin TO Uppercase<============");
+                
+                return "P";
             }
             //DETERMINA SI ES LENGTH
             if(this.tipo_operacion == TIPO_NATIVA_CADENA.LENGHT){
@@ -300,9 +303,17 @@ export class NativasString extends Instruccion{
                 if(this.tipo_operacion.tipo == TIPO.ARREGLO){
                     
                 }
-                console.log(this.tipo_operacion.tipo);
-                var cadena=variable.getValor()+"";
-                return cadena.length;
+                this.tipo = TIPO.DECIMAL;
+                Principal.addComentario("=========>Length<============");
+                NativasString.LEN = true;
+                Principal.historial +=  "P = "+variable.posicion+";\n";
+                Principal.historial += "len();\n";
+                NativasString.UPPER = true;
+                
+                Principal.addComentario("=========>Fin TO Length<============");
+                
+                return "stack[(int)P]";
+                
             }
             
             //DETERMINA SI ES SUBSTRING
@@ -361,7 +372,29 @@ export class NativasString extends Instruccion{
                     return new Excepcion('Semantico','Parametro fin en caracterOfPosition fuera de los limites',`${this.fila}`,`${this.columna}`)
                 }
                 
-                return cadena.charAt(this.inicio.traducir(entorno,arbol));
+                //return cadena.charAt(this.inicio.interpretar(entorno,arbol));
+                Principal.addComentario("=========>CharAt<============");
+                let temp = Principal.posicion;
+                temp++;
+                
+                NativasString.CHAR = true;
+                
+                let tempE = Principal.temp;
+                tempE++;
+                let t = "t"+tempE+";\n";
+                Principal.temp = tempE;
+                //this.inicio.traducir(entorno,arbol)
+                t = this.inicio.traducir(entorno,arbol);//obtengo el indice
+                Principal.historial += "stack[(int)"+temp+"] = "+t+";\n";//posicion de donde se guarda el indice
+                
+                
+                Principal.historial +=  "P = "+temp+";\n";
+                Principal.historial += "charAt();\n";
+                NativasString.UPPER = true;
+                this.tipo = TIPO.CARACTER;
+                Principal.addComentario("=========>Fin char at<============");
+                
+                return "stack[(int)P]";
             }
 
             return new Excepcion("Semantico",`Tipo de datos invalido para metodo nativo string() `,`${this.fila}`,`${this.columna}`);
@@ -374,26 +407,39 @@ export class NativasString extends Instruccion{
     }
     
     transform_cadena(x: string, arbol: Arbol): string {
-        let return_string: string = "";
-    
-        return_string = "t" + Principal.temp + " = H;\n";
+        
+        let temp = Principal.temp;
+        temp++;
+        let t0:string = "t"+temp;
+        Principal.historial +=  t0 + " = H;\n";
+        Principal.temp = temp;
+        
         //obtener codigo ASCII de cada caracter de la cadena
         //cadena en el heap
         for (let i = 0; i < x.length; i++) {
           let item: number = x.charCodeAt(i);
-          return_string += "heap[(int)H] = " + item + " ;\n";
-          return_string += "H = H + 1;\n";
+          Principal.historial += "heap[(int)H] = " + item + " ;\n";
+          Principal.historial += "H = H + 1;\n";
           //console.log(item);
         }
-        return_string += "heap[(int)H] = -1 ;\n";
-        return_string += "H = H + 1;\n";
+        Principal.historial += "heap[(int)H] = -1 ;\n";
+        Principal.historial += "H = H + 1;\n";
     
         //referencia de la cadena desde el stack
         //Principal.posicion;
-        return_string +=
-          "t" + Principal.temp + " = P + " + Principal.posicion + ";\n";
+        Principal.temp++
+        let t:string= "t" + Principal.temp;
+        
+        Principal.historial +=
+          t + " = P + " + Principal.posicion + ";\n";
+        
+          Principal.historial += t+"= "+t+" + " + 1+";\n";
+        
+          Principal.historial += "stack[(int)"+t+"] = "+t0+";\n";
           
-        return return_string;
+          
+          Principal.addComentario("Fin transformacion decadena, se devuelve el puntero");
+        return t0;
       }
 
 }

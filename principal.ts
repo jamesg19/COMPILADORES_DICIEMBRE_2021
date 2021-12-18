@@ -16,6 +16,7 @@ import { Main } from "./instruccion/main";
 import { Print } from "./instruccion/print";
 import { NodoAST } from "./abs/nodo";
 import { Nativas } from "./nativas";
+import { NativasString } from './expresiones/nativas/nativas_string';
 const Parser = require("./analizador/analizador");
 
 export class Principal {
@@ -161,12 +162,20 @@ export class Principal {
     });
     
     let code_objeto = "";
-    let print_nativa = nativa.print_function(ast);
-    let string_upper = nativa.toUpper();
+    let print_nativa = (Print.print)?nativa.print_function(ast):"";
+    let string_upper = (NativasString.UPPER)?nativa.toUpper():"";
+    let string_len = (NativasString.LEN)?nativa.getLength():"";
+    let string_lower = (NativasString.LOWER)?nativa.toLower():"";
+    let string_char =  (NativasString.LOWER)?nativa.charAt():"";
     //console.log(nativa.print_function());
 
       code_objeto =
-        ast.head + "\n" + ast.list_temporales() + "\n" + string_upper + "\n"+print_nativa+"\n";
+        ast.head + "\n" + ast.list_temporales() + "\n" + 
+        string_upper + "\n"+
+        string_lower + "\n"+
+        string_len  + "\n"+
+        string_char  + "\n"+
+        print_nativa+"\n";
     
 
     console.log(code_objeto + "\n" + Principal.historial);
