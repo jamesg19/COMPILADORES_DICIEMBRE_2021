@@ -145,21 +145,11 @@ export class DoWhile extends Instruccion {
         let etiquetaWhile=lcont;
         lcont++;
 
-        //se la asignamos a while
+        //se la asignamos a FOR
         let l = "L"+(lcont);
         lcont++;
         let lsalida=lcont;
-        
-        this.instrucciones.forEach((x)=>{
-            
-            const value=x.traducir(entorno,arbol);
 
-            if(value instanceof Excepcion){
-                return value;
-            }
-
-            
-        });
 
         //ejecuta la condicion
         const value_case=this.condicion.traducir(entorno,arbol);
@@ -171,6 +161,19 @@ export class DoWhile extends Instruccion {
         Principal.historial += "if( "+value_case+") goto "+l+";\n"
                 +"goto L"+lsalida+";\n";
         Principal.historial += l+":\n";
+
+        this.instrucciones.forEach((x)=>{
+            
+            const value=x.traducir(entorno,arbol);
+
+            if(value instanceof Excepcion){
+                return value;
+            }
+
+            
+        });
+
+        
 
         Principal.historial+="goto L"+etiquetaWhile+";\n";
         

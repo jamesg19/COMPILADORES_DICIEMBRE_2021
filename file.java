@@ -1,15 +1,11 @@
 
 
 void main(){
-  
-  
-  string mi_variable = "UnaCadeNaConMAYUSCALASYminusculas";
-  
-  
-  println("cadena".toUppercase());
-  println(mi_variable.toLowercase());
-  println( mi_variable.length());
-  println(mi_variable.caracterOfPosition(5));
+
+  for(int i=0;i<2;i++){
+    //continue;
+    println(900);
+  }
   
   
   

@@ -134,4 +134,74 @@ export class For extends Instruccion {
         nodo.agregarHijoNodo(instruccionesNodo);
         return nodo;
     }
+
+    traducir(entorno: TablaSimbolos, arbol: Arbol) {
+        //realizamos la declaracion  o asignacion
+        const  asgina= this.declaracion.traducir(entorno,arbol);    
+        if(asgina instanceof Excepcion){
+            return asgina;
+        }
+
+        //obtenemos la etiqueta actual
+        let lcont = Principal.etiqueta;
+        lcont++;
+        
+        Principal.addComentario("FOR");
+        Principal.historial+="L"+lcont+":\n";
+        
+        
+
+        let etiquetaFor=lcont;
+        lcont++;
+
+        //se la asignamos a FOR
+        let l = "L"+(lcont);
+        lcont++;
+        let Lasgina=lcont;
+
+        lcont++;
+        let lsalida=lcont;
+
+
+        //ejecuta la condicion
+        const value_case=this.condicion.traducir(entorno,arbol);
+
+        if(value_case instanceof Excepcion){
+            return value_case;
+        }
+
+        Principal.historial += "if( "+value_case+") goto "+l+";\n"
+                +"goto L"+lsalida+";\n";
+        Principal.historial += l+":\n";
+
+        
+        this.instrucciones.forEach((x)=>{
+            if(x instanceof Continue){
+                Principal.historial += "goto L"+Lasgina+";\n";
+                return;
+            }
+            const value=x.traducir(entorno,arbol);
+
+            if(value instanceof Excepcion){
+                return value;
+            }
+            
+
+            
+        });
+        Principal.historial += "L"+Lasgina+":"
+        //REALIZA INCREMENTO
+        const incremental=this.actualizacion.traducir(entorno,arbol);
+        if(incremental instanceof Excepcion){
+            return incremental;
+        }
+
+        Principal.historial+="goto L"+etiquetaFor+";\n";
+        
+        Principal.historial += "L"+lsalida+":"  
+        Principal.etiqueta = lsalida;  
+
+
+
+    }
 }
