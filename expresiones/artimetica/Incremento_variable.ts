@@ -8,6 +8,7 @@ import { Primitivo } from "../primitivo";
 import { Simbolo } from "../../table/simbolo";
 import { isUndefined } from "util";
 import { NodoAST } from "../../abs/nodo";
+import { Principal } from "../../principal";
 
 
 export class IncrementoVariable extends Instruccion{
@@ -92,5 +93,83 @@ export class IncrementoVariable extends Instruccion{
         }
 
     }
+
+
+    traducir(entorno: TablaSimbolos, arbol: Arbol): any {
+        let variable = entorno.getSimbolo(this.id);
+    
+        if (!variable) {
+          return new Excepcion(
+            "Semantico",
+            "No existe la variable " + this.id,
+            super.fila + "",
+            super.columna + ""
+          );
+        }
+        //verifico si es una constante
+        if (variable.constante) {
+          return new Excepcion(
+            "Semantico",
+            "No se puede cambiar de valor a una constante " + this.id,
+            super.fila + "",
+            super.columna + ""
+          );
+        }
+        const primitivo=new Primitivo(TIPO.ENTERO,"1",this.fila,this.columna);
+
+        let valor = primitivo.traducir(entorno, arbol);
+        let value = JSON.parse(JSON.stringify(valor));
+    
+        if (valor instanceof Array) {
+          // if(variable.valor instanceof Array){
+          //   variable.valor = value;
+          //   e.actualizarSimboloEnTabla(variable);
+          //   return ;
+          // }
+    
+          return new Excepcion(
+            "Semantico",
+            "Se esperaba almacenar un Arreglo dentro de un arreglo " + this.id,
+            super.fila + "",
+            super.columna + ""
+          );
+        }
+    
+        //let value = JSON.parse(JSON.stringify(valor));
+        console.log(primitivo.tipo+" -------------------------- "+variable.tipo);
+        if (primitivo.tipo != variable.tipo)
+          return new Excepcion(
+            "Semantico",
+            "Tipos diferentes " + this.id,
+            super.fila + "",
+            super.columna + ""
+          );
+          
+        if (
+          (primitivo.tipo == TIPO.ENTERO || primitivo.tipo == TIPO.DECIMAL) &&
+          (variable.tipo == TIPO.ENTERO || variable.tipo == TIPO.DECIMAL)
+        ) {
+          if (true){
+              //Principal.historial += "/*Asignacion de variable: var += exp;*/\n"
+              Principal.historial += "stack[(int)"+variable.posicion+"] = stack[(int)"+variable.posicion+"] + " + valor +";\n";
+            }
+        //   else {
+        //       Principal.historial += "/*Asignacion de variable: var -= exp;*/"
+        //       Principal.historial += "stack[(int)"+variable.posicion+"] = stack[(int)"+variable.posicion+"] - " + valor +";\n";
+              
+        //     }
+    
+          return "";
+        }
+    
+        return new Excepcion(
+          "Semantico",
+          "Tipos diferentes " + this.id,
+          super.fila + "",
+          super.columna + ""
+        );
+      }
+
+
 
 }

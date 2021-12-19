@@ -22,4 +22,9 @@ export class Continue extends Instruccion{
         const nodo=new NodoAST("CONTINUE");
         return nodo;
     }
+
+
+    traducir(entorno: TablaSimbolos, arbol: Arbol) {
+        return new Continue(this.fila,this.columna);
+    }
 }
