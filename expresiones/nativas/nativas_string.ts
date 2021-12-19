@@ -105,7 +105,6 @@ export class NativasString extends Instruccion {
         if (this.tipo_operacion == TIPO_NATIVA_CADENA.LENGHT) {
           if (this.tipo_operacion.tipo == TIPO.ARREGLO) {
           }
-          //console.log(this.tipo_operacion.tipo);
           var cadena = variable.getValor() + "";
           return cadena.length;
         }
@@ -402,19 +401,19 @@ export class NativasString extends Instruccion {
   ///--------------------------------------TRADUCIR------------------------------
   ///--------------------------------------TRADUCIR------------------------------
   traducir(entorno: TablaSimbolos, arbol: Arbol) {
-    Principal.addComentario("  Nativas String   ");
     try {
       //VERIFICA QUE LA VARIABLE O ID EXISTAN
       if (this.identificador instanceof Identificador) {
-        const variable = entorno.getSimbolo(this.identificador);
+        const variable = entorno.getSimbolo(this.identificador.id);
         if (variable == null) {
           return new Excepcion(
             "Semantico",
-            "No existe la variable " + `${this.identificador}`,
+            "No existe la variable " + `${this.identificador.id}`,
             `${this.fila}`,
             `${this.columna}`
           );
         }
+        
         //VERIFICA QUE SEA TIPO CADENA
 
         if (variable.tipo == TIPO.NULL) {
@@ -430,7 +429,7 @@ export class NativasString extends Instruccion {
         if (variable.arreglo) {
           if (this.tipo_operacion == TIPO_NATIVA_CADENA.LENGHT) {
             //codigo para length
-            return variable.valor.length;
+            //return variable.valor.length;
           }
         }
 
@@ -588,11 +587,10 @@ export class NativasString extends Instruccion {
           Principal.temp = tempE;
           //this.inicio.traducir(entorno,arbol)
           t = this.inicio.traducir(entorno, arbol); //obtengo el indice
-          Principal.historial += "stack[(int)" + temp + "] = " + t + ";\n"; //posicion de donde se guarda el indice
+          Principal.historial += "stack[(int)" + (temp+1) + "] = " + (t) + ";\n"; //posicion de donde se guarda el indice
 
-          Principal.historial += "P = " + temp + ";\n";
+          Principal.historial += "P = " + (temp+1) + ";\n";
           Principal.historial += "charAt();\n";
-          NativasString.UPPER = true;
           this.tipo = TIPO.CARACTER;
           Principal.addComentario("=========>Fin char at<============");
 
