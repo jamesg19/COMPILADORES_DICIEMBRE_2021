@@ -455,9 +455,11 @@ CONDICION_IF:
     //if con una instruccion
     
     | if par_abierto EXP par_cerrado  INSTRUCCION 
-    { $$=new If($3,$6,null,null,@1.firt_line,@1.firt_column); }
+    { $$=new If($3,$5,null,null,@1.firt_line,@1.firt_column); }
+    
     | if par_abierto EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada else llave_abierta INSTRUCCIONES llave_cerrada 
     {  $$=new If($3,$6,$10,null,@1.firt_line,@1.firt_column); }
+    
     | if par_abierto EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada else CONDICION_IF
     {  $$=new If($3,$6,null,[$9],@1.firt_line,@1.firt_column); }
 ;

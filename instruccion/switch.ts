@@ -117,19 +117,8 @@ export class Switch extends Instruccion{
             if(!this.defaultt != null){
                 this.defaultt.traducir(entorno,arbol)
 
-/**
- * 
- *          aca tambien podes agregar una etiqueta desalida
- * 
- * 
- * 
- * 
- * 
- * 
- */
-
-
-
+                // Principal.historial += "L"+lsalida+":"  
+                // Principal.etiqueta = lsalida;  
 
             }
         } else{
@@ -165,13 +154,10 @@ export class Switch extends Instruccion{
 
             });
             
-
             //esto es lo que tenes que traducir a una etiqueta de salida
             if(this.defaultt != null || this.defaultt != undefined){
                 this.defaultt.traducir(entorno,arbol);
             }
-
-
 
             this.lst_case.forEach((casee) => {
                 const caseee = casee.traducir(entorno,arbol);
@@ -182,200 +168,13 @@ export class Switch extends Instruccion{
             })
             // si this.flag_break  == true --> el caso evaluado trae break
             
-            Principal.addComentario("Etiqeta de salida");
+            //Principal.addComentario("Etiqeta de salida");
             Principal.historial += "L"+lsalida+":"  
             Principal.etiqueta = lsalida;  
         }
 
         return this;
     }
-
-    // traducir(entorno: TablaSimbolos, arbol: Arbol) {
-
-
-    //     this.ins=this;
-    //     const condition=this.condicion.traducir(entorno,arbol);
-    //     Principal.historial += "\t";
-    //     if(condition instanceof Excepcion){
-    //         return condition;
-    //     }
-        
-        
-    //     if(true){
-    //     //declaracion de etiquetas y temporales
-        
-        
-        
-    //     Principal.addComentario("------------>SWITCH<----------------")
-            
-    //     // Principal.historial += "if("+t+") goto "+l_veradero+";\n"+ 
-    //     //                         "goto "+ l_default+";\n";
-    //     // //console.log(this.condicion.traducir(entorno,arbol));
-    //     //  Principal.historial += l_veradero+":\n"   ;
-
-    //     //verifica que la condicion sea TRUE
-    //     //  if(condition){
-    //     //CREA UN ENTORNO PARA LAS INSTRUCCIONES DENTRO DEL IF
-    //     const nuevaTabla=new TablaSimbolos(entorno);
-        
-    //     //EJECUTA LAS INSTRUCCIONES CASE
-
-    //     this.lst_case.forEach((element:Case) => {
-
-    //         let tem = Principal.temp;
-    //         tem++;
-            
-    //         let t:string =  "t"+tem;//temporal donde se almacenara el resultado de la condicion
-    //         t = condition;
-            
-    //         let lcont = Principal.etiqueta;
-    //         lcont++;
-    //         let l_veradero = "L"+lcont;
-    //         lcont++;
-    //         let l_default = "L"+lcont;
-    //         lcont++;
-    //         let l_falso = "L"+lcont;
-    //         lcont++;
-    //         let l_salida = "L"+lcont;
-            
-    //         Principal.etiqueta = lcont;
-
-    //         if(element instanceof Excepcion){
-    //             arbol.excepciones.push(element);
-    //             arbol.updateConsolaError(element.toString());
-    //             console.log(element.toString());
-    //         }else{
-    //             const condicionCase=element.condicion.traducir(entorno,arbol);
-    //             //condicionCase "exp"
-    //             //guardar resultado de la comparacion en el temporal
-    //             let temp = Principal.temp;
-    //             temp++;
-    //             let tt:any =  "t"+temp;//temporal donde se almacenara el resultado de la condicion
-    //             tt = t == condicionCase; 
-                
-        
-    //             Principal.historial += "if("+tt+") goto "+l_veradero+";\n";
-                                        
-                                
-                
-
-    //             //console.log(this.condicion.traducir(entorno,arbol));
-    //             //Principal.historial += l_veradero+":\n"   ;
-
-
-
-    //             const result=element.traducir(nuevaTabla,arbol);
-                
-                
-    //             if(result instanceof Excepcion){
-
-    //                 arbol.excepciones.push(result);
-    //                 arbol.updateConsolaError(result.toString());
-                    
-    //             }
-    //             if(result instanceof Break || result instanceof Continue ){
-    //                 this.ins=result;
-    //                 return result;
-    //             }
-    //             if(result instanceof Return){
-    //                 this.ins=result;
-                
-    //                 //console.log(result.value?.traducir(nuevaTabla,arbol)+"VALUE RETURN");
-    //                 return result;
-    //             }
-    //         }
-            
-    //     });
-    //       //  }
-    //         //SI ES FALSA
-    //        // else{
-               
-    //         Principal.historial += "goto "+l_salida+";\n";
-    //         Principal.addComentario("Else ")
-    //         Principal.historial += l_default+":\n"
-    //             //console.log("la condicion tiene que entrar a else")
-    //             if(this. != null || this.instruccionesElse != undefined ){
-    //                 //crea un nuevo entorno
-    //                 const nuevaTabla=new TablaSimbolos(entorno);
-                    
-    //                 //ejecuta instrucciones else
-    //                 this.instruccionesElse.forEach((element2:Instruccion) => {
-    //                     if(element2 instanceof Excepcion){
-    //                         arbol.excepciones.push(element2);
-    //                         arbol.updateConsolaError(element2.toString());
-    //                         console.log(element2.toString());
-    //                     }else{
-    //                     const result=element2.traducir(nuevaTabla,arbol);
-
-    //                     if(result instanceof Excepcion){
-    //                         ///
-    //                         ///
-    //                         arbol.excepciones.push(result);
-    //                         arbol.updateConsolaError(result.toString());
-    //                     }
-    //                     if(result instanceof Break || result instanceof Continue ){
-    //                         this.ins=result;
-    //                         return result;
-    //                     }
-    //                     if(result instanceof Return){
-    //                         this.ins=result;
-    //                         //console.log(result.value?.traducir(nuevaTabla,arbol)+"VALUE RETURN");
-    //                         return result;
-    //                     }
-    //                 }
-    //                 });
-    //             } 
-    //             //INSTRUCCIONES ELSE IF
-    //             else if(this.ElseIf !=null || this.ElseIf != undefined){
-
-    //                 //ejecuta instrucciones else
-    //                 const nuevaTabla=new TablaSimbolos(entorno);
-    //                 this.ElseIf.forEach((element2) => {
-    //                     if(element2 instanceof Excepcion){
-    //                         arbol.excepciones.push(element2);
-    //                         arbol.updateConsolaError(element2.toString());
-    //                         console.log(element2.toString());
-    //                     }else{
-    //                     const result=element2.traducir(nuevaTabla,arbol);
-                        
-    //                     if(result instanceof Excepcion){
-    //                         ///
-    //                         ///
-    //                         arbol.excepciones.push(result);
-    //                         arbol.updateConsolaError(result.toString());
-    //                     }
-    //                     if(result instanceof Break || result instanceof Continue ){
-    //                         this.ins=result;
-    //                         return result;
-    //                     }
-    //                     if(result instanceof Return){
-    //                         this.ins=result;
-    //                         //console.log(result.value?.traducir(nuevaTabla,arbol)+"VALUE RETURN");
-    //                         return result;
-    //                     }
-    //                 }
-
-    //                 });
-                
-          
-    //             }
-    //         //}
-    //        Principal.addComentario("Etiqeta de salida");
-    //        Principal.historial += l_salida+":"
-
-
-    //     }else{
-    //         console.log('TIPO DATO NO BOOLEANO');
-    //         return new Excepcion("Semantico", "Tipo de dato no Booleano en IF",`${this.fila}`,`${this.columna}`);
-    //     }
-
-
-    //     return this.ins;
-
-
-
-
-    // }
 
 
 }

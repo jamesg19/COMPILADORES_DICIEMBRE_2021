@@ -111,10 +111,50 @@ export class While extends Instruccion {
     }
 
     traducir(entorno: TablaSimbolos, arbol: Arbol) {
+        
+        
+        //obtenemos la etiqueta actual
         let lcont = Principal.etiqueta;
+        lcont++;
+        
+        Principal.addComentario("WHILE");
+        Principal.historial+="L"+lcont+":\n";
+        
         
 
+        let etiquetaWhile=lcont;
+        lcont++;
 
+        //se la asignamos a while
+        let l = "L"+(lcont);
+        lcont++;
+        let lsalida=lcont;
+
+        const value_case=this.condicion.traducir(entorno,arbol);
+
+        if(value_case instanceof Excepcion){
+            return value_case;
+        }
+        
+        
+
+        Principal.historial += "if( "+value_case+") goto "+l+";\n"
+                +"goto L"+lsalida+";\n";
+        Principal.historial += l+":\n";
+        this.instrucciones.forEach((x)=>{
+            
+            const value=x.traducir(entorno,arbol);
+
+            if(value instanceof Excepcion){
+                return value;
+            }
+
+            
+        });
+        Principal.historial+="goto L"+etiquetaWhile+";\n";
+        
+        Principal.historial += "L"+lsalida+":"  
+        Principal.etiqueta = lsalida;  
 
 
 

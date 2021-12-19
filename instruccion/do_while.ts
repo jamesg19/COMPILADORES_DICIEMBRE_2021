@@ -1,5 +1,6 @@
 import { Instruccion } from "../abs/Instruccion";
 import { NodoAST } from "../abs/nodo";
+import { Principal } from "../principal";
 import { Arbol } from "../table/arbol";
 import { Excepcion } from "../table/excepcion";
 import { TablaSimbolos } from "../table/tablasimbolos";
@@ -58,10 +59,6 @@ export class DoWhile extends Instruccion {
             }
 
         });
-
-
-
-
 
         while(true){
             //NUEVO ENTONO DENTRO DEL CICLO
@@ -130,6 +127,58 @@ export class DoWhile extends Instruccion {
         });
         nodo.agregarHijoNodo(instruccionesNodo);
         return nodo;
+    }
+
+
+    traducir(entorno: TablaSimbolos, arbol: Arbol) {
+        
+        
+        //obtenemos la etiqueta actual
+        let lcont = Principal.etiqueta;
+        lcont++;
+        
+        Principal.addComentario("DO-WHILE");
+        Principal.historial+="L"+lcont+":\n";
+        
+        
+
+        let etiquetaWhile=lcont;
+        lcont++;
+
+        //se la asignamos a while
+        let l = "L"+(lcont);
+        lcont++;
+        let lsalida=lcont;
+        
+        this.instrucciones.forEach((x)=>{
+            
+            const value=x.traducir(entorno,arbol);
+
+            if(value instanceof Excepcion){
+                return value;
+            }
+
+            
+        });
+
+        //ejecuta la condicion
+        const value_case=this.condicion.traducir(entorno,arbol);
+
+        if(value_case instanceof Excepcion){
+            return value_case;
+        }
+
+        Principal.historial += "if( "+value_case+") goto "+l+";\n"
+                +"goto L"+lsalida+";\n";
+        Principal.historial += l+":\n";
+
+        Principal.historial+="goto L"+etiquetaWhile+";\n";
+        
+        Principal.historial += "L"+lsalida+":"  
+        Principal.etiqueta = lsalida;  
+
+
+
     }
 
 }

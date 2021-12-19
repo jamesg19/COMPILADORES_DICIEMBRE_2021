@@ -1,5 +1,6 @@
 import { Instruccion } from "../abs/Instruccion";
 import { NodoAST } from "../abs/nodo";
+import { Principal } from "../principal";
 import { Arbol } from "../table/arbol";
 import { Excepcion } from "../table/excepcion";
 import { TablaSimbolos } from "../table/tablasimbolos";
@@ -133,5 +134,12 @@ export class For extends Instruccion {
         nodo.agregarHijoNodo(instruccionesNodo);
         return nodo;
     }
+
+
+
+    
+
+
+
 
 }

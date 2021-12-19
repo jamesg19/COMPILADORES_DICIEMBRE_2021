@@ -162,8 +162,8 @@ fs.readFile(NOMBRE_ARCHIVO, "utf8", (error, datos) => {
         throw error;
     let principa = new Principal();
     // console.log(datos)
-    //principa.traducir(datos);
-    principa.ejecutar(datos);
+    principa.traducir(datos);
+    //principa.ejecutar(datos);
     //console.log("El contenido es: ", datos);
 });
 // principa.ejecutar ('println(6>5);   '
