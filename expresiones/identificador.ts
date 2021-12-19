@@ -47,7 +47,7 @@ export class Identificador extends Instruccion {
   traducir(entorno: TablaSimbolos, arbol: Arbol) {
     try {
       //obtenemos el tipo
-      let simbol = entorno.getSimboloJ(this.id);
+      let simbol = entorno.getSimbolo(this.id);
       //establecemos el tipo
       this.tipo = simbol?.tipo;
       //return simbol?.valor;

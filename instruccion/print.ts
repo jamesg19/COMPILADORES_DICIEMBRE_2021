@@ -16,6 +16,7 @@ import { NativasString } from '../expresiones/nativas/nativas_string';
 export class Print extends Instruccion {
   fila: number;
   columna: number;
+  newLine:boolean = false;
   static print: boolean = false;
 
   value?: Instruccion[];
@@ -24,11 +25,12 @@ export class Print extends Instruccion {
    * @param  {number} columna
    * @param  {Instruccion[]} value?
    */
-  constructor(fila: number, columna: number, value?: Instruccion[]) {
+  constructor(fila: number, columna: number, value?: Instruccion[],newLine?:boolean) {
     super(fila, columna);
     this.fila = fila;
     this.columna = columna;
     this.value = value;
+    this.newLine = newLine;
   }
   /**
    * @param  {TablaSimbolos} entorno
@@ -48,12 +50,15 @@ export class Print extends Instruccion {
           if (exp_print instanceof Identificador) {
             let simbol = entorno.getSimbolo(exp_print.id);
             value = simbol.toString();
-          } else value = value.toString();
+          } else {
+            value = value.toString();
+            
+                  }
         } else {
           value = "Indefinido";
         }
 
-        arbol.consola += value;
+        arbol.consola += value+((this.newLine)?"\n":"");
         console.log(value);
       });
     }
@@ -90,32 +95,18 @@ export class Print extends Instruccion {
       
       let tr = x.traducir(entorno,arbol); //t[0]
       
-        //console.log(x);
-        // if(x instanceof NativasString){
-        //   Print.print = true;
-        //   Principal.addComentario("Imprimiendo una expresion cadena tr"+tr);
-        //   Principal.historial += "P = "+tr+";\n";
-        //   Principal.historial += "printString();\n";
-          
-          
-        //   Principal.historial += "printf(\"%s\",\"\\n\");\n"
-          
-        // }else 
         if(x instanceof Identificador){
           Print.print = true;
           Principal.addComentario("Imprimiendo una expresion cadena tr"+tr);
           Principal.historial += "P = "+tr+";\n";
           Principal.historial += "printString();\n";
-          Principal.historial += "printf(\"%s\",\"\\n\");\n"
+          //Principal.historial += "printf(\"%s\",\"\");\n"
           
         }else if (TIPO.CADENA == x.tipo) {
           Print.print = true;
-          
-          
-                    
+    
           cadena += this.transform_cadena(x.value, arbol);
-          cadena += "printString();\n";
-          Principal.historial += "printf(\"%s\",\"\\n\");\n"
+          
           
         }else if (TIPO.ENTERO == x.tipo) {
           
@@ -139,7 +130,7 @@ export class Print extends Instruccion {
         /*
         encerrar en un if para ver si requiere saltos de linea 
          */
-         cadena += 'printf("\\n");\n';
+         cadena += (this.newLine)? 'printf("\\n");\n' : "\n" ;
       
       //if (TIPO.ENTERO == x.tipo) cadena += 'printf("%f"+stack['+x.posicion+']);';
 

@@ -18,7 +18,7 @@ export class List_Declaracion extends Instruccion {
   }
   interpretar(entorno: TablaSimbolos, arbolL: Arbol) {
     this.list_id.forEach((x) => {
-      let sim = entorno.getSimbolo(x);
+      let sim = entorno.consultar_en_tabla_actual(x);
       if (sim)
         return new Excepcion(
           "Semantico",

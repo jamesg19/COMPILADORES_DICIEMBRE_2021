@@ -20,7 +20,7 @@ class TablaSimbolos {
         }
         else {
             principal_1.Principal.posicion += 1; //contador  de posicion P
-            simbolo.posicion = principal_1.Principal.posicion; //para el 
+            simbolo.posicion = principal_1.Principal.posicion; //para el
             this.tabla.set(simbolo.id, simbolo);
         }
     }
@@ -76,6 +76,12 @@ class TablaSimbolos {
             }
         }
         return new excepcion_1.Excepcion("Semantico", "Variable No encontrada en Asignacion", simbolo.fila + "", simbolo.columna + "");
+    }
+    consultar_en_tabla_actual(id) {
+        if (this.tabla.has(id)) {
+            return this.tabla.get(id);
+        }
+        return undefined;
     }
     get_temp() {
         let vale = TablaSimbolos.contador;

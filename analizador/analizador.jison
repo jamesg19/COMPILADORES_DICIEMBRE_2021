@@ -346,7 +346,8 @@ MAIN:
 
 void main par_abierto par_cerrado llave_abierta INSTRUCCIONES llave_cerrada { $$ = new Main($6,@1.firt_line,@1.first_column); } 
 ;
-PRINT  :  println par_abierto LISTA_EXPRESIONES par_cerrado punto_coma  { addReporte('PRINT:= println par_abierto LISTA_EXPRESIONES par_cerrado punto_coma','PRINT.val := LISTA_EXPRESIONES.val'); $$ = new Print(@1.firt_line,@1.firt_column,$3);  }
+PRINT  :  println par_abierto LISTA_EXPRESIONES par_cerrado punto_coma  { addReporte('PRINT:= println par_abierto LISTA_EXPRESIONES par_cerrado punto_coma','PRINT.val := LISTA_EXPRESIONES.val'); $$ = new Print(@1.firt_line,@1.firt_column,$3,true);  }
+        | print par_abierto LISTA_EXPRESIONES par_cerrado punto_coma    { addReporte('PRINT:= println par_abierto LISTA_EXPRESIONES par_cerrado punto_coma','PRINT.val := LISTA_EXPRESIONES.val'); $$ = new Print(@1.firt_line,@1.firt_column,$3,false);  }
 
 ;
 

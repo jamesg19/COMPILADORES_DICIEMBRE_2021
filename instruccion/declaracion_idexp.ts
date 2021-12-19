@@ -44,7 +44,7 @@ export class D_IdExp extends Instruccion {
    */
   interpretar(e: TablaSimbolos, arbol: Arbol): any {
     //Validacion de variable existente
-    let variable = e.getSimbolo(this.id); //e.getVariable(this.id);
+    let variable = e.consultar_en_tabla_actual(this.id); //e.getVariable(this.id);
 
     if (variable)
       return new Excepcion(

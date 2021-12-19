@@ -13,11 +13,13 @@ class Print extends Instruccion_1.Instruccion {
      * @param  {number} columna
      * @param  {Instruccion[]} value?
      */
-    constructor(fila, columna, value) {
+    constructor(fila, columna, value, newLine) {
         super(fila, columna);
+        this.newLine = false;
         this.fila = fila;
         this.columna = columna;
         this.value = value;
+        this.newLine = newLine;
     }
     /**
      * @param  {TablaSimbolos} entorno
@@ -37,13 +39,14 @@ class Print extends Instruccion_1.Instruccion {
                         let simbol = entorno.getSimbolo(exp_print.id);
                         value = simbol.toString();
                     }
-                    else
+                    else {
                         value = value.toString();
+                    }
                 }
                 else {
                     value = "Indefinido";
                 }
-                arbol.consola += value;
+                arbol.consola += value + ((this.newLine) ? "\n" : "");
                 console.log(value);
             });
         }
@@ -75,26 +78,16 @@ class Print extends Instruccion_1.Instruccion {
         (_a = this.value) === null || _a === void 0 ? void 0 : _a.forEach((x) => {
             contador++;
             let tr = x.traducir(entorno, arbol); //t[0]
-            //console.log(x);
-            // if(x instanceof NativasString){
-            //   Print.print = true;
-            //   Principal.addComentario("Imprimiendo una expresion cadena tr"+tr);
-            //   Principal.historial += "P = "+tr+";\n";
-            //   Principal.historial += "printString();\n";
-            //   Principal.historial += "printf(\"%s\",\"\\n\");\n"
-            // }else 
             if (x instanceof identificador_1.Identificador) {
                 Print.print = true;
                 principal_1.Principal.addComentario("Imprimiendo una expresion cadena tr" + tr);
                 principal_1.Principal.historial += "P = " + tr + ";\n";
                 principal_1.Principal.historial += "printString();\n";
-                principal_1.Principal.historial += "printf(\"%s\",\"\\n\");\n";
+                //Principal.historial += "printf(\"%s\",\"\");\n"
             }
             else if (tipo_1.TIPO.CADENA == x.tipo) {
                 Print.print = true;
                 cadena += this.transform_cadena(x.value, arbol);
-                cadena += "printString();\n";
-                principal_1.Principal.historial += "printf(\"%s\",\"\\n\");\n";
             }
             else if (tipo_1.TIPO.ENTERO == x.tipo) {
                 cadena += 'printf("%d",' + tr + ");\n";
@@ -112,7 +105,7 @@ class Print extends Instruccion_1.Instruccion {
             /*
             encerrar en un if para ver si requiere saltos de linea
              */
-            cadena += 'printf("\\n");\n';
+            cadena += (this.newLine) ? 'printf("\\n");\n' : "\n";
             //if (TIPO.ENTERO == x.tipo) cadena += 'printf("%f"+stack['+x.posicion+']);';
             //cadena += " %f";
             // value_cadena += isCadena ? ', "' + x.value + '"' : "," + x.value;
