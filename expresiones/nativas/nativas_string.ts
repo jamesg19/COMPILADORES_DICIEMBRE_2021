@@ -48,7 +48,6 @@ export class NativasString extends Instruccion{
 
            
             if(this.identificador instanceof Identificador){
-
             
                 //VERIFICA QUE LA VARIABLE O ID EXISTAN
                 const variable = entorno.getSimbolo(this.identificador.id);
@@ -94,6 +93,7 @@ export class NativasString extends Instruccion{
                     
 
                     var cadena=variable.getValor()+"";
+                    console.log(cadena+"aaaaaaaaaaaa");
                     return cadena.toUpperCase();
                 }
                 //DETERMINA SI ES LENGTH
@@ -168,7 +168,7 @@ export class NativasString extends Instruccion{
                 }
 
             } else{
-
+                
                 //console.log("ENTRA AQUI"+this.identificador);
                 //VERIFICA QUE LA VARIABLE O ID EXISTAN
                 const variable = this.identificador;

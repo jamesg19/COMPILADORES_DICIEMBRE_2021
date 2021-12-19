@@ -199,10 +199,10 @@ export class If extends Instruccion{
     
     traducir(entorno: TablaSimbolos, arbol: Arbol) {
         
-        
         this.ins=this;
         const condition=this.condicion.traducir(entorno,arbol);
         Principal.historial += "\t";
+        
         if(condition instanceof Excepcion){
             return condition;
         }
@@ -213,7 +213,7 @@ export class If extends Instruccion{
         let tem = Principal.temp;
         tem++;
         
-        let t:string =  "t"+tem;//temporal donde se almacenara el resultado de la condicio
+        let t:string =  "t"+tem;//temporal donde se almacenara el resultado de la condicion
         t = condition;
         
         let lcont = Principal.etiqueta;
