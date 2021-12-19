@@ -9,15 +9,25 @@ import { Principal } from "../principal";
 
 export class List_Declaracion extends Instruccion {
   tipo: TIPO;
-  list_id: string[];
+  list_id: any[];
 
-  constructor(tipo: TIPO, list_id: string[], fila: number, columna: number) {
+  constructor(tipo: TIPO, list_id: any[], fila: number, columna: number) {
     super(fila, columna);
     this.tipo = tipo;
     this.list_id = list_id;
   }
   interpretar(entorno: TablaSimbolos, arbolL: Arbol) {
+    let bandera:boolean=true;
+
     this.list_id.forEach((x) => {
+      if(x instanceof Excepcion){
+        bandera=false;
+        //console.log(x);
+
+      }
+      if(bandera){
+
+      
       let sim = entorno.getSimbolo(x);
       if (sim)
         return new Excepcion(
@@ -37,6 +47,11 @@ export class List_Declaracion extends Instruccion {
         false
       );
       entorno.addSimbolo(simbolo);
+    }else{
+      console.log(x);
+      console.log("ENTRA EN ELSE");
+      bandera=true;
+    }
     });
   }
   getValue(tipo: TIPO) {

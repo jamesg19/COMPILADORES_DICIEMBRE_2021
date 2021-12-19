@@ -475,13 +475,17 @@ PUSH_ARREGLO
 DECLARACION_FUNCION 
   //   1               2         3     4           5           6            7
   :  TIPO_DEC_VARIABLE id par_abierto par_cerrado llave_abierta INSTRUCCIONES llave_cerrada 
-                                                                                                                {  $$ = new Funcion($2,$6,$1,@1.first_line,@1.first_column);   }
-  | void id par_abierto par_cerrado llave_abierta INSTRUCCIONES llave_cerrada                                   {  $$ = new Funcion($2,$6,TIPO.VOID,@1.first_line,@1.first_column);   }
-  | id id par_abierto par_cerrado llave_abierta INSTRUCCIONES llave_cerrada                                     {  $$ = new Funcion($2,$6,TIPO.STRUCT,@1.first_line,@1.first_column);   }
-  | TIPO_DEC_VARIABLE id par_abierto LISTA_PARAMETROS par_cerrado  llave_abierta INSTRUCCIONES llave_cerrada    {  $$ = new Funcion($2,$7,$1,@1.first_line,@1.first_column,$4);    }
-  | void id par_abierto LISTA_PARAMETROS par_cerrado  llave_abierta INSTRUCCIONES llave_cerrada                 {  $$ = new Funcion($2,$7,TIPO.VOID,@1.first_line,@1.first_column,$4);    }
-  | id id par_abierto LISTA_PARAMETROS par_cerrado  llave_abierta INSTRUCCIONES llave_cerrada                   {  $$ = new Funcion($2,$7,TIPO.STRUCT,@1.first_line,@1.first_column,$4);    }
-  | TIPO_DEC_VARIABLE LISTA_CORCHETES id par_abierto LISTA_PARAMETROS par_cerrado llave_abierta INSTRUCCIONES llave_cerrada {    }
+  { $$ = new Funcion($2,$6,$1,@1.first_line,@1.first_column);   }
+  | void id par_abierto par_cerrado llave_abierta INSTRUCCIONES llave_cerrada               { $$ = new Funcion($2,$6,TIPO.VOID,@1.first_line,@1.first_column);   }
+  | id id par_abierto par_cerrado llave_abierta INSTRUCCIONES llave_cerrada                 { $$ = new Funcion($2,$6,TIPO.STRUCT,@1.first_line,@1.first_column);   }
+  //Funcion con parametros y con tipo -> function TIPO test ( LISTA_PARAMETROS )  { INSTRUCCIONES }
+  //1                  2       3     4         5                   6           
+  |  TIPO_DEC_VARIABLE id par_abierto LISTA_PARAMETROS par_cerrado  llave_abierta INSTRUCCIONES llave_cerrada
+   {  $$ = new Funcion($2,$7,$1,@1.first_line,@1.first_column,$4);    }
+  | void id par_abierto LISTA_PARAMETROS par_cerrado  llave_abierta INSTRUCCIONES llave_cerrada {  $$ = new Funcion($2,$7,TIPO.VOID,@1.first_line,@1.first_column,$4);    }
+  | id id par_abierto LISTA_PARAMETROS par_cerrado  llave_abierta INSTRUCCIONES llave_cerrada{  $$ = new Funcion($2,$7,TIPO.STRUCT,@1.first_line,@1.first_column,$4);    }
+  //Funcion con parametros y con tipo -> function TIPO[][] test ( LISTA_PARAMETROS )  { INSTRUCCIONES }
+  //| function TIPO_VARIABLE_NATIVA LISTA_CORCHETES id par_abierto LISTA_PARAMETROS par_cerrado llave_abierta INSTRUCCIONES llave_cerrada {    }
 
   //Funcion con parametros y sin tipo -> function test ( LISTA_PARAMETROS ) { INSTRUCCIONES }
   
@@ -497,7 +501,7 @@ LISTA_PARAMETROS
 PARAMETRO 
   : TIPO_DEC_VARIABLE id                                { $$ = {'tipo':$1, 'id':$2, 'arreglo':false}   }
     | id id                                             { $$ = {'tipo':TIPO.STRUCT, 'id':$2, 'arreglo':false}   }  
-    | TIPO_DEC_VARIABLE LISTA_CORCHETES id              { $$ = {'tipo':TIPO.ARREGLO,'id':$3, 'arreglo':true}      }
+  //| TIPO_VARIABLE_NATIVA LISTA_CORCHETES id              {    }
   //| id dos_puntos Array menor TIPO_VARIABLE_NATIVA mayor {    }
 ;
 
@@ -527,12 +531,14 @@ DECLARACION_VARIABLE
   : TIPO_DEC_VARIABLE id igual EXP punto_coma      {  $$ = new D_IdExp($1, $2, $4,false,@1.firt_line,@1.firt_column);  }
   | TIPO_DEC_VARIABLE id           punto_coma      {  $$ = new D_Id($1, $2,false,@1.firt_line,@1.firt_column);         }   
   | TIPO_DEC_VARIABLE id coma  LIST_ID punto_coma  {  $4.push($2) ; $$ = new List_Declaracion($1,$4,@1.first_line,@1.first_column)   }
-  
+   
      
 ;
+
 LIST_ID:
     LIST_ID coma id                            { $1.push($3); $$ = $1;}
   | id                                         { $$ = [$1]}
+  | LIST_ID coma INSTRUCCION    {   $1.push(new Excepcion('Sintactico',`NO SE PERMITE PALABRAS RESERVADAS ${$1}`,@1.first_line,@1.first_column)); $$ = $1;  }
 ;
 
 DECLARACION_VARIABLE_FOR 

@@ -19,6 +19,7 @@ import { NativasString } from "./expresiones/nativas/nativas_string";
 import { Reporte } from "./analizador/reporte";
 const Parser = require("./analizador/analizador");
 import { Nativas } from "./nativas";
+import { List_Declaracion } from "./instruccion/list_declaracion";
 
 export class Principal {
   static contador: number = 0;
@@ -71,6 +72,7 @@ export class Principal {
         element instanceof Asignacion_Struct ||
         element instanceof Arreglo ||
         element instanceof D_IdExp ||
+        element instanceof List_Declaracion ||
         element instanceof D_Id ||
         element instanceof Dec_Struct ||
         element instanceof Arreglo_Valor

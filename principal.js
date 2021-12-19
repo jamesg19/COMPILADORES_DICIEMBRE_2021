@@ -19,6 +19,7 @@ const print_1 = require("./instruccion/print");
 const nativas_string_1 = require("./expresiones/nativas/nativas_string");
 const Parser = require("./analizador/analizador");
 const nativas_1 = require("./nativas");
+const list_declaracion_1 = require("./instruccion/list_declaracion");
 class Principal {
     ejecutar(code) {
         const instrucciones = Parser.parse(code);
@@ -48,6 +49,7 @@ class Principal {
                 element instanceof asignacion_struct_1.Asignacion_Struct ||
                 element instanceof declarar_array_1.Arreglo ||
                 element instanceof declaracion_idexp_1.D_IdExp ||
+                element instanceof list_declaracion_1.List_Declaracion ||
                 element instanceof declaracion_id_1.D_Id ||
                 element instanceof instancia_struct_1.Dec_Struct ||
                 element instanceof array_valor_1.Arreglo_Valor) {
