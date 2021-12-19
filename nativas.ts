@@ -39,7 +39,7 @@ export class Nativas {
       "\treturn;\n" +
       "}\n";
       
-    return (Print.print)?print_line:"";
+    return print_line;
   }
   toUpper():string{
     
@@ -85,7 +85,7 @@ export class Nativas {
       +"\t"+"return;\n"
   +"}"
     
-    return NativasString.UPPER?toUpper:"";
+    return toUpper;
   }
   getLength():string{
     

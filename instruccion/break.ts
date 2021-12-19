@@ -23,4 +23,7 @@ export class Break extends Instruccion{
         const nodo=new NodoAST("BREAK");
         return nodo;
     }
+    traducir(entorno: TablaSimbolos, arbol: Arbol) {
+        return new Break(this.fila,this.columna);
+    }
 }
