@@ -133,5 +133,4 @@ export class For extends Instruccion {
         nodo.agregarHijoNodo(instruccionesNodo);
         return nodo;
     }
-
 }

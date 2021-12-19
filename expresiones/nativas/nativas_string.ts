@@ -405,6 +405,7 @@ export class NativasString extends Instruccion {
     Principal.addComentario("  Nativas String   ");
     try {
       //VERIFICA QUE LA VARIABLE O ID EXISTAN
+      
       if (this.identificador instanceof Identificador) {
         const variable = entorno.getSimbolo(this.identificador);
         if (variable == null) {
@@ -603,7 +604,6 @@ export class NativasString extends Instruccion {
         //VERIFICA QUE LA VARIABLE O ID EXISTAN
         
         const variable = this.identificador;
-        
 
         //DETERMINA SI ES LOWER_CASE
         if (this.tipo_operacion == TIPO_NATIVA_CADENA.TOLOWER) {
