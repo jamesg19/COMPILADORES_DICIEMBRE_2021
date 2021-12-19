@@ -170,6 +170,7 @@ export class Principal {
        element.traducir(ts_global, ast);
      });
 
+    
     let code_objeto = "";
     let nativa: Nativas = new Nativas();
     let print_nativa = Print.print ? nativa.print_function(ast) : "";
