@@ -55,12 +55,12 @@ export class Resta extends Instruccion{
                 //ENTERO - ENTERO
                 if(this.operadorIzq.tipo===TIPO.ENTERO && this.operadorDer.tipo===TIPO.ENTERO ){
                     this.tipo=TIPO.ENTERO;
-                    return this.setAtributosC3D(izq+"",der+"");
+                    return this.obtenerVal(this.operadorIzq.tipo,izq) - this.obtenerVal(this.operadorDer.tipo,der);
                 }
                 //ENTERO - DECIMAL
                 else if(this.operadorIzq.tipo===TIPO.ENTERO && this.operadorDer.tipo===TIPO.DECIMAL ){
                     this.tipo=TIPO.DECIMAL;
-                    return this.setAtributosC3D(izq+"",der+"");
+                    return this.obtenerVal(this.operadorIzq.tipo,izq) - this.obtenerVal(this.operadorDer.tipo,der);
                 }
 
                 //ENTERO - BOOLEAN
@@ -80,12 +80,12 @@ export class Resta extends Instruccion{
                 //DECIMAL - ENTERO
                 else if(this.operadorIzq.tipo===TIPO.DECIMAL && this.operadorDer.tipo===TIPO.ENTERO ){
                     this.tipo=TIPO.DECIMAL;
-                    return this.setAtributosC3D(izq+"",der+"");
+                     return this.obtenerVal(this.operadorIzq.tipo,izq) - this.obtenerVal(this.operadorDer.tipo,der);
                 }
                 //DECIMAL - DECIMAL
                 else if(this.operadorIzq.tipo===TIPO.DECIMAL && this.operadorDer.tipo===TIPO.DECIMAL ){
                     this.tipo=TIPO.DECIMAL;
-                    return this.setAtributosC3D(izq+"",der+"");
+                    return this.obtenerVal(this.operadorIzq.tipo,izq) - this.obtenerVal(this.operadorDer.tipo,der);
                 }
                 //DECIMAL - BOOLEAN
                 else if(this.operadorIzq.tipo===TIPO.DECIMAL && this.operadorDer.tipo===TIPO.BOOLEAN ){
