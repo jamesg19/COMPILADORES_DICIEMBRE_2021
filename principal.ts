@@ -72,6 +72,7 @@ export class Principal {
         element instanceof Asignacion_Struct ||
         element instanceof Arreglo ||
         element instanceof D_IdExp ||
+        element instanceof List_Declaracion ||
         element instanceof D_Id ||
         element instanceof List_Declaracion ||
         element instanceof Dec_Struct ||

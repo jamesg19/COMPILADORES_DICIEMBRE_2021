@@ -49,6 +49,7 @@ class Principal {
                 element instanceof asignacion_struct_1.Asignacion_Struct ||
                 element instanceof declarar_array_1.Arreglo ||
                 element instanceof declaracion_idexp_1.D_IdExp ||
+                element instanceof list_declaracion_1.List_Declaracion ||
                 element instanceof declaracion_id_1.D_Id ||
                 element instanceof list_declaracion_1.List_Declaracion ||
                 element instanceof instancia_struct_1.Dec_Struct ||
