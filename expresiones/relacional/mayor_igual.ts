@@ -71,7 +71,7 @@ export class MayorIgual extends Instruccion {
       this.rigthExpression.tipo === TIPO.ENTERO
     ) {
       this.tipo = TIPO.BOOLEAN;
-      return this.return_tem(exp1, exp2);
+      this.obtenerVal(this.leftExpression.tipo,exp1) >=this.obtenerVal(this.rigthExpression.tipo,exp2);
     }
     //ENTERO >= DECIMAL
     else if (
@@ -79,7 +79,7 @@ export class MayorIgual extends Instruccion {
       this.rigthExpression.tipo === TIPO.DECIMAL
     ) {
       this.tipo = TIPO.BOOLEAN;
-      return this.return_tem(exp1, exp2);
+      this.obtenerVal(this.leftExpression.tipo,exp1) >=this.obtenerVal(this.rigthExpression.tipo,exp2);
     }
 
     //DECIMAL >= ENTERO
@@ -88,7 +88,7 @@ export class MayorIgual extends Instruccion {
       this.rigthExpression.tipo === TIPO.ENTERO
     ) {
       this.tipo = TIPO.BOOLEAN;
-      return this.return_tem(exp1, exp2);
+      this.obtenerVal(this.leftExpression.tipo,exp1) >=this.obtenerVal(this.rigthExpression.tipo,exp2);
     }
     //DECIMAL >= DECIMAL
     else if (
@@ -96,7 +96,7 @@ export class MayorIgual extends Instruccion {
       this.rigthExpression.tipo === TIPO.DECIMAL
     ) {
       this.tipo = TIPO.BOOLEAN;
-      return this.return_tem(exp1, exp2);
+      this.obtenerVal(this.leftExpression.tipo,exp1) >=this.obtenerVal(this.rigthExpression.tipo,exp2);
     }
     //BOOLEAN >= BOOLEAN
     else if (
@@ -104,7 +104,7 @@ export class MayorIgual extends Instruccion {
       this.rigthExpression.tipo === TIPO.BOOLEAN
     ) {
       this.tipo = TIPO.BOOLEAN;
-      return this.return_tem(exp1, exp2);
+      this.obtenerVal(this.leftExpression.tipo,exp1) >=this.obtenerVal(this.rigthExpression.tipo,exp2);
     }
   }
   getNodo() {

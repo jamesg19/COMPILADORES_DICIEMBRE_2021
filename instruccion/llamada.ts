@@ -54,7 +54,18 @@ constructor(id:string, fila:number,columna:number,lista_parmetros?:Array<Instruc
                     
                     if(result_parametros instanceof Excepcion) return result_parametros;
                     
-                    if( llamar_funcion.lista_parametros[contador]['tipo'] == x.tipo ){
+                    if( result_parametros instanceof Array && llamar_funcion.lista_parametros[contador]['tipo'] == TIPO.ARREGLO) {
+                        
+                        
+                        //value_return = JSON.parse(JSON.stringify(re));
+                        let ident:string = llamar_funcion.lista_parametros[contador]['id']+"";
+                        
+                        
+                        let simbolo:Simbolo = new Simbolo(ident,x.tipo,super.fila,super.columna,result_parametros,true,false );
+                        entorno_local.addSimbolo(simbolo);
+                        
+                        
+                    }else if( llamar_funcion.lista_parametros[contador]['tipo'] == x.tipo || (llamar_funcion.lista_parametros[contador]["tipo"] == TIPO.ENTERO && x.tipo == TIPO.DECIMAL)){
                      
                      
                     let ident:string = llamar_funcion.lista_parametros[contador]['id']+"";
@@ -116,17 +127,31 @@ constructor(id:string, fila:number,columna:number,lista_parmetros?:Array<Instruc
                     
                     if(result_parametros instanceof Excepcion) return result_parametros;
                     
-                    if( llamar_funcion.lista_parametros[contador]['tipo'] == x.tipo ){
+                    if( result_parametros instanceof Array && llamar_funcion.lista_parametros[contador]['tipo'] == TIPO.ARREGLO) {
+                        
+                        console.log("James gayf, ")
+                        //value_return = JSON.parse(JSON.stringify(re));
+                        let ident:string = llamar_funcion.lista_parametros[contador]['id']+"";
+                        
+                        
+                        let simbolo:Simbolo = new Simbolo(ident,x.tipo,super.fila,super.columna,result_parametros,false,false );
+                        entorno_local.addSimbolo(simbolo);
+                        
+                        
+                    }else if( llamar_funcion.lista_parametros[contador]['tipo'] == x.tipo ){
                      
                      
                     let ident:string = llamar_funcion.lista_parametros[contador]['id']+"";
                     let simbolo:Simbolo = new Simbolo(ident,x.tipo,super.fila,super.columna,result_parametros,false,false );
+                    console.log("identificador del parametro",ident,result_parametros);
                     
                      //agregar la verificacion de arrays y struct
                      entorno_local.addSimbolo(simbolo);
                      //Principal.historial += "stac";
                      
                     }else{
+                        console.log("Hola mundo");
+                        //else
                         return new Excepcion("Semantico", "Tipo de dato diferente en Parametros de la llamada.", super.fila+"", super.columna+"")
                     }
                     contador++;

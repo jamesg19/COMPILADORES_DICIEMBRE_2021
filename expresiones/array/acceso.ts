@@ -55,6 +55,7 @@ export class Acceso extends Instruccion {
     let contador = this.list_expresiones.length;
     let temp:any =  (exist.valor);
     let value_return;
+    this.tipo = exist.tipo;
 
     if (contador == 1) temp = exist?.valor;
 
@@ -78,7 +79,6 @@ export class Acceso extends Instruccion {
         if (temp instanceof Array) {
           if (index < 0 || index > temp.length)
             return value_return = new Excepcion("Semantico", "no existe el indice indicado para el arreglo " + this.id, "" + super.fila, "" + super.columna);
-
           return value_return = JSON.parse(JSON.stringify(temp[index]));
         }
         this.tipo = exist.tipo;

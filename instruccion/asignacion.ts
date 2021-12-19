@@ -50,7 +50,7 @@ export class Asignacion extends Instruccion {
     }
     
 
-    let valor = this.exp.traducir(e, arbol);
+    let valor = this.exp.interpretar(e, arbol);
     let value = JSON.parse(JSON.stringify(valor));  
     
     if(valor instanceof Array ){

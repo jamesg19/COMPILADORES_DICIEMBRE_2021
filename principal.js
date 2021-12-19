@@ -27,7 +27,6 @@ class Principal {
         //   console.log(x);
         // })
         // reporteE.forEach((x)=>{
-        console.log();
         // });
         //console.log(reporteE);
         //tabla
@@ -162,7 +161,7 @@ fs.readFile(NOMBRE_ARCHIVO, "utf8", (error, datos) => {
         throw error;
     let principa = new Principal();
     // console.log(datos)
-    principa.traducir(datos);
+    principa.ejecutar(datos);
     //principa.ejecutar(datos);
     //console.log("El contenido es: ", datos);
 });
