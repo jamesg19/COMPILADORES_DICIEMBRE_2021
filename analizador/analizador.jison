@@ -315,29 +315,29 @@ INSTRUCCIONES:
 INSTRUCCION: 
   //init_inst
     MAIN                            {   addReporte('INSTRUCCION: MAIN',' MAIN: INSTRUCCION'); $$ = $1; } 
-  | DEC_ARRAY                       {   $$ = $1 } 
-  | DECLARACION_VARIABLE           {   $$ = $1 }//falta cuando hay una lista de id's
-  | DECLARACION_FUNCION             {   $$ = $1 }//listo
-  | DECLARACION_TYPE                {   $$ = $1 } //aca se crea la 'plantilla' para despues crear instancias
-  | INSTANCIA_STRUCT                {   $$ = $1 } 
-  | ASIGNACION 	                    {   $$ = $1 } 
-  | PUSH_ARREGLO 	                  {   $$ = $1 }
-  | IMPRIMIR 	                      {   $$ = $1 }
-  | CONDICION_IF 	                  {   $$ = $1 }
-  | SWITCH 	                        {   $$ = $1 }
-  | BREAK 	                        {   $$ = $1 }
-  | RETURN 	                        {   $$ = $1 }
-  | CONTINUE 	                      {   $$ = $1 }
-  | WHILE 	                        {   $$ = $1 }
-  | DO_WHILE 	                      {   $$ = $1 }
-  | FOR 	                          {   $$ = $1 }
-  | FOR1_OF 	                      {   $$ = $1 }
-  | FOR_IN 	                        {   $$ = $1 }
-  | INCREMENTO_DECREMENTO           {   $$ = $1 }
-  | PRINTLN                         {   $$ = $1 }
-  | PRINT                           {   $$ = $1 } //listo
-  | LLAMADA_FUNCION_EXP punto_coma  {   $$ = $1 }
-  | MODIFICAR_ARREGLO               {   $$ = $1 }
+  | DEC_ARRAY                       { addReporte('INSTRUCCION: DEC_ARRAY',' DEC_ARRAY: DEC_ARRAY.val');  $$ = $1 } 
+  | DECLARACION_VARIABLE            {  addReporte('INSTRUCCION: DECLARACION_VARIABLE',' DECLARACION_VARIABLE: DECLARACION_VARIABLE.val'); $$ = $1 }//falta cuando hay una lista de id's
+  | DECLARACION_FUNCION             { addReporte('INSTRUCCION: DECLARACION_FUNCION',' DECLARACION_FUNCION: DECLARACION_FUNCION.val');  $$ = $1 }//listo
+  | DECLARACION_TYPE                {  addReporte('INSTRUCCION: DECLARACION_TYPE',' DECLARACION_TYPE: DECLARACION_TYPE.val'); $$ = $1 } //aca se crea la 'plantilla' para despues crear instancias
+  | INSTANCIA_STRUCT                { addReporte('INSTRUCCION: INSTANCIA_STRUCT',' INSTANCIA_STRUCT: INSTANCIA_STRUCT.val');  $$ = $1 } 
+  | ASIGNACION 	                    {  addReporte('INSTRUCCION: ASIGNACION',' ASIGNACION: ASIGNACION.val'); $$ = $1 } 
+  | PUSH_ARREGLO 	                  { addReporte('INSTRUCCION: PUSH_ARREGLO',' PUSH_ARREGLO: PUSH_ARREGLO.val');  $$ = $1 }
+  | IMPRIMIR 	                      { addReporte('INSTRUCCION: IMPRIMIR',' IMPRIMIR: IMPRIMIR.val');  $$ = $1 }
+  | CONDICION_IF 	                  { addReporte('INSTRUCCION: CONDICION_IF',' CONDICION_IF: CONDICION_IF.val');  $$ = $1 }
+  | SWITCH 	                        { addReporte('INSTRUCCION: SWITCH',' SWITCH: SWITCH.val');  $$ = $1 }
+  | BREAK 	                        { addReporte('INSTRUCCION: BREAK',' BREAK: BREAK.val');  $$ = $1 }
+  | RETURN 	                        { addReporte('INSTRUCCION: RETURN',' RETURN: RETURN.val');  $$ = $1 }
+  | CONTINUE 	                      { addReporte('INSTRUCCION: CONTINUE',' ');  $$ = $1 }
+  | WHILE 	                        { addReporte('INSTRUCCION: WHILE',' WHILE: WHILE.val');  $$ = $1 }
+  | DO_WHILE 	                      { addReporte('INSTRUCCION: DO_WHILE',' DO_WHILE: DO_WHILE.val');  $$ = $1 }
+  | FOR 	                          { addReporte('INSTRUCCION: FOR',' FOR: FOR.val');  $$ = $1 }
+  | FOR1_OF 	                      { addReporte('INSTRUCCION: RETURN',' RETURN: RETURN.val');  $$ = $1 }
+  | FOR_IN 	                        { addReporte('INSTRUCCION: FOR_IN',' FOR_IN: FOR_IN.val');  $$ = $1 }
+  | INCREMENTO_DECREMENTO           { addReporte('INSTRUCCION: INCREMENTO_DECREMENTO',' INCREMENTO_DECREMENTO: INCREMENTO_DECREMENTO.val');  $$ = $1 }
+  | PRINTLN                         { addReporte('INSTRUCCION: PRINTLN',' PRINTLN: PRINTLN.val');  $$ = $1 }
+  | PRINT                           { addReporte('INSTRUCCION: PRINT',' PRINT: PRINT.val');  $$ = $1 } //listo
+  | LLAMADA_FUNCION_EXP punto_coma  { addReporte('INSTRUCCION: LLAMADA_FUNCION_EXP',' LLAMADA_FUNCION_EXP: LLAMADA_FUNCION_EXP.val');  $$ = $1 }
+  | MODIFICAR_ARREGLO               { addReporte('INSTRUCCION: MODIFICAR_ARREGLO',' MODIFICAR_ARREGLO: MODIFICAR_ARREGLO.val');  $$ = $1 }
   //| ACCESO_TYPE                     { $$ = $1 }
   | error  {$$=new Excepcion('Sintactico',`Error sintactico en ${$1}`,@1.first_line,@1.first_column); }
 ;
@@ -357,27 +357,27 @@ PT_COMA:
 //--------------------LLAMADA DE UNA FUNCION--------------------
 
 LLAMAR_FUNCION 
-  : id par_abierto par_cerrado PT_COMA                   { addReporte('LLAMAR_FUNCION: id par_abierto par_cerrado );','');  $$ = new Llamada($1,@1.first_line,@1.first_column); }
-  | id par_abierto LISTA_EXPRESIONES par_cerrado PT_COMA { addReporte('LLAMAR_FUNCION: id par_abierto LISTA_EXPRESIONES par_cerrado','');  $$ = new Llamada($1,@1.first_line,@1.first_column,$3); }
+  : id par_abierto par_cerrado PT_COMA                   { addReporte('LLAMAR_FUNCION: id par_abierto par_cerrado );',' ');  $$ = new Llamada($1,@1.first_line,@1.first_column); }
+  | id par_abierto LISTA_EXPRESIONES par_cerrado PT_COMA { addReporte('LLAMAR_FUNCION: id par_abierto LISTA_EXPRESIONES par_cerrado',' ');  $$ = new Llamada($1,@1.first_line,@1.first_column,$3); }
 ;
 
 
 WHILE 
   : while par_abierto EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada 
-  { addReporte('WHILE: while par_abierto EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada',''); $$= new While($3,$6,@1.first_line,@1.first_column);  }
+  { addReporte('WHILE: while par_abierto EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada',' '); $$= new While($3,$6,@1.first_line,@1.first_column);  }
 ;
 
 
 //---------------------------------DO WHILE----------------------
 DO_WHILE 
   : do llave_abierta INSTRUCCIONES llave_cerrada while par_abierto EXP par_cerrado PT_COMA 
-  { addReporte('DO_WHILE: do llave_abierta INSTRUCCIONES llave_cerrada while par_abierto EXP par_cerrado PT_COMA',''); $$= new DoWhile($7,$3,@1.first_line,@1.first_column);   }
+  { addReporte('DO_WHILE: do llave_abierta INSTRUCCIONES llave_cerrada while par_abierto EXP par_cerrado PT_COMA',' '); $$= new DoWhile($7,$3,@1.first_line,@1.first_column);   }
 ;
 
 
 FOR : 
   for par_abierto DECLARACION_VARIABLE_FOR  punto_coma EXP punto_coma INCREMENTO_FOR par_cerrado llave_abierta INSTRUCCIONES llave_cerrada 
-  {  addReporte('FOR : for par_abierto DECLARACION_VARIABLE_FOR  punto_coma EXP punto_coma INCREMENTO_FOR par_cerrado llave_abierta INSTRUCCIONES llave_cerrada',''); $$= new For($3,$5,$7,$10,@1.firt_line,@1.firt_column); }
+  {  addReporte('FOR : for par_abierto DECLARACION_VARIABLE_FOR  punto_coma EXP punto_coma INCREMENTO_FOR par_cerrado { INSTRUCCIONES }',' '); $$= new For($3,$5,$7,$10,@1.firt_line,@1.firt_column); }
   //| for par_abierto ASIGNACION EXP punto_coma INCREMENTO_FOR par_cerrado llave_abierta INSTRUCCIONES llave_cerrada    {   }
 ;
 
@@ -408,60 +408,60 @@ ASIGNACION
 
 INCREMENTO_FOR 
   : //id TIPO_IGUAL EXP {    }
-   id mas_mas      { $$= new IncrementoVariable($1,@1.firt_line,@1.firt_column); }
-  | id menos_menos  { $$= new DecrementoVariable($1,@1.firt_line,@1.firt_column); }
+   id mas_mas      {  addReporte('INCREMENTO_FOR: id mas_mas  ','id.val := id.val+1'); $$= new IncrementoVariable($1,@1.firt_line,@1.firt_column); }
+  | id menos_menos  { addReporte('INCREMENTO_FOR: id menos_menos  ','id.val := id.val-1'); $$= new DecrementoVariable($1,@1.firt_line,@1.firt_column); }
 ;
 
 SWITCH 
   : switch par_abierto EXP par_cerrado llave_abierta LISTA_CASE llave_cerrada 
-  { $$=new Switch($3,$6,null,@1.firt_line,@1.firt_column);  }
+  { addReporte('SWITCH: switch par_abierto EXP par_cerrado { LISTA_CASE }','EXP:=EXP.val LISTA_CASE:= LISTA_CASE.val');  $$=new Switch($3,$6,null,@1.firt_line,@1.firt_column);  }
 
   | switch par_abierto EXP par_cerrado llave_abierta LISTA_CASE DEFAULT llave_cerrada 
-  { $$=new Switch($3,$6,$7,@1.firt_line,@1.firt_column);  }
+  {  addReporte('SWITCH: switch par_abierto EXP par_cerrado { LISTA_CASE DEFAULT }','EXP:=EXP.val'); $$=new Switch($3,$6,$7,@1.firt_line,@1.firt_column);  }
 
   | switch par_abierto EXP par_cerrado llave_abierta DEFAULT llave_cerrada   
-  { $$=new Switch($3,null,$6,@1.firt_line,@1.firt_column);  }
+  { addReporte('SWITCH: switch par_abierto EXP par_cerrado { DEFAULT } ','EXP:=EXP.val'); $$=new Switch($3,null,$6,@1.firt_line,@1.firt_column);  }
 ;
 
 LISTA_CASE 
-  : LISTA_CASE CASE     {  $1.push($2); $$ = $1; }
-  | CASE                { $$ = [$1]              }
+  : LISTA_CASE CASE     { addReporte('LISTA_CASE: LISTA_CASE CASE',' '); $1.push($2); $$ = $1; }
+  | CASE                { addReporte('LISTA_CASE: CASE','LISTA_CASE:= CASE.val'); $$ = [$1]              }
 ;
 
 CASE 
-  : case EXP dos_puntos INSTRUCCIONES { $$ = new Case($2, $4,@1.firt_line,@1.firt_column); }
+  : case EXP dos_puntos INSTRUCCIONES { addReporte('CASE: case EXP dos_puntos INSTRUCCIONES','EXP:= EXP.val'); $$ = new Case($2, $4,@1.firt_line,@1.firt_column); }
 ;
 
 DEFAULT 
-  : default dos_puntos INSTRUCCIONES { $$ = new Default($3,@1.firt_line,@1.firt_column);  }
+  : default dos_puntos INSTRUCCIONES { addReporte('DEFAULT: default dos_puntos INSTRUCCIONES','INSTRUCCIONES:= INSTRUCCIONES.val'); $$ = new Default($3,@1.firt_line,@1.firt_column);  }
 ;
 
 CONTINUE 
-  : continue PT_COMA { $$= new Continue(@1.firt_line,@1.firt_column); }
+  : continue PT_COMA { addReporte('CONTINUE: continue PT_COMA',' ' ); $$= new Continue(@1.firt_line,@1.firt_column); }
 ;
 
 BREAK 
-  : break PT_COMA     { $$= new Break(@1.firt_line,@1.firt_column);  }
+  : break PT_COMA     { addReporte('BREAK: break PT_COMA',' ' ); $$= new Break(@1.firt_line,@1.firt_column);  }
 ;
 
 RETURN 
-  : return EXP PT_COMA {  $$ = new Return(true,@1.first_line,@1.first_column,$2); }
-  | return punto_coma  {  $$ = new Return(false,@1.first_line,@1.first_column); }
+  : return EXP PT_COMA { addReporte('RETURN: return EXP PT_COMA','RETURN:= EXP.val',' ' );  $$ = new Return(true,@1.first_line,@1.first_column,$2); }
+  | return punto_coma  { addReporte('RETURN: return punto_coma','RETURN:= return',' ' ); $$ = new Return(false,@1.first_line,@1.first_column); }
 ;
 
 CONDICION_IF:
     if par_abierto EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada 
-    { $$=new If($3,$6,null,null,@1.firt_line,@1.firt_column); }
+    { addReporte('CONDICION_IF: if par_abierto EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada','EXP:=EXP.val'); $$=new If($3,$6,null,null,@1.firt_line,@1.firt_column); }
     //if con una instruccion
     
     | if par_abierto EXP par_cerrado  INSTRUCCION 
-    { $$=new If($3,$5,null,null,@1.firt_line,@1.firt_column); }
+    { addReporte('CONDICION_IF: if par_abierto EXP par_cerrado  INSTRUCCION ','EXP:=EXP.val'); $$=new If($3,$5,null,null,@1.firt_line,@1.firt_column); }
     
     | if par_abierto EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada else llave_abierta INSTRUCCIONES llave_cerrada 
-    {  $$=new If($3,$6,$10,null,@1.firt_line,@1.firt_column); }
+    { addReporte('CONDICION_IF: if par_abierto EXP par_cerrado { INSTRUCCIONES } else { INSTRUCCIONES } ','EXP:=EXP.val'); $$=new If($3,$6,$10,null,@1.firt_line,@1.firt_column); }
     
     | if par_abierto EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada else CONDICION_IF
-    {  $$=new If($3,$6,null,[$9],@1.firt_line,@1.firt_column); }
+    { addReporte('CONDICION_IF: if ( EXP ) { INSTRUCCIONES } else CONDICION_IF ','EXP:=EXP.val'); $$=new If($3,$6,null,[$9],@1.firt_line,@1.firt_column); }
 ;
 
 
@@ -552,7 +552,7 @@ DEC_ID_TIPO_EXP
 
 //let id ;
 DEC_ID  
-  : id                                                {  $$ = $1  }
+  : id                                                { addReporte('DEC_ID: id','id:=id.val'); $$ = $1  }
 ;
 
 INCREMENTO_DECREMENTO
@@ -562,53 +562,53 @@ INCREMENTO_DECREMENTO
 
 EXP
   //Operaciones Aritmeticas
-  : menos EXP %prec UMENOS          { addReporte('EXP: - EXP %prec UMENOS ','EXP.val='); $$ = new NegacionNum(6,$2,0,@1.firt_line,@1.firt_column);   }
-  | EXP mas EXP                     { $$ = new Suma(0,$1,$3,@1.firt_line,@1.firt_column);         }
-  | EXP mass EXP                    { $$ = new Suma(0,$1,$3,@1.firt_line,@1.firt_column);         }
-  | EXP menos EXP                   { $$ = new Resta(1,$1,$3,@1.firt_line,@1.firt_column);        } 
-  | EXP por EXP                     { $$ = new Multiplicar(2,$1,$3,@1.firt_line,@1.firt_column);  }
-  | EXP div EXP                     { $$ = new Division(3,$1,$3,@1.firt_line,@1.firt_column);     }
+  : menos EXP %prec UMENOS          { addReporte('EXP: - EXP %prec UMENOS ','EXP:=EXP.val'); $$ = new NegacionNum(6,$2,0,@1.firt_line,@1.firt_column);   }
+  | EXP mas EXP                     { addReporte('EXP:  EXP + EXP ','EXP:=EXP.val+EXP.val'); $$ = new Suma(0,$1,$3,@1.firt_line,@1.firt_column);         }
+  | EXP mass EXP                    { addReporte('EXP:  EXP & EXP ','EXP:=EXP.val&EXP.val'); $$ = new Suma(0,$1,$3,@1.firt_line,@1.firt_column);         }
+  | EXP menos EXP                   { addReporte('EXP:  EXP - EXP','EXP:=EXP.val-EXP.val'); $$ = new Resta(1,$1,$3,@1.firt_line,@1.firt_column);        } 
+  | EXP por EXP                     { addReporte('EXP:  EXP * EXP','EXP:=EXP.val*EXP.val'); $$ = new Multiplicar(2,$1,$3,@1.firt_line,@1.firt_column);  }
+  | EXP div EXP                     { addReporte('EXP:  EXP / EXP','EXP:=EXP.val/EXP.val'); $$ = new Division(3,$1,$3,@1.firt_line,@1.firt_column);     }
   //| EXP potencia EXP                { $$ = new Potencia(4,$1,$3,@1.firt_line,@1.firt_column);     }
-  | EXP mod EXP                     { $$ = new Modulo(5,$1,$3,@1.firt_line,@1.firt_column);       }
-  | id mas_mas                      { $$=new IncrementoVariable($1,@1.firt_line,@1.firt_column);  }
-  | id menos_menos                  { $$=new DecrementoVariable($1,@1.firt_line,@1.firt_column);  }
-  | par_abierto EXP par_cerrado     {  $$ = $2  }
+  | EXP mod EXP                     { addReporte('EXP:  EXP % EXP','EXP:=EXP.val % EXP.val'); $$ = new Modulo(5,$1,$3,@1.firt_line,@1.firt_column);       }
+  | id mas_mas                      { addReporte('EXP:  EXP ++','EXP:=EXP.val+1'); $$=new IncrementoVariable($1,@1.firt_line,@1.firt_column);  }
+  | id menos_menos                  { addReporte('EXP:  EXP --','EXP:=EXP.val-1'); $$=new DecrementoVariable($1,@1.firt_line,@1.firt_column);  }
+  | par_abierto EXP par_cerrado     { addReporte('EXP:  ( EXP )','EXP:=EXP.val '); $$ = $2  }
   //nativas
-  | sin par_abierto EXP par_cerrado             {  $$ = new Seno($3,@1.firt_line,@1.firt_column);  }
-  | cos par_abierto EXP par_cerrado             {  $$ = new Coseno($3,@1.firt_line,@1.firt_column);  }
-  | tan par_abierto EXP par_cerrado             {  $$ = new Tangente($3,@1.firt_line,@1.firt_column);  }
-  | sqrt par_abierto EXP par_cerrado            {  $$ = new Sqrt($3,@1.firt_line,@1.firt_column);  }
-  | pow par_abierto EXP coma EXP par_cerrado    {  $$ = new Pow($3,$5,@1.firt_line,@1.firt_column);  }
-  | log10 par_abierto EXP par_cerrado           {  $$ = new Log($3,@1.firt_line,@1.firt_column);  }
+  | sin par_abierto EXP par_cerrado             { addReporte('EXP: sin par_abierto EXP par_cerrado','EXP:=sen( EXP.val )'); $$ = new Seno($3,@1.firt_line,@1.firt_column);  }
+  | cos par_abierto EXP par_cerrado             { addReporte('EXP: cos par_abierto EXP par_cerrado','EXP:=cos( EXP.val )'); $$ = new Coseno($3,@1.firt_line,@1.firt_column);  }
+  | tan par_abierto EXP par_cerrado             { addReporte('EXP: tan par_abierto EXP par_cerrado','EXP:=tan( EXP.val )'); $$ = new Tangente($3,@1.firt_line,@1.firt_column);  }
+  | sqrt par_abierto EXP par_cerrado            { addReporte('EXP: sqrt par_abierto EXP par_cerrado','EXP:=sqrt( EXP.val )'); $$ = new Sqrt($3,@1.firt_line,@1.firt_column);  }
+  | pow par_abierto EXP coma EXP par_cerrado    { addReporte('EXP: pow par_abierto EXP coma EXP par_cerrado','EXP:=pow( EXP.val^ EXP.val)'); $$ = new Pow($3,$5,@1.firt_line,@1.firt_column);  }
+  | log10 par_abierto EXP par_cerrado           { addReporte('EXP: log10 par_abierto EXP par_cerrado','EXP:=log10( EXP.val )'); $$ = new Log($3,@1.firt_line,@1.firt_column);  }
   //nativas string
   | id punto toLowercase par_abierto par_cerrado         
-  { $$= new NativasString(new Identificador($1,@1.firt_line,@1.firt_column),TIPO_NATIVA_CADENA.TOLOWER,null,null,@1.firt_line,@1.firt_column); }
+  { addReporte('EXP: id punto toLowercase par_abierto par_cerrado','EXP:= toLowercase(id.val)'); $$= new NativasString(new Identificador($1,@1.firt_line,@1.firt_column),TIPO_NATIVA_CADENA.TOLOWER,null,null,@1.firt_line,@1.firt_column); }
   | string punto toLowercase par_abierto par_cerrado         
-  { $$= new NativasString($1,TIPO_NATIVA_CADENA.TOLOWER,null,null,@1.firt_line,@1.firt_column); }
+  { addReporte('EXP: id punto toLowercase par_abierto par_cerrado','EXP:= toLowercase(id.val)'); $$= new NativasString($1,TIPO_NATIVA_CADENA.TOLOWER,null,null,@1.firt_line,@1.firt_column); }
 
   | id punto toUppercase par_abierto par_cerrado         
-  { $$= new NativasString(new Identificador($1,@1.firt_line,@1.firt_column),TIPO_NATIVA_CADENA.TOUPPER,null,null,@1.firt_line,@1.firt_column); }
+  { addReporte('EXP: id punto toUppercase par_abierto par_cerrado','EXP:= toUppercase(id.val)'); $$= new NativasString(new Identificador($1,@1.firt_line,@1.firt_column),TIPO_NATIVA_CADENA.TOUPPER,null,null,@1.firt_line,@1.firt_column); }
   | string punto toUppercase par_abierto par_cerrado         
-  { $$= new NativasString($1,TIPO_NATIVA_CADENA.TOUPPER,null,null,@1.firt_line,@1.firt_column); }
+  { addReporte('EXP: id punto toUppercase par_abierto par_cerrado','EXP:= toUppercase(id.val)'); $$= new NativasString($1,TIPO_NATIVA_CADENA.TOUPPER,null,null,@1.firt_line,@1.firt_column); }
 
   | id punto length par_abierto par_cerrado         
-  { $$= new NativasString(new Identificador($1,@1.firt_line,@1.firt_column),TIPO_NATIVA_CADENA.LENGHT,null,null,@1.firt_line,@1.firt_column); }
+  { addReporte('EXP: id punto length par_abierto par_cerrado','EXP:= id.val.length()'); $$= new NativasString(new Identificador($1,@1.firt_line,@1.firt_column),TIPO_NATIVA_CADENA.LENGHT,null,null,@1.firt_line,@1.firt_column); }
   | string punto length par_abierto par_cerrado         
-  { $$= new NativasString($1,TIPO_NATIVA_CADENA.LENGHT,null,null,@1.firt_line,@1.firt_column); }
+  { addReporte('EXP: id punto length par_abierto par_cerrado','EXP:= id.val.length()'); $$= new NativasString($1,TIPO_NATIVA_CADENA.LENGHT,null,null,@1.firt_line,@1.firt_column); }
 
   | id punto subString par_abierto EXP coma EXP par_cerrado         
-  { $$= new NativasString(new Identificador($1,@1.firt_line,@1.firt_column),TIPO_NATIVA_CADENA.SUBSTRING,$5,$7,@1.firt_line,@1.firt_column); }
+  { addReporte('EXP: id punto subString par_abierto EXP coma EXP par_cerrado','EXP:= id.val.subString(EXP1.val,EXP2.val)'); $$= new NativasString(new Identificador($1,@1.firt_line,@1.firt_column),TIPO_NATIVA_CADENA.SUBSTRING,$5,$7,@1.firt_line,@1.firt_column); }
   
   | string punto subString par_abierto EXP coma EXP par_cerrado         
-  { $$= new NativasString($1,TIPO_NATIVA_CADENA.SUBSTRING,$5,$7,@1.firt_line,@1.firt_column); }
+  { addReporte('EXP: id punto subString par_abierto EXP coma EXP par_cerrado','EXP:= id.val.subString(EXP1.val,EXP2.val)'); $$= new NativasString($1,TIPO_NATIVA_CADENA.SUBSTRING,$5,$7,@1.firt_line,@1.firt_column); }
 
   | id punto caracterOfPosition par_abierto EXP par_cerrado         
-  { $$= new NativasString(new Identificador($1,@1.firt_line,@1.firt_column),TIPO_NATIVA_CADENA.CARACTER_POSITION,$5,null,@1.firt_line,@1.firt_column); }
+  { addReporte('EXP: id punto caracterOfPosition par_abierto EXP par_cerrado','EXP:= id.val)'); $$= new NativasString(new Identificador($1,@1.firt_line,@1.firt_column),TIPO_NATIVA_CADENA.CARACTER_POSITION,$5,null,@1.firt_line,@1.firt_column); }
   | string punto caracterOfPosition par_abierto EXP par_cerrado         
-  { $$= new NativasString($1,TIPO_NATIVA_CADENA.CARACTER_POSITION,$5,null,@1.firt_line,@1.firt_column); }
+  { addReporte('EXP: id punto caracterOfPosition par_abierto EXP par_cerrado','EXP:= id.val)'); $$= new NativasString($1,TIPO_NATIVA_CADENA.CARACTER_POSITION,$5,null,@1.firt_line,@1.firt_column); }
   
   | EXP repeticion EXP         
-  { $$= new RepeticionCadena($1,TIPO_NATIVA_CADENA.REPETICION,$3,null,@1.firt_line,@1.firt_column); }
+  { addReporte('EXP:  EXP ^ EXP','EXP:=EXP1.val ^ EXP2.val'); $$= new RepeticionCadena($1,TIPO_NATIVA_CADENA.REPETICION,$3,null,@1.firt_line,@1.firt_column); }
 
   //casteos CADENA
   | int punto parse par_abierto EXP par_cerrado
@@ -631,45 +631,45 @@ EXP
 
 
   //Operaciones de Comparacion
-  | EXP mayor EXP                   {   $$ = new Mayor($1,$3,@1.firt_line,@1.firt_column);       }
-  | EXP menor EXP                   {   $$ = new Menor($1,$3,@1.firt_line,@1.firt_column);       }
-  | EXP mayor_igual EXP             {   $$ = new MayorIgual($1,$3,@1.firt_line,@1.firt_column);  }
-  | EXP menor_igual EXP             {   $$ = new MenorIgual($1,$3,@1.firt_line,@1.firt_column);  }
-  | EXP igual_que EXP               {   $$ = new IgualIgual($1,$3,@1.firt_line,@1.firt_column);  }
-  | EXP dif_que EXP                 {   $$ = new Diff($1,$3,@1.firt_line,@1.firt_column);        }
+  | EXP mayor EXP                   { addReporte('EXP:  EXP > EXP','EXP:=EXP1.val > EXP2.val');  $$ = new Mayor($1,$3,@1.firt_line,@1.firt_column);       }
+  | EXP menor EXP                   { addReporte('EXP:  EXP < EXP','EXP:=EXP1.val < EXP2.val');   $$ = new Menor($1,$3,@1.firt_line,@1.firt_column);       }
+  | EXP mayor_igual EXP             { addReporte('EXP:  EXP >= EXP','EXP:=EXP1.val >= EXP2.val');  $$ = new MayorIgual($1,$3,@1.firt_line,@1.firt_column);  }
+  | EXP menor_igual EXP             { addReporte('EXP:  EXP <= EXP','EXP:=EXP1.val <= EXP2.val');   $$ = new MenorIgual($1,$3,@1.firt_line,@1.firt_column);  }
+  | EXP igual_que EXP               { addReporte('EXP:  EXP == EXP','EXP:=EXP1.val == EXP2.val');   $$ = new IgualIgual($1,$3,@1.firt_line,@1.firt_column);  }
+  | EXP dif_que EXP                 { addReporte('EXP:  EXP != EXP','EXP:=EXP1.val != EXP2.val');   $$ = new Diff($1,$3,@1.firt_line,@1.firt_column);        }
   
   //Operaciones Lógicas
-  | EXP and EXP                     {  $$ = new And($1,$3,@1.firt_line,@1.firt_column);   }
-  | EXP or EXP                      {  $$ = new Or($1,$3,@1.firt_line,@1.firt_column);  }
-  | not EXP                         {  $$ = new Not($2,@1.firt_line,@1.firt_column);  }
+  | EXP and EXP                     { addReporte('EXP:  EXP && EXP','EXP:=EXP1.val && EXP2.val'); $$ = new And($1,$3,@1.firt_line,@1.firt_column);   }
+  | EXP or EXP                      { addReporte('EXP:  EXP || EXP','EXP:=EXP1.val || EXP2.val'); $$ = new Or($1,$3,@1.firt_line,@1.firt_column);  }
+  | not EXP                         { addReporte('EXP:  ! EXP','EXP:= ! EXP1.val'); $$ = new Not($2,@1.firt_line,@1.firt_column);  }
   
   //Valores Primitivos
   
-  | entero                          { $$ = new Primitivo(0,$1,@1.firt_line,@1.firt_column); }
-  | decimal                         { $$ = new Primitivo(TIPO.DECIMAL,$1,@1.firt_line,@1.firt_column);}
-  | string                          { $$ = new Primitivo(TIPO.CADENA,$1,@1.firt_line,@1.firt_column);   }
-  | id                              { $$ = new Identificador($1,@1.firt_line,@1.firt_column);   }
-  | true                            { $$ = new Primitivo(TIPO.BOOLEAN,true,@1.firt_line,@1.firt_column);   }
-  | false                           { $$ = new Primitivo(TIPO.BOOLEAN,false,@1.firt_line,@1.firt_column);   }
-  | null                            { $$ = new Primitivo(TIPO.NULL,$1,@1.firt_line,@1.firt_column);  }
+  | entero                          { addReporte('EXP:  entero','EXP:=entero.val'); $$ = new Primitivo(0,$1,@1.firt_line,@1.firt_column); }
+  | decimal                         { addReporte('EXP:  decimal','EXP:=decimal.val'); $$ = new Primitivo(TIPO.DECIMAL,$1,@1.firt_line,@1.firt_column);}
+  | string                          { addReporte('EXP:  string','EXP:=string.val'); $$ = new Primitivo(TIPO.CADENA,$1,@1.firt_line,@1.firt_column);   }
+  | id                              { addReporte('EXP:  id','EXP:=id.val'); $$ = new Identificador($1,@1.firt_line,@1.firt_column);   }
+  | true                            { addReporte('EXP:  true','EXP:=true'); $$ = new Primitivo(TIPO.BOOLEAN,true,@1.firt_line,@1.firt_column);   }
+  | false                           { addReporte('EXP:  false','EXP:=false'); $$ = new Primitivo(TIPO.BOOLEAN,false,@1.firt_line,@1.firt_column);   }
+  | null                            { addReporte('EXP:  null','EXP:=null'); $$ = new Primitivo(TIPO.NULL,$1,@1.firt_line,@1.firt_column);  }
   
   //Arreglos
-  | ACCESO_ARREGLO                                      {   $$ = $1; }
-  | ARRAY_LENGTH                                        {   $$ = $1; }
-  | ARRAY_POP                                           {   $$ = $1; }
-  | corchete_abierto LISTA_EXPRESIONES corchete_cerrado {   $$ = $2; }
-  | ARRAY_METHOD                                        {   $$ = $1; }
+  | ACCESO_ARREGLO                                      { addReporte('EXP:  ACCESO_ARREGLO','EXP:=ACCESO_ARREGLO');  $$ = $1; }
+  | ARRAY_LENGTH                                        { addReporte('EXP:  ARRAY_LENGTH','EXP:=ARRAY_LENGTH');  $$ = $1; }
+  | ARRAY_POP                                           { addReporte('EXP:  ACCESO_ARREGLO','EXP:=ACCESO_ARREGLO');  $$ = $1; }
+  | corchete_abierto LISTA_EXPRESIONES corchete_cerrado { addReporte('EXP:  { LISTA_EXPRESIONES }','EXP:=LISTA_EXPRESIONES');  $$ = $2; }
+  | ARRAY_METHOD                                        {  addReporte('EXP:  ARRAY_METHOD','EXP:=ARRAY_METHOD'); $$ = $1; }
   | corchete_abierto corchete_cerrado                    {    }
   
   //Types - accesos
-  | ACCESO_TYPE                                          { $$ = $1;   }
-  | ACCESO_TYPE igual EXP punto_coma                    {  $$ = new Asignacion_Struct_Exp($1,$3,@1.first_line,@1.first_column);}  
+  | ACCESO_TYPE                                          { addReporte('EXP:  ACCESO_TYPE','EXP:=ACCESO_TYPE'); $$ = $1;   }
+  | ACCESO_TYPE igual EXP punto_coma                    { addReporte('EXP:  ACCESO_TYPE igual EXP punto_coma','EXP:=EXP.val'); $$ = new Asignacion_Struct_Exp($1,$3,@1.first_line,@1.first_column);}  
   //| id id                                               { $$ = new Struct_Param($1,$2,@1.first_line,@1.first_column);}
   //Ternario
-  | TERNARIO                                             {  $$ = $1;  }
+  | TERNARIO                                             { addReporte('EXP:  TERNARIO','EXP:=TERNARIO.val'); $$ = $1;  }
   
   //Funciones
-  | LLAMADA_FUNCION_EXP                                  {  $$ = $1  }
+  | LLAMADA_FUNCION_EXP                                  { addReporte('EXP: LLAMADA_FUNCION_EXP','EXP:= LLAMADA_FUNCION_EXP'); $$ = $1  }
   
 ;
 
@@ -681,20 +681,20 @@ EXP
 // ;
 
  ARRAY_POP 
-     : id punto pop par_abierto par_cerrado                        { $$ = new Pop($1,@1.first_line,@1.first_column);   }
-     | id punto push par_abierto EXP par_cerrado                   { $$ = new Push($1,$5,@1.first_line,@1.first_column);   }
-     | id EXPS_CORCHETE punto pop par_abierto par_cerrado          { $$ = new Pop_List($1,$2,@1.first_line,@1.first_column);  }
-     | id EXPS_CORCHETE punto push par_abierto EXP par_cerrado     { $$ = new Push_List($1,$2,$6,@1.first_line,@1.first_column);   }     
+     : id punto pop par_abierto par_cerrado                        { addReporte('ARRAY_POP: id punto pop par_abierto par_cerrado',''); $$ = new Pop($1,@1.first_line,@1.first_column);   }
+     | id punto push par_abierto EXP par_cerrado                   { addReporte('ARRAY_POP: id punto push par_abierto EXP par_cerrado',''); $$ = new Push($1,$5,@1.first_line,@1.first_column);   }
+     | id EXPS_CORCHETE punto pop par_abierto par_cerrado          { addReporte('ARRAY_POP: id EXPS_CORCHETE punto pop par_abierto par_cerrado',''); $$ = new Pop_List($1,$2,@1.first_line,@1.first_column);  }
+     | id EXPS_CORCHETE punto push par_abierto EXP par_cerrado     { addReporte('ARRAY_POP: id EXPS_CORCHETE punto push par_abierto EXP par_cerrado',''); $$ = new Push_List($1,$2,$6,@1.first_line,@1.first_column);   }     
 //   | id LISTA_ACCESOS_ARREGLO punto pop par_abierto par_cerrado  {    }
 //   | id LISTA_ACCESOS_TYPE punto pop par_abierto par_cerrado     {    }
  ;
 
 TERNARIO 
-  : EXP interrogacion EXP dos_puntos EXP          {  $$ = new Ternario($1,$3,$5,@1.firt_line,@1.firt_column);  }
+  : EXP interrogacion EXP dos_puntos EXP          { addReporte('TERNARIO: EXP interrogacion EXP dos_puntos EXP',''); $$ = new Ternario($1,$3,$5,@1.firt_line,@1.firt_column);  }
 ;
 
 ACCESO_TYPE                                                   //$1 => id struct //$2 objetos del struct
-  : id LISTA_ACCESOS_TYPE                         {   $$ = new Acceso_Struct($1,$2,@1.first_line,@1.first_column);   }
+  : id LISTA_ACCESOS_TYPE                         {   addReporte('ACCESO_TYPE: id LISTA_ACCESOS_TYPE',''); $$ = new Acceso_Struct($1,$2,@1.first_line,@1.first_column);   }
  // | id = id LISTA_ACCESOS_TYPE  punto_coma       // {   $$ = new ($1,$2,@1.first_line,@1.first_column);   }
   
 ;
@@ -702,8 +702,8 @@ ACCESO_TYPE                                                   //$1 => id struct 
 //----------------------------------------------PRUEBA--------------------------------------------------
 //------------------------------------------------------------------------------------------------------
 LISTA_ACCESOS_TYPE 
-  : LISTA_ACCESOS_TYPE punto id                                 {  $1.push($3);$$ = $1;  }
-  | punto id                                                    {  $$ = [$2];            }
+  : LISTA_ACCESOS_TYPE punto id                                 { addReporte('LISTA_ACCESOS_TYPE: LISTA_ACCESOS_TYPE punto id',''); $1.push($3);$$ = $1;  }
+  | punto id                                                    { addReporte('LISTA_ACCESOS_TYPE: punto id','');  $$ = [$2];            }
   //| LISTA_ACCESOS_TYPE punto id LISTA_ACCESOS_ARREGLO           {    }
   //| punto id LISTA_ACCESOS_ARREGLO                              {    }
 ;
@@ -714,16 +714,16 @@ LISTA_ACCESOS_ARREGLO
 ;
 
 LISTA_EXPRESIONES 
-  : LISTA_EXPRESIONES coma EXP {  $1.push($3); $$ = $1;  }
-  | EXP                        {  $$ = [$1];             }
+  : LISTA_EXPRESIONES coma EXP { addReporte('LISTA_EXPRESIONES: LISTA_EXPRESIONES coma EXP','LISTA_EXPRESIONES:=LISTA_EXPRESIONES.push(EXP) '); $1.push($3); $$ = $1;  }
+  | EXP                        { addReporte('LISTA_EXPRESIONES: EXP','LISTA_EXPRESIONES:=EXP.val '); $$ = [$1]; }
 ;
 
 
 TIPO_DEC_VARIABLE
-  : string                      {  $$ = TIPO.CADENA;  }
-  | int                        {  $$ = 0;            }
-  | double                     {  $$ = TIPO.DECIMAL; }
-  | boolean                    {  $$ = TIPO.BOOLEAN; }
+  : string                      { addReporte('TIPO_DEC_VARIABLE: string','TIPO_DEC_VARIABLE:= string.val'); $$ = TIPO.CADENA;  }
+  | int                        { addReporte('TIPO_DEC_VARIABLE: int','TIPO_DEC_VARIABLE:= int.val'); $$ = 0;            }
+  | double                     { addReporte('TIPO_DEC_VARIABLE: double','TIPO_DEC_VARIABLE:= double.val'); $$ = TIPO.DECIMAL; }
+  | boolean                    { addReporte('TIPO_DEC_VARIABLE: boolean','TIPO_DEC_VARIABLE:= boolean.val'); $$ = TIPO.BOOLEAN; }
 ;
 
 // TIPO_VARIABLE_NATIVA
@@ -735,12 +735,12 @@ TIPO_DEC_VARIABLE
 //   | id                         { $$ = TIPO.STRUCT;  }
 // ;
 LLAMADA_FUNCION_EXP:
-      id par_abierto par_cerrado                     { $$ = new Llamada($1,@1.first_line,@1.first_column); }
-    | id par_abierto PARAMETROS_LLAMADA par_cerrado  { $$ = new Llamada($1,@1.first_line,@1.first_column,$3); }    
+      id par_abierto par_cerrado                     { addReporte('LLAMADA_FUNCION_EXP: id par_abierto par_cerrado',''); $$ = new Llamada($1,@1.first_line,@1.first_column); }
+    | id par_abierto PARAMETROS_LLAMADA par_cerrado  { addReporte('LLAMADA_FUNCION_EXP: id par_abierto PARAMETROS_LLAMADA par_cerrado',''); $$ = new Llamada($1,@1.first_line,@1.first_column,$3); }    
 ;
 
 PARAMETROS_LLAMADA :
-    PARAMETROS_LLAMADA coma PARAMETRO_LLAMADA       { $1.push($3); $$ = $1; }
+    PARAMETROS_LLAMADA coma PARAMETRO_LLAMADA       {  addReporte(''); $1.push($3); $$ = $1; }
   | PARAMETRO_LLAMADA                               { $$ = [$1];           }
 ;
 
