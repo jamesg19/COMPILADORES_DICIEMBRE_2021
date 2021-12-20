@@ -41,7 +41,7 @@ export class Diff extends Instruccion{
       
       
       this.tipo = TIPO.BOOLEAN;
-      return this.obtenerVal(this.expIzq.tipo,exp1) !=this.obtenerVal(this.expDer.tipo,exp2);
+      return this.obtenerVal(this.expIzq.tipo,exp1) != this.obtenerVal(this.expDer.tipo,exp2);
       
   
     }

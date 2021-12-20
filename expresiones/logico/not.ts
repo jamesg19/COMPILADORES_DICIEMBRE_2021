@@ -37,8 +37,11 @@ export class Not extends Instruccion {
 
     if (expression1 instanceof Excepcion) return expression1;
 
-    if (this.expression.tipo === TIPO.BOOLEAN) return !expression1;
-    console.log("ERROR EN !  not");
+    if (this.expression.tipo === TIPO.BOOLEAN){
+      this.tipo=TIPO.BOOLEAN
+      return !expression1;
+    }
+    
     return new Excepcion(
       "Semantico",
       "Se requiere un tipo Boolean ",

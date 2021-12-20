@@ -78,7 +78,7 @@ export class Menor extends Instruccion {
       this.rigthExpression.tipo === TIPO.DECIMAL
     ) {
       this.tipo = TIPO.BOOLEAN;
-      return this.obtenerVal(this.leftExpression.tipo,exp1) <this.obtenerVal(this.rigthExpression.tipo,exp2);
+      return this.obtenerVal(this.leftExpression.tipo,exp1) < this.obtenerVal(this.rigthExpression.tipo,exp2);
     }
 
     //DECIMAL < ENTERO
@@ -87,7 +87,7 @@ export class Menor extends Instruccion {
       this.rigthExpression.tipo === TIPO.ENTERO
     ) {
       this.tipo = TIPO.BOOLEAN;
-      return this.obtenerVal(this.leftExpression.tipo,exp1) <this.obtenerVal(this.rigthExpression.tipo,exp2);
+      return this.obtenerVal(this.leftExpression.tipo,exp1) < this.obtenerVal(this.rigthExpression.tipo,exp2);
     }
     //DECIMAL < DECIMAL
     else if (
@@ -103,7 +103,7 @@ export class Menor extends Instruccion {
       this.rigthExpression.tipo === TIPO.BOOLEAN
     ) {
       this.tipo = TIPO.BOOLEAN;
-      return this.obtenerVal(this.leftExpression.tipo,exp1) <this.obtenerVal(this.rigthExpression.tipo,exp2);
+      return this.obtenerVal(this.leftExpression.tipo,exp1) < this.obtenerVal(this.rigthExpression.tipo,exp2);
     }
   }
   traducir(e: TablaSimbolos, arbol: Arbol): any {
