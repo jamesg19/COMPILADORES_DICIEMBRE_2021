@@ -539,7 +539,7 @@ DECLARACION_VARIABLE
 LIST_ID:
     LIST_ID coma id                            { $1.push($3); $$ = $1;}
   | id                                         { $$ = [$1]}
-  | LIST_ID coma INSTRUCCION    {   $1.push(new Excepcion('Sintactico',`NO SE PERMITE PALABRAS RESERVADAS ${$1}`,@1.first_line,@1.first_column)); $$ = $1;  }
+  | LIST_ID coma INSTRUCCION    {   $1.push(new Excepcion('Sintactico',`NO SE PERMITE PALABRAS RESERVADAS ${$3}`,@1.first_line,@1.first_column)); $$ = $1;  }
 ;
 
 DECLARACION_VARIABLE_FOR 
@@ -584,32 +584,7 @@ EXP
   | pow par_abierto EXP coma EXP par_cerrado    { addReporte('EXP: pow par_abierto EXP coma EXP par_cerrado','EXP:=pow( EXP.val^ EXP.val)'); $$ = new Pow($3,$5,@1.firt_line,@1.firt_column);  }
   | log10 par_abierto EXP par_cerrado           { addReporte('EXP: log10 par_abierto EXP par_cerrado','EXP:=log10( EXP.val )'); $$ = new Log($3,@1.firt_line,@1.firt_column);  }
   //nativas string
-  | id punto toLowercase par_abierto par_cerrado         
-  { addReporte('EXP: id punto toLowercase par_abierto par_cerrado','EXP:= toLowercase(id.val)'); $$= new NativasString(new Identificador($1,@1.firt_line,@1.firt_column),TIPO_NATIVA_CADENA.TOLOWER,null,null,@1.firt_line,@1.firt_column); }
-  | string punto toLowercase par_abierto par_cerrado         
-  { addReporte('EXP: id punto toLowercase par_abierto par_cerrado','EXP:= toLowercase(id.val)'); $$= new NativasString($1,TIPO_NATIVA_CADENA.TOLOWER,null,null,@1.firt_line,@1.firt_column); }
-
-  | id punto toUppercase par_abierto par_cerrado         
-  { addReporte('EXP: id punto toUppercase par_abierto par_cerrado','EXP:= toUppercase(id.val)'); $$= new NativasString(new Identificador($1,@1.firt_line,@1.firt_column),TIPO_NATIVA_CADENA.TOUPPER,null,null,@1.firt_line,@1.firt_column); }
-  | string punto toUppercase par_abierto par_cerrado         
-  { addReporte('EXP: id punto toUppercase par_abierto par_cerrado','EXP:= toUppercase(id.val)'); $$= new NativasString($1,TIPO_NATIVA_CADENA.TOUPPER,null,null,@1.firt_line,@1.firt_column); }
-
-  | id punto length par_abierto par_cerrado         
-  { addReporte('EXP: id punto length par_abierto par_cerrado','EXP:= id.val.length()'); $$= new NativasString(new Identificador($1,@1.firt_line,@1.firt_column),TIPO_NATIVA_CADENA.LENGHT,null,null,@1.firt_line,@1.firt_column); }
-  | string punto length par_abierto par_cerrado         
-  { addReporte('EXP: id punto length par_abierto par_cerrado','EXP:= id.val.length()'); $$= new NativasString($1,TIPO_NATIVA_CADENA.LENGHT,null,null,@1.firt_line,@1.firt_column); }
-
-  | id punto subString par_abierto EXP coma EXP par_cerrado         
-  { addReporte('EXP: id punto subString par_abierto EXP coma EXP par_cerrado','EXP:= id.val.subString(EXP1.val,EXP2.val)'); $$= new NativasString(new Identificador($1,@1.firt_line,@1.firt_column),TIPO_NATIVA_CADENA.SUBSTRING,$5,$7,@1.firt_line,@1.firt_column); }
-  
-  | string punto subString par_abierto EXP coma EXP par_cerrado         
-  { addReporte('EXP: id punto subString par_abierto EXP coma EXP par_cerrado','EXP:= id.val.subString(EXP1.val,EXP2.val)'); $$= new NativasString($1,TIPO_NATIVA_CADENA.SUBSTRING,$5,$7,@1.firt_line,@1.firt_column); }
-
-  | id punto caracterOfPosition par_abierto EXP par_cerrado         
-  { addReporte('EXP: id punto caracterOfPosition par_abierto EXP par_cerrado','EXP:= id.val)'); $$= new NativasString(new Identificador($1,@1.firt_line,@1.firt_column),TIPO_NATIVA_CADENA.CARACTER_POSITION,$5,null,@1.firt_line,@1.firt_column); }
-  | string punto caracterOfPosition par_abierto EXP par_cerrado         
-  { addReporte('EXP: id punto caracterOfPosition par_abierto EXP par_cerrado','EXP:= id.val)'); $$= new NativasString($1,TIPO_NATIVA_CADENA.CARACTER_POSITION,$5,null,@1.firt_line,@1.firt_column); }
-  
+  | NATIVA_STRING                 {$$=$1;}
   | EXP repeticion EXP         
   { addReporte('EXP:  EXP ^ EXP','EXP:=EXP1.val ^ EXP2.val'); $$= new RepeticionCadena($1,TIPO_NATIVA_CADENA.REPETICION,$3,null,@1.firt_line,@1.firt_column); }
 
@@ -674,6 +649,72 @@ EXP
   //Funciones
   | LLAMADA_FUNCION_EXP                                  { addReporte('EXP: LLAMADA_FUNCION_EXP','EXP:= LLAMADA_FUNCION_EXP'); $$ = $1  }
   
+;
+NATIVA_STRING:
+   id punto toLowercase par_abierto par_cerrado NATIVA_STRING2        
+  { addReporte('EXP: id punto toLowercase par_abierto par_cerrado','EXP:= toLowercase(id.val)'); $$= new NativasString(new Identificador($1,@1.firt_line,@1.firt_column),TIPO_NATIVA_CADENA.TOLOWER,null,null,@1.firt_line,@1.firt_column,$6); }
+  | string punto toLowercase par_abierto par_cerrado NATIVA_STRING2        
+  { addReporte('EXP: id punto toLowercase par_abierto par_cerrado','EXP:= toLowercase(id.val)'); $$= new NativasString($1,TIPO_NATIVA_CADENA.TOLOWER,null,null,@1.firt_line,@1.firt_column,$6); }
+
+  | id punto toUppercase par_abierto par_cerrado NATIVA_STRING2        
+  { addReporte('EXP: id punto toUppercase par_abierto par_cerrado','EXP:= toUppercase(id.val)'); $$= new NativasString(new Identificador($1,@1.firt_line,@1.firt_column),TIPO_NATIVA_CADENA.TOUPPER,null,null,@1.firt_line,@1.firt_column,$6); }
+  | string punto toUppercase par_abierto par_cerrado NATIVA_STRING2        
+  { addReporte('EXP: id punto toUppercase par_abierto par_cerrado','EXP:= toUppercase(id.val)'); $$= new NativasString($1,TIPO_NATIVA_CADENA.TOUPPER,null,null,@1.firt_line,@1.firt_column,$6); }
+
+  | id punto length par_abierto par_cerrado NATIVA_STRING2        
+  { addReporte('EXP: id punto length par_abierto par_cerrado','EXP:= id.val.length()'); $$= new NativasString(new Identificador($1,@1.firt_line,@1.firt_column),TIPO_NATIVA_CADENA.LENGHT,null,null,@1.firt_line,@1.firt_column,$6); }
+  | string punto length par_abierto par_cerrado NATIVA_STRING2        
+  { addReporte('EXP: id punto length par_abierto par_cerrado','EXP:= id.val.length()'); $$= new NativasString($1,TIPO_NATIVA_CADENA.LENGHT,null,null,@1.firt_line,@1.firt_column,$6); }
+
+  | id punto subString par_abierto EXP coma EXP par_cerrado NATIVA_STRING2        
+  { addReporte('EXP: id punto subString par_abierto EXP coma EXP par_cerrado','EXP:= id.val.subString(EXP1.val,EXP2.val)'); $$= new NativasString(new Identificador($1,@1.firt_line,@1.firt_column),TIPO_NATIVA_CADENA.SUBSTRING,$5,$7,@1.firt_line,@1.firt_column,$9); }
+  | string punto subString par_abierto EXP coma EXP par_cerrado NATIVA_STRING2        
+  { addReporte('EXP: id punto subString par_abierto EXP coma EXP par_cerrado','EXP:= id.val.subString(EXP1.val,EXP2.val)'); $$= new NativasString($1,TIPO_NATIVA_CADENA.SUBSTRING,$5,$7,@1.firt_line,@1.firt_column,$9); }
+
+  | id punto caracterOfPosition par_abierto EXP par_cerrado NATIVA_STRING2        
+  { addReporte('EXP: id punto caracterOfPosition par_abierto EXP par_cerrado','EXP:= id.val)'); $$= new NativasString(new Identificador($1,@1.firt_line,@1.firt_column),TIPO_NATIVA_CADENA.CARACTER_POSITION,$5,null,@1.firt_line,@1.firt_column,$7); }
+  | string punto caracterOfPosition par_abierto EXP par_cerrado NATIVA_STRING2        
+  { addReporte('EXP: id punto caracterOfPosition par_abierto EXP par_cerrado','EXP:= id.val)'); $$= new NativasString($1,TIPO_NATIVA_CADENA.CARACTER_POSITION,$5,null,@1.firt_line,@1.firt_column,$7); }
+
+  ///////////////////////////////////
+  | id punto toLowercase par_abierto par_cerrado         
+  { addReporte('EXP: id punto toLowercase par_abierto par_cerrado','EXP:= toLowercase(id.val)'); $$= new NativasString(new Identificador($1,@1.firt_line,@1.firt_column),TIPO_NATIVA_CADENA.TOLOWER,null,null,@1.firt_line,@1.firt_column); }
+  | string punto toLowercase par_abierto par_cerrado         
+  { addReporte('EXP: id punto toLowercase par_abierto par_cerrado','EXP:= toLowercase(id.val)'); $$= new NativasString($1,TIPO_NATIVA_CADENA.TOLOWER,null,null,@1.firt_line,@1.firt_column); }
+
+  | id punto toUppercase par_abierto par_cerrado         
+  { addReporte('EXP: id punto toUppercase par_abierto par_cerrado','EXP:= toUppercase(id.val)'); $$= new NativasString(new Identificador($1,@1.firt_line,@1.firt_column),TIPO_NATIVA_CADENA.TOUPPER,null,null,@1.firt_line,@1.firt_column); }
+  | string punto toUppercase par_abierto par_cerrado         
+  { addReporte('EXP: id punto toUppercase par_abierto par_cerrado','EXP:= toUppercase(id.val)'); $$= new NativasString($1,TIPO_NATIVA_CADENA.TOUPPER,null,null,@1.firt_line,@1.firt_column); }
+
+  | id punto length par_abierto par_cerrado         
+  { addReporte('EXP: id punto length par_abierto par_cerrado','EXP:= id.val.length()'); $$= new NativasString(new Identificador($1,@1.firt_line,@1.firt_column),TIPO_NATIVA_CADENA.LENGHT,null,null,@1.firt_line,@1.firt_column); }
+  | string punto length par_abierto par_cerrado         
+  { addReporte('EXP: id punto length par_abierto par_cerrado','EXP:= id.val.length()'); $$= new NativasString($1,TIPO_NATIVA_CADENA.LENGHT,null,null,@1.firt_line,@1.firt_column); }
+
+  | id punto subString par_abierto EXP coma EXP par_cerrado         
+  { addReporte('EXP: id punto subString par_abierto EXP coma EXP par_cerrado','EXP:= id.val.subString(EXP1.val,EXP2.val)'); $$= new NativasString(new Identificador($1,@1.firt_line,@1.firt_column),TIPO_NATIVA_CADENA.SUBSTRING,$5,$7,@1.firt_line,@1.firt_column); }
+  | string punto subString par_abierto EXP coma EXP par_cerrado         
+  { addReporte('EXP: id punto subString par_abierto EXP coma EXP par_cerrado','EXP:= id.val.subString(EXP1.val,EXP2.val)'); $$= new NativasString($1,TIPO_NATIVA_CADENA.SUBSTRING,$5,$7,@1.firt_line,@1.firt_column); }
+
+  | id punto caracterOfPosition par_abierto EXP par_cerrado         
+  { addReporte('EXP: id punto caracterOfPosition par_abierto EXP par_cerrado','EXP:= id.val)'); $$= new NativasString(new Identificador($1,@1.firt_line,@1.firt_column),TIPO_NATIVA_CADENA.CARACTER_POSITION,$5,null,@1.firt_line,@1.firt_column); }
+  | string punto caracterOfPosition par_abierto EXP par_cerrado         
+  { addReporte('EXP: id punto caracterOfPosition par_abierto EXP par_cerrado','EXP:= id.val)'); $$= new NativasString($1,TIPO_NATIVA_CADENA.CARACTER_POSITION,$5,null,@1.firt_line,@1.firt_column); }
+
+;
+NATIVA_STRING2:
+
+   NATIVA_STRING2 punto toLowercase par_abierto par_cerrado             { $1.push(new NativasString("",TIPO_NATIVA_CADENA.TOLOWER,null,null,@1.firt_line,@1.firt_column)); $$=$1; }
+  | NATIVA_STRING2 punto toUppercase par_abierto par_cerrado            { $1.push(new NativasString("",TIPO_NATIVA_CADENA.TOUPPER,null,null,@1.firt_line,@1.firt_column)); $$=$1; }
+  | NATIVA_STRING2 punto length par_abierto par_cerrado                 { $1.push(new NativasString("",TIPO_NATIVA_CADENA.LENGHT,null,null,@1.firt_line,@1.firt_column)); $$=$1; }
+  | NATIVA_STRING2 punto subString par_abierto EXP coma EXP par_cerrado { $1.push(new NativasString("",TIPO_NATIVA_CADENA.SUBSTRING,$5,$7,@1.firt_line,@1.firt_column)); $$=$1; }
+  | NATIVA_STRING2 punto caracterOfPosition par_abierto EXP par_cerrado { $1.push(new NativasString("",TIPO_NATIVA_CADENA.CARACTER_POSITION,$5,null,@1.firt_line,@1.firt_column)); $$=$1; }
+  | punto toLowercase par_abierto par_cerrado                           { $$=[new NativasString("",TIPO_NATIVA_CADENA.TOLOWER,null,null,@1.firt_line,@1.firt_column)]; } 
+  | punto toUppercase par_abierto par_cerrado                           { $$=[new NativasString("",TIPO_NATIVA_CADENA.TOUPPER,null,null,@1.firt_line,@1.firt_column)]; }         
+  | punto length par_abierto par_cerrado                                { $$=[new NativasString("",TIPO_NATIVA_CADENA.LENGHT,null,null,@1.firt_line,@1.firt_column) ]; }
+  | punto subString par_abierto EXP coma EXP par_cerrado                { $$=[new NativasString("",TIPO_NATIVA_CADENA.SUBSTRING,$4,$6,@1.firt_line,@1.firt_column)]; }
+  | punto caracterOfPosition par_abierto EXP par_cerrado                { $$=[new NativasString("",TIPO_NATIVA_CADENA.CARACTER_POSITION,$4,null,@1.firt_line,@1.firt_column)]; }
 ;
 
 

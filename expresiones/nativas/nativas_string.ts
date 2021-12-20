@@ -20,6 +20,7 @@ export class NativasString extends Instruccion {
   fila: number;
   columna: number;
   tipo: TIPO;
+  lista_nativas:NativasString[];
   static UPPER: boolean = false;
   static LOWER: boolean = false;
   static LEN: boolean = false;
@@ -38,7 +39,8 @@ export class NativasString extends Instruccion {
     inicio: Instruccion,
     final: Instruccion,
     fila: number,
-    columna: number
+    columna: number,
+    lista_nativas?:NativasString[]
   ) {
     super(fila, columna);
     this.identificador = id;
@@ -48,65 +50,116 @@ export class NativasString extends Instruccion {
     this.fila = fila;
     this.columna = columna;
     this.tipo = TIPO.CADENA;
+    this.lista_nativas =lista_nativas;
   }
   interpretar(entorno: TablaSimbolos, arbol: Arbol): any {
     try {
+
       if (this.identificador instanceof Identificador) {
         //VERIFICA QUE LA VARIABLE O ID EXISTAN
         const variable = entorno.getSimbolo(this.identificador.id);
         if (variable == null) {
           return new Excepcion(
-            "Semantico",
-            "No existe la variable " + `${this.identificador}`,
-            `${this.fila}`,
-            `${this.columna}`
-          );
+            "Semantico","No existe la variable " + `${this.identificador}`,`${this.fila}`,`${this.columna}`);
         }
         //VERIFICA QUE SEA TIPO CADENA
 
         if (variable.tipo == TIPO.NULL) {
-          return new Excepcion(
-            "Semantico",
-            "Error de operacion en variable NULL",
-            `${this.fila}`,
-            `${this.columna}`
-          );
+          return new Excepcion("Semantico","Error de operacion en variable NULL",`${this.fila}`,`${this.columna}`);
         }
 
         //VERIFICACION DE OPERACIONES NATIVAS EN ARREGLOS
         if (variable.arreglo) {
           if (this.tipo_operacion == TIPO_NATIVA_CADENA.LENGHT) {
             //codigo para length
-            return variable.valor.length;
+            this.tipo=TIPO.ENTERO;
+            if(this.lista_nativas == null || this.lista_nativas == undefined ){
+              return cadena.length;
+            }else{
+              //variable
+              let dato=cadena.length;
+              //ciclo
+              this.lista_nativas.forEach((x)=>{
+                //new NativasString(id,tipo,inicio,fin,linea,columna);
+                const primitivo=new Primitivo(TIPO.CADENA,dato,this.fila,this.columna);
+                const temp=new NativasString(primitivo.interpretar(entorno,arbol),x.tipo_operacion,x.inicio,x.final,this.fila,this.columna,null)
+  
+                dato=temp.interpretar(entorno,arbol);
+              });
+              return dato;
+            }
           }
         }
 
         if (variable.tipo != TIPO.CADENA) {
-          return new Excepcion(
-            "Semantico",
-            "Error de operacion en variable diferente a Cadena",
-            `${this.fila}`,
-            `${this.columna}`
-          );
+          return new Excepcion("Semantico","Error de operacion en variable diferente a Cadena",`${this.fila}`,`${this.columna}`);
         }
 
         //DETERMINA SI ES LOWER_CASE
         if (this.tipo_operacion == TIPO_NATIVA_CADENA.TOLOWER) {
           var cadena = variable.getValor() + "";
-          return cadena.toLowerCase();
+          this.tipo=TIPO.CADENA;
+          if(this.lista_nativas == null || this.lista_nativas == undefined ){
+            return cadena.toLowerCase();
+          }else{
+            
+            //variable
+            let dato=cadena.toLowerCase();
+            //ciclo
+            this.lista_nativas.forEach((x)=>{
+              //new NativasString(id,tipo,inicio,fin,linea,columna);
+              const primitivo=new Primitivo(TIPO.CADENA,dato,this.fila,this.columna);
+              const temp=new NativasString(primitivo.interpretar(entorno,arbol),x.tipo_operacion,x.inicio,x.final,this.fila,this.columna)
+              
+              dato=temp.interpretar(entorno,arbol);
+            });
+            return dato;
+          }
         }
 
         //DETERMINA SI ES UPPER_CASE
         if (this.tipo_operacion == TIPO_NATIVA_CADENA.TOUPPER) {
           var cadena = variable.getValor() + "";
-          return cadena.toUpperCase();
+          this.tipo=TIPO.CADENA;
+          
+          if(this.lista_nativas == null || this.lista_nativas == undefined ){
+            return cadena.toUpperCase();
+          }else{
+            //variable
+            let dato=cadena.toUpperCase();
+            //ciclo
+            this.lista_nativas.forEach((x)=>{
+              //new NativasString(id,tipo,inicio,fin,linea,columna);
+              const primitivo=new Primitivo(TIPO.CADENA,dato,this.fila,this.columna);
+              const temp=new NativasString(primitivo.interpretar(entorno,arbol),x.tipo_operacion,x.inicio,x.final,this.fila,this.columna,null)
+
+              dato=temp.interpretar(entorno,arbol);
+            });
+            return dato;
+          }
+          
         }
         //DETERMINA SI ES LENGTH
         if (this.tipo_operacion == TIPO_NATIVA_CADENA.LENGHT) {
           if (this.tipo_operacion.tipo == TIPO.ARREGLO) {
           }
           var cadena = variable.getValor() + "";
-          return cadena.length;
+          this.tipo=TIPO.ENTERO;
+          if(this.lista_nativas == null || this.lista_nativas == undefined ){
+            return cadena.length;
+          }else{
+            //variable
+            let dato=cadena.length;
+            //ciclo
+            this.lista_nativas.forEach((x)=>{
+              //new NativasString(id,tipo,inicio,fin,linea,columna);
+              const primitivo=new Primitivo(TIPO.CADENA,dato,this.fila,this.columna);
+              const temp=new NativasString(primitivo.interpretar(entorno,arbol),x.tipo_operacion,x.inicio,x.final,this.fila,this.columna,null)
+
+              dato=temp.interpretar(entorno,arbol);
+            });
+            return dato;
+          }
         }
 
         //DETERMINA SI ES SUBSTRING
@@ -158,8 +211,22 @@ export class NativasString extends Instruccion {
               `${this.columna}`
             );
           }
+          this.tipo=TIPO.CADENA;
+          if(this.lista_nativas == null || this.lista_nativas == undefined ){
+            return cadena.substring(aa,b);
+          }else{
+            //variable
+            let dato=cadena.substring(aa,b);
+            //ciclo
+            this.lista_nativas.forEach((x)=>{
+              //new NativasString(id,tipo,inicio,fin,linea,columna);
+              const primitivo=new Primitivo(TIPO.CADENA,dato,this.fila,this.columna);
+              const temp=new NativasString(primitivo.interpretar(entorno,arbol),x.tipo_operacion,x.inicio,x.final,this.fila,this.columna,null)
 
-          return cadena.substring(aa, b);
+              dato=temp.interpretar(entorno,arbol);
+            });
+            return dato;
+          }
         }
 
         //DETERMINA SI ES CARACTER OF POSITION
@@ -199,10 +266,28 @@ export class NativasString extends Instruccion {
               `${this.columna}`
             );
           }
+          this.tipo=TIPO.CADENA;
+          if(this.lista_nativas == null || this.lista_nativas == undefined ){
+            return cadena.charAt(aa);
+          }else{
+            //variable
+            let dato=cadena.charAt(aa);
+            //ciclo
+            this.lista_nativas.forEach((x)=>{
+              //new NativasString(id,tipo,inicio,fin,linea,columna);
+              const primitivo=new Primitivo(TIPO.CADENA,dato,this.fila,this.columna);
+              const temp=new NativasString(primitivo.interpretar(entorno,arbol),x.tipo_operacion,x.inicio,x.final,this.fila,this.columna,null)
 
-          return cadena.charAt(this.inicio.interpretar(entorno, arbol));
+              dato=temp.interpretar(entorno,arbol);
+            });
+            return dato;
+          }
         }
-      } else {
+      } 
+      ///
+      ///
+      ///
+      else {
         //console.log("ENTRA AQUI"+this.identificador);
         //VERIFICA QUE LA VARIABLE O ID EXISTAN
         const variable = this.identificador;
@@ -210,13 +295,47 @@ export class NativasString extends Instruccion {
         //DETERMINA SI ES LOWER_CASE
         if (this.tipo_operacion == TIPO_NATIVA_CADENA.TOLOWER) {
           var cadena = variable + "";
-          return cadena.toLowerCase();
+          this.tipo=TIPO.CADENA;
+
+          if(this.lista_nativas == null || this.lista_nativas == undefined ){
+            return cadena.toLowerCase();
+          }else{
+            
+            //variable
+            var dato=cadena.toLowerCase();
+            //ciclo
+            this.lista_nativas.forEach((x)=>{
+              //new NativasString(id,tipo,inicio,fin,linea,columna);
+              const primitivo=new Primitivo(TIPO.CADENA,dato,this.fila,this.columna);
+              const temp=new NativasString(primitivo.interpretar(entorno,arbol),x.tipo_operacion,x.inicio,x.final,this.fila,this.columna)
+              
+              dato=temp.interpretar(entorno,arbol);
+            });
+            return dato;
+          }
         }
 
         //DETERMINA SI ES UPPER_CASE
         if (this.tipo_operacion == TIPO_NATIVA_CADENA.TOUPPER) {
           var cadena = variable + "";
-          return cadena.toUpperCase();
+          this.tipo=TIPO.CADENA;
+
+          if(this.lista_nativas == null || this.lista_nativas == undefined ){
+            return cadena.toUpperCase();
+          }else{
+            
+            //variable
+            let dato=cadena.toUpperCase();
+            //ciclo
+            this.lista_nativas.forEach((x)=>{
+              //new NativasString(id,tipo,inicio,fin,linea,columna);
+              const primitivo=new Primitivo(TIPO.CADENA,dato,this.fila,this.columna);
+              const temp=new NativasString(primitivo.interpretar(entorno,arbol),x.tipo_operacion,x.inicio,x.final,this.fila,this.columna)
+              
+              dato=temp.interpretar(entorno,arbol);
+            });
+            return dato;
+          }
         }
         //DETERMINA SI ES LENGTH
         if (this.tipo_operacion == TIPO_NATIVA_CADENA.LENGHT) {
@@ -224,6 +343,8 @@ export class NativasString extends Instruccion {
           }
           //console.log(this.tipo_operacion.tipo);
           var cadena = variable + "";
+          this.tipo=TIPO.ENTERO;
+
           return cadena.length;
         }
 
@@ -276,8 +397,23 @@ export class NativasString extends Instruccion {
               `${this.columna}`
             );
           }
+          this.tipo=TIPO.CADENA;
 
-          return cadena.substring(aa, b);
+          if(this.lista_nativas == null || this.lista_nativas == undefined ){
+            return cadena.substring(aa,b);
+          }else{
+            //variable
+            let dato=cadena.substring(aa,b);
+            //ciclo
+            this.lista_nativas.forEach((x)=>{
+              //new NativasString(id,tipo,inicio,fin,linea,columna);
+              const primitivo=new Primitivo(TIPO.CADENA,dato,this.fila,this.columna);
+              const temp=new NativasString(primitivo.interpretar(entorno,arbol),x.tipo_operacion,x.inicio,x.final,this.fila,this.columna,null)
+
+              dato=temp.interpretar(entorno,arbol);
+            });
+            return dato;
+          }
         }
 
         //DETERMINA SI ES CARACTER OF POSITION
@@ -317,8 +453,23 @@ export class NativasString extends Instruccion {
               `${this.columna}`
             );
           }
+          this.tipo=TIPO.CADENA;
 
-          return cadena.charAt(this.inicio.interpretar(entorno, arbol));
+          if(this.lista_nativas == null || this.lista_nativas == undefined ){
+            return cadena.charAt(aa);
+          }else{
+            //variable
+            let dato=cadena.charAt(aa);
+            //ciclo
+            this.lista_nativas.forEach((x)=>{
+              //new NativasString(id,tipo,inicio,fin,linea,columna);
+              const primitivo=new Primitivo(TIPO.CADENA,dato,this.fila,this.columna);
+              const temp=new NativasString(primitivo.interpretar(entorno,arbol),x.tipo_operacion,x.inicio,x.final,this.fila,this.columna,null)
+
+              dato=temp.interpretar(entorno,arbol);
+            });
+            return dato;
+          }
         }
       }
 

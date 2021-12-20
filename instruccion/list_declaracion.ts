@@ -50,7 +50,7 @@ export class List_Declaracion extends Instruccion {
       entorno.addSimbolo(simbolo);
     }else{
       console.log(x);
-      console.log("ENTRA EN ELSE");
+      //console.log("ENTRA EN ELSE");
       bandera=true;
     }
     });
