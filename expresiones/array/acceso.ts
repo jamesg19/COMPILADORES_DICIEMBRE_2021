@@ -70,11 +70,7 @@ export class Acceso extends Instruccion {
           super.fila + "",
           super.columna + ""
         );
-
-
-
       contador--;
-
       if (contador == 0) {
         if (temp instanceof Array) {
           if (index < 0 || index > temp.length)
