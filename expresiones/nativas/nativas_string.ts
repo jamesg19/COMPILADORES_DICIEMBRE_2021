@@ -74,7 +74,7 @@ export class NativasString extends Instruccion {
             //codigo para length
             this.tipo=TIPO.ENTERO;
             if(this.lista_nativas == null || this.lista_nativas == undefined ){
-              return cadena.length;
+              return variable.valor.length;
             }else{
               //variable
               let dato=cadena.length;
@@ -581,6 +581,7 @@ export class NativasString extends Instruccion {
           if (this.tipo_operacion == TIPO_NATIVA_CADENA.LENGHT) {
             //codigo para length
             //return variable.valor.length;
+          
           }
         }
 

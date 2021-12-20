@@ -451,12 +451,13 @@ RETURN
 ;
 
 CONDICION_IF:
-    if par_abierto EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada 
+
+     if par_abierto EXP par_cerrado  INSTRUCCION 
+    { addReporte('CONDICION_IF: if par_abierto EXP par_cerrado  INSTRUCCION ','EXP:=EXP.val'); $$=new If($3,[$5],null,null,@1.firt_line,@1.firt_column); }
+    
+    | if par_abierto EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada 
     { addReporte('CONDICION_IF: if par_abierto EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada','EXP:=EXP.val'); $$=new If($3,$6,null,null,@1.firt_line,@1.firt_column); }
     //if con una instruccion
-    
-    | if par_abierto EXP par_cerrado  INSTRUCCION 
-    { addReporte('CONDICION_IF: if par_abierto EXP par_cerrado  INSTRUCCION ','EXP:=EXP.val'); $$=new If($3,$5,null,null,@1.firt_line,@1.firt_column); }
     
     | if par_abierto EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada else llave_abierta INSTRUCCIONES llave_cerrada 
     { addReporte('CONDICION_IF: if par_abierto EXP par_cerrado { INSTRUCCIONES } else { INSTRUCCIONES } ','EXP:=EXP.val'); $$=new If($3,$6,$10,null,@1.firt_line,@1.firt_column); }
@@ -475,16 +476,14 @@ PUSH_ARREGLO
 //------------------------------------- DECLARACION DE FUNCION ---------------------------------
 DECLARACION_FUNCION 
   //   1               2         3     4           5           6            7
-  :  TIPO_DEC_VARIABLE id par_abierto par_cerrado llave_abierta INSTRUCCIONES llave_cerrada 
-  { $$ = new Funcion($2,$6,$1,@1.first_line,@1.first_column);   }
+  :  TIPO_DEC_VARIABLE id par_abierto par_cerrado llave_abierta INSTRUCCIONES llave_cerrada { $$ = new Funcion($2,$6,$1,@1.first_line,@1.first_column);   }
   | void id par_abierto par_cerrado llave_abierta INSTRUCCIONES llave_cerrada               { $$ = new Funcion($2,$6,TIPO.VOID,@1.first_line,@1.first_column);   }
   | id id par_abierto par_cerrado llave_abierta INSTRUCCIONES llave_cerrada                 { $$ = new Funcion($2,$6,TIPO.STRUCT,@1.first_line,@1.first_column);   }
   //Funcion con parametros y con tipo -> function TIPO test ( LISTA_PARAMETROS )  { INSTRUCCIONES }
   //1                  2       3     4         5                   6           
-  |  TIPO_DEC_VARIABLE id par_abierto LISTA_PARAMETROS par_cerrado  llave_abierta INSTRUCCIONES llave_cerrada
-   {  $$ = new Funcion($2,$7,$1,@1.first_line,@1.first_column,$4);    }
-  | void id par_abierto LISTA_PARAMETROS par_cerrado  llave_abierta INSTRUCCIONES llave_cerrada {  $$ = new Funcion($2,$7,TIPO.VOID,@1.first_line,@1.first_column,$4);    }
-  | id id par_abierto LISTA_PARAMETROS par_cerrado  llave_abierta INSTRUCCIONES llave_cerrada{  $$ = new Funcion($2,$7,TIPO.STRUCT,@1.first_line,@1.first_column,$4);    }
+  | TIPO_DEC_VARIABLE id par_abierto LISTA_PARAMETROS par_cerrado  llave_abierta INSTRUCCIONES llave_cerrada {  $$ = new Funcion($2,$7,$1,@1.first_line,@1.first_column,$4);             }
+  | void id par_abierto LISTA_PARAMETROS par_cerrado  llave_abierta INSTRUCCIONES llave_cerrada              {  $$ = new Funcion($2,$7,TIPO.VOID,@1.first_line,@1.first_column,$4);      }
+  | id id par_abierto LISTA_PARAMETROS par_cerrado  llave_abierta INSTRUCCIONES llave_cerrada                {  $$ = new Funcion($2,$7,TIPO.STRUCT,@1.first_line,@1.first_column,$4);    }
   //Funcion con parametros y con tipo -> function TIPO[][] test ( LISTA_PARAMETROS )  { INSTRUCCIONES }
   //| function TIPO_VARIABLE_NATIVA LISTA_CORCHETES id par_abierto LISTA_PARAMETROS par_cerrado llave_abierta INSTRUCCIONES llave_cerrada {    }
 
@@ -502,8 +501,8 @@ LISTA_PARAMETROS
 PARAMETRO 
   : TIPO_DEC_VARIABLE id                                { $$ = {'tipo':$1, 'id':$2, 'arreglo':false}   }
     | id id                                             { $$ = {'tipo':TIPO.STRUCT, 'id':$2, 'arreglo':false}   }  
-  //| TIPO_VARIABLE_NATIVA LISTA_CORCHETES id              {    }
-  //| id dos_puntos Array menor TIPO_VARIABLE_NATIVA mayor {    }
+    | TIPO_DEC_VARIABLE LISTA_CORCHETES id              { $$ = {'tipo':TIPO.ARREGLO, 'id':$3, 'arreglo':true}   }
+  
 ;
 
 

@@ -20,31 +20,16 @@ import { Reporte } from "./analizador/reporte";
 const Parser = require("./analizador/analizador");
 import { Nativas } from "./nativas";
 import { List_Declaracion } from "./instruccion/list_declaracion";
+import { Principal } from "./principal";
 
-export class Principal {
-  static contador: number = 0;
-  static temp: number = 0; //control de temporales
-  static etiqueta = 0; //contro de etiquetas
-  static posicion: number = 0; //guarda la poscion en el stack
-  static heap: number = 0; //posicion en el heap    ???
-  static historial: string = "";
+export class Traducir {
+  
+  static funciones:string="";
 
-  ejecutar(code: string) {
+  traducir(code: string) {
     const instrucciones = Parser.parse(code);
 
-    // const reporteE=instrucciones[1];
     
-    
-    // reporteE.reporteGramatical.reverse().forEach((x)=>{
-    //   console.log(x);
-    // })
-
-    // reporteE.forEach((x)=>{
-
-    // });
-
-    //console.log(reporteE);
-    //tabla
     let ts_global: TablaSimbolos = new TablaSimbolos(undefined);
 
     //ast
@@ -55,6 +40,7 @@ export class Principal {
     ast.instrucciones.forEach((element: Instruccion) => {
       if (element instanceof Funcion) {
         ast.funciones.push(element);
+        element.traducir(ts_global,ast);
       }
       if (element instanceof Struct) {
         if (ast.structs.has(element.id))
@@ -144,39 +130,8 @@ export class Principal {
       //console.log("Sentencias fuera de Main")
     });
 
-    // console.log("PROBANDO DOT.......*/*/*/*/");
-    // //generacion de AST
-    // const init=new NodoAST("RAIZ");
-    // const instr=new NodoAST("INSTRUCCIONES");
-    // ast.getInstrucciones().forEach((instruccion:Instruccion) => {
-    //   instr.agregarHijoNodo(instruccion.getNodo());
 
-    //});
 
-    // init.agregarHijoNodo(instr);
-    // //devuelve el codigo GRAPHIZ DEL AST
-    // const grafo = ast.getDot(init);
-
-    // console.log(grafo);
-  }
-
-  // /**************************************************Traduccion****************************************************** */
-  traducir(code: string) {
-    const instrucciones = Parser.parse(code);
-    //tabla
-    let ts_global: TablaSimbolos = new TablaSimbolos(undefined);
-
-    //ast
-    const ast: Arbol = new Arbol(ts_global, instrucciones[0]);
-    // console.log(instrucciones[0]);
-    // console.log(ast.instrucciones);
-    //ast.instrucciones[0].interpretar(ts_global, ast);
-     ast.instrucciones.forEach((element: Instruccion) => {
-       //console.log(element);
-       element.traducir(ts_global, ast);
-     });
-
-    
     let code_objeto = "";
     let nativa: Nativas = new Nativas();
     let print_nativa = Print.print ? nativa.print_function(ast) : "";
@@ -191,7 +146,6 @@ export class Principal {
       ast.list_temporales() +
       "\n" +
       string_upper +
-      "\n" +
       string_lower +
       "\n" +
       string_len +
@@ -202,7 +156,13 @@ export class Principal {
       "\n";
 
     console.log(code_objeto + "\n" + Principal.historial);
+
+   
   }
+
+  // /**************************************************Traduccion****************************************************** */
+ 
+  
   static addComentario(comentario: string) {
     Principal.historial += "/* " + comentario + " */\n";
   }
@@ -215,9 +175,9 @@ const fs = require("fs"),
 
 fs.readFile(NOMBRE_ARCHIVO, "utf8", (error, datos) => {
   if (error) throw error;
-  let principa: Principal = new Principal();
+  let traducir:Traducir = new Traducir();
   // console.log(datos)
-  principa.ejecutar(datos);
+  traducir.traducir(datos);
   //principa.ejecutar(datos);
   //console.log("El contenido es: ", datos);
 });
