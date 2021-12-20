@@ -397,7 +397,7 @@ ASIGNACION
   : id igual EXP          punto_coma         { addReporte('ASIGNACION: id igual EXP ;','EXP:= EXP.val; ');  $$ = new Asignacion($1, $3,false,@1.firt_line,@1.firt_column); }
   | id mas igual EXP      punto_coma         { addReporte('ASIGNACION: id += EXP ;','EXP:= EXP.val; '); $$ = new Asignacion_Mas($1, $4,true,@1.firt_line,@1.firt_column); }
   | id menos igual EXP    punto_coma         { addReporte('ASIGNACION: id -= EXP ;','EXP:= EXP.val; '); $$ = new Asignacion_Mas($1, $4,false,@1.firt_line,@1.firt_column); }
-  | ACCESO_TYPE igual EXP  punto_coma          { addReporte('ASIGNACION: ACCESO_TYPE = EXP ;',' EXP:= EXP.val; ');   $$ = new Asignacion_VAR_STRUCT($3,$1,@1.first_line,@1.first_column);}  
+  | ACCESO_TYPE igual EXP  punto_coma        { addReporte('ASIGNACION: ACCESO_TYPE = EXP ;',' EXP:= EXP.val; ');   $$ = new Asignacion_VAR_STRUCT($3,$1,@1.first_line,@1.first_column);}  
   
   
 
@@ -522,8 +522,8 @@ LISTA_ATRIBUTOS
 ATRIBUTO 
   : TIPO_DEC_VARIABLE id                   { $$ = new Simbolo($2,$1,@1.first_line,@1.first_column,null,false,false)}//$$ = new Atributo($2,$1,false,@1.firt_line,@1.firt_column);   }
   | id id                                  { $$ = new Simbolo($2,TIPO.STRUCT,@1.first_line,@1.first_column,$1,false,true)}//{ $$ = new Atributo($2,TIPO.STRUCT,false,@1.firt_line,@1.firt_column);   }
-  | TIPO_DEC_VARIABLE id   LISTA_CORCHETES { $$ = new Simbolo($2,$1,@1.first_line,@1.first_column,null,false,false)}//{ $$ = new Atributo($2,$1,true,@1.firt_line,@1.firt_column);}
-  | id LISTA_CORCHETES id                   { $$ = new Simbolo($2,$1,@1.first_line,@1.first_column,$1,true,true)}// { $$ = new Atributo($2,TIPO.STRUCT,true,@1.firt_line,@1.firt_column);}  
+  | TIPO_DEC_VARIABLE  LISTA_CORCHETES id  { $$ = new Simbolo($3,$1,@1.first_line,@1.first_column,null,false,false)}//{ $$ = new Atributo($2,$1,true,@1.firt_line,@1.firt_column);}
+  | id  id  LISTA_CORCHETES                { $$ = new Simbolo($3,$1,@1.first_line,@1.first_column,$1,true,true)}// { $$ = new Atributo($2,TIPO.STRUCT,true,@1.firt_line,@1.firt_column);}  
 ;
 
 //=========================================>fin
@@ -662,12 +662,12 @@ EXP
   | ARRAY_POP                                           { addReporte('EXP:  ACCESO_ARREGLO','EXP:=ACCESO_ARREGLO');  $$ = $1; }
   | corchete_abierto LISTA_EXPRESIONES corchete_cerrado { addReporte('EXP:  { LISTA_EXPRESIONES }','EXP:=LISTA_EXPRESIONES');  $$ = $2; }
   | ARRAY_METHOD                                        {  addReporte('EXP:  ARRAY_METHOD','EXP:=ARRAY_METHOD'); $$ = $1; }
-  | corchete_abierto corchete_cerrado                    {    }
+  | corchete_abierto corchete_cerrado                   {    }
   
   //Types - accesos
-  | ACCESO_TYPE                                          { addReporte('EXP:  ACCESO_TYPE','EXP:=ACCESO_TYPE'); $$ = $1;   }
+  | ACCESO_TYPE                                         { addReporte('EXP:  ACCESO_TYPE','EXP:=ACCESO_TYPE'); $$ = $1;   }
   | ACCESO_TYPE igual EXP punto_coma                    { addReporte('EXP:  ACCESO_TYPE igual EXP punto_coma','EXP:=EXP.val'); $$ = new Asignacion_Struct_Exp($1,$3,@1.first_line,@1.first_column);}  
-  //| id id                                               { $$ = new Struct_Param($1,$2,@1.first_line,@1.first_column);}
+  //| id id                                             { $$ = new Struct_Param($1,$2,@1.first_line,@1.first_column);}
   //Ternario
   | TERNARIO                                             { addReporte('EXP:  TERNARIO','EXP:=TERNARIO.val'); $$ = $1;  }
   
@@ -705,10 +705,15 @@ ACCESO_TYPE                                                   //$1 => id struct 
 //----------------------------------------------PRUEBA--------------------------------------------------
 //------------------------------------------------------------------------------------------------------
 LISTA_ACCESOS_TYPE 
-  : LISTA_ACCESOS_TYPE punto id                                 { addReporte('LISTA_ACCESOS_TYPE: LISTA_ACCESOS_TYPE punto id',''); $1.push($3);$$ = $1;  }
-  | punto id                                                    { addReporte('LISTA_ACCESOS_TYPE: punto id','');  $$ = [$2];            }
-  //| LISTA_ACCESOS_TYPE punto id LISTA_ACCESOS_ARREGLO           {    }
-  //| punto id LISTA_ACCESOS_ARREGLO                              {    }
+  : LISTA_ACCESOS_TYPE punto id                                   { addReporte('LISTA_ACCESOS_TYPE: LISTA_ACCESOS_TYPE punto id',''); $1.push($3);$$ = $1;  }
+  | punto id                                                      { addReporte('LISTA_ACCESOS_TYPE: punto id','');  $$ = [$2];            }
+  | punto ACCESO_ARREGLO {   $$ = [$2];}
+  
+  //| punto id  EXPS_CORCHETE                                            {  $$ = new Acceso($1,$2,@1.first_line,@1.first_column); }  
+  //| 
+  //| LISTA_ACCESOS_TYPE punto  ACCESO_ARREGLO                      { $1.push($2); $$ = $1;  }
+  
+  //| punto id LISTA_ACCESOS_ARREGLO                                {    }
 ;
 
 LISTA_ACCESOS_ARREGLO 
@@ -770,10 +775,11 @@ MODIFICAR_ARREGLO:
   id EXPS_CORCHETE igual EXP punto_coma                 {  $$ = new Modificar($1,$2, $4,@1.first_line,@1.first_column); }
 ;
 ACCESO_ARREGLO:
-   id  EXPS_CORCHETE                                            {  $$ = new Acceso($1,$2,@1.first_line,@1.first_column); }
+    id  EXPS_CORCHETE                                            {  $$ = new Acceso($1,$2,@1.first_line,@1.first_column); }
+  
   | id  corchete_abierto begin dos_puntos EXP corchete_cerrado  {  $$ = new Fin_Rango($1,$5,@1.first_line,@1.first_column); }
   | id  corchete_abierto EXP dos_puntos end corchete_cerrado    {  $$ = new Begin_Rango($1,$3,@1.first_line,@1.first_column); }
-  | id  corchete_abierto EXP dos_puntos EXP corchete_cerrado    {  $$ = new Rango($1,$3 ,$5,@1.first_line,@1.first_column); }
+  | id  corchete_abierto EXP dos_puntos EXP corchete_cerrado      {  $$ = new Rango($1,$3 ,$5,@1.first_line,@1.first_column); }
   | id  corchete_abierto begin dos_puntos end corchete_cerrado    {  $$ = new Rango_Complete($1,$3 ,$5,@1.first_line,@1.first_column); }
 ;
 
