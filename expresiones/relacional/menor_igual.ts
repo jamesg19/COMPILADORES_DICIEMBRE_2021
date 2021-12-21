@@ -27,7 +27,7 @@ export class MenorIgual extends Instruccion{
     if( exp1 instanceof Excepcion )return exp1;
     if( exp2 instanceof Excepcion )return exp2;
     
-    if( this.rigthExpression.tipo == TIPO.ARREGLO || this.rigthExpression.tipo == TIPO.ARREGLO)
+    if( this.leftExpression.tipo == TIPO.ARREGLO || this.rigthExpression.tipo == TIPO.ARREGLO)
     return new Excepcion("Semantico","no se pueden comparar objetos ",super.fila+"",super.columna+"");
     
     
@@ -43,28 +43,28 @@ export class MenorIgual extends Instruccion{
     //ENTERO <= ENTERO
     if(this.leftExpression.tipo===TIPO.ENTERO && this.rigthExpression.tipo===TIPO.ENTERO ){
         this.tipo=TIPO.BOOLEAN;
-        this.obtenerVal(this.leftExpression.tipo,exp1) <=this.obtenerVal(this.rigthExpression.tipo,exp2);
+        return this.obtenerVal(this.leftExpression.tipo,exp1) <=this.obtenerVal(this.rigthExpression.tipo,exp2);
       }
       //ENTERO <= DECIMAL
       else if(this.leftExpression.tipo===TIPO.ENTERO && this.rigthExpression.tipo===TIPO.DECIMAL ){
         this.tipo=TIPO.BOOLEAN;
-        this.obtenerVal(this.leftExpression.tipo,exp1) <=this.obtenerVal(this.rigthExpression.tipo,exp2);
+        return this.obtenerVal(this.leftExpression.tipo,exp1) <=this.obtenerVal(this.rigthExpression.tipo,exp2);
       }
   
       //DECIMAL <= ENTERO
       else if(this.leftExpression.tipo===TIPO.DECIMAL && this.rigthExpression.tipo===TIPO.ENTERO ){
         this.tipo=TIPO.BOOLEAN;
-        this.obtenerVal(this.leftExpression.tipo,exp1) <=this.obtenerVal(this.rigthExpression.tipo,exp2);
+        return this.obtenerVal(this.leftExpression.tipo,exp1) <=this.obtenerVal(this.rigthExpression.tipo,exp2);
       }
       //DECIMAL <= DECIMAL
       else if(this.leftExpression.tipo===TIPO.DECIMAL && this.rigthExpression.tipo===TIPO.DECIMAL ){
         this.tipo=TIPO.BOOLEAN;
-        this.obtenerVal(this.leftExpression.tipo,exp1) <=this.obtenerVal(this.rigthExpression.tipo,exp2);
+        return this.obtenerVal(this.leftExpression.tipo,exp1) <= this.obtenerVal(this.rigthExpression.tipo,exp2);
       }
       //BOOLEAN <= BOOLEAN
       else if(this.leftExpression.tipo===TIPO.BOOLEAN && this.rigthExpression.tipo===TIPO.BOOLEAN ){
         this.tipo=TIPO.BOOLEAN;
-        this.obtenerVal(this.leftExpression.tipo,exp1) <=this.obtenerVal(this.rigthExpression.tipo,exp2);
+        return this.obtenerVal(this.leftExpression.tipo,exp1) <= this.obtenerVal(this.rigthExpression.tipo,exp2);
       }
 
   }
