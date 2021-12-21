@@ -8,7 +8,7 @@ const identificador_1 = require("../expresiones/identificador");
 const primitivo_1 = require("../expresiones/primitivo");
 const nodo_1 = require("../abs/nodo");
 const principal_1 = require("../principal");
-const Parser = require("../analizador/variable");
+//const Parser = require("../analizador/variable");
 class Print extends Instruccion_1.Instruccion {
     /**
      * @param  {number} fila
