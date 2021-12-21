@@ -26,6 +26,9 @@ export class Identificador extends Instruccion {
     try {
       //obtenemos el tipo
       let simbol = entorno.getSimboloJ(this.id);
+      if(simbol == undefined){
+        return new Excepcion('Semantico',`La variable no existe ${this.id} `,`${this.fila}`,`${this.columna}` );
+      }
       //establecemos el tipo
       this.tipo = simbol?.tipo;
       return simbol?.valor;

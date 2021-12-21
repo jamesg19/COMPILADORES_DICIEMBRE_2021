@@ -5,8 +5,10 @@ const Instruccion_1 = require("../abs/Instruccion");
 const tipo_1 = require("../table/tipo");
 const excepcion_1 = require("../table/excepcion");
 const identificador_1 = require("../expresiones/identificador");
+const primitivo_1 = require("../expresiones/primitivo");
 const nodo_1 = require("../abs/nodo");
 const principal_1 = require("../principal");
+const Parser = require("../analizador/variable");
 class Print extends Instruccion_1.Instruccion {
     /**
      * @param  {number} fila
@@ -27,20 +29,54 @@ class Print extends Instruccion_1.Instruccion {
      * @returns any
      */
     interpretar(entorno, arbol) {
+        //verifica que exista un valor para imprimir
         if (this.value != undefined) {
+            //ejecuta las instrucciones para imprimir
             this.value.forEach((exp_print) => {
+                //interpreta las expresiones
+                let valorTemporal = "";
                 let value = exp_print.interpretar(entorno, arbol);
                 if (value instanceof excepcion_1.Excepcion) {
                     console.log(value);
                     return value;
                 }
+                //verifica que el valor resultante de la interpretacion exista
                 if (value != undefined) {
+                    //verifica que la expresion sea un identificador
                     if (exp_print instanceof identificador_1.Identificador) {
                         let simbol = entorno.getSimbolo(exp_print.id);
                         value = simbol.toString();
                     }
+                    //caso contrario es una cadena
                     else {
-                        value = value.toString();
+                        let dolar = "$";
+                        //verifica que la expresion incluya el $
+                        if (value.toString().includes(dolar)) {
+                            //console.log(" VALUE to.string"+value.toString());
+                            //verifica que sea un primitivo de tipo cadena "asdfsdfs ${}" para verificar que venga incrustado codigo
+                            if (exp_print instanceof primitivo_1.Primitivo) {
+                                if (exp_print.tipo == tipo_1.TIPO.CADENA) {
+                                    //analiza la cadena
+                                    const instruccioness = Parser.parse(value.toString());
+                                    //verifica que la lista contenga instrucciones
+                                    instruccioness.forEach(element => {
+                                        let tmp = element.interpretar(entorno, arbol);
+                                        if (tmp instanceof excepcion_1.Excepcion) {
+                                            arbol.excepciones.push(tmp);
+                                            arbol.updateConsolaError(tmp + "");
+                                            tmp = "";
+                                            console.log("ERROR");
+                                        }
+                                        valorTemporal += tmp + "";
+                                    });
+                                    //console.log(instruccioness);
+                                }
+                            }
+                            value = valorTemporal.toString();
+                        }
+                        else {
+                            value = value.toString();
+                        }
                     }
                 }
                 else {

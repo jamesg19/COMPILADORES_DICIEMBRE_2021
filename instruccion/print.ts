@@ -11,6 +11,7 @@ import { Dec_Struct } from "../expresiones/struct/instancia_struct";
 import { sign } from "crypto";
 import { NodoAST } from "../abs/nodo";
 import { Principal } from "../principal";
+const Parser = require("../analizador/variable");
 import { NativasString } from '../expresiones/nativas/nativas_string';
 
 export class Print extends Instruccion {
@@ -38,22 +39,61 @@ export class Print extends Instruccion {
    * @returns any
    */
   interpretar(entorno: TablaSimbolos, arbol: Arbol): any {
+    //verifica que exista un valor para imprimir
     if (this.value != undefined) {
+
+      //ejecuta las instrucciones para imprimir
       this.value.forEach((exp_print) => {
+        //interpreta las expresiones
+        let valorTemporal="";
         let value = exp_print.interpretar(entorno, arbol);
+
         if (value instanceof Excepcion) {
           console.log(value);
           return value;
         }
-
+        //verifica que el valor resultante de la interpretacion exista
         if (value != undefined) {
+          //verifica que la expresion sea un identificador
           if (exp_print instanceof Identificador) {
             let simbol = entorno.getSimbolo(exp_print.id);
             value = simbol.toString();
-          } else {
-            value = value.toString();
+          } 
+          //caso contrario es una cadena
+          else {
             
-                  }
+            let dolar= "$";
+            //verifica que la expresion incluya el $
+            if(value.toString().includes(dolar)){
+              //console.log(" VALUE to.string"+value.toString());
+              
+              //verifica que sea un primitivo de tipo cadena "asdfsdfs ${}" para verificar que venga incrustado codigo
+              if(exp_print instanceof Primitivo){
+                if(exp_print.tipo == TIPO.CADENA){
+                  //analiza la cadena
+                  const instruccioness:Instruccion[] = Parser.parse(value.toString());
+                  //verifica que la lista contenga instrucciones
+                  instruccioness.forEach(element => {
+                    
+                    let tmp=element.interpretar(entorno,arbol);
+                    if (tmp instanceof Excepcion) {
+                            arbol.excepciones.push(tmp);
+                            arbol.updateConsolaError(tmp+"");
+                            tmp="";
+                            console.log("ERROR");
+                    }
+                    valorTemporal+=tmp+"";
+                  });
+                  //console.log(instruccioness);
+                }
+              }
+              value = valorTemporal.toString();
+            }else{
+              value=value.toString();
+            }
+            
+            
+          }
         } else {
           value = "Indefinido";
         }
@@ -62,6 +102,9 @@ export class Print extends Instruccion {
         console.log(value);
       });
     }
+
+
+
   }
 
   print_struct(exp: Simbolo): string {

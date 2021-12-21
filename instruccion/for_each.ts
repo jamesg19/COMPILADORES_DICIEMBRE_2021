@@ -43,7 +43,62 @@ export class ForEach extends Instruccion {
      * @param arbol 
      */
     interpretar(entorno: TablaSimbolos, arbol: Arbol) {
+        //verifica si es un array
+        if(this.condicion instanceof Array){
 
+            //declara la variable temporal
+            const declaracion_temp=new D_Id(TIPO.ENTERO,this.temporal,false,this.fila,this.columna);
+            const declaracion_tmp=declaracion_temp.interpretar(entorno,arbol);
+            if(declaracion_tmp instanceof Excepcion){
+                return declaracion_tmp;
+            }
+            //recorremos el aaray
+           this.condicion.forEach((x)=>{
+
+                const nueva_tabla=new TablaSimbolos(entorno);
+
+                //asignamos el valor de caga posicion al temporal
+                //creamos el objeto primitivo del valor en la posicion i
+                const valor=new Primitivo(TIPO.ENTERO,x.interpretar(nueva_tabla,arbol)-1,this.fila,this.columna);
+                    
+                //asignacion del valor a la variable temporal
+                const asignacion_temp= new Asignacion(this.temporal,valor,this.fila,this.columna);
+                asignacion_temp.interpretar(nueva_tabla,arbol);
+
+                //realizamos las instrucciones
+                this.instrucciones.forEach((element:Instruccion) => {
+                        
+                    const result=element.interpretar(nueva_tabla,arbol);
+
+                    if(result instanceof Excepcion){
+                        arbol.excepciones.push(result);
+                        arbol.updateConsolaError(result.toString());
+                    }
+                    
+                    if(result instanceof Break){
+                        this.hayBreak=true;
+                        return result;
+                    }
+                    if(result instanceof Return){
+                        return result;
+                    }
+                    //VERIFICA SI VIENE UN CONTINUE
+                    if(result instanceof Continue){
+                        this.hayContinue=true;
+                        return result;
+                    }
+
+                });
+
+
+
+
+           });
+
+
+
+
+        }else{
         //verifica que la condicion no sea una Excepcion
         const condition=this.condicion.interpretar(entorno,arbol);
         if(condition instanceof Excepcion){
@@ -210,7 +265,7 @@ export class ForEach extends Instruccion {
             if(declaracion_tmp instanceof Excepcion){
                 return declaracion_tmp;
             }
-
+            console.log("ENTRA AQUI");
             var cantidad=this.condicion.interpretar(entorno,arbol);
             if(cantidad instanceof Excepcion){
                 return cantidad;
@@ -271,7 +326,7 @@ export class ForEach extends Instruccion {
         }
         //SI ES Una CADENA NORMAL
 
-
+    }
     }
 
     getNodo(){

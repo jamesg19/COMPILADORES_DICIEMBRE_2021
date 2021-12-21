@@ -27,7 +27,7 @@ export class MenorIgual extends Instruccion{
     if( exp1 instanceof Excepcion )return exp1;
     if( exp2 instanceof Excepcion )return exp2;
     
-    if( this.rigthExpression.tipo == TIPO.ARREGLO || this.rigthExpression.tipo == TIPO.ARREGLO)
+    if( this.leftExpression.tipo == TIPO.ARREGLO || this.rigthExpression.tipo == TIPO.ARREGLO)
     return new Excepcion("Semantico","no se pueden comparar objetos ",super.fila+"",super.columna+"");
     
     
