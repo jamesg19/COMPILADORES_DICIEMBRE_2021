@@ -278,7 +278,8 @@
 %left 'or' //listo
 %left 'and'//listo
 %left 'not' //listo
-%left 'igual_que' 'dif_que' //listo
+%left 'dif_que' //listo
+%left 'igual_que' 
 %left 'mayor' 'menor' 'mayor_igual' 'menor_igual' //listo
 %left 'mas' 'menos' 'mass'
 %left 'por' 'div' 'mod' 'repeticion'
