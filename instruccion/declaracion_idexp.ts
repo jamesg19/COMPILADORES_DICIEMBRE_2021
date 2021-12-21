@@ -136,6 +136,7 @@ export class D_IdExp extends Instruccion {
       "stack[(int)" + simbolo.posicion + "] = " + valor + ";\n ";
   }
   transform_cadena(x: string, arbol: Arbol): string {
+    Principal.addComentario("Creando variable de tipo string");
     let temp = Principal.temp;
     temp++;
     let t0: string = "t" + temp;

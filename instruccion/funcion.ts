@@ -16,6 +16,7 @@ export class Funcion extends Instruccion {
   tipo_return: TIPO;
   tipo: TIPO;
   lista_parametros?: Array<Simbolo>;
+  posicion:number;
 
   constructor(
     id: string,
@@ -121,7 +122,7 @@ export class Funcion extends Instruccion {
     
     let entorno_local: TablaSimbolos = new TablaSimbolos(entorno);
     let return_value;
-    Principal.addComentario("  Traduciendo Funcion "+this.id);
+    Principal.addComentario("  Traduciendo Funcion  "+this.id);
 
     Principal.historial += "void "+this.id+"(){\n";
     

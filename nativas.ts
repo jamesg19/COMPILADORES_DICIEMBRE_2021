@@ -231,4 +231,70 @@ export class Nativas {
     +"\t"+"}\n"
     return charAtS;
   }
+  
+  potencia_string(): string {
+    
+    Principal.addComentario("Iniciando con Potencia")
+    let temp = Principal.temp;
+    temp++;
+    let t1 = "t" + temp;
+    temp++
+    let t2 = "t" + temp;
+    temp++
+    let t3 = "t" + temp;
+    temp++
+    let tcantidad = "t" + temp;
+    temp++
+    let tref = "t" + temp;
+    
+    Principal.temp = temp;
+    
+    
+    let etiqueta = Principal.etiqueta;
+    
+    etiqueta++;
+    let label0 = "L"+etiqueta;
+    etiqueta++;
+    let label1 = "L"+etiqueta;
+    etiqueta++;
+    let label_discount = "L"+etiqueta;
+   Principal.etiqueta = etiqueta;
+   
+    let print_line: string =
+      "/*------- POTENCIA STRING ------*/\n" +
+      //Principal.addComentario("creo que debo tambien almacenar el valor de H para reasignarlo, para evitar que se llene rapido");                               
+      "void potencia_string() {\n" +
+      "\t"+t1+"= P-1; //referencia a la cadena \n" +                         //referencia a la cadena                    //puntero disponible
+      "\t"+tcantidad+"= stack[(int)(P+1)];//Numero de veces que se van a repetir\n" +  //cantidad de veces que se debera repetir la cadena
+      "\t"+t2+" = stack[(int)"+t1+"];// posicion del heap donde inicia la cadena\n" +       //le asigno el primer caracteer 
+      "\t"+tref+" = P+2;\n //encuentro la nueva posicion libre en la que se almacenara el resultado de la potencia\n" + 
+      "\tstack[(int)"+tref+"] = H;\n\n" +        //guardo la referencia en donde se almacenara la cadena repetida
+
+      "\t"+label1+":\n" +                        //etiqueta para un loop
+      "\t"+t3+" = heap[(int)"+t2+"];\n" +        //le doy el caracter actual, en la primera iteracion seria la primera letra
+      "\tif("+t3+" == -1) goto "+label_discount+";\n" +  //le pregunto  si ya llego al limite de la palabra
+      "\theap[(int)H] = " + t3 + " ;\n"+
+      "\tH = H + 1;\n"+
+      "\t"+t2+" = "+t2+"+1;\n" +
+      
+      
+      "\tgoto "+label1+";\n" +
+      "\t"+label_discount+":\n"+
+      "\t"+tcantidad+" = "+tcantidad+" - 1;\n"+
+      "\n\tif("+tcantidad+" == 0) goto "+label0+";\n" +
+      "\t"+t2+" = stack[(int)"+t1+"];// primer caracaeter\n" +   
+      "\t goto "+label1+";\n"+
+      //Principal.addComentario("Etiqueta de Salida")
+      "\t"+label0+":\n" +
+      "\theap[(int)H] = -1;\n"+
+      "\tH = H+1;\n"+
+      "\tP = "+tref+";\n"+
+      "\treturn;\n" +
+      "}\n";
+      
+      
+      Principal.addComentario("Fin Potencia String")
+    return print_line;
+  }
+  
 }
