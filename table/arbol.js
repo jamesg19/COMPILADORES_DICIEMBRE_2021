@@ -22,6 +22,7 @@ class Arbol {
         this.structs = new Map();
         this.head += "#include <math.h>\n\ndouble heap[30101999];\n";
         this.head += "double stack[30101999];\n\ndouble P;\ndouble H;\n\n";
+        this.posicion = 0;
     }
     updateConsolaError(texto) {
         this.consola += texto + '\n';

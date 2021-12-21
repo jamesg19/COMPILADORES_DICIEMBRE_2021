@@ -1,8 +1,7 @@
-int imprimir(){
- printl("cadena");
-}
+
 void main(){
+    string cadena = "Julio";
+    //cadena = cadena^3;
+    println(cadena^3);
     
-    imprimir();
-    return 0;
 }

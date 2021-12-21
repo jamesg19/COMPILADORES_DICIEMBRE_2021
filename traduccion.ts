@@ -21,26 +21,32 @@ const Parser = require("./analizador/analizador");
 import { Nativas } from "./nativas";
 import { List_Declaracion } from "./instruccion/list_declaracion";
 import { Principal } from "./principal";
+import { Potencia } from './expresiones/artimetica/potencia';
+import { RepeticionCadena } from './expresiones/nativas/repeticion_cadena';
 
 export class Traducir {
-  
-  static funciones:string="";
+  static funciones: string = "";
 
   traducir(code: string) {
     const instrucciones = Parser.parse(code);
 
-    
     let ts_global: TablaSimbolos = new TablaSimbolos(undefined);
 
     //ast
     const ast: Arbol = new Arbol(ts_global, instrucciones[0]);
-    
-    ast.excepciones.forEach((element)=>{ console.log(element)});
+
+    ast.excepciones.forEach((element) => {
+      console.log(element);
+    });
     //interpreto 1ra pasada
     ast.instrucciones.forEach((element: Instruccion) => {
       if (element instanceof Funcion) {
+        let posicion = Principal.posicion;
+        posicion++;
+        element.posicion = posicion;
         ast.funciones.push(element);
-        element.traducir(ts_global,ast);
+        element.traducir(ts_global, ast);
+        Principal.posicion = posicion;
       }
       if (element instanceof Struct) {
         if (ast.structs.has(element.id))
@@ -64,11 +70,11 @@ export class Traducir {
         element instanceof List_Declaracion ||
         element instanceof Dec_Struct ||
         element instanceof Arreglo_Valor ||
-        element instanceof Arreglo||
+        element instanceof Arreglo ||
         element instanceof Dec_Struct
       ) {
         //console.log("ejecutar");
-        let value = element.interpretar(ts_global, ast);
+        let value = element.traducir(ts_global, ast);
 
         if (value instanceof Excepcion) {
           ast.excepciones.push(value);
@@ -105,7 +111,7 @@ export class Traducir {
           return;
         }
 
-        let segunda_pasada = element.interpretar(ts_global, ast);
+        let segunda_pasada = element.traducir(ts_global, ast);
 
         if (segunda_pasada instanceof Excepcion) {
           ast.excepciones.push(segunda_pasada);
@@ -130,8 +136,6 @@ export class Traducir {
       //console.log("Sentencias fuera de Main")
     });
 
-
-
     let code_objeto = "";
     let nativa: Nativas = new Nativas();
     let print_nativa = Print.print ? nativa.print_function(ast) : "";
@@ -139,30 +143,30 @@ export class Traducir {
     let string_len = NativasString.LEN ? nativa.getLength() : "";
     let string_lower = NativasString.LOWER ? nativa.toLower() : "";
     let string_char = NativasString.LOWER ? nativa.charAt() : "";
+    let potencia_str = RepeticionCadena.REPETICION ? nativa.potencia_string() : "";
 
-    code_objeto =
-      ast.head +
+    code_objeto =ast.head +
       "\n" +
       ast.list_temporales() +
       "\n" +
       string_upper +
+      "\n" +
       string_lower +
       "\n" +
       string_len +
       "\n" +
       string_char +
       "\n" +
+      potencia_str+  
+      "\n" +
       print_nativa +
       "\n";
 
     console.log(code_objeto + "\n" + Principal.historial);
-
-   
   }
 
   // /**************************************************Traduccion****************************************************** */
- 
-  
+
   static addComentario(comentario: string) {
     Principal.historial += "/* " + comentario + " */\n";
   }
@@ -175,37 +179,9 @@ const fs = require("fs"),
 
 fs.readFile(NOMBRE_ARCHIVO, "utf8", (error, datos) => {
   if (error) throw error;
-  let traducir:Traducir = new Traducir();
+  let traducir: Traducir = new Traducir();
   // console.log(datos)
   traducir.traducir(datos);
   //principa.ejecutar(datos);
   //console.log("El contenido es: ", datos);
 });
-
-// principa.ejecutar ('println(6>5);   '
-//                     +'if(1>5){'
-//                     +'println("entra if6>5");'
-//                     +'} '
-//                     +'else if(5>5){'
-//                     +'println("entra else if 7>5 ");'
-//                     +'} '
-//                     +'else if(8>5){'
-//                     +'println("entra else if 8>5 ");'
-//                     +'} '
-//                     +'else { println("entra AL FALSE");  } '
-//                     +'println(true);'
-
-//                     +'switch ("5+6"){'
-//                     +'case "5+6":'
-//                     +'println("ENTRA A SWITCH1");'
-//                     +''
-//                     +'case "5+6":'
-//                     +'println("ENTRA A SWITCH2");'
-//                     +'break;'
-//                     +'default:'
-//                     +' println("ENTRA A DEFAULT");'
-//                     +'}'
-//                     +''
-//                     );
-
-//principa.ejecutar ('println((true && true) && (true && true));');
