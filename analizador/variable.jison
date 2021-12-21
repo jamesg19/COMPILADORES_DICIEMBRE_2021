@@ -135,6 +135,7 @@
 <state1>[}]      this.popState(); return 'llave_cerrada';
 
 
+([$][a-zA-ZÀ-ÿ_$])[À-ÿ$a-zA-Z0-9_]* return 'id2';
 '$'       return 'dolar';
 ([a-zA-ZÀ-ÿ_$])[À-ÿ$a-zA-Z0-9_]* return 'id';
 \s+					return 'esp';						                // espacios en blanco
@@ -320,6 +321,7 @@ INSTRUCCION:
     { $$=$3; }
     | id  { $$ = new Primitivo(TIPO.CADENA,$1,@1.firt_line,@1.firt_column); }
     | esp     { $$ = new Primitivo(TIPO.CADENA,$1,@1.firt_line,@1.firt_column); }
+    | id2     { $$ = new Identificador($1,@1.firt_line,@1.firt_column);   }
 
 ;
 

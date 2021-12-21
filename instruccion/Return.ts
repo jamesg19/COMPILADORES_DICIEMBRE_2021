@@ -55,6 +55,14 @@ export class Return extends Instruccion {
       }
       return nodo;
   }
+  traducir(entorno: TablaSimbolos, arbol: Arbol) {
+    //si viene un valor en el return
+      if(this.has_value){
+        this.value.traducir(entorno,arbol);
+      }else{
+        
+      }
+  }
 
 
 }

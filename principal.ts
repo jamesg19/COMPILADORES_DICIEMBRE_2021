@@ -222,7 +222,7 @@ fs.readFile(NOMBRE_ARCHIVO, "utf8", (error, datos) => {
   let principa: Principal = new Principal();
   // console.log(datos)
   principa.ejecutar(datos);
-  //principa.ejecutar(datos);
+  //principa.traducir(datos);
   //console.log("El contenido es: ", datos);
 });
 

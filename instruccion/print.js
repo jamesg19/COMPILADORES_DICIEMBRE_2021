@@ -65,14 +65,18 @@ class Print extends Instruccion_1.Instruccion {
                                             arbol.excepciones.push(tmp);
                                             arbol.updateConsolaError(tmp + "");
                                             tmp = "";
+                                            console.log("ERROR");
                                         }
                                         valorTemporal += tmp + "";
                                     });
                                     //console.log(instruccioness);
                                 }
                             }
+                            value = valorTemporal.toString();
                         }
-                        value = valorTemporal.toString();
+                        else {
+                            value = value.toString();
+                        }
                     }
                 }
                 else {

@@ -61,7 +61,7 @@ export class Print extends Instruccion {
           } 
           //caso contrario es una cadena
           else {
-
+            
             let dolar= "$";
             //verifica que la expresion incluya el $
             if(value.toString().includes(dolar)){
@@ -80,15 +80,19 @@ export class Print extends Instruccion {
                             arbol.excepciones.push(tmp);
                             arbol.updateConsolaError(tmp+"");
                             tmp="";
+                            console.log("ERROR");
                     }
                     valorTemporal+=tmp+"";
                   });
                   //console.log(instruccioness);
                 }
               }
+              value = valorTemporal.toString();
+            }else{
+              value=value.toString();
             }
             
-            value = valorTemporal.toString();
+            
           }
         } else {
           value = "Indefinido";
