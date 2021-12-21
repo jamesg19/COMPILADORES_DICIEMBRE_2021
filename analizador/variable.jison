@@ -1,133 +1,143 @@
 %lex
 %options case-sensitive
-
+%x state1
 %%
 
 
 "//".*										              // comentario simple
 [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]			// comentario multiple líneas
+//stados iniciales
 
+
+[{]               this.begin("state1"); return 'llave_abierta'; 
 //tipos de datos
-'string'    return 'string';
-'int'       return 'int';
-'double'    return 'double';
-'boolean'   return 'boolean';
-'void'      return 'void';
-'struct'    return 'struct';
-'const'     return 'const';
-\s+					return 'esp';						                // espacios en blanco
+<state1>'string'    return 'string';
+<state1>'int'       return 'int';
+<state1>'double'    return 'double';
+<state1>'boolean'   return 'boolean';
+<state1>'void'      return 'void';
+<state1>'struct'    return 'struct';
+<state1>'const'     return 'const';
 //funciones nativas
-'print'     return 'print';
-'println'   return 'println';
-'push'      return 'push';
-'length'    return 'length';
-'pop'       return 'pop';
+<state1>'print'     return 'print';
+<state1>'println'   return 'println';
+<state1>'push'      return 'push';
+<state1>'length'    return 'length';
+<state1>'pop'       return 'pop';
 
-'return'    return 'return';
-'null'      return 'null';
+<state1>'return'    return 'return';
+<state1>'null'      return 'null';
 
 //condicionales y ciclos
-'if'        return 'if';
-'else'      return 'else';
-'break'     return 'break';
-'switch'    return 'switch';
-'case'      return 'case';
-'default'   return 'default';
-'continue'  return 'continue';
-'while'     return 'while';
-'do'        return 'do';
-'for'       return 'for';
-'in'        return 'in';
+<state1>'if'        return 'if';
+<state1>'else'      return 'else';
+<state1>'break'     return 'break';
+<state1>'switch'    return 'switch';
+<state1>'case'      return 'case';
+<state1>'default'   return 'default';
+<state1>'continue'  return 'continue';
+<state1>'while'     return 'while';
+<state1>'do'        return 'do';
+<state1>'for'       return 'for';
+<state1>'in'        return 'in';
 
 //nativas
-'sin'         return 'sin';
-'log10'       return 'log10';
-'cos'         return 'cos';
-'tan'         return 'tan';
-'sqrt'        return 'sqrt';
-'pow'         return 'pow';
+<state1>'sin'         return 'sin';
+<state1>'log10'       return 'log10';
+<state1>'cos'         return 'cos';
+<state1>'tan'         return 'tan';
+<state1>'sqrt'        return 'sqrt';
+<state1>'pow'         return 'pow';
 //nativas String
-'^' return 'repeticion';
-'toLowercase' return 'toLowercase';
-'toUppercase' return 'toUppercase';
-'subString' return 'subString';
-'caracterOfPosition' return 'caracterOfPosition';
+<state1>'^' return 'repeticion';
+<state1>'toLowercase' return 'toLowercase';
+<state1>'toUppercase' return 'toUppercase';
+<state1>'subString' return 'subString';
+<state1>'caracterOfPosition' return 'caracterOfPosition';
 //casteos
-'parse'     return 'parse';
-'toInt'     return 'toInt';
-'toDouble'  return 'toDouble';
-'typeof'    return 'typeof';
+<state1>'parse'     return 'parse';
+<state1>'toInt'     return 'toInt';
+<state1>'toDouble'  return 'toDouble';
+<state1>'typeof'    return 'typeof';
 
 //kw
-'true'      return 'true';
-'false'     return 'false';
-'pop'       return 'pop';
-'push'      return 'push';
-'main'      return 'main';
-'begin'     return 'begin';
-'end'       return 'end';
-'$'       return 'dolar';
+<state1>'true'      return 'true';
+<state1>'false'     return 'false';
+<state1>'pop'       return 'pop';
+<state1>'push'      return 'push';
+<state1>'main'      return 'main';
+<state1>'begin'     return 'begin';
+<state1>'end'       return 'end';
+
 
 //Patrones numericos
-[0-9]+("."[0-9]+)\b  	return 'decimal';
-[0-9]+\b  	return 'entero';
+<state1>[0-9]+("."[0-9]+)\b  	return 'decimal';
+//[0-9]+\b  	return 'entero';
 
 
-([a-zA-Z])[a-zA-Z0-9_]* return 'id';
+
 
 
 //Signos
-';'         return  'punto_coma';
-','         return 'coma';
-':'         return 'dos_puntos';
-'.'         return 'punto';
+<state1>';'         return  'punto_coma';
+<state1>','         return 'coma';
+<state1>':'         return 'dos_puntos';
+<state1>'.'         return 'punto';
 
 //agrupacion
-'{'         return 'llave_abierta';
-'}'         return 'llave_cerrada';
-'('         return 'par_abierto';
-')'         return 'par_cerrado';
-'['         return 'corchete_abierto';
-']'         return 'corchete_cerrado';
+
+//agrupacion
+//'{'         return 'llave_abierta';
+//'}'         return 'llave_cerrada';
+<state1>\s+	            {  }
+<state1>'+'         return 'mas';
+<state1>[0-9]+\b   	return 'entero';
+<state1>([a-zA-Z])[a-zA-Z0-9_]* return 'id';
+//<state1>[}]       this.begin('INITIAL'); return 'llave_cerrada';
+<state1>'('         return 'par_abierto';
+<state1>')'         return 'par_cerrado';
+<state1>'['         return 'corchete_abierto';
+<state1>']'         return 'corchete_cerrado';
 
 //operadores aritmeticos
-'++'        return 'mas_mas';
-'+'         return 'mas';
-'--'        return 'menos_menos'
-'-'         return 'menos';
-'**'        return 'potencia';
-'*'         return 'por';
-'/'         return 'div';
-'%'         return 'mod';
+<state1>'++'        return 'mas_mas';
+//'+'         return 'mas';
+<state1>'--'        return 'menos_menos'
+<state1>'-'         return 'menos';
+<state1>'**'        return 'potencia';
+<state1>'*'         return 'por';
+<state1>'/'         return 'div';
+<state1>'%'         return 'mod';
 
 
 //operadores relaciona
-'<='        return 'menor_igual';
-'>='        return 'mayor_igual';
-'>'         return 'mayor';
-'<'         return 'menor';
-'=='        return 'igual_que';
+<state1>'<='        return 'menor_igual';
+<state1>'>='        return 'mayor_igual';
+<state1>'>'         return 'mayor';
+<state1>'<'         return 'menor';
+<state1>'=='        return 'igual_que';
 
 //asignacion
-'='         return 'igual';
+<state1>'='         return 'igual';
 
 //operadores logicos
-'!='        return 'dif_que';
-'&&'        return 'and';
-'&'         return 'mass';
-'||'        return 'or';
-'!'         return 'not';
-'?'         return 'interrogacion';
-
-'#'         return 'nmral';
-
-
+<state1>'!='        return 'dif_que';
+<state1>'&&'        return 'and';
+<state1>'&'         return 'mass';
+<state1>'||'        return 'or';
+<state1>'!'         return 'not';
+<state1>'?'         return 'interrogacion';
+<state1>'#'         return 'nmral';
 //Patrones para cadenas
-\"[^\"]*\"			{ yytext = yytext.slice(1,-1); return 'string'; }
-\'[^\']*\'			{ yytext = yytext.slice(1,-1); return 'string'; }
+<state1>\"[^\"]*\"			{ yytext = yytext.slice(1,-1); return 'string'; }
+<state1>\'[^\']*\'			{ yytext = yytext.slice(1,-1); return 'string'; }
 //\`[^\`]*\`			{ yytext = yytext.substr(0,yyleng-0); return 'string'; }
+<state1>[}]      this.popState(); return 'llave_cerrada';
 
 
+'$'       return 'dolar';
+([a-zA-ZÀ-ÿ_$])[À-ÿ$a-zA-Z0-9_]* return 'id';
+\s+					return 'esp';						                // espacios en blanco
 
 //errores
 .					{
@@ -308,26 +318,207 @@ INSTRUCCION:
   
     dolar llave_abierta EXP llave_cerrada 
     { $$=$3; }
-    | id  { $$=$1; }
-    | esp     { $$=$1; }
+    | id  { $$ = new Primitivo(TIPO.CADENA,$1,@1.firt_line,@1.firt_column); }
+    | esp     { $$ = new Primitivo(TIPO.CADENA,$1,@1.firt_line,@1.firt_column); }
 
 ;
 
 EXP
   //Operaciones Aritmeticas
-  : 
-  menos EXP %prec UMENOS          {  $$ = new NegacionNum(6,$2,0,@1.firt_line,@1.firt_column);   }
-    | esp     {  }
-  | EXP mas EXP                     {  $$ = new Suma(0,$1,$3,@1.firt_line,@1.firt_column);         }
+  : menos EXP %prec UMENOS          {  $$ = new NegacionNum(6,$2,0,@1.firt_line,@1.firt_column);   }
+  | EXP mas EXP                     { $$ = new Suma(0,$1,$3,@1.firt_line,@1.firt_column);         }
   | EXP mass EXP                    {  $$ = new Suma(0,$1,$3,@1.firt_line,@1.firt_column);         }
   | EXP menos EXP                   {  $$ = new Resta(1,$1,$3,@1.firt_line,@1.firt_column);        } 
   | EXP por EXP                     {  $$ = new Multiplicar(2,$1,$3,@1.firt_line,@1.firt_column);  }
   | EXP div EXP                     {  $$ = new Division(3,$1,$3,@1.firt_line,@1.firt_column);     }
-  | entero                        { $$ = new Primitivo(0,$1,@1.firt_line,@1.firt_column); }
-  | decimal                         {  $$ = new Primitivo(TIPO.DECIMAL,$1,@1.firt_line,@1.firt_column);}
-  | id                              {  $$ = new Identificador($1,@1.firt_line,@1.firt_column);   }
+  //| EXP potencia EXP                { $$ = new Potencia(4,$1,$3,@1.firt_line,@1.firt_column);     }
+  | EXP mod EXP                     {  $$ = new Modulo(5,$1,$3,@1.firt_line,@1.firt_column);       }
+  | id mas_mas                      {  $$=new IncrementoVariable($1,@1.firt_line,@1.firt_column);  }
+  | id menos_menos                  {  $$=new DecrementoVariable($1,@1.firt_line,@1.firt_column);  }
+  | par_abierto EXP par_cerrado     {  $$ = $2  }
+  //nativas
+  | sin par_abierto EXP par_cerrado             {  $$ = new Seno($3,@1.firt_line,@1.firt_column);  }
+  | cos par_abierto EXP par_cerrado             {  $$ = new Coseno($3,@1.firt_line,@1.firt_column);  }
+  | tan par_abierto EXP par_cerrado             {  $$ = new Tangente($3,@1.firt_line,@1.firt_column);  }
+  | sqrt par_abierto EXP par_cerrado            { $$ = new Sqrt($3,@1.firt_line,@1.firt_column);  }
+  | pow par_abierto EXP coma EXP par_cerrado    { $$ = new Pow($3,$5,@1.firt_line,@1.firt_column);  }
+  | log10 par_abierto EXP par_cerrado           {  $$ = new Log($3,@1.firt_line,@1.firt_column);  }
+  //nativas string
+  | NATIVA_STRING                 {$$=$1;}
+  | EXP repeticion EXP         
+  {  $$= new RepeticionCadena($1,TIPO_NATIVA_CADENA.REPETICION,$3,null,@1.firt_line,@1.firt_column); }
+
+  //casteos CADENA
+  | int punto parse par_abierto EXP par_cerrado
+  { $$=new Casteos($5,TIPO_NATIVA_CADENA.INTPARSE,@1.firt_line,@1.firt_column); }
+  | double punto parse par_abierto EXP par_cerrado
+  { $$=new Casteos($5,TIPO_NATIVA_CADENA.DOUBLEPARSE,@1.firt_line,@1.firt_column); }
+  | boolean punto parse par_abierto EXP par_cerrado
+  { $$=new Casteos($5,TIPO_NATIVA_CADENA.BOOLEANPARSE,@1.firt_line,@1.firt_column); }
+  //casteos INT
+  | toInt par_abierto EXP par_cerrado
+  { $$=new CasteosTo($3,TIPO_NATIVA_CADENA.TOINT,@1.firt_line,@1.firt_column); }
+  | toDouble par_abierto EXP par_cerrado
+  { $$=new CasteosTo($3,TIPO_NATIVA_CADENA.TODOUBLE,@1.firt_line,@1.firt_column); }
+  | typeof par_abierto EXP par_cerrado
+  { $$=new CasteosTo($3,TIPO_NATIVA_CADENA.TYPEOF,@1.firt_line,@1.firt_column); }
   | string par_abierto EXP par_cerrado
   { $$=new CasteosTo($3,TIPO_NATIVA_CADENA.TOSTRING,@1.firt_line,@1.firt_column); }
 
-  ;
+
+
+
+  //Operaciones de Comparacion
+  | EXP mayor EXP                   { $$ = new Mayor($1,$3,@1.firt_line,@1.firt_column);       }
+  | EXP menor EXP                   { $$ = new Menor($1,$3,@1.firt_line,@1.firt_column);       }
+  | EXP mayor_igual EXP             { $$ = new MayorIgual($1,$3,@1.firt_line,@1.firt_column);  }
+  | EXP menor_igual EXP             { $$ = new MenorIgual($1,$3,@1.firt_line,@1.firt_column);  }
+  | EXP igual_que EXP               { $$ = new IgualIgual($1,$3,@1.firt_line,@1.firt_column);  }
+  | EXP dif_que EXP                 { $$ = new Diff($1,$3,@1.firt_line,@1.firt_column);        }
+  
+  //Operaciones Lógicas
+  | EXP and EXP                     {  $$ = new And($1,$3,@1.firt_line,@1.firt_column);   }
+  | EXP or EXP                      { $$ = new Or($1,$3,@1.firt_line,@1.firt_column);  }
+  | not EXP                         {  $$ = new Not($2,@1.firt_line,@1.firt_column);  }
+  
+  //Valores Primitivos
+  
+  | entero                          { $$ = new Primitivo(0,$1,@1.firt_line,@1.firt_column); }
+  | decimal                         { $$ = new Primitivo(TIPO.DECIMAL,$1,@1.firt_line,@1.firt_column);}
+  | string                          { $$ = new Primitivo(TIPO.CADENA,$1,@1.firt_line,@1.firt_column);   }
+  | id                              { $$ = new Identificador($1,@1.firt_line,@1.firt_column);   }
+  | true                            { $$ = new Primitivo(TIPO.BOOLEAN,true,@1.firt_line,@1.firt_column);   }
+  | false                           { $$ = new Primitivo(TIPO.BOOLEAN,false,@1.firt_line,@1.firt_column);   }
+  | null                            { $$ = new Primitivo(TIPO.NULL,$1,@1.firt_line,@1.firt_column);  }
+  
+  //Arreglos
+  | ACCESO_ARREGLO                                      { $$ = $1; }
+  | ARRAY_LENGTH                                        { $$ = $1; }
+  | ARRAY_POP                                           { $$ = $1; }
+  | corchete_abierto LISTA_EXPRESIONES corchete_cerrado { $$ = $2; }
+  | ARRAY_METHOD                                        { $$ = $1; }
+  | corchete_abierto corchete_cerrado                   {    }
+  
+  //Types - accesos
+  | ACCESO_TYPE                                         { $$ = $1;   }
+  | ACCESO_TYPE igual EXP punto_coma                    {  $$ = new Asignacion_Struct_Exp($1,$3,@1.first_line,@1.first_column);}  
+  //| id id                                             { $$ = new Struct_Param($1,$2,@1.first_line,@1.first_column);}
+  //Ternario
+  | TERNARIO                                             {  $$ = $1;  }
+  
+  //Funciones
+  | LLAMADA_FUNCION_EXP                                  {  $$ = $1  }
+  
+;
+NATIVA_STRING:
+   id punto toLowercase par_abierto par_cerrado NATIVA_STRING2        
+  {  $$= new NativasString(new Identificador($1,@1.firt_line,@1.firt_column),TIPO_NATIVA_CADENA.TOLOWER,null,null,@1.firt_line,@1.firt_column,$6); }
+  | string punto toLowercase par_abierto par_cerrado NATIVA_STRING2        
+  {  $$= new NativasString($1,TIPO_NATIVA_CADENA.TOLOWER,null,null,@1.firt_line,@1.firt_column,$6); }
+
+  | id punto toUppercase par_abierto par_cerrado NATIVA_STRING2        
+  { $$= new NativasString(new Identificador($1,@1.firt_line,@1.firt_column),TIPO_NATIVA_CADENA.TOUPPER,null,null,@1.firt_line,@1.firt_column,$6); }
+  | string punto toUppercase par_abierto par_cerrado NATIVA_STRING2        
+  { $$= new NativasString($1,TIPO_NATIVA_CADENA.TOUPPER,null,null,@1.firt_line,@1.firt_column,$6); }
+
+  | id punto length par_abierto par_cerrado NATIVA_STRING2        
+  { $$= new NativasString(new Identificador($1,@1.firt_line,@1.firt_column),TIPO_NATIVA_CADENA.LENGHT,null,null,@1.firt_line,@1.firt_column,$6); }
+  | string punto length par_abierto par_cerrado NATIVA_STRING2        
+  { $$= new NativasString($1,TIPO_NATIVA_CADENA.LENGHT,null,null,@1.firt_line,@1.firt_column,$6); }
+
+  | id punto subString par_abierto EXP coma EXP par_cerrado NATIVA_STRING2        
+  { $$= new NativasString(new Identificador($1,@1.firt_line,@1.firt_column),TIPO_NATIVA_CADENA.SUBSTRING,$5,$7,@1.firt_line,@1.firt_column,$9); }
+  | string punto subString par_abierto EXP coma EXP par_cerrado NATIVA_STRING2        
+  { $$= new NativasString($1,TIPO_NATIVA_CADENA.SUBSTRING,$5,$7,@1.firt_line,@1.firt_column,$9); }
+
+  | id punto caracterOfPosition par_abierto EXP par_cerrado NATIVA_STRING2        
+  { $$= new NativasString(new Identificador($1,@1.firt_line,@1.firt_column),TIPO_NATIVA_CADENA.CARACTER_POSITION,$5,null,@1.firt_line,@1.firt_column,$7); }
+  | string punto caracterOfPosition par_abierto EXP par_cerrado NATIVA_STRING2        
+  { $$= new NativasString($1,TIPO_NATIVA_CADENA.CARACTER_POSITION,$5,null,@1.firt_line,@1.firt_column,$7); }
+
+  ///////////////////////////////////
+  | id punto toLowercase par_abierto par_cerrado         
+  { $$= new NativasString(new Identificador($1,@1.firt_line,@1.firt_column),TIPO_NATIVA_CADENA.TOLOWER,null,null,@1.firt_line,@1.firt_column); }
+  | string punto toLowercase par_abierto par_cerrado         
+  { $$= new NativasString($1,TIPO_NATIVA_CADENA.TOLOWER,null,null,@1.firt_line,@1.firt_column); }
+
+  | id punto toUppercase par_abierto par_cerrado         
+  {  $$= new NativasString(new Identificador($1,@1.firt_line,@1.firt_column),TIPO_NATIVA_CADENA.TOUPPER,null,null,@1.firt_line,@1.firt_column); }
+  | string punto toUppercase par_abierto par_cerrado         
+  { ; $$= new NativasString($1,TIPO_NATIVA_CADENA.TOUPPER,null,null,@1.firt_line,@1.firt_column); }
+
+  | id punto length par_abierto par_cerrado         
+  {  $$= new NativasString(new Identificador($1,@1.firt_line,@1.firt_column),TIPO_NATIVA_CADENA.LENGHT,null,null,@1.firt_line,@1.firt_column); }
+  | string punto length par_abierto par_cerrado         
+  {  $$= new NativasString($1,TIPO_NATIVA_CADENA.LENGHT,null,null,@1.firt_line,@1.firt_column); }
+
+  | id punto subString par_abierto EXP coma EXP par_cerrado         
+  {  $$= new NativasString(new Identificador($1,@1.firt_line,@1.firt_column),TIPO_NATIVA_CADENA.SUBSTRING,$5,$7,@1.firt_line,@1.firt_column); }
+  | string punto subString par_abierto EXP coma EXP par_cerrado         
+  {  $$= new NativasString($1,TIPO_NATIVA_CADENA.SUBSTRING,$5,$7,@1.firt_line,@1.firt_column); }
+
+  | id punto caracterOfPosition par_abierto EXP par_cerrado         
+  {  $$= new NativasString(new Identificador($1,@1.firt_line,@1.firt_column),TIPO_NATIVA_CADENA.CARACTER_POSITION,$5,null,@1.firt_line,@1.firt_column); }
+  | string punto caracterOfPosition par_abierto EXP par_cerrado         
+  {  $$= new NativasString($1,TIPO_NATIVA_CADENA.CARACTER_POSITION,$5,null,@1.firt_line,@1.firt_column); }
+
+;
+NATIVA_STRING2:
+
+   NATIVA_STRING2 punto toLowercase par_abierto par_cerrado             { $1.push(new NativasString("",TIPO_NATIVA_CADENA.TOLOWER,null,null,@1.firt_line,@1.firt_column)); $$=$1; }
+  | NATIVA_STRING2 punto toUppercase par_abierto par_cerrado            { $1.push(new NativasString("",TIPO_NATIVA_CADENA.TOUPPER,null,null,@1.firt_line,@1.firt_column)); $$=$1; }
+  | NATIVA_STRING2 punto length par_abierto par_cerrado                 { $1.push(new NativasString("",TIPO_NATIVA_CADENA.LENGHT,null,null,@1.firt_line,@1.firt_column)); $$=$1; }
+  | NATIVA_STRING2 punto subString par_abierto EXP coma EXP par_cerrado { $1.push(new NativasString("",TIPO_NATIVA_CADENA.SUBSTRING,$5,$7,@1.firt_line,@1.firt_column)); $$=$1; }
+  | NATIVA_STRING2 punto caracterOfPosition par_abierto EXP par_cerrado { $1.push(new NativasString("",TIPO_NATIVA_CADENA.CARACTER_POSITION,$5,null,@1.firt_line,@1.firt_column)); $$=$1; }
+  | punto toLowercase par_abierto par_cerrado                           { $$=[new NativasString("",TIPO_NATIVA_CADENA.TOLOWER,null,null,@1.firt_line,@1.firt_column)]; } 
+  | punto toUppercase par_abierto par_cerrado                           { $$=[new NativasString("",TIPO_NATIVA_CADENA.TOUPPER,null,null,@1.firt_line,@1.firt_column)]; }         
+  | punto length par_abierto par_cerrado                                { $$=[new NativasString("",TIPO_NATIVA_CADENA.LENGHT,null,null,@1.firt_line,@1.firt_column) ]; }
+  | punto subString par_abierto EXP coma EXP par_cerrado                { $$=[new NativasString("",TIPO_NATIVA_CADENA.SUBSTRING,$4,$6,@1.firt_line,@1.firt_column)]; }
+  | punto caracterOfPosition par_abierto EXP par_cerrado                { $$=[new NativasString("",TIPO_NATIVA_CADENA.CARACTER_POSITION,$4,null,@1.firt_line,@1.firt_column)]; }
+;
+
+
+ACCESO_ARREGLO:
+    id  EXPS_CORCHETE                                            {  $$ = new Acceso($1,$2,@1.first_line,@1.first_column); }
+  
+  | id  corchete_abierto begin dos_puntos EXP corchete_cerrado  {  $$ = new Fin_Rango($1,$5,@1.first_line,@1.first_column); }
+  | id  corchete_abierto EXP dos_puntos end corchete_cerrado    {  $$ = new Begin_Rango($1,$3,@1.first_line,@1.first_column); }
+  | id  corchete_abierto EXP dos_puntos EXP corchete_cerrado      {  $$ = new Rango($1,$3 ,$5,@1.first_line,@1.first_column); }
+  | id  corchete_abierto begin dos_puntos end corchete_cerrado    {  $$ = new Rango_Complete($1,$3 ,$5,@1.first_line,@1.first_column); }
+;
+
+ ARRAY_POP 
+     : id punto pop par_abierto par_cerrado                        { $$ = new Pop($1,@1.first_line,@1.first_column);   }
+     | id punto push par_abierto EXP par_cerrado                   { $$ = new Push($1,$5,@1.first_line,@1.first_column);   }
+     | id EXPS_CORCHETE punto pop par_abierto par_cerrado          { $$ = new Pop_List($1,$2,@1.first_line,@1.first_column);  }
+     | id EXPS_CORCHETE punto push par_abierto EXP par_cerrado     { $$ = new Push_List($1,$2,$6,@1.first_line,@1.first_column);   }     
+//   | id LISTA_ACCESOS_ARREGLO punto pop par_abierto par_cerrado  {    }
+//   | id LISTA_ACCESOS_TYPE punto pop par_abierto par_cerrado     {    }
+ ;
+ LISTA_EXPRESIONES 
+  : LISTA_EXPRESIONES coma EXP { $1.push($3); $$ = $1;  }
+  | EXP                        { $$ = [$1]; }
+;
+
+ARRAY_METHOD:
+  id nmral por EXP                                        {$$ = new Multiplicacion_Arr($1,$4,@1.first_line,@1.first_column);}
+ | id nmral div EXP                                       {$$ = new Division_Arr($1,$4,@1.first_line,@1.first_column);}
+ | id nmral menos EXP                                     {$$ = new Resta_Arr($1,$4,@1.first_line,@1.first_column);}
+ | id nmral mas EXP                                       {$$ = new Suma_Arr($1,$4,@1.first_line,@1.first_column);}
+ | sin nmral par_abierto id par_cerrado                   {$$ = new Seno_Arr($4,@1.first_line,@1.first_column);}
+ | cos nmral par_abierto id par_cerrado                   {$$ = new Cos_Arr($4,@1.first_line,@1.first_column);}
+ | tan nmral par_abierto id par_cerrado                   {$$ = new Tan_Arr($4,@1.first_line,@1.first_column);}
+;
+ACCESO_TYPE                                                   //$1 => id struct //$2 objetos del struct
+  : id LISTA_ACCESOS_TYPE                         { $$ = new Acceso_Struct($1,$2,@1.first_line,@1.first_column);   }
+ // | id = id LISTA_ACCESOS_TYPE  punto_coma       // {   $$ = new ($1,$2,@1.first_line,@1.first_column);   }
+  
+;
+TERNARIO 
+  : EXP interrogacion EXP dos_puntos EXP          { $$ = new Ternario($1,$3,$5,@1.firt_line,@1.firt_column);  }
+;
+LLAMADA_FUNCION_EXP:
+      id par_abierto par_cerrado                     { $$ = new Llamada($1,@1.first_line,@1.first_column); }
+    | id par_abierto PARAMETROS_LLAMADA par_cerrado  { $$ = new Llamada($1,@1.first_line,@1.first_column,$3); }    
+;
 // id asda 

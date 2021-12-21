@@ -138,6 +138,10 @@ export class Principal {
       }
     });
 
+    ast.excepciones.forEach((x)=>{
+      console.log(x.toString());
+    });
+
     //3era pasada
     ast.instrucciones.forEach((element) => {
       //if(!(element instanceof Main || ) )
