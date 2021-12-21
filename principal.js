@@ -34,6 +34,7 @@ class Principal {
         let ts_global = new tablasimbolos_1.TablaSimbolos(undefined);
         //ast
         const ast = new arbol_1.Arbol(ts_global, instrucciones[0]);
+        ast.excepciones.forEach((element) => { console.log(element); });
         //interpreto 1ra pasada
         ast.instrucciones.forEach((element) => {
             if (element instanceof funcion_1.Funcion) {

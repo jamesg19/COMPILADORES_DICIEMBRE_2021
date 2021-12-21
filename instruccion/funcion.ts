@@ -121,11 +121,19 @@ export class Funcion extends Instruccion {
     
     let entorno_local: TablaSimbolos = new TablaSimbolos(entorno);
     let return_value;
-    Principal.addComentario("Traduciendi Funcion "+this.id);
+    Principal.addComentario("  Traduciendo Funcion "+this.id);
 
+    Principal.historial += "void "+this.id+"(){\n";
+    
+    let temp = Principal.temp;
+    temp++;
+    let t = "t"+temp+";\n";//puntero de parametros
+    
+    
     this.instrucciones.forEach((instruccion) => {
+      
       let value = instruccion.traducir(entorno_local, arbol);
-
+   
       if (value instanceof Excepcion) {
         arbol.excepciones.push(value);
         arbol.consola = arbol.consola + value;
@@ -154,6 +162,9 @@ export class Funcion extends Instruccion {
         }
       }
     });
-    return return_value;
+    
+    Principal.historial += "return ;"
+    //""return"" return_value;
+    Principal.historial += "\n}\n";
   }
 }

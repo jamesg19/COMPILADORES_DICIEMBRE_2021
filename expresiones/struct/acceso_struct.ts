@@ -81,11 +81,11 @@ export class Acceso_Struct extends Instruccion {
                         if(temp_arr instanceof Array){
                           if(index<0 || index> temp_arr.length)
                           return value_return = new Excepcion("Semantico", "no existe el indice indicado para el arreglo " + this.id, "" + super.fila, "" + super.columna);
-                        return value_return = JSON.parse(JSON.stringify(temp_arr[index]));     
+                        return value_return = JSON.parse(JSON.stringify(temp_arr[parseInt(index)]));     
                         }
                         //this.tipo = exist.tipo;
-                        console.log(value_return);
-                        return value_return = JSON.parse(JSON.stringify(temp));
+                        
+                        return value_return = JSON.parse(JSON.stringify(temp_arr[parseInt(index)])); 
                         }else{
                           temp_arr = (temp_arr)[index];
                         }

@@ -59,12 +59,12 @@ export class MenorIgual extends Instruccion{
       //DECIMAL <= DECIMAL
       else if(this.leftExpression.tipo===TIPO.DECIMAL && this.rigthExpression.tipo===TIPO.DECIMAL ){
         this.tipo=TIPO.BOOLEAN;
-        return this.obtenerVal(this.leftExpression.tipo,exp1) <= this.obtenerVal(this.rigthExpression.tipo,exp2);
+        return this.obtenerVal(this.leftExpression.tipo,exp1) <=this.obtenerVal(this.rigthExpression.tipo,exp2);
       }
       //BOOLEAN <= BOOLEAN
       else if(this.leftExpression.tipo===TIPO.BOOLEAN && this.rigthExpression.tipo===TIPO.BOOLEAN ){
         this.tipo=TIPO.BOOLEAN;
-        return this.obtenerVal(this.leftExpression.tipo,exp1) <= this.obtenerVal(this.rigthExpression.tipo,exp2);
+        return this.obtenerVal(this.leftExpression.tipo,exp1) <=this.obtenerVal(this.rigthExpression.tipo,exp2);
       }
 
   }
