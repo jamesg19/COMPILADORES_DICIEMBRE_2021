@@ -322,7 +322,7 @@ INSTRUCCION:
   | DECLARACION_TYPE                {  addReporte('INSTRUCCION: DECLARACION_TYPE',' DECLARACION_TYPE: DECLARACION_TYPE.val'); $$ = $1 } //aca se crea la 'plantilla' para despues crear instancias
   | INSTANCIA_STRUCT                { addReporte('INSTRUCCION: INSTANCIA_STRUCT',' INSTANCIA_STRUCT: INSTANCIA_STRUCT.val');  $$ = $1 } 
   | ASIGNACION 	                    {  addReporte('INSTRUCCION: ASIGNACION',' ASIGNACION: ASIGNACION.val'); $$ = $1 } 
-  | PUSH_ARREGLO 	                  { addReporte('INSTRUCCION: PUSH_ARREGLO',' PUSH_ARREGLO: PUSH_ARREGLO.val');  $$ = $1 }
+  //| PUSH_ARREGLO 	                  { addReporte('INSTRUCCION: PUSH_ARREGLO',' PUSH_ARREGLO: PUSH_ARREGLO.val');  $$ = $1 }
   | IMPRIMIR 	                      { addReporte('INSTRUCCION: IMPRIMIR',' IMPRIMIR: IMPRIMIR.val');  $$ = $1 }
   | CONDICION_IF 	                  { addReporte('INSTRUCCION: CONDICION_IF',' CONDICION_IF: CONDICION_IF.val');  $$ = $1 }
   | SWITCH 	                        { addReporte('INSTRUCCION: SWITCH',' SWITCH: SWITCH.val');  $$ = $1 }
@@ -334,6 +334,7 @@ INSTRUCCION:
   | FOR 	                          { addReporte('INSTRUCCION: FOR',' FOR: FOR.val');  $$ = $1 }
   | FOR1_OF 	                      { addReporte('INSTRUCCION: RETURN',' RETURN: RETURN.val');  $$ = $1 }
   | FOR_IN 	                        { addReporte('INSTRUCCION: FOR_IN',' FOR_IN: FOR_IN.val');  $$ = $1 }
+  | ARRAY_POP punto_coma                      { addReporte('INSTRUCCION: ARRAY_POP',' ARRAY_POP: ARRAY_POP.val');  $$ = $1 }
   | INCREMENTO_DECREMENTO           { addReporte('INSTRUCCION: INCREMENTO_DECREMENTO',' INCREMENTO_DECREMENTO: INCREMENTO_DECREMENTO.val');  $$ = $1 }
   | PRINTLN                         { addReporte('INSTRUCCION: PRINTLN',' PRINTLN: PRINTLN.val');  $$ = $1 }
   | PRINT                           { addReporte('INSTRUCCION: PRINT',' PRINT: PRINT.val');  $$ = $1 } //listo
@@ -464,7 +465,7 @@ CONDICION_IF:
 
 
 PUSH_ARREGLO 
-  : id punto push par_abierto EXP par_cerrado PT_COMA                     {  }
+  : id punto push par_abierto EXP par_cerrado PT_COMA                     { console.log("ENTRA QUI EL PUSH"); $$ = new Push($1,$5,@1.first_line,@1.first_column);   }
   | id LISTA_ACCESOS_TYPE punto push par_abierto EXP par_cerrado PT_COMA  {  }
 ;
 

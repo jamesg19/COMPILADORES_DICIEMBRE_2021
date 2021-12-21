@@ -87,9 +87,9 @@ export class Print extends Instruccion {
                   //console.log(instruccioness);
                 }
               }
-              value = valorTemporal.toString();
+              value = valorTemporal.toString().replace('\\n', '\n');
             }else{
-              value=value.toString();
+              value=value.toString().replace('\\n', '\n');
             }
             
             
