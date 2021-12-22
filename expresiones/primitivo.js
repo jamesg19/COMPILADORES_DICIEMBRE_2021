@@ -66,7 +66,7 @@ class Primitivo extends Instruccion_1.Instruccion {
         principal_1.Principal.addComentario("Pasando cadena al heap , '" + x + "'");
         if (!x)
             x = "Undefined";
-        for (let i = 0; i < x.length - 1; i++) {
+        for (let i = 0; i < x.length; i++) {
             let item = x.charCodeAt(i);
             return_string += "heap[(int)H] = " + item + " ;\n";
             return_string += "H = H + 1;\n";

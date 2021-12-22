@@ -60,7 +60,7 @@ export class Dec_Struct extends Instruccion {
       );
 
     //getsimbolo para verificar  si existe una variable con el mismo id
-    let create_struct = entorno.getSimbolo(this.id);
+    let create_struct = entorno.consultar_en_tabla_actual(this.id);
     //console.log(!create_struct);
     if (create_struct)
       return new Excepcion(

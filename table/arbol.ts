@@ -34,7 +34,7 @@ export class Arbol{
      * @param  {Instruccion[]} instrucciones
      */
     constructor(TSglobal:TablaSimbolos,instrucciones:Instruccion[]){
-        this.excepciones = 
+        this.excepciones = new Array();
         this.funciones = new Array();
         this.TSglobal = TSglobal;
         this.instrucciones = instrucciones;

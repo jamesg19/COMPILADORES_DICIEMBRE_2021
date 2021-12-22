@@ -15,8 +15,8 @@ class Arbol {
         this.head = "#include <stdio.h>\n";
         this.etiqueta = ""; //para crear los saltos
         this.contador = 0; //para llevar el conteo de las etiquetas
-        this.excepciones =
-            this.funciones = new Array();
+        this.excepciones = new Array();
+        this.funciones = new Array();
         this.TSglobal = TSglobal;
         this.instrucciones = instrucciones;
         this.structs = new Map();

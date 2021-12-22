@@ -296,5 +296,47 @@ export class Nativas {
       Principal.addComentario("Fin Potencia String")
     return print_line;
   }
+  potencia_int(){
+    
+    Principal.addComentario("Potencia Enteros");
+    let temp = Principal.temp;
+    temp++;
+    let tbase = "t" + temp;//valor que se multiplicara
+    temp++
+    let texponente = "t" + temp;//cantidad de veces que se multiplicara
+    temp++
+    let tresultado = "t" + temp;//cantidad de veces que se multiplicara
+    temp++
+    let tpos = "t" + temp;
+    Principal.temp = temp;
+    
+    
+    let etiqueta = Principal.etiqueta;
+    
+    etiqueta++;
+    let label0 = "L"+etiqueta;
+    etiqueta++;
+    let label1 = "L"+etiqueta;
+    etiqueta++;
+    let label_salida = "L"+etiqueta;
+   Principal.etiqueta = etiqueta;
+   //
+   //inicia proceso para realizar una potencia
+   let potencia="\t"+tbase +" = P;\n"+
+   "\t"+texponente+" = P+1;\n"+
+   "\t"+tresultado+" = 1;\n"+
+   
+   "\t"+label0+":"+
+   tresultado+"= "+tresultado+" * "+texponente+";\n"+
+   texponente+" = "+texponente+" - 1;\n";
+   "if("+texponente+"== 0) goto "+label0+";\n"+
+   ""
+   
+   
+   
+   
+   
+   
+  }
   
 }

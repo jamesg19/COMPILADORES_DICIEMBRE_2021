@@ -37,6 +37,7 @@ export class Struct extends Instruccion {
     this.lista_simbolo = new Map();
     let contador = 0;
     
+    
   }
 
   /**
