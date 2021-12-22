@@ -45,7 +45,7 @@ export class ForEach extends Instruccion {
     interpretar(entorno: TablaSimbolos, arbol: Arbol) {
         //verifica si es un array
         if(this.condicion instanceof Array){
-
+            console.log("LA CONDICION EN EACH ES ARRAY")
             //declara la variable temporal
             const declaracion_temp=new D_Id(TIPO.ENTERO,this.temporal,false,this.fila,this.columna);
             const declaracion_tmp=declaracion_temp.interpretar(entorno,arbol);
@@ -99,6 +99,7 @@ export class ForEach extends Instruccion {
 
 
         }else{
+            console.log("/********/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*");
         //verifica que la condicion no sea una Excepcion
         const condition=this.condicion.interpretar(entorno,arbol);
         if(condition instanceof Excepcion){
@@ -116,7 +117,7 @@ export class ForEach extends Instruccion {
 
 
             //declara la variable temporal
-            const declaracion_temp=new D_Id(TIPO.CADENA,this.temporal,false,this.fila,this.columna);
+            const declaracion_temp=new D_Id(variable.tipo,this.temporal,false,this.fila,this.columna);
             const declaracion_tmp=declaracion_temp.interpretar(entorno,arbol);
             if(declaracion_tmp instanceof Excepcion){
                 return declaracion_tmp;
@@ -126,23 +127,36 @@ export class ForEach extends Instruccion {
             if( variable.arreglo){
 
                 var cantidad=this.condicion.interpretar(entorno,arbol);
+                //console.log("CANTIDAD "+cantidad);
                 if(cantidad instanceof Excepcion){
                     return cantidad;
                 }
                 for(let i=0;i<cantidad.length;i++){
-                    const nueva_tabla=new TablaSimbolos(entorno);
+                    const nueva_tablaa=new TablaSimbolos(entorno);
+
+                    // //declaracion
+                    // const declaracion_temp=new D_Id(variable.tipo,this.temporal,false,this.fila,this.columna);
+                    // const declaracion_tmp=declaracion_temp.interpretar(entorno,arbol);
+                    // if(declaracion_tmp instanceof Excepcion){
+                    //     return declaracion_tmp;
+                    // }
+
                     //creamos el objeto primitivo del valor en la posicion i
                     const valor=new Primitivo(variable.tipo,cantidad[i],this.fila,this.columna);
-                    
+
                     //asignacion del valor a la variable temporal
                     const asignacion_temp= new Asignacion(this.temporal,valor,this.fila,this.columna);
-                    asignacion_temp.interpretar(nueva_tabla,arbol);
+                    const asig =asignacion_temp.interpretar(nueva_tablaa,arbol);
+                    if(asig instanceof Excepcion){
+                        return asig;
+                    }
+
 
                     //ejecucion de las instrucciones
                     //ejecuta las instrucciones que estan dentro del FOR
                     this.instrucciones.forEach((element:Instruccion) => {
                         
-                        const result=element.interpretar(nueva_tabla,arbol);
+                        const result=element.interpretar(nueva_tablaa,arbol);
 
                         if(result instanceof Excepcion){
                             arbol.excepciones.push(result);

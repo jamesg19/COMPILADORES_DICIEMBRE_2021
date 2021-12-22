@@ -87,7 +87,7 @@ export class Print extends Instruccion {
                   //console.log(instruccioness);
                 }
               }
-              value = valorTemporal.toString().replace('\\n', '\n');
+              value = valorTemporal.toString().replace('\\n','\n');
             }else{
               value=value.toString().replace('\\n', '\n');
             }
@@ -97,7 +97,7 @@ export class Print extends Instruccion {
         } else {
           value = "Indefinido";
         }
-
+        //console.log("ESTO VIENE "+value+"      aallllvvvv ");
         arbol.consola += value+((this.newLine)?"\n":"");
         console.log(value);
       });

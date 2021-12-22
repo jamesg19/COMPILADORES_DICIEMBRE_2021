@@ -20,6 +20,7 @@ import { Reporte } from "./analizador/reporte";
 const Parser = require("./analizador/analizador");
 import { Nativas } from "./nativas";
 import { List_Declaracion } from "./instruccion/list_declaracion";
+import { TIPO } from "./table/tipo";
 
 export class Principal {
   static contador: number = 0;
@@ -51,6 +52,9 @@ export class Principal {
     const ast: Arbol = new Arbol(ts_global, instrucciones[0]);
     
     ast.excepciones.forEach((element)=>{ console.log(element)});
+    
+
+    
     //interpreto 1ra pasada
     ast.instrucciones.forEach((element: Instruccion) => {
       if (element instanceof Funcion) {
@@ -141,6 +145,9 @@ export class Principal {
     ast.excepciones.forEach((x)=>{
       console.log(x.toString());
     });
+    //IMPRIME LAS TS
+    this.graficarTS(ast);
+
 
     //3era pasada
     ast.instrucciones.forEach((element) => {
@@ -209,6 +216,19 @@ export class Principal {
   }
   static addComentario(comentario: string) {
     Principal.historial += "/* " + comentario + " */\n";
+  }
+
+  graficarTS(arbol:Arbol){
+
+    //RECORRE LA CANTIDAD DE TABLAS ALMACENADAS EN EL ARBOL
+      arbol.graficarts.forEach((graph)=>{
+        // console.log("----------INICIO TABLA----------- ");
+        // graph.listaElementos.forEach((x)=>{
+        //   console.log("ID "+x.id+" TIPO "+x.tipo+" VALOR "+x.valor+" FILA "+x.fila +" COLUMNA "+x.columna);
+        // });
+
+        // console.log("----------FIN TABLA----------- ");
+      });
   }
 }
 

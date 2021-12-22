@@ -28,6 +28,9 @@ class Primitivo extends Instruccion_1.Instruccion {
         if (this.tipo == tipo_1.TIPO.ENTERO || this.tipo == tipo_1.TIPO.DECIMAL) {
             return this.value;
         }
+        if (this.tipo == tipo_1.TIPO.CADENA) {
+            return this.value.replace('\\n', '\n');
+        }
         return this.value;
     }
     getNodo() {
