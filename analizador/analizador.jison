@@ -9,6 +9,7 @@
 
 //tipos de datos
 'string'    return 'string';
+'String'    return 'string';
 'int'       return 'int';
 'double'    return 'double';
 'boolean'   return 'boolean';
@@ -457,7 +458,7 @@ CONDICION_IF:
     //if con una instruccion
     
     | if par_abierto EXP par_cerrado  INSTRUCCION 
-    { addReporte('CONDICION_IF: if par_abierto EXP par_cerrado  INSTRUCCION ','EXP:=EXP.val'); $$=new If($3,$5,null,null,@1.firt_line,@1.firt_column); }
+    { addReporte('CONDICION_IF: if par_abierto EXP par_cerrado  INSTRUCCION ','EXP:=EXP.val'); $$=new If($3,[$5],null,null,@1.firt_line,@1.firt_column); }
     
     | if par_abierto EXP par_cerrado llave_abierta INSTRUCCIONES llave_cerrada else llave_abierta INSTRUCCIONES llave_cerrada 
     { addReporte('CONDICION_IF: if par_abierto EXP par_cerrado { INSTRUCCIONES } else { INSTRUCCIONES } ','EXP:=EXP.val'); $$=new If($3,$6,$10,null,@1.firt_line,@1.firt_column); }
@@ -638,7 +639,7 @@ EXP
   | ARRAY_POP                                           { addReporte('EXP:  ACCESO_ARREGLO','EXP:=ACCESO_ARREGLO');  $$ = $1; }
   | corchete_abierto LISTA_EXPRESIONES corchete_cerrado { addReporte('EXP:  { LISTA_EXPRESIONES }','EXP:=LISTA_EXPRESIONES');  $$ = $2; }
   | ARRAY_METHOD                                        {  addReporte('EXP:  ARRAY_METHOD','EXP:=ARRAY_METHOD'); $$ = $1; }
-  | corchete_abierto corchete_cerrado                   {    }
+  | corchete_abierto corchete_cerrado                   {  $$ = new Primitivo(TIPO.ARREGLO,0,@1.firt_line,@1.firt_column);  }
   
   //Types - accesos
   | ACCESO_TYPE                                         { addReporte('EXP:  ACCESO_TYPE','EXP:=ACCESO_TYPE'); $$ = $1;   }

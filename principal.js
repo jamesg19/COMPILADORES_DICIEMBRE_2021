@@ -104,6 +104,7 @@ class Principal {
             //console.log("Sentencias fuera de Main")
         });
         this.arbolG = ast;
+        //this.graficarAST();
     }
     // /**************************************************Traduccion****************************************************** */
     traducir(code) {
@@ -224,13 +225,13 @@ Principal.etiqueta = 0; //contro de etiquetas
 Principal.posicion = 0; //guarda la poscion en el stack
 Principal.heap = 0; //posicion en el heap    ???
 Principal.historial = "";
-//let principa: Principal = new Principal();
-// // const fs = require("fs"),NOMBRE_ARCHIVO = "file.java";
-// // fs.readFile(NOMBRE_ARCHIVO, "utf8", (error, datos) => {
-// //   if (error) throw error;
-// //   let principa: Principal = new Principal();
-// //   //console.log(datos)
-// //   principa.ejecutar(datos);
-// //   //principa.traducir(datos);
-// //   //console.log("El contenido es: ", datos);
-// // });
+// let principa: Principal = new Principal();
+// const fs = require("fs"),NOMBRE_ARCHIVO = "file.java";
+// fs.readFile(NOMBRE_ARCHIVO, "utf8", (error, datos) => {
+//   if (error) throw error;
+//   let principa: Principal = new Principal();
+//   //console.log(datos)
+//   principa.ejecutar(datos);
+//   //principa.traducir(datos);
+//   //console.log("El contenido es: ", datos);
+// });

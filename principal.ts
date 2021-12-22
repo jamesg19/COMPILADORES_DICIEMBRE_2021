@@ -144,6 +144,8 @@ export class Principal {
       }
     });
 
+    
+
     ast.excepciones.forEach((x)=>{
       console.log(x.toString());
     });
@@ -157,6 +159,7 @@ export class Principal {
     });
 
     this.arbolG=ast;
+    //this.graficarAST();
   }
 
   // /**************************************************Traduccion****************************************************** */
@@ -293,15 +296,15 @@ export class Principal {
   }
 }
 
-//let principa: Principal = new Principal();
+// let principa: Principal = new Principal();
 
-// // const fs = require("fs"),NOMBRE_ARCHIVO = "file.java";
+// const fs = require("fs"),NOMBRE_ARCHIVO = "file.java";
 
-// // fs.readFile(NOMBRE_ARCHIVO, "utf8", (error, datos) => {
-// //   if (error) throw error;
-// //   let principa: Principal = new Principal();
-// //   //console.log(datos)
-// //   principa.ejecutar(datos);
-// //   //principa.traducir(datos);
-// //   //console.log("El contenido es: ", datos);
-// // });
+// fs.readFile(NOMBRE_ARCHIVO, "utf8", (error, datos) => {
+//   if (error) throw error;
+//   let principa: Principal = new Principal();
+//   //console.log(datos)
+//   principa.ejecutar(datos);
+//   //principa.traducir(datos);
+//   //console.log("El contenido es: ", datos);
+// });

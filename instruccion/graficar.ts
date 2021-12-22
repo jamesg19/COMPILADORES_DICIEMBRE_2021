@@ -21,9 +21,14 @@ export class Graficar extends Instruccion{
     }
 
     interpretar(entorno: TablaSimbolos, arbol: Arbol) {
-
-
         const reporte=new TSreporte();
+        //agrega la TS GLOBAL
+        arbol.TSglobal.tabla.forEach((x)=>{
+            let elemento=new TSelemento(x.id+"",this.getTipoDato(x.tipo),x.valor+"",x.fila,x.columna);
+            reporte.listaElementos.push(elemento);
+        });
+        
+        //agrega la TS LOCAL        
         entorno.tabla.forEach((x)=>{
             
             let elemento=new TSelemento(x.id+"",this.getTipoDato(x.tipo),x.valor+"",x.fila,x.columna);
