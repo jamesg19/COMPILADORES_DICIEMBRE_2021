@@ -131,10 +131,8 @@ export class Print extends Instruccion {
     let cadena: string = "";
     let value_cadena: string = "";
     //me sirve para agregarle las comillas a la cadena
-  let contador:number = 0;
+  
     this.value?.forEach((x) => {  //print(4+3);
-      
-      contador++;
       
       let tr = x.traducir(entorno,arbol); //t[0]
       

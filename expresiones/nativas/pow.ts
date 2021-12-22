@@ -16,6 +16,8 @@ export class Pow extends Instruccion{
     fila: number;
     columna:number;
     tipo:TIPO;
+    
+    static Pow:boolean = false;
     /**
      * CONSTRUCTOR DE OPERACION TANGENTE()
      * @param operador 
@@ -193,10 +195,19 @@ export class Pow extends Instruccion{
         temp++;
         
         let t = "t"+temp;
-        Principal.temp = temp;
-        Principal.historial += t +" = pow("+izquierda+" , "+derecha+");" ;
-        Principal.historial += "\n";
+        
+        Pow.Pow = true;
+        // Principal.temp = temp;
+        // Principal.historial += t +" = pow("+izquierda+" , "+derecha+");" ;
+        // Principal.historial += "\n";
         this.tipo = TIPO.DECIMAL;
+        
+        let tspos = Principal.posicion;
+        Principal.historial += "P = "+tspos+";\n";
+        Principal.historial += "stack[(int)"+tspos+"] = " + izquierda+";\n";
+        Principal.historial += "stack[(int)"+(tspos+1)+"] = " + derecha+";\n";
+        Principal.historial += "potencia();\n" ;
+        Principal.historial += t +" =  stack[(int) P];\n";
         return t; 
     }
 

@@ -111,9 +111,7 @@ class Print extends Instruccion_1.Instruccion {
         let cadena = "";
         let value_cadena = "";
         //me sirve para agregarle las comillas a la cadena
-        let contador = 0;
         (_a = this.value) === null || _a === void 0 ? void 0 : _a.forEach((x) => {
-            contador++;
             let tr = x.traducir(entorno, arbol); //t[0]
             if (x instanceof identificador_1.Identificador) {
                 Print.print = true;

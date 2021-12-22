@@ -23,6 +23,7 @@ import { List_Declaracion } from "./instruccion/list_declaracion";
 import { Principal } from "./principal";
 import { Potencia } from './expresiones/artimetica/potencia';
 import { RepeticionCadena } from './expresiones/nativas/repeticion_cadena';
+import { Pow } from './expresiones/nativas/pow';
 
 export class Traducir {
   static funciones: string = "";
@@ -144,6 +145,7 @@ export class Traducir {
     let string_lower = NativasString.LOWER ? nativa.toLower() : "";
     let string_char = NativasString.LOWER ? nativa.charAt() : "";
     let potencia_str = RepeticionCadena.REPETICION ? nativa.potencia_string() : "";
+    let potencia_int = Pow.Pow? nativa.potencia_int()+"\n" : "";
 
     code_objeto =ast.head +
       "\n" +
@@ -159,6 +161,8 @@ export class Traducir {
       "\n" +
       potencia_str+  
       "\n" +
+      potencia_int+
+      "\n"+
       print_nativa +
       "\n";
 
