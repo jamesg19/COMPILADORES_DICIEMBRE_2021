@@ -2,6 +2,7 @@ import { Arbol } from "./table/arbol";
 import { Principal } from "./principal";
 import { Print } from "./instruccion/print";
 import { NativasString } from "./expresiones/nativas/nativas_string";
+import { Pow } from "./expresiones/nativas/pow";
 export class Nativas {
   constructor() {}
   print_function(arbol: Arbol): string {
@@ -308,6 +309,8 @@ export class Nativas {
     let tresultado = "t" + temp;//cantidad de veces que se multiplicara
     temp++
     let tpos = "t" + temp;
+    temp++
+    let tval = "t" + temp;
     Principal.temp = temp;
     
     
@@ -322,17 +325,27 @@ export class Nativas {
    Principal.etiqueta = etiqueta;
    //
    //inicia proceso para realizar una potencia
-   let potencia="\t"+tbase +" = P;\n"+
-   "\t"+texponente+" = P+1;\n"+
+   let potencia="void potencia(){\n"+
+   "\t"+tbase +" = P;\n"+
+   "\t"+tpos +" = P+1;//posicion del exponente\n"+
+   "\t"+tval +" = stack[(int)P];//posicion de la base\n"+
+   
+   "\t"+texponente+" = stack[(int)"+tpos+"];//valor del exponente\n"+
    "\t"+tresultado+" = 1;\n"+
    
-   "\t"+label0+":"+
-   tresultado+"= "+tresultado+" * "+texponente+";\n"+
-   texponente+" = "+texponente+" - 1;\n";
-   "if("+texponente+"== 0) goto "+label0+";\n"+
-   ""
+   "\t"+label0+":\n"+
+   "\t\t"+tresultado+"= "+tresultado+" * "+tval+";\n"+
+   "\t\t"+texponente+" = "+texponente+" - 1;\n"+
+   "\t\t"+"if("+texponente+"== 0) goto "+label1+";\n"+
+   "\t\t\t"+"goto "+label0+";\n"+
+   
+   "\t"+label1+":\n"+
+   "\t\t"+   "P = P + 2;\n"+
+   "\t\t"+"stack[(int) P] = "+tresultado+";\n"+//salida
+   "}";
    
    
+  return potencia;
    
    
    
