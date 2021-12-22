@@ -46,6 +46,8 @@ class Primitivo extends Instruccion_1.Instruccion {
         if ((0, util_1.isNumber)(this.value))
             this.tipo = tipo_1.TIPO.DECIMAL;
         codigo = this.value;
+        if (this.tipo == tipo_1.TIPO.BOOLEAN)
+            return (this.value) ? 1 : 0;
         if (this.tipo == tipo_1.TIPO.CADENA) {
             codigo = this.transform_cadena(this.value);
         }

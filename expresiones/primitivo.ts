@@ -53,6 +53,8 @@ export class Primitivo extends Instruccion {
     let codigo
     if(isNumber(this.value)) this.tipo = TIPO.DECIMAL;
     codigo=this.value;
+    if(this.tipo == TIPO.BOOLEAN)
+      return (this.value)?1:0;
     
     if(this.tipo == TIPO.CADENA){
       codigo = this.transform_cadena(this.value);

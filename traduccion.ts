@@ -24,6 +24,7 @@ import { Principal } from "./principal";
 import { Potencia } from './expresiones/artimetica/potencia';
 import { RepeticionCadena } from './expresiones/nativas/repeticion_cadena';
 import { Pow } from './expresiones/nativas/pow';
+import { Acceso } from './expresiones/array/acceso';
 
 export class Traducir {
   static funciones: string = "";
@@ -37,7 +38,7 @@ export class Traducir {
     const ast: Arbol = new Arbol(ts_global, instrucciones[0]);
 
     ast.excepciones.forEach((element) => {
-      console.log(element);
+      console.log("excepciones",element);
     });
     //interpreto 1ra pasada
     ast.instrucciones.forEach((element: Instruccion) => {
@@ -146,7 +147,7 @@ export class Traducir {
     let string_char = NativasString.LOWER ? nativa.charAt() : "";
     let potencia_str = RepeticionCadena.REPETICION ? nativa.potencia_string() : "";
     let potencia_int = Pow.Pow? nativa.potencia_int()+"\n" : "";
-
+    let acceso = Acceso.ACCCESO? nativa.acceso_array()+"\n" : "";
     code_objeto =ast.head +
       "\n" +
       ast.list_temporales() +
@@ -162,6 +163,8 @@ export class Traducir {
       potencia_str+  
       "\n" +
       potencia_int+
+      "\n"+
+      acceso+
       "\n"+
       print_nativa +
       "\n";

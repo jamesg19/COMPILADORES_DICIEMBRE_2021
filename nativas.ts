@@ -3,6 +3,7 @@ import { Principal } from "./principal";
 import { Print } from "./instruccion/print";
 import { NativasString } from "./expresiones/nativas/nativas_string";
 import { Pow } from "./expresiones/nativas/pow";
+import { table } from "console";
 export class Nativas {
   constructor() {}
   print_function(arbol: Arbol): string {
@@ -26,7 +27,7 @@ export class Nativas {
    Principal.etiqueta = etiqueta;
    
     let print_line: string =
-      "/*------NATIVES------*/\n" +
+      "/*  Imprimir secuencia de caracteres  */\n" +
       "void printString() {\n" +
       "\t"+t1+"= P;\n" +
       "\t"+t2+" = stack[(int)"+t1+"];\n" +
@@ -347,9 +348,101 @@ export class Nativas {
    
   return potencia;
    
-   
-   
-   
+  }
+  acceso_array(){
+     
+    Principal.addComentario("buscando elemento");
+    
+    let temp = Principal.temp;
+    temp++;
+    let t_pos_heap_element = "t" + temp;////;posicion que se busca en el heap
+    temp++
+    let t_array = "t" + temp;//posicion del array en el stack
+    temp++
+    let t_contador = "t" + temp;//contador de posciones que han pasado
+    temp++
+    let tref = "t" + temp;//posicion que se devuelve
+    temp++
+    let taux = "t" + temp;//una variable auxiliar
+    temp++
+    let temp_comparacio = "t" + temp;//temporal que guardara el resultado de la comparacion
+    temp++
+    let t2 = "t" + temp;
+    Principal.temp = temp;
+    
+    
+    let etiqueta = Principal.etiqueta;
+    
+    etiqueta++;
+    let label0 = "L"+etiqueta;
+    etiqueta++;
+    let label1 = "L"+etiqueta;
+    etiqueta++;
+    etiqueta++;
+    let label2 = "L"+etiqueta;
+    let literacion = "L"+etiqueta;
+    etiqueta++;
+    let liter = "L"+etiqueta;
+    etiqueta++;
+    let labelsalida = "L"+etiqueta;
+   Principal.etiqueta = etiqueta;
+    
+    
+    let acces:string= "void acces(){\n"+
+                                    
+          "\t"+t_array +" = P;//posicion del arreglo en el stack\n"+
+          "\t"+t_pos_heap_element + " = P + 1 ;//elemento que se busca\n"+
+          "\t"+t_contador+"= 0;//un contador de posicones\n"+
+          
+          
+           "\t"+t_array +"= stack[(int) "+t_array+"] ;\n"+
+           "\t"+t_array +"= stack[(int) "+t_array+"] ;\n"+
+           "\t"+t_pos_heap_element  +"= stack[(int) "+t_pos_heap_element+"] ;\n"+
+           
+          
+           "//iniciando con las iteraciones para buscar el elemento\n"+
+          
+           "\n\t"+label0+":\n"+
+           "if ("+t_contador+"=="+ t_pos_heap_element+") goto "+labelsalida+";\n"+
+           label2+":\n"+
+           t_array+" = "+t_array+" + 1 ;\n"+
+           
+           "if(heap[(int)"+t_array+"] == -1 ) goto " +label1+";\n"+
+                    "goto "+label2+";"+
+           
+           
+           label1+":\n"+
+           t_array +"="+ t_array + "+ 1;\n//finaliza con -1, entonces le sumo 1 para entrar al nuevo item"+
+           t_contador +" = "+t_contador + "+ 1 ;\n//aumento el contador"+
+           "goto "+label0+";\n"+
+           labelsalida+" : \n"+
+           "P = "+t_array+";\n"+
+           "return;\n"+
+           
+           //heap[(int)"+t_array+"];\n"+
+          //  "\t\t"+tref  +" = heap[(int)"+t_array+"];\n//obtengo lo que esta almacenado en el heap"+
+          //  "if("+tref+" == -1) goto"+label1+";\n"//label1 -> aumenta el contador
+          //  "goto "+label0+";\n"+//-> 
+          //  label1+":\n"+
+           
+          // "\t\t"+taux  +" = "+tref+";//almacena la posicion actual antes de continuar con la iteracion\n"+
+          // "\t\t"+temp_comparacio + " = "+t_contador+"=="+t_pos_heap_element+";\n"+
+          // "\n\t\t"+"if("+temp_comparacio+") goto " +labelsalida+";\n"+
+          // "\t"+liter+":\n"+
+          // "\t\t"+t_array  +" = "+t_array+" + 1;\n"+
+          // "\t\t"+tref  +" = heap[(int)"+t_array+"];\n"+
+          // //"if("+tref+" != -1 ) goto " +liter+";\n"+
+          // "\n\t\t"+"if("+tref+" == -1 ) goto " +label0+";\n"+
+          // "\t\t"+t_array +" = "+t_array+" + 1 ;\n"+
+          // "\t\t"+"goto "+liter+";\n"+
+          // "\t"+labelsalida+":\n"+
+          // "\t\t"+"P = "+t_array+";\n"+
+          // "\t"+"return;\n"+
+          
+          
+        "}\n";
+    
+    return acces;
   }
   
 }

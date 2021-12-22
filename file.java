@@ -58,5 +58,5 @@ void main(){
     println("Pos | Val \n",temp);
 
     vaciar();
-    desapilar();
+    // desapilar();
 }

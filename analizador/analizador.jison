@@ -400,10 +400,16 @@ FOR_IN
 ;
 
 ASIGNACION 
-  : id igual EXP          punto_coma         { addReporte('ASIGNACION: id igual EXP ;','EXP:= EXP.val; ');  $$ = new Asignacion($1, $3,false,@1.firt_line,@1.firt_column); }
+  : id  igual corchete_abierto corchete_cerrado    punto_coma         { addReporte('ASIGNACION: id -= EXP ;','EXP:= EXP.val; '); $$ = new Asignacion($1, null,false,@1.firt_line,@1.firt_column); }  
+   | id igual EXP          punto_coma         { addReporte('ASIGNACION: id igual EXP ;','EXP:= EXP.val; ');  $$ = new Asignacion($1, $3,false,@1.firt_line,@1.firt_column); }
   | id mas igual EXP      punto_coma         { addReporte('ASIGNACION: id += EXP ;','EXP:= EXP.val; '); $$ = new Asignacion_Mas($1, $4,true,@1.firt_line,@1.firt_column); }
   | id menos igual EXP    punto_coma         { addReporte('ASIGNACION: id -= EXP ;','EXP:= EXP.val; '); $$ = new Asignacion_Mas($1, $4,false,@1.firt_line,@1.firt_column); }
+  
+  
+  
   | ACCESO_TYPE igual EXP  punto_coma        { addReporte('ASIGNACION: ACCESO_TYPE = EXP ;',' EXP:= EXP.val; ');   $$ = new Asignacion_VAR_STRUCT($3,$1,@1.first_line,@1.first_column);}  
+  //| ACCESO_TYPE igual  id par_abierto LISTA_EXPRESIONES par_cerrado punto_coma  
+  //{ addReporte('ASIGNACION: ACCESO_TYPE = EXP ;',' EXP:= EXP.val; ');   $$ = new Asignacion_Struct_Struct($1,new Constructor_st($3,$5); }
 
 ;
 
@@ -639,7 +645,7 @@ EXP
   | ARRAY_POP                                           { addReporte('EXP:  ACCESO_ARREGLO','EXP:=ACCESO_ARREGLO');  $$ = $1; }
   | corchete_abierto LISTA_EXPRESIONES corchete_cerrado { addReporte('EXP:  { LISTA_EXPRESIONES }','EXP:=LISTA_EXPRESIONES');  $$ = $2; }
   | ARRAY_METHOD                                        {  addReporte('EXP:  ARRAY_METHOD','EXP:=ARRAY_METHOD'); $$ = $1; }
-  | corchete_abierto corchete_cerrado                   {  $$ = new Primitivo(TIPO.ARREGLO,0,@1.firt_line,@1.firt_column);  }
+  
   
   //Types - accesos
   | ACCESO_TYPE                                         { addReporte('EXP:  ACCESO_TYPE','EXP:=ACCESO_TYPE'); $$ = $1;   }
