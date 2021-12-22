@@ -29,7 +29,7 @@ import { Acceso } from './expresiones/array/acceso';
 export class Traducir {
   static funciones: string = "";
 
-  traducir(code: string) {
+  traducir(code: string):string {
     const instrucciones = Parser.parse(code);
 
     let ts_global: TablaSimbolos = new TablaSimbolos(undefined);
@@ -170,6 +170,8 @@ export class Traducir {
       "\n";
 
     console.log(code_objeto + "\n" + Principal.historial);
+    let codeshare=code_objeto + "\n" + Principal.historial+"";
+    return codeshare;
   }
 
   // /**************************************************Traduccion****************************************************** */
@@ -181,14 +183,14 @@ export class Traducir {
 
 //let principa: Principal = new Principal();
 
-const fs = require("fs"),
-  NOMBRE_ARCHIVO = "file.java";
+// const fs = require("fs"),
+//   NOMBRE_ARCHIVO = "file.java";
 
-fs.readFile(NOMBRE_ARCHIVO, "utf8", (error, datos) => {
-  if (error) throw error;
-  let traducir: Traducir = new Traducir();
-  // console.log(datos)
-  traducir.traducir(datos);
-  //principa.ejecutar(datos);
-  //console.log("El contenido es: ", datos);
-});
+// fs.readFile(NOMBRE_ARCHIVO, "utf8", (error, datos) => {
+//   if (error) throw error;
+//   let traducir: Traducir = new Traducir();
+//   // console.log(datos)
+//   traducir.traducir(datos);
+//   //principa.ejecutar(datos);
+//   //console.log("El contenido es: ", datos);
+// });
