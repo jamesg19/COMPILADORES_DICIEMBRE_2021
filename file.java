@@ -38,33 +38,20 @@ StructBasico();
 }
 
 
-void StructBasico(){
-    t persona = t("Calificacion",25);
-    println(persona);
 
-    persona.nombre = "Cambio";
-    persona.edad = 40;
-
-    println(persona);
-
-
-    persona = null;
-    println(persona);
-
-}
 
 
 void funcion1() {
-    graficar_ts(); //Grafica global
+graficar_ts(); //Grafica global
 }
 
 void funcion2(int param1, String param2, boolean param3) {
-    graficar_ts(); //Grafica global + 3 parametros
+graficar_ts(); //Grafica global + 3 parametros
 }
 
 void funcion3(){
-    int x = 10;
-    int y = 10;
-    int z = 20;
-    graficar_ts();//Grafica global + 3 variables
+int x = 10;
+int y = 10;
+int z = 20;
+graficar_ts();//Grafica global + 3 variables
 }

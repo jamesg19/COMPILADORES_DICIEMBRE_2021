@@ -193,7 +193,7 @@ export class RepeticionCadena extends Instruccion{
                     
                     
                     Principal.historial += "P = "+(t_cadena)+";\n";
-                RepeticionCadena.REPETICION = true;
+                    RepeticionCadena.REPETICION = true;
                     
                     this.tipo=TIPO.CADENA;
                     return "P";
@@ -226,9 +226,39 @@ export class RepeticionCadena extends Instruccion{
                     return new Excepcion('Semantico','El tipo de expresion debe ser cadena en repeticion ',`${this.fila}`,`${this.columna}`);
                 }
                 var cadena="";
-                for(let i=0;i<this.inicio.interpretar(entorno,arbol);i++){
-                    cadena+=this.identificador.interpretar(entorno,arbol);
-                }
+                //for(let i=0;i<this.inicio.interpretar(entorno,arbol);i++){
+                    cadena+=this.identificador.traducir(entorno,arbol);
+                //}
+                
+                
+                
+                let temp:number = Principal.temp;
+                temp++;
+                let t_cadena = "t"+temp;
+                temp++;
+                let t_cantidad = "t"+temp;
+                //this.inicio.interpretar(entorno,arbol)
+                let cantidad = this.inicio.interpretar(entorno,arbol);
+                
+                Principal.addComentario("Posicion libre en el stack");
+                    Principal.historial += "P = "+(Principal.posicion+2)+";\n";//obtengo la posicion libre actual
+                    Principal.addComentario("Obtengo la posicion de la variable");
+                    Principal.historial += t_cadena+" = "+(cadena)+";\n";//obtengo la posicion de la cadena
+                    Principal.addComentario("Guardo  la posicion de la cadena en la posicion libre del stack")                    
+                    Principal.historial += "stack[(int) P] ="+t_cadena+";\n ";//guarda la posicion de la cadena 
+                    Principal.addComentario("Almaceno la cantidad de veces que se debe repetir la cadena")
+                    Principal.historial += "stack[(int) (P+"+1+")] = "+  cantidad +";\n";
+                    
+                    Principal.historial += "potencia_string();\n";
+                    
+                    
+                    
+                    Principal.historial += "P = "+(t_cadena)+";\n";
+                    RepeticionCadena.REPETICION = true;
+                    
+                    this.tipo=TIPO.CADENA;
+                
+                
                 this.tipo=TIPO.CADENA;
                 return cadena;
 
@@ -247,6 +277,36 @@ export class RepeticionCadena extends Instruccion{
 
         }
     }
+    
+    
+    transform_cadena(x: string, arbol: Arbol): string {
+        let return_string: string = "";
+        let temp = Principal.temp;
+        temp++;
+        let t  = "t"+temp;
+        return_string = t+ " = H;\n";
+        
+        Principal.temp = temp;
+        //obtener codigo ASCII de cada caracter de la cadena
+        //cadena en el heap
+        if(!x) x="Undefined";
+        
+        for (let i = 0; i < x.length-1; i++) {
+          let item: number = x.charCodeAt(i);
+          return_string += "heap[(int)H] = " + item + " ;\n";
+          return_string += "H = H + 1;\n";
+          //console.log(item);
+        }
+        return_string += "heap[(int)H] = -1 ;\n";
+        return_string += "H = H + 1;\n";
+    
+        //referencia de la cadena desde el stack
+        //Principal.posicion;
+        return_string +=
+          "t" + Principal.temp + " = P + " + Principal.posicion + ";\n";
+          
+        return t;
+      }
 
 }
 

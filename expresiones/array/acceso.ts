@@ -103,4 +103,63 @@ export class Acceso extends Instruccion {
       }
       return nodo;
   }
+  
+  
+  traducir(entorno: TablaSimbolos, arbol: Arbol): any {
+    let exist = entorno.getSimbolo(this.id); //verifico que exista la variable
+
+    if (!exist)
+      return new Excepcion(
+        "Semantico",
+        "No se encontro " + this.id,
+        super.fila + "",
+        super.columna + ""
+      );
+    if (!exist.arreglo)
+      //verifico que sea un arreglo
+      new Excepcion(
+        "Semantico",
+        "No es un arragle " + this.id,
+        super.fila + "",
+        super.columna + ""
+      );
+
+    let contador = this.list_expresiones.length;
+    let temp:any =  (exist.valor);
+    let value_return;
+    this.tipo = exist.tipo;
+
+    if (contador == 1) temp = exist?.valor;
+
+    this.list_expresiones.forEach((x) => {
+      let index = x.interpretar(entorno, arbol);
+      if (index instanceof Excepcion) return index;
+
+      if (!(x.tipo == TIPO.ENTERO))
+        return new Excepcion(
+          "Semantico",
+          "Se esperaba una expresion numerica",
+          super.fila + "",
+          super.columna + ""
+        );
+      contador--;
+      if (contador == 0) {
+        if (temp instanceof Array) {
+          if (index < 0 || index > temp.length)
+            return value_return = new Excepcion("Semantico", "no existe el indice indicado para el arreglo " + this.id, "" + super.fila, "" + super.columna);
+          return value_return = JSON.parse(JSON.stringify(temp[parseInt(index)]));
+        }
+        this.tipo = exist.tipo;
+        value_return = JSON.parse(JSON.stringify(temp));
+        //if()
+        //value_return = new Excepcion("Semantico","no existe el indice indicado para el arreglo "+this.id,""+super.fila,""+super.columna);
+        //return (value_return = JSON.parse(JSON.stringify(temp[index])));
+      } else {
+        this.tipo = exist.tipo;
+        temp = (temp)[index];
+        
+      }
+    });
+    return value_return;
+  }
 }

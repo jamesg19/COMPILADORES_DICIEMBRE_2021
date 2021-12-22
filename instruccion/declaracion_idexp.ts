@@ -96,6 +96,7 @@ export class D_IdExp extends Instruccion {
     nodo.agregarHijoNodo(this.exp.getNodo());
     return nodo;
   }
+  
   traducir(e: TablaSimbolos, arbol: Arbol): any {
     //Validacion de variable existente
     let variable = e.getSimbolo(this.id); //e.getVariable(this.id);

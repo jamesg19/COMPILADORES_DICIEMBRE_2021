@@ -5,6 +5,8 @@ import { Arbol } from "../../table/arbol";
 import { Excepcion } from "../../table/excepcion";
 import { Simbolo } from "../../table/simbolo";
 import { NodoAST } from "../../abs/nodo";
+import { Principal } from '../../principal';
+import { Resultado3D } from '../../traduccion/resultador3d';
 
 export class Arreglo extends Instruccion {
   id: string;
@@ -160,6 +162,79 @@ export class Arreglo extends Instruccion {
     return nodo;
   }
 
+  traducir(entorno: TablaSimbolos, arbol: Arbol): any {
+    
+    Principal.addComentario("Declarando Arreglos");
+    
+    let value_array: any[] = [];
+    
+    let temp = Principal.temp;
+    temp++;
+    let th_position = "t"+temp;
+    
+    Principal.temp = temp;
+    Principal.historial += th_position + "= H; //Posicion inicial que ocupara el array en  el heap\n";
+    
+    
+    this.lst_expresiones.forEach((x) => {
+      
+        let result_value = x.traducir(entorno, arbol);
+        
+        if (x.tipo != this.tipo) {
+          console.log(
+            "x.tipo != this.tipo",
+            x.tipo != this.tipo,
+            x.tipo,
+            this.tipo
+          );
+          return new Excepcion(
+            "Semantico",
+            "Se esta asigando un tipo de valor inesperado",
+            "" + super.fila,
+            "" + this.columna
+          );
+        }
+     
+     if( x.tipo == Tu)
+      if (result_value instanceof Excepcion) return result_value;
+
+      //let value = JSON.parse(JSON.stringify(result_value));
+
+      
+      Principal.historial += "heap[(int) H] = " + result_value+";\n";
+      Principal.historial += "H = H + 1;\n"
+      
+    });
+
+    let value_object = JSON.parse(JSON.stringify(value_array));
+
+    let simbolo: Simbolo = new Simbolo(
+      this.id,
+      this.tipo,
+      super.fila,
+      super.columna,
+      value_object,
+      true,
+      false
+    );
+    
+    entorno.addSimbolo(simbolo);
+    Principal.addComentario("Agregando referencia del heap en el stack");
+    
+    Principal.historial += "heap[(int) H] = " + (-1)+";\n";
+      Principal.historial += "H = H + 1;\n"
+    
+    let temp1 = Principal.temp;
+    temp1++;
+    Principal.temp = temp1;
+    
+    let ts = "t"+temp1;
+    Principal.historial += ts + " = " +simbolo.posicion+";\n";
+    Principal.historial += "stack[(int) "+ts+"] = " +th_position + ";\n";
+    
+    
+    Principal.addComentario("Fin De La De")
+  }
 
 
 }
