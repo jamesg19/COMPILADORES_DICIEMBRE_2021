@@ -1,95 +1,62 @@
-// /**** Arbol binario de busqueda ***/
-// struct Nodo{
-//   Nodo izq,
-//   Nodo der,
-//   int indice,
-//   String nombre
-// };
+/************ STACK *****************/
+int[] stack = [0];
+int MAXSIZE = 50;
+int MINZIE = 0;
 
-// struct Arbol{
-//   Nodo raiz 
-// };
+void apilar(int num) {
+    if(stack.length() == MAXSIZE){
+        print("Pila llena");
+    }
+    else{
+        stack.push(num);
+    }
+}
 
-// Arbol arbol  = Arbol(null);
+void desapilar(){
+    if(stack.length() == MINZIE){
+        print("Pila llena");
+        return;
+    }
+    else{
+        stack.pop();
+    }
+}
 
-// Nodo insertar(Nodo nodo, int indice, String nombre) {
-//   if(nodo == null){
-//       nodo = Nodo(null, null, indice, nombre);
-//   }
-//   else if(indice < nodo.indice){
-//       nodo.izq = insertar(nodo.izq, indice, nombre);
-//   }
-//   else {
-//       nodo.der = insertar(nodo.der, indice, nombre);
-//   }
-//   return nodo;
-// }
+boolean estadoPila(){
+    return stack.length() == MAXSIZE;
+}
 
-// void preOrden(Nodo raiz){
-//   if(raiz != null){
-//       println("Indice: $raiz.indice  Dato: $raiz.nombre");
-//       preOrden(raiz.izq);
-//       preOrden(raiz.der);
-//   }
-// }
-
-// void postOrden(Nodo raiz) {
-//   if(raiz != null){
-//       postOrden(raiz.izq);
-//       postOrden(raiz.der);
-//       println("Indice: $raiz.indice  Dato: $raiz.nombre");
-//   }
-// }
-
-// void inOrden(Nodo raiz){
-//   if(raiz != null){
-//       inOrden(raiz.izq);
-//       println("Indice: $raiz.indice  Dato: $raiz.nombre");
-//       inOrden(raiz.der);
-//   }
-// }
-
-// void cambio(Nodo raiz, int indice, String nuevoNombe){
-//   if(raiz == null){
-//      println("Indice no encontrado: ", indice);
-//       return;
-//   }
-
-//   if(raiz.indice == indice){
-//       println("Encontrado: $indice");
-//       raiz.nombre = nuevoNombe;
-//       return;
-//   }
-//   else if(indice < raiz.indice){
-//       cambio(raiz.izq, indice, nuevoNombe);
-//       return;
-//   }
-//   cambio(raiz.der, indice, nuevoNombe);
-// }
-
-// void main(){
-//   println("-------- INSERTANDO ---------");
-// arbol.raiz = insertar(arbol.raiz, 10,"id1");
-// arbol.raiz = insertar(arbol.raiz, 5,"id2");
-// arbol.raiz = insertar(arbol.raiz, 12,"id3");
-// arbol.raiz = insertar(arbol.raiz, 9,"id4");
-// arbol.raiz = insertar(arbol.raiz, 3,"id5");
-// arbol.raiz = insertar(arbol.raiz, 14,"id6");
-// println("--------- PREORDEN ----------");
-// preOrden(arbol.raiz); // (* RESULTADO : 10, 5, 3, 9, 12, 14 *)
-// println("--------- POSTORDEN ----------");
-// postOrden(arbol.raiz); // (* RESULTADO : 3, 9, 5, 14, 12, 10*)
-// println("--------- INORDEN ----------");
-// inOrden(arbol.raiz); // (* RESULTADO : 3, 5, 9, 10, 12, 14*)
-
-// println("--------- CAMBIANDO --------");
-// cambio(arbol.raiz,3,"idnuevo"); // (* RESULTADO: Econtrado 3 *)
-// cambio(arbol.raiz,4,"no encontrado");  //(*RESULTADO: No encontrado 4*)
-// inOrden(arbol.raiz); 
-// }
+void vaciar(){
+    stack = [];
+}
 
 void main(){
-  string[] arreglo = ["aaa", "bbb", "fff"];
-  println(arreglo[1]);
-  println("cadena");
+    for(int i = 1; i < 20 && !estadoPila(); i++){
+        apilar(i);
+    }
+    println(stack.length()); //20
+    println(stack);
+
+    for (int i = 0; i < 10; i++){
+        desapilar();
+    }
+    println(stack.length()); //10
+    println(stack);
+
+    for(int i = 10; i < 55; i++){
+        apilar(i);
+    }
+
+    println(stack.length()); //50
+    println(stack);
+    string temp = "";
+    for i in stack{
+
+        temp = temp & "|" & i & "|" & stack[i] & "|\n";
+        println(stack.length());
+    }
+    println("Pos | Val \n",temp);
+
+    vaciar();
+    // desapilar();
 }

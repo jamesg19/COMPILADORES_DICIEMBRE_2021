@@ -140,7 +140,7 @@ export class Case extends Instruccion{
                     if(element instanceof Excepcion){
                         arbol.excepciones.push(element);
                         arbol.updateConsolaError(element.toString());
-                        console.log(element.toString());
+                            console.log(element.toString());
                     }else{
 
                     const result=element.traducir(nuevaTabla,arbol);
