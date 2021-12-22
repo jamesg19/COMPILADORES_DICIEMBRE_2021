@@ -403,6 +403,8 @@ ASIGNACION
   | id mas igual EXP      punto_coma         { addReporte('ASIGNACION: id += EXP ;','EXP:= EXP.val; '); $$ = new Asignacion_Mas($1, $4,true,@1.firt_line,@1.firt_column); }
   | id menos igual EXP    punto_coma         { addReporte('ASIGNACION: id -= EXP ;','EXP:= EXP.val; '); $$ = new Asignacion_Mas($1, $4,false,@1.firt_line,@1.firt_column); }
   | ACCESO_TYPE igual EXP  punto_coma        { addReporte('ASIGNACION: ACCESO_TYPE = EXP ;',' EXP:= EXP.val; ');   $$ = new Asignacion_VAR_STRUCT($3,$1,@1.first_line,@1.first_column);}  
+  //| ACCESO_TYPE igual  id par_abierto LISTA_EXPRESIONES par_cerrado punto_coma  
+  //{ addReporte('ASIGNACION: ACCESO_TYPE = EXP ;',' EXP:= EXP.val; ');   $$ = new Asignacion_Struct_Struct($1,new Constructor_st($3,$5); }
 
 ;
 

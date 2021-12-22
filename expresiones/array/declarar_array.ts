@@ -5,8 +5,8 @@ import { Arbol } from "../../table/arbol";
 import { Excepcion } from "../../table/excepcion";
 import { Simbolo } from "../../table/simbolo";
 import { NodoAST } from "../../abs/nodo";
-import { Principal } from '../../principal';
-import { Resultado3D } from '../../traduccion/resultador3d';
+import { Principal } from "../../principal";
+import { Resultado3D } from "../../traduccion/resultador3d";
 
 export class Arreglo extends Instruccion {
   id: string;
@@ -91,8 +91,6 @@ export class Arreglo extends Instruccion {
     entorno.addSimbolo(simbolo);
   }
 
-
-
   copyExpDeep(
     entorno: TablaSimbolos,
     arbol: Arbol,
@@ -126,84 +124,85 @@ export class Arreglo extends Instruccion {
     return value_array;
   }
 
-  getNodo():NodoAST{
-    const nodo=new NodoAST("DECLARACION ARRAY");
-    const lista_expresiones=new NodoAST("LISTA EXPRESION");
-    if(this.tipo==TIPO.ARREGLO){
+  getNodo(): NodoAST {
+    const nodo = new NodoAST("DECLARACION ARRAY");
+    const lista_expresiones = new NodoAST("LISTA EXPRESION");
+    if (this.tipo == TIPO.ARREGLO) {
       nodo.agregarHijo("ARREGLO");
-    } else if(this.tipo==TIPO.BOOLEAN){
+    } else if (this.tipo == TIPO.BOOLEAN) {
       nodo.agregarHijo("BOOLEAN");
-    } else if(this.tipo==TIPO.CADENA){
+    } else if (this.tipo == TIPO.CADENA) {
       nodo.agregarHijo("CADENA");
-    } else if(this.tipo==TIPO.CARACTER){
+    } else if (this.tipo == TIPO.CARACTER) {
       nodo.agregarHijo("CARACTER");
-    } else if(this.tipo==TIPO.DECIMAL){
+    } else if (this.tipo == TIPO.DECIMAL) {
       nodo.agregarHijo("DECIMAL");
-    } else if(this.tipo==TIPO.ENTERO){
+    } else if (this.tipo == TIPO.ENTERO) {
       nodo.agregarHijo("ENTERO");
-    } else if(this.tipo==TIPO.NULL){
+    } else if (this.tipo == TIPO.NULL) {
       nodo.agregarHijo("NULL");
-    } else if(this.tipo==TIPO.STRUCT){
+    } else if (this.tipo == TIPO.STRUCT) {
       nodo.agregarHijo("STRUCT");
-    } else if(this.tipo==TIPO.VOID){
+    } else if (this.tipo == TIPO.VOID) {
       nodo.agregarHijo("VOID");
     }
     nodo.agregarHijo(this.id);
 
-    if(this.lst_expresiones!= null || this.lst_expresiones != undefined){
-        this.lst_expresiones.forEach((element)=>{
-          lista_expresiones.agregarHijoNodo(element.getNodo());
-
-        });
-        nodo.agregarHijoNodo(lista_expresiones);
+    if (this.lst_expresiones != null || this.lst_expresiones != undefined) {
+      this.lst_expresiones.forEach((element) => {
+        lista_expresiones.agregarHijoNodo(element.getNodo());
+      });
+      nodo.agregarHijoNodo(lista_expresiones);
     }
 
-  
     return nodo;
   }
 
   traducir(entorno: TablaSimbolos, arbol: Arbol): any {
-    
     Principal.addComentario("Declarando Arreglos");
-    
+
     let value_array: any[] = [];
-    
+
     let temp = Principal.temp;
     temp++;
-    let th_position = "t"+temp;
-    
+    let th_position = "t" + temp;
+
     Principal.temp = temp;
-    Principal.historial += th_position + "= H; //Posicion inicial que ocupara el array en  el heap\n";
-    
-    
+    Principal.historial +=
+      th_position +
+      "= H; //Posicion inicial que ocupara el array en  el heap\n";
+
+    let contador = this.lst_expresiones.length;
     this.lst_expresiones.forEach((x) => {
       
-        let result_value = x.traducir(entorno, arbol);
-        
-        if (x.tipo != this.tipo) {
-          console.log(
-            "x.tipo != this.tipo",
-            x.tipo != this.tipo,
-            x.tipo,
-            this.tipo
-          );
-          return new Excepcion(
-            "Semantico",
-            "Se esta asigando un tipo de valor inesperado",
-            "" + super.fila,
-            "" + this.columna
-          );
-        }
-     
-     if( x.tipo == Tu)
-      if (result_value instanceof Excepcion) return result_value;
+      let result_value
+      if(x.tipo != TIPO.CADENA)
+       result_value= x.traducir(entorno, arbol);
 
-      //let value = JSON.parse(JSON.stringify(result_value));
+      if (x.tipo != this.tipo) {
+        console.log(
+          "x.tipo != this.tipo",
+          x.tipo != this.tipo,
+          x.tipo,
+          this.tipo
+        );
+        return new Excepcion(
+          "Semantico",
+          "Se esta asigando un tipo de valor inesperado",
+          "" + super.fila,
+          "" + this.columna
+        );
+      }
 
-      
-      Principal.historial += "heap[(int) H] = " + result_value+";\n";
-      Principal.historial += "H = H + 1;\n"
-      
+      //verificar si es una cadena
+      if (x.tipo == TIPO.CADENA) {
+        this.transform_cadena(x.value,contador);
+        contador--;
+      } else {
+        //let value = JSON.parse(JSON.stringify(result_value));
+        Principal.historial += "heap[(int) H] = " + result_value + ";\n";
+        Principal.historial += "H = H + 1;\n";
+      }
     });
 
     let value_object = JSON.parse(JSON.stringify(value_array));
@@ -217,24 +216,50 @@ export class Arreglo extends Instruccion {
       true,
       false
     );
-    
+
     entorno.addSimbolo(simbolo);
     Principal.addComentario("Agregando referencia del heap en el stack");
-    
-    Principal.historial += "heap[(int) H] = " + (-1)+";\n";
-      Principal.historial += "H = H + 1;\n"
-    
+
+    Principal.historial += "heap[(int) H] = " + -1 + ";\n";
+    Principal.historial += "H = H + 1;\n";
+
     let temp1 = Principal.temp;
     temp1++;
     Principal.temp = temp1;
-    
-    let ts = "t"+temp1;
-    Principal.historial += ts + " = " +simbolo.posicion+";\n";
-    Principal.historial += "stack[(int) "+ts+"] = " +th_position + ";\n";
-    
-    
-    Principal.addComentario("Fin De La De")
+
+    let ts = "t" + temp1;
+    Principal.historial += ts + " = " + simbolo.posicion + ";\n";
+    Principal.historial += "stack[(int) " + ts + "] = " + th_position + ";\n";
+
+    Principal.addComentario("Fin De La De");
   }
 
+  transform_cadena(x: string,contador:number): string {
+    let return_string: string = "";
+    
+    Principal.addComentario("Pasando cadena al heap , '" + x + "'");
+    if (!x) x = "Undefined";
 
+    for (let i = 0; i < x.length; i++) {
+      let item: number = x.charCodeAt(i);
+      return_string += "heap[(int)H] = " + item + " ;\n";
+      return_string += "H = H + 1;\n";
+      //console.log(item);
+    }
+    return_string += "heap[(int)H] = -"+contador+";\n";
+    return_string += "H = H + 1;\n";
+
+    //referencia de la cadena desde el stack
+    //Principal.posicion;
+
+    //let temp2 = Principal.posicion+1+"";
+    //return_string +="stack[(int)"+(temp2)+"] = " +t+";\n";
+
+    Principal.historial += return_string;
+
+    Principal.addComentario("Fin de pasar cadena al heap");
+    //"t" + Principal.temp + " = P + " + Principal.posicion + ";\n";
+
+    //return //temp2;
+  }
 }
