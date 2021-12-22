@@ -89,7 +89,13 @@ export class Asignacion extends Instruccion {
   getNodo(){
     const nodo=new NodoAST("ASIGNACION");
     nodo.agregarHijo(this.id+" ID ");
+    try {
+      
+    
     nodo.agregarHijoNodo(this.exp.getNodo());
+  } catch (error) {
+      
+  }
     return nodo;
   }
   
