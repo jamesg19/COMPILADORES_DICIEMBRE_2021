@@ -8,6 +8,8 @@ import { createNoSubstitutionTemplateLiteral } from 'typescript';
 import { Principal } from '../principal';
 import { Print } from '../instruccion/print';
 import { Nativas } from '../nativas';
+import { TSreporte } from '../instruccion/TSreporte';
+
 
 export class Arbol{
     
@@ -19,7 +21,7 @@ export class Arbol{
     TSglobal:TablaSimbolos; 
     posicion:number;
     dot:string="";
-    
+    graficarts:Array<TSreporte>;
     
     head:string = "#include <stdio.h>\n";
     
@@ -34,7 +36,8 @@ export class Arbol{
      * @param  {Instruccion[]} instrucciones
      */
     constructor(TSglobal:TablaSimbolos,instrucciones:Instruccion[]){
-        this.excepciones = new Array();
+        this.excepciones = new Array()
+        this.graficarts = new Array();
         this.funciones = new Array();
         this.TSglobal = TSglobal;
         this.instrucciones = instrucciones;
@@ -42,6 +45,7 @@ export class Arbol{
         this.head +="#include <math.h>\n\ndouble heap[30101999];\n" ;
         this.head += "double stack[30101999];\n\ndouble P;\ndouble H;\n\n";
         this.posicion= 0;
+        this.graficarts=new Array();
     }
     
     updateConsolaError(texto:string){
@@ -108,5 +112,11 @@ export class Arbol{
         
         return (temporales.length >0 )?"double "+temporales.slice(0,temporales.length-2)+";":"";
         
+    }
+    getGraficarTS(){
+        return this.graficarts;
+    }
+    addGraficarTS(table:TablaSimbolos){
+        this.graficarts.push(table);
     }
 }

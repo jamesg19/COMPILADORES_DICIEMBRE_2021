@@ -16,6 +16,7 @@ class Arbol {
         this.etiqueta = ""; //para crear los saltos
         this.contador = 0; //para llevar el conteo de las etiquetas
         this.excepciones = new Array();
+        this.graficarts = new Array();
         this.funciones = new Array();
         this.TSglobal = TSglobal;
         this.instrucciones = instrucciones;
@@ -23,6 +24,7 @@ class Arbol {
         this.head += "#include <math.h>\n\ndouble heap[30101999];\n";
         this.head += "double stack[30101999];\n\ndouble P;\ndouble H;\n\n";
         this.posicion = 0;
+        this.graficarts = new Array();
     }
     updateConsolaError(texto) {
         this.consola += texto + '\n';
@@ -77,6 +79,12 @@ class Arbol {
             temporales += " t" + con + ", ";
         }
         return (temporales.length > 0) ? "double " + temporales.slice(0, temporales.length - 2) + ";" : "";
+    }
+    getGraficarTS() {
+        return this.graficarts;
+    }
+    addGraficarTS(table) {
+        this.graficarts.push(table);
     }
 }
 exports.Arbol = Arbol;

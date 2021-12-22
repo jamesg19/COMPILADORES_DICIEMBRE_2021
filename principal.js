@@ -97,6 +97,8 @@ class Principal {
         ast.excepciones.forEach((x) => {
             console.log(x.toString());
         });
+        //IMPRIME LAS TS
+        this.graficarTS(ast);
         //3era pasada
         ast.instrucciones.forEach((element) => {
             //if(!(element instanceof Main || ) )
@@ -154,6 +156,16 @@ class Principal {
     }
     static addComentario(comentario) {
         Principal.historial += "/* " + comentario + " */\n";
+    }
+    graficarTS(arbol) {
+        //RECORRE LA CANTIDAD DE TABLAS ALMACENADAS EN EL ARBOL
+        arbol.graficarts.forEach((graph) => {
+            // console.log("----------INICIO TABLA----------- ");
+            // graph.listaElementos.forEach((x)=>{
+            //   console.log("ID "+x.id+" TIPO "+x.tipo+" VALOR "+x.valor+" FILA "+x.fila +" COLUMNA "+x.columna);
+            // });
+            // console.log("----------FIN TABLA----------- ");
+        });
     }
 }
 exports.Principal = Principal;

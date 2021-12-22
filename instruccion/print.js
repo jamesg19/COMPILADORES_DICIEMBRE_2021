@@ -82,6 +82,7 @@ class Print extends Instruccion_1.Instruccion {
                 else {
                     value = "Indefinido";
                 }
+                //console.log("ESTO VIENE "+value+"      aallllvvvv ");
                 arbol.consola += value + ((this.newLine) ? "\n" : "");
                 console.log(value);
             });

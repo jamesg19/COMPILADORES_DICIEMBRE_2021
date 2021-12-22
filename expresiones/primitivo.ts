@@ -34,6 +34,9 @@ export class Primitivo extends Instruccion {
     if(this.tipo==TIPO.ENTERO || this.tipo== TIPO.DECIMAL){
       return this.value;
     }
+    if(this.tipo==TIPO.CADENA){
+      return this.value.replace('\\n', '\n');
+    }
     return this.value;
   }
   getNodo(){

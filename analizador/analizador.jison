@@ -38,6 +38,7 @@
 'do'        return 'do';
 'for'       return 'for';
 'in'        return 'in';
+'graficar_ts'  return 'graficar_ts';
 
 //nativas
 'sin'         return 'sin';
@@ -247,6 +248,7 @@
     const { Continue } = require('../instruccion/continue');
     const { Excepcion } = require('../table/excepcion');
     const { Reporte } = require('./reporte');
+    const { Graficar } = require('../instruccion/graficar');
     
 
     const reporte=new Reporte();
@@ -340,6 +342,7 @@ INSTRUCCION:
   | PRINT                           { addReporte('INSTRUCCION: PRINT',' PRINT: PRINT.val');  $$ = $1 } //listo
   | LLAMADA_FUNCION_EXP punto_coma  { addReporte('INSTRUCCION: LLAMADA_FUNCION_EXP',' LLAMADA_FUNCION_EXP: LLAMADA_FUNCION_EXP.val');  $$ = $1 }
   | MODIFICAR_ARREGLO               { addReporte('INSTRUCCION: MODIFICAR_ARREGLO',' MODIFICAR_ARREGLO: MODIFICAR_ARREGLO.val');  $$ = $1 }
+  | GRAFICAR_TABLA                  { $$=$1; }
   //| ACCESO_TYPE                     { $$ = $1 }
   | error  {$$=new Excepcion('Sintactico',`Error sintactico en ${$1}`,@1.first_line,@1.first_column); }
 ;
@@ -845,6 +848,12 @@ ARRAY_METHOD:
  | sin nmral par_abierto id par_cerrado                   {$$ = new Seno_Arr($4,@1.first_line,@1.first_column);}
  | cos nmral par_abierto id par_cerrado                   {$$ = new Cos_Arr($4,@1.first_line,@1.first_column);}
  | tan nmral par_abierto id par_cerrado                   {$$ = new Tan_Arr($4,@1.first_line,@1.first_column);}
+;
+
+GRAFICAR_TABLA:
+    graficar_ts par_abierto par_cerrado punto_coma
+    { $$ = new Graficar(@1.first_line,@1.first_column);}
+
 ;
 
 /*
