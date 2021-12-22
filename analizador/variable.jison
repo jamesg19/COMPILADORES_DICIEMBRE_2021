@@ -321,7 +321,7 @@ INSTRUCCION:
     { $$=$3; }
     | id  { $$ = new Primitivo(TIPO.CADENA,$1,@1.firt_line,@1.firt_column); }
     | esp     { $$ = new Primitivo(TIPO.CADENA,$1,@1.firt_line,@1.firt_column); }
-    | id2     { $$ = new Identificador($1,@1.firt_line,@1.firt_column);   }
+    | id2     { $$ = new Identificador($1.slice(1),@1.firt_line,@1.firt_column);   }
 
 ;
 

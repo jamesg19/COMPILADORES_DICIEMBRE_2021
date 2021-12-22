@@ -20,6 +20,7 @@ const nativas_string_1 = require("./expresiones/nativas/nativas_string");
 const Parser = require("./analizador/analizador");
 const nativas_1 = require("./nativas");
 const list_declaracion_1 = require("./instruccion/list_declaracion");
+const nodo_1 = require("./abs/nodo");
 class Principal {
     ejecutar(code) {
         const instrucciones = Parser.parse(code);
@@ -97,24 +98,12 @@ class Principal {
         ast.excepciones.forEach((x) => {
             console.log(x.toString());
         });
-        //IMPRIME LAS TS
-        this.graficarTS(ast);
         //3era pasada
         ast.instrucciones.forEach((element) => {
             //if(!(element instanceof Main || ) )
             //console.log("Sentencias fuera de Main")
         });
-        // console.log("PROBANDO DOT.......*/*/*/*/");
-        // //generacion de AST
-        // const init=new NodoAST("RAIZ");
-        // const instr=new NodoAST("INSTRUCCIONES");
-        // ast.getInstrucciones().forEach((instruccion:Instruccion) => {
-        //   instr.agregarHijoNodo(instruccion.getNodo());
-        //});
-        // init.agregarHijoNodo(instr);
-        // //devuelve el codigo GRAPHIZ DEL AST
-        // const grafo = ast.getDot(init);
-        // console.log(grafo);
+        this.arbolG = ast;
     }
     // /**************************************************Traduccion****************************************************** */
     traducir(code) {
@@ -157,15 +146,75 @@ class Principal {
     static addComentario(comentario) {
         Principal.historial += "/* " + comentario + " */\n";
     }
-    graficarTS(arbol) {
+    graficarTS() {
+        let codigoHTMLError = "";
         //RECORRE LA CANTIDAD DE TABLAS ALMACENADAS EN EL ARBOL
-        arbol.graficarts.forEach((graph) => {
+        this.arbolG.graficarts.forEach((graph) => {
             // console.log("----------INICIO TABLA----------- ");
-            // graph.listaElementos.forEach((x)=>{
-            //   console.log("ID "+x.id+" TIPO "+x.tipo+" VALOR "+x.valor+" FILA "+x.fila +" COLUMNA "+x.columna);
-            // });
+            codigoHTMLError += "<table id=\"example\" class=\"table table-striped table-bordered\" cellspacing=\"0\" width=\"100%\">\n"
+                + "<thead>\n"
+                + "<tr>\n"
+                + "<th>ID</th>\n"
+                + "<th>TIPO</th>\n"
+                + "<th>VALOR</th>\n"
+                + "<th>FILA</th>\n"
+                + "<th>COLUMNA</th>\n"
+                + "</tr>\n"
+                + "</thead>\n"
+                + "<tbody>\n";
+            graph.listaElementos.forEach((x) => {
+                //console.log("ID "+x.id+" TIPO "+x.tipo+" VALOR "+x.valor+" FILA "+x.fila +" COLUMNA "+x.columna);
+                codigoHTMLError += "<tr>\n";
+                codigoHTMLError += "<td>" + x.id + "</td>\n";
+                codigoHTMLError += "<td>" + x.tipo + "</td>\n";
+                codigoHTMLError += "<td>" + x.valor + "</td>\n";
+                codigoHTMLError += "<td>" + x.fila + "</td>\n";
+                codigoHTMLError += "<td>" + x.columna + "</td>\n";
+                codigoHTMLError += "</tr>\n";
+            });
+            codigoHTMLError += "</tbody>\n" + "</table>\n";
             // console.log("----------FIN TABLA----------- ");
         });
+        return codigoHTMLError;
+    }
+    graficarAST() {
+        console.log("-----------GENERANDO AST-----------");
+        //generacion de AST
+        const init = new nodo_1.NodoAST("RAIZ");
+        const instr = new nodo_1.NodoAST("INSTRUCCIONES");
+        this.arbolG.getInstrucciones().forEach((instruccion) => {
+            instr.agregarHijoNodo(instruccion.getNodo());
+        });
+        init.agregarHijoNodo(instr);
+        //devuelve el codigo GRAPHIZ DEL AST
+        const grafo = this.arbolG.getDot(init);
+        return grafo;
+    }
+    getErrores() {
+        let codigoHTMLError = "<table id=\"example\" class=\"table table-striped table-bordered\" cellspacing=\"0\" width=\"100%\">\n"
+            + "<thead>\n"
+            + "<tr>\n"
+            + "<th>TIPO</th>\n"
+            + "<th>DESCRIPCCION</th>\n"
+            + "<th>FILA</th>\n"
+            + "<th>COLUMNA</th>\n"
+            + "</tr>\n"
+            + "</thead>\n"
+            + "<tbody>\n";
+        this.arbolG.excepciones.forEach((x) => {
+            codigoHTMLError += "<tr>\n";
+            codigoHTMLError += "<td>" + x.tipo + "</td>\n";
+            codigoHTMLError += "<td>" + x.descripcion + "</td>\n";
+            codigoHTMLError += "<td>" + x.fila + "</td>\n";
+            codigoHTMLError += "<td>" + x.columna + "</td>\n";
+            codigoHTMLError += "</tr>\n";
+        });
+        codigoHTMLError += "</tbody>\n"
+            + "</table>\n";
+        return codigoHTMLError;
+    }
+    getConsola() {
+        return this.arbolG.consola;
     }
 }
 exports.Principal = Principal;
@@ -176,38 +225,12 @@ Principal.posicion = 0; //guarda la poscion en el stack
 Principal.heap = 0; //posicion en el heap    ???
 Principal.historial = "";
 //let principa: Principal = new Principal();
-const fs = require("fs"), NOMBRE_ARCHIVO = "file.java";
-fs.readFile(NOMBRE_ARCHIVO, "utf8", (error, datos) => {
-    if (error)
-        throw error;
-    let principa = new Principal();
-    //console.log(datos)
-    principa.ejecutar(datos);
-    //principa.traducir(datos);
-    //console.log("El contenido es: ", datos);
-});
-// principa.ejecutar ('println(6>5);   '
-//                     +'if(1>5){'
-//                     +'println("entra if6>5");'
-//                     +'} '
-//                     +'else if(5>5){'
-//                     +'println("entra else if 7>5 ");'
-//                     +'} '
-//                     +'else if(8>5){'
-//                     +'println("entra else if 8>5 ");'
-//                     +'} '
-//                     +'else { println("entra AL FALSE");  } '
-//                     +'println(true);'
-//                     +'switch ("5+6"){'
-//                     +'case "5+6":'
-//                     +'println("ENTRA A SWITCH1");'
-//                     +''
-//                     +'case "5+6":'
-//                     +'println("ENTRA A SWITCH2");'
-//                     +'break;'
-//                     +'default:'
-//                     +' println("ENTRA A DEFAULT");'
-//                     +'}'
-//                     +''
-//                     );
-//principa.ejecutar ('println((true && true) && (true && true));');
+// // const fs = require("fs"),NOMBRE_ARCHIVO = "file.java";
+// // fs.readFile(NOMBRE_ARCHIVO, "utf8", (error, datos) => {
+// //   if (error) throw error;
+// //   let principa: Principal = new Principal();
+// //   //console.log(datos)
+// //   principa.ejecutar(datos);
+// //   //principa.traducir(datos);
+// //   //console.log("El contenido es: ", datos);
+// // });

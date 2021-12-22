@@ -94,12 +94,24 @@ export class Asignacion extends Instruccion {
     }
   }
 
-  getNodo() {
-    const nodo = new NodoAST("ASIGNACION");
-    nodo.agregarHijo(this.id + " ID ");
+  getNodo(){
+    const nodo=new NodoAST("ASIGNACION");
+    nodo.agregarHijo(this.id+" ID ");
+    try {
+      
+    
     nodo.agregarHijoNodo(this.exp.getNodo());
+  } catch (error) {
+      
+  }
     return nodo;
   }
+  // getNodo() {
+  //   const nodo = new NodoAST("ASIGNACION");
+  //   nodo.agregarHijo(this.id + " ID ");
+  //   nodo.agregarHijoNodo(this.exp.getNodo());
+  //   return nodo;
+  // }
 
   traducir(e: TablaSimbolos, arbol: Arbol): any {
     const variable = e.getSimbolo(this.id);
