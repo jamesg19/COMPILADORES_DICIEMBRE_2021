@@ -4,12 +4,14 @@ import { TablaSimbolos } from "../../table/tablasimbolos";
 import { Excepcion } from "../../table/excepcion";
 import { TIPO } from "../../table/tipo";
 import { NodoAST } from "../../abs/nodo";
+import { Principal } from '../../principal';
 
 export class Acceso extends Instruccion {
 
   id: string;
   list_expresiones: Instruccion[];
   tipo: TIPO;
+  static ACCCESO:boolean = false;
 
   /**
    * @param  {string} id
@@ -132,7 +134,8 @@ export class Acceso extends Instruccion {
     if (contador == 1) temp = exist?.valor;
 
     this.list_expresiones.forEach((x) => {
-      let index = x.interpretar(entorno, arbol);
+      let index = x.traducir(entorno, arbol);
+      
       if (index instanceof Excepcion) return index;
 
       if (!(x.tipo == TIPO.ENTERO))
@@ -142,24 +145,44 @@ export class Acceso extends Instruccion {
           super.fila + "",
           super.columna + ""
         );
-      contador--;
-      if (contador == 0) {
-        if (temp instanceof Array) {
-          if (index < 0 || index > temp.length)
-            return value_return = new Excepcion("Semantico", "no existe el indice indicado para el arreglo " + this.id, "" + super.fila, "" + super.columna);
-          return value_return = JSON.parse(JSON.stringify(temp[parseInt(index)]));
-        }
-        this.tipo = exist.tipo;
-        value_return = JSON.parse(JSON.stringify(temp));
-        //if()
-        //value_return = new Excepcion("Semantico","no existe el indice indicado para el arreglo "+this.id,""+super.fila,""+super.columna);
-        //return (value_return = JSON.parse(JSON.stringify(temp[index])));
-      } else {
-        this.tipo = exist.tipo;
-        temp = (temp)[index];
         
-      }
+        Principal.addComentario("Accediendo a un Arreglo");
+        let temp = Principal.temp;
+        temp++;
+        let t = "t"+temp;
+        Principal.temp = temp;
+        
+        Acceso.ACCCESO = true;
+        Principal.historial += "stack[(int)"+(Principal.posicion+1)+"] = "+exist.posicion+";\n";
+        Principal.historial += "stack[(int)"+(Principal.posicion+2)+"] = "+index+";\n";
+        Principal.historial += "P = "+(Principal.posicion+1)+";\n";
+        Principal.historial += "acces();\n";
+        
+        Principal.historial += t+" = P;\nprintString();\n";
+        value_return = t+"/* esta es la referencia del heap*/";
+      // contador--;
+      // if (contador == 0) {
+      //   if (temp instanceof Array) {
+      //     if (index < 0 || index > temp.length)
+      //       return value_return = new Excepcion("Semantico", "no existe el indice indicado para el arreglo " + this.id, "" + super.fila, "" + super.columna);
+        
+      //     return value_return = JSON.parse(JSON.stringify(temp[parseInt(index)]));
+        
+        
+        
+      //   }
+      //   this.tipo = exist.tipo;
+      //   value_return = JSON.parse(JSON.stringify(temp));
+      //   //if()
+      //   //value_return = new Excepcion("Semantico","no existe el indice indicado para el arreglo "+this.id,""+super.fila,""+super.columna);
+      //   //return (value_return = JSON.parse(JSON.stringify(temp[index])));
+      // } else {
+      //   this.tipo = exist.tipo;
+      //   temp = (temp)[index];
+        
+      // }
     });
-    return value_return;
+    return value_return
+    //return value_return;
   }
 }

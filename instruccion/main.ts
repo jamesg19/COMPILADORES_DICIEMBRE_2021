@@ -62,6 +62,8 @@ export class Main extends Instruccion {
     
     Principal.addComentario("Metodo Main");
     Principal.historial +="int main(){\n"
+    Principal.historial += "\tP = 0;\n"
+    Principal.historial += "\tH = 0;\n"
     
     this.instrucciones.forEach((element) => {
         

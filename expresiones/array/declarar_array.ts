@@ -172,7 +172,7 @@ export class Arreglo extends Instruccion {
       th_position +
       "= H; //Posicion inicial que ocupara el array en  el heap\n";
 
-    let contador = this.lst_expresiones.length;
+    let contador = 0;
     this.lst_expresiones.forEach((x) => {
       
       let result_value
@@ -229,7 +229,8 @@ export class Arreglo extends Instruccion {
 
     let ts = "t" + temp1;
     Principal.historial += ts + " = " + simbolo.posicion + ";\n";
-    Principal.historial += "stack[(int) " + ts + "] = " + th_position + ";\n";
+    Principal.addComentario("simbolo posicion "+simbolo.posicion)
+    Principal.historial += "stack[(int) " + simbolo.posicion + "] = " + th_position + ";\n";
 
     Principal.addComentario("Fin De La De");
   }
@@ -246,7 +247,7 @@ export class Arreglo extends Instruccion {
       return_string += "H = H + 1;\n";
       //console.log(item);
     }
-    return_string += "heap[(int)H] = -"+contador+";\n";
+    return_string += "heap[(int)H] = -1;\n";
     return_string += "H = H + 1;\n";
 
     //referencia de la cadena desde el stack

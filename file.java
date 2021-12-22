@@ -87,7 +87,9 @@
 // cambio(arbol.raiz,4,"no encontrado");  //(*RESULTADO: No encontrado 4*)
 // inOrden(arbol.raiz); 
 // }
+
 void main(){
-  string[] arreglo = ["Estudiante1", "Estudiante2", "Estudiante3"];
-  println(arreglo);
+  string[] arreglo = ["aaa", "bbb", "fff"];
+  println(arreglo[1]);
+  println("cadena");
 }
