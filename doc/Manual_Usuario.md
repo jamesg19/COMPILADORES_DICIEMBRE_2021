@@ -8,6 +8,27 @@ Quetzal es un interprete de código y traductor de código intermedio con sintax
 - Reporte de errores Lexico, Sintactico, Semantico.
 - Reporte de las producciones gramaticales utilizadas para las reglas sintácticas de cada instrucción de código.
 
+## Quetzal Compiler
+Cuenta con una interfaz amigable y facil de usar, las siguientes imagenes muestran la interfaz
+![editor](https://github.com/jamesg19/COMPILADORES_DICIEMBRE_2021/blob/main/doc/Screenshot_20211222_230008.png)
+
+Terminal o salida 
+![editor](https://github.com/jamesg19/COMPILADORES_DICIEMBRE_2021/blob/main/doc/Screenshot_20211222_230029.png)
+
+**Hola Mundo**
+![Hola mundo](https://github.com/jamesg19/COMPILADORES_DICIEMBRE_2021/blob/main/doc/Screenshot_20211222_230113.png)
+
+**Salida**
+![Salida](https://github.com/jamesg19/COMPILADORES_DICIEMBRE_2021/blob/main/doc/Screenshot_20211222_230128.png)
+
+**Reporte**
+![reporte](https://github.com/jamesg19/COMPILADORES_DICIEMBRE_2021/blob/main/doc/Screenshot_20211222_230148.png)
+
+esperamos que la demostracion de un Hola mundo tan sencillo en Quetzal compiler, te haya emocionado para seguir aprendiendo mas sobre Quetzal compiler, a continuacion enumeramos algunas instrucciones que puedes permutar e un sentido estructurado y logico para que puedas jugar y aprender al mismo tiempo
+
+---
+
+
 Instrucciones permitidas en Compilador Quetzal.
 
 1) **Instrucciones**(#introduccion)
@@ -22,16 +43,15 @@ Instrucciones permitidas en Compilador Quetzal.
       1) **[For in](#forin)**
       1) **[While](#while)**
       1) **[Do while](#wdowhile)**
-   1) **Arreglos(#arreglos)**
-   1) **Operaciones(#operacion)**
-      1) **Aritméticas(#aritmetica)**
-      1) **Lógicas(#logica)**
-      1) **Condicionales(#condicion)**
-      1) **Trigonométricas(#trigonometrica)**
+   1) **[Arreglos](#arreglos)**
+   1) **[Operaciones](#operacion)**
+      1) **[Aritméticas](#aritmetica)**
+      1) **[Lógicas](#logica)**
+      1) **[Condicionales](#condicion)**
+      1) **[Trigonométricas](#trigonometrica)**
    1) **Structs(#struct)**
    1) **Llamadas a función(#llamada)**
 1) **Expresiones(#expresiones)**
-
 
 
 
@@ -341,3 +361,5 @@ t2=t1-3
 
 a=t2;
 ```
+*Usa Quetzal Compiler*
+[QuetzalCompiler](https://juli0f.github.io/)

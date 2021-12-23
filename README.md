@@ -2,30 +2,20 @@
 ### Quetzal
 
 Proyecto referente al curso de lenguajes y compiladores 2 de Usac
-el lenguaje es una mezcla de C y java y otras caracteristicas, cuenta
-con un tipado fuerte, datos inmutables y otras caracteristicas
+el lenguaje es una mezcla de C, java y otras caracteristicas, cuenta
+con un tipado fuerte, datos inmutables y otras caracteristicas muy interesantes.
 
-## Tipos Nativos
 
-- string
-- int
-- double
-- boolean
-- char
-- null
-- struct
-- arreglos
 
-## Funciones Nativas
+## Usuario
+[Manual de Usuario](https://github.com/jamesg19/COMPILADORES_DICIEMBRE_2021/blob/main/doc/Manual_Usuario.md)
 
-- $$Matematicas
 
-- **Artimeticas** ``` suma, resta, multiplicacion y division ```
-- **pow** ``` pow(base,exponente); ```
-- **sen** ``` sen(exp); ``` donde exp pueden ser array's y devolvera el sen de cada termino
-- **cos** ``` sen(exp); ``` donde exp pueden ser array's y devolvera el sen de cada termino
+## Super Usuario
+[Manual Tecnico](https://github.com/jamesg19/COMPILADORES_DICIEMBRE_2021/blob/main/doc/Manual_Usuario.md)
 
-- **tan** ```tan(exp)``` devuelve la tangete de la expresion
+## Quetzal Compiler
+[QuetzalCompiler](https://juli0f.github.io/)
 
-- cadena^exp: devuelve una cadena con la cantidad de veces que indica exp. ```exp es una expresion numerica```
+
 
