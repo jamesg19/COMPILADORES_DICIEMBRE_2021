@@ -12,7 +12,7 @@ con un tipado fuerte, datos inmutables y otras caracteristicas muy interesantes.
 
 
 ## Super Usuario
-[Manual Tecnico](https://github.com/jamesg19/COMPILADORES_DICIEMBRE_2021/blob/main/doc/Manual_Usuario.md)
+[Manual Tecnico](https://github.com/jamesg19/COMPILADORES_DICIEMBRE_2021/blob/main/doc/Manual_tecnico.md)
 
 ## Quetzal Compiler
 [QuetzalCompiler](https://juli0f.github.io/)
