@@ -124,7 +124,11 @@ export class Struct extends Instruccion {
         const lista_atributos=new NodoAST("LISTA ATRIBUTOS");
         
         this.lista_atributos.forEach((element)=>{
+          try{
           lista_atributos.agregarHijoNodo(element.getNodo());
+          } catch(e){
+            
+          }
 
         });
         nodo.agregarHijoNodo(lista_atributos);

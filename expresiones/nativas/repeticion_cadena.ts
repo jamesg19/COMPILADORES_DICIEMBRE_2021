@@ -113,9 +113,13 @@ export class RepeticionCadena extends Instruccion{
     getNodo(){
         const nodo= new NodoAST("REPEAT");
         if( (this.inicio!=null) || (this.inicio != undefined)){
+            try{
             nodo.agregarHijoNodo(this.expresion.getNodo());
             nodo.agregarHijo("^");
             nodo.agregarHijoNodo(this.inicio.getNodo());
+            } catch(e){
+
+            }
             return nodo;
         }else{
             nodo.agregarHijo("^");
