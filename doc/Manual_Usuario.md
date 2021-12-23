@@ -1,4 +1,4 @@
-# **Manuel de usuario**
+# **Manual de usuario**
 Quetzal es un interprete de código y traductor de código intermedio con sintaxis similar a Java donde se manejan struct similar a C. Ademas tiene varias funcionalidades, que se describen a continuación:
 
 - Interpretacion de código
