@@ -1,9 +1,5 @@
-*.js
-*.vscode
-dist
 .vscode
 node_modules
 file.java
-*.java
-*.json
+
 
