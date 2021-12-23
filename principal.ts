@@ -22,6 +22,8 @@ import { Nativas } from "./nativas";
 import { List_Declaracion } from "./instruccion/list_declaracion";
 import { TIPO } from "./table/tipo";
 import { NodoAST } from "./abs/nodo";
+import { TSreporte } from "./instruccion/TSreporte";
+import { TSelemento } from "./instruccion/TSelemento";
 
 export class Principal {
   static contador: number = 0;
@@ -31,16 +33,21 @@ export class Principal {
   static heap: number = 0; //posicion en el heap    ???
   static historial: string = "";
   arbolG:Arbol;
+  reporteGramatica:TSreporte;
 
   ejecutar(code: string) {
     const instrucciones = Parser.parse(code);
 
-    // const reporteE=instrucciones[1];
+    const reporteE=instrucciones[1];
     
-    
-    // reporteE.reporteGramatical.reverse().forEach((x)=>{
-    //   console.log(x);
-    // })
+    const reporteGramatical=new TSreporte();
+    reporteE.reporteGramatical.reverse().forEach((x)=>{
+        
+      let elemento=new TSelemento(x["produccion"],x["regla"],"",Number(""),Number(""));
+      reporteGramatical.listaElementos.push(elemento);
+
+    });
+    this.reporteGramatica=reporteGramatical;
 
     // reporteE.forEach((x)=>{
 
@@ -290,6 +297,33 @@ export class Principal {
     +"</table>\n";
     return codigoHTMLError;
   }
+
+  getReporteGramatical(){
+    let codigoHTMLError="";
+    codigoHTMLError+="<table id=\"example\" class=\"table table-striped table-bordered\" cellspacing=\"0\" width=\"100%\">\n"
+          +"<thead>\n"
+          +"<tr>\n"
+              +"<th>PRODUCCION</th>\n"
+                  +"<th>VALOR</th>\n"
+                  +"</tr>\n"
+              +"</thead>\n"
+          +"<tbody>\n";   
+    this.reporteGramatica.listaElementos.forEach((x)=>{
+            codigoHTMLError+="<tr>\n";
+           codigoHTMLError+="<td>"+x.id+"</td>\n";
+           codigoHTMLError+="<td>"+x.tipo+"</td>\n";
+           codigoHTMLError+="</tr>\n";
+    });
+
+          codigoHTMLError+="</tbody>\n"+"</table>\n";
+
+        // console.log("----------FIN TABLA----------- ");
+
+      return codigoHTMLError;
+  }
+
+
+
 
   getConsola():string{
     return this.arbolG.consola;

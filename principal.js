@@ -21,13 +21,18 @@ const Parser = require("./analizador/analizador");
 const nativas_1 = require("./nativas");
 const list_declaracion_1 = require("./instruccion/list_declaracion");
 const nodo_1 = require("./abs/nodo");
+const TSreporte_1 = require("./instruccion/TSreporte");
+const TSelemento_1 = require("./instruccion/TSelemento");
 class Principal {
     ejecutar(code) {
         const instrucciones = Parser.parse(code);
-        // const reporteE=instrucciones[1];
-        // reporteE.reporteGramatical.reverse().forEach((x)=>{
-        //   console.log(x);
-        // })
+        const reporteE = instrucciones[1];
+        const reporteGramatical = new TSreporte_1.TSreporte();
+        reporteE.reporteGramatical.reverse().forEach((x) => {
+            let elemento = new TSelemento_1.TSelemento(x["produccion"], x["regla"], "", Number(""), Number(""));
+            reporteGramatical.listaElementos.push(elemento);
+        });
+        this.reporteGramatica = reporteGramatical;
         // reporteE.forEach((x)=>{
         // });
         //console.log(reporteE);
@@ -212,6 +217,26 @@ class Principal {
         });
         codigoHTMLError += "</tbody>\n"
             + "</table>\n";
+        return codigoHTMLError;
+    }
+    getReporteGramatical() {
+        let codigoHTMLError = "";
+        codigoHTMLError += "<table id=\"example\" class=\"table table-striped table-bordered\" cellspacing=\"0\" width=\"100%\">\n"
+            + "<thead>\n"
+            + "<tr>\n"
+            + "<th>PRODUCCION</th>\n"
+            + "<th>VALOR</th>\n"
+            + "</tr>\n"
+            + "</thead>\n"
+            + "<tbody>\n";
+        this.reporteGramatica.listaElementos.forEach((x) => {
+            codigoHTMLError += "<tr>\n";
+            codigoHTMLError += "<td>" + x.id + "</td>\n";
+            codigoHTMLError += "<td>" + x.tipo + "</td>\n";
+            codigoHTMLError += "</tr>\n";
+        });
+        codigoHTMLError += "</tbody>\n" + "</table>\n";
+        // console.log("----------FIN TABLA----------- ");
         return codigoHTMLError;
     }
     getConsola() {

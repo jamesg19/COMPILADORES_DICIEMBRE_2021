@@ -147,6 +147,7 @@ export class Print extends Instruccion {
           Print.print = true;
     
           cadena += this.transform_cadena(x.value, arbol);
+          cadena += "printString();"
           
           
         }else if (TIPO.ENTERO == x.tipo) {

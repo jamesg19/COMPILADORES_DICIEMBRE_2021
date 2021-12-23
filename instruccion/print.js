@@ -123,6 +123,7 @@ class Print extends Instruccion_1.Instruccion {
             else if (tipo_1.TIPO.CADENA == x.tipo) {
                 Print.print = true;
                 cadena += this.transform_cadena(x.value, arbol);
+                cadena += "printString();";
             }
             else if (tipo_1.TIPO.ENTERO == x.tipo) {
                 cadena += 'printf("%d",' + tr + ");\n";
