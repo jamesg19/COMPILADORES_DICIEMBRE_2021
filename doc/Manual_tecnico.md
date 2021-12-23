@@ -32,7 +32,7 @@ Interprete quetzal cuenta con una mezcla de la sintaxis de los lenguajes de prog
 
 Como se menciono anteriormente el lenguaje es una mezcla de varios lenguajes ya conocidos, la siguiente imagen demuestra de mejor manera el patron utilizado para crear el lenguaje
 
-![img_patron_interprete](img_patron_interprete.png)
+![img_patron_interprete](https://github.com/jamesg19/COMPILADORES_DICIEMBRE_2021/blob/main/img_patron.png)
 
 Donde el proyecto se encuentra estructurado de la siguiente manera
 
