@@ -94,15 +94,18 @@ boolean flag2=false;```
 
 Tambien existe la declaracion en lista de variables
 
-\```String a,b,c,d,e,f=”Hola Quetzal”;
+```java
+String a,b,c,d,e,f=”Hola Quetzal”;
 
-Int n1,n2,n3=100;```
+Int n1,n2,n3=100;
+```
 ## **Funciones** <a name="funciones"></a>
 una función es una sección de un programa que calcula un valor de manera independiente al resto del programa el código de la función, que son las operaciones que hace la función; y. el resultado (o valor de retorno), que es el valor final que entrega la función.
 
 Las funciones pueden declararse:
 
-\```Tipo identifcador(){
+```java
+Tipo identifcador(){
 
 ….
 
@@ -118,21 +121,24 @@ void saludar(){
 
 println(“Hola mundo”);
 
-} ```
+} 
+```
 
 Tambien pueden declararse con parámetros e indicando su tipo a cada uno
 
-\```Void sumar(int numero1, double numero2){
+```java
+Void sumar(int numero1, double numero2){
 
 Println(numero1+numero2);
 
-}```
+}
+```
 
 Las funciones pueden llamarse de la siguiente manera
 
-Identificador\_de\_funcion ();
+Identificador_de_funcion ();
 
-\``` sumar(); ```
+``` sumar(); ```
 
 ``Restar();``
 
@@ -140,49 +146,58 @@ Identificador\_de\_funcion ();
 
 Además se pueden llamar pasandole una lista de parámetros según el tipo de dato que corresponda.
 
-\```Multiplicar(numero1 , numero2 );```
+```Multiplicar(numero1 , numero2 );```
 
-```Calcular\_numero\_mayor(numero1, numero2, numero3 …… ,numero5);\```
+```Calcular_numero_mayor(numero1, numero2, numero3 …… ,numero5);```
 ## **Sentencias de control** <a name="sentenciasdecontrol"></a>
 Las centencias de control son utilizadas para iterar en varias ocaciones un conjunto de datos en las variables o arreglos
 ## **FOR** <a name="for"></a>
 Se puede declarac de la siguiente manera
 
-```for ( declaración/asignación  ; condición    ; incremento  ){```
+```java
+for ( declaración/asignación  ; condición    ; incremento  ){
 
-```… //codigo```
+… //codigo
 
-```} ```
+} 
 
-\```For( int i=0;i<5;i++){
+For( int i=0;i<5;i++){
 
-}```
+}
+```
 
 
 ## **FOR-IN** <a name="forin"></a>
 Se puede declarac de la siguiente manera
 
-\``` for a in [“hola”,”mundo”,”quiero”,”ganar”, “compi2”)  {
+```python
+
+for a in [“hola”,”mundo”,”quiero”,”ganar”, “compi2”)  {
 
 … //codigo
 
-}```
+}
+
+```
 ## WHILE <a name="while"></a>
 La declaracion de un while es la siguiente
 
-‘’’ while( a<15){
+```java
+while( a<15){
 
-… //codigo
+   … //codigo
 
-}```
+}
 
 DO WHILE
 
-\``` do{
+ do{
 
-… //codigo
+   … //codigo
 
-}while(a>15 && a< 25);```
+}while(a>15 && a< 25);
+
+```
 
 **SENTENCIAS DE SALIDAS CICLICAS** <a name="sentenciasciclicas"></a>
 
@@ -194,67 +209,70 @@ Continue sirve para avanzar a la siguiente iteración del ciclo y Break sirve pa
 
 INSTRUCIONES CONDICIONALES
 
-\```if (CONDICION){
+```java
+if (CONDICION){
 
-`    `LISTA\_INTRUCCIONES
+   LISTA_INTRUCCIONES
 
 }
 
 if (CONDICION)
 
-`    `INSTRUCCION
+   INSTRUCCION
 
 if(CONDICION1){
 
-`  `LISTA\_INTRUCCIONES
+   LISTA\_INTRUCCIONES
 
 }
 
 else if(CONDICION1){
 
-`  `LISTA\_INTRUCCIONES
+   LISTA\_INTRUCCIONES
 
 }
 
 else{
 
-`    `LISTA\_INTRUCCIONES
+   LISTA\_INTRUCCIONES
 
 }
 
 switch(expression) {
 
-`  `case x:
+   case x:
 
-`    `LISTA\_INTRUCCIONES
+      LISTA\_INTRUCCIONES
 
-`    `break;
+   break;
 
-`  `case y:
+   case y:
 
-`    `LISTA\_INTRUCCIONES
+      LISTA\_INTRUCCIONES
 
-`    `break;
+   break;
 
-`  `default:
+      default:
 
-`    `LISTA\_INTRUCCIONES
+   LISTA\_INTRUCCIONES
 
 }
 
-\```
-
 // el break puede ser opcional, se manejará igual que un switch de java
+
+```
 ## **ARREGLOS** <a name="arreglos"></a>
 Se pueden declarar de la siguiente manera
 
-\``` int[] arr = [1,2,3,4,5,6];
+```java
+int[] arr = [1,2,3,4,5,6];
 
 print(arr[2:4]); //[2,3,4]
 
 print(arr[begin:4]) //[1,2,3,4]
 
-print(arr[4:end]) //[4,5,6] ```
+print(arr[4:end]) //[4,5,6]
+```
 
 
 
@@ -262,15 +280,17 @@ print(arr[4:end]) //[4,5,6] ```
 
 Se pueden declarar de la siguiente manera
 
-\``` // Struct
+```c
+// Struct
 
 struct NOMBRE\_STRUCT
 
 {
 
-`    `LISTA\_ATRIBUTOS
+      LISTA\_ATRIBUTOS
 
-};```
+};
+```
 
 Instanciar un struct 
 
@@ -282,10 +302,12 @@ En el proceso de traducir un programa fuente a código destino, un compilador pu
 
 Después del análisis sintáctico y semántico del programa fuente, muchos compiladores generan un nivel bajo explícito, o una representación intermedia similar al código máquina, que podemos considerar como un programa para una máquina abstracta. Esta representación intermedia debe tener dos propiedades importantes: debe ser fácil de producir y fácil de traducir en la máquina destino. Existe una forma intermedia llamada código de tres direcciones, que consiste en una secuencia de instrucciones similares a ensamblador, con tres operandos por instrucción. Cada operando puede actuar como un registro. La salida del generador de código intermedio en la figura 2.7 consiste en la secuencia de código de tres direcciones. 
 
-\```a=150\*6-3
+```assembler
+a=150\*6-3
 
 t1=150\*6
 
 t2=t1-3
 
-a=t2;```
+a=t2;
+```
