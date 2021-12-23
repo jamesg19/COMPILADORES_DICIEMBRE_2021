@@ -153,11 +153,11 @@ class Principal {
         Principal.historial += "/* " + comentario + " */\n";
     }
     graficarTS() {
-        let codigoHTMLError = "";
+        let codigoHTMLErrorr = " ";
         //RECORRE LA CANTIDAD DE TABLAS ALMACENADAS EN EL ARBOL
         this.arbolG.graficarts.forEach((graph) => {
             // console.log("----------INICIO TABLA----------- ");
-            codigoHTMLError += "<table id=\"example\" class=\"table table-striped table-bordered\" cellspacing=\"0\" width=\"100%\">\n"
+            codigoHTMLErrorr += "<table id=\"example\" class=\"table table-striped table-bordered\" cellspacing=\"0\" width=\"100%\">\n"
                 + "<thead>\n"
                 + "<tr>\n"
                 + "<th>ID</th>\n"
@@ -170,18 +170,20 @@ class Principal {
                 + "<tbody>\n";
             graph.listaElementos.forEach((x) => {
                 //console.log("ID "+x.id+" TIPO "+x.tipo+" VALOR "+x.valor+" FILA "+x.fila +" COLUMNA "+x.columna);
-                codigoHTMLError += "<tr>\n";
-                codigoHTMLError += "<td>" + x.id + "</td>\n";
-                codigoHTMLError += "<td>" + x.tipo + "</td>\n";
-                codigoHTMLError += "<td>" + x.valor + "</td>\n";
-                codigoHTMLError += "<td>" + x.fila + "</td>\n";
-                codigoHTMLError += "<td>" + x.columna + "</td>\n";
-                codigoHTMLError += "</tr>\n";
+                codigoHTMLErrorr += "<tr>\n";
+                codigoHTMLErrorr += "<td>" + x.id + "</td>\n";
+                codigoHTMLErrorr += "<td>" + x.tipo + "</td>\n";
+                codigoHTMLErrorr += "<td>" + x.valor + "</td>\n";
+                codigoHTMLErrorr += "<td>" + x.fila + "</td>\n";
+                codigoHTMLErrorr += "<td>" + x.columna + "</td>\n";
+                codigoHTMLErrorr += "</tr>\n";
             });
-            codigoHTMLError += "</tbody>\n" + "</table>\n";
-            // console.log("----------FIN TABLA----------- ");
+            codigoHTMLErrorr += "</tbody>\n" + "</table>\n";
         });
-        return codigoHTMLError;
+        console.log("----------INICIO TABLA----------- ");
+        console.log(codigoHTMLErrorr);
+        console.log("----------FIN TABLA----------- ");
+        return codigoHTMLErrorr;
     }
     graficarAST() {
         console.log("-----------GENERANDO AST-----------");

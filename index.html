@@ -50,6 +50,7 @@
                     <script>
                         
                         function compilar(){
+                            document.getElementById("gramatica").innerHTML = " ";
                             let codigo=getText();
                             //analiza el codigo
                             parseExternal(codigo);
@@ -104,8 +105,11 @@
         </div>
         <br>
         <h3 align="center">Reporte de producciones Gramatica Jison</h3>
-        <div class="row" align="center">
+        <div class="row" align="left">
             <div id="gramatica" class="col-sm">
+               
+            </div> 
+            <div id="aq" class="col-sm">
                
             </div> 
         </div>

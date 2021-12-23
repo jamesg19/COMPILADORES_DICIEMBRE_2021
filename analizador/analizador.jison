@@ -269,6 +269,9 @@
     function getReporteError(){
       return reporte_error;
     }
+    function setReporte(){
+      reporte_error=[];
+    }
     function getReporteGramatical(){
       return reporteGramatical;
     }
