@@ -10,27 +10,27 @@ Quetzal es un interprete de código y traductor de código intermedio con sintax
 
 Instrucciones permitidas en Compilador Quetzal.
 
-1) **Instrucciones**//[Introducción](#introduccion)
+1) **Instrucciones**(#introduccion)
    1) **[Print(Imprimir)](#print)**
       1) **[Println](#print)**
       1) **[Print](#print)**
-   1) **[Asignacion de variables]**
-   1) **Declaracion de variables**
+   2) **[Declaracion de variables](#declaracion)**
+   1) **[Asignacion de variables](#asignacion)**
    1) **[Funciones](#funciones)**
    1) **[Sentencias de control](#sentenciasdecontrol)**
       1) **[For](#for)**
       1) **[For in](#forin)**
       1) **[While](#while)**
       1) **[Do while](#wdowhile)**
-   1) **Arreglos**
-   1) **Operaciones**
-      1) **Aritméticas**
-      1) **Lógicas**
-      1) **Condicionales**
-      1) **Trigonométricas**
-   1) **Structs**
-   1) **Llamadas a función**
-1) **Expresiones**
+   1) **Arreglos(#arreglos)**
+   1) **Operaciones(#operacion)**
+      1) **Aritméticas(#aritmetica)**
+      1) **Lógicas(#logica)**
+      1) **Condicionales(#condicion)**
+      1) **Trigonométricas(#trigonometrica)**
+   1) **Structs(#struct)**
+   1) **Llamadas a función(#llamada)**
+1) **Expresiones(#expresiones)**
 
 
 
@@ -56,6 +56,19 @@ Los comentarios pueden declarase de la siguiente manera:
 - ```//este es un comentario de una línea```
 - ```/\* Este es un comentario Multi-línea  \*/```
 
+
+
+
+
+## Asignacion de variables <a name="asignacion"></a>
+
+para asignar se hace de la siguiente manera
+
+```java
+
+   miVar = 20;
+
+```
 ## **Tipos de Datos** <a name="datos"></a>
 Permite el ingreso de los siguientes tipos de datos:
 
@@ -82,7 +95,8 @@ Deben de seguir el formato
 
 Tipo identificaror = dato a guardar ;
 
-\```String cadena=”Hola Quetzal”;
+```java
+String cadena=”Hola Quetzal”;
 
 int varaible1=100;
 
@@ -90,7 +104,8 @@ double variable2=150.00;
 
 boolean flag=true;
 
-boolean flag2=false;```
+boolean flag2=false;
+```
 
 Tambien existe la declaracion en lista de variables
 
@@ -99,6 +114,21 @@ String a,b,c,d,e,f=”Hola Quetzal”;
 
 Int n1,n2,n3=100;
 ```
+
+```java
+   //tipo id = valor;
+  int miVar = 20;
+  
+   //tipo lstId = valor;
+  int a,b,c,d;
+  
+   //tipo id ;
+   int x;
+   
+   //en esta declaracion el compilador le asigna el valor 0 por defecto
+
+```
+
 ## **Funciones** <a name="funciones"></a>
 una función es una sección de un programa que calcula un valor de manera independiente al resto del programa el código de la función, que son las operaciones que hace la función; y. el resultado (o valor de retorno), que es el valor final que entrega la función.
 
